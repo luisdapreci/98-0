@@ -5,9 +5,15 @@ import type {
 export const STARTER_POSITIONS = ['PG', 'SG', 'SF', 'PF', 'C'] as const;
 export const SIGMOID_WIDTH = 10.5;
 
-export const BALANCE_RULES_V1 = { version: 'mid-iq-1', coreOffenseWeight: 0 } as const;
-export const BALANCE_RULES_V2 = { version: 'mid-iq-2', coreOffenseWeight: 0.8 } as const;
-export interface BalanceRules { version: string; coreOffenseWeight: number }
+export const BALANCE_RULES_V1 = { version: 'mid-iq-1', coreOffenseWeight: 0, usagePenaltySlope: 0.008, usagePenaltyFloor: 0.5 } as const;
+export const BALANCE_RULES_V2 = { version: 'mid-iq-2', coreOffenseWeight: 0.8, usagePenaltySlope: 0.008, usagePenaltyFloor: 0.5 } as const;
+export const BALANCE_RULES_V3 = { version: 'mid-iq-3', coreOffenseWeight: 0.8, usagePenaltySlope: 0.015, usagePenaltyFloor: 0.45 } as const;
+export interface BalanceRules {
+  version: string;
+  coreOffenseWeight: number;
+  usagePenaltySlope: number;
+  usagePenaltyFloor: number;
+}
 
 export function calculateTeamOffense(contributions: readonly number[], rules: BalanceRules = BALANCE_RULES_V1): number {
   if (contributions.length !== 5 || contributions.some((value) => !Number.isFinite(value)))
@@ -54,11 +60,11 @@ function coachedStats(stats: PlayerStats, coach: Coach | null): PlayerStats {
   };
 }
 
-export function calculateUsageModifier(usage: number, usgCapDelta = 0): number {
+export function calculateUsageModifier(usage: number, usgCapDelta = 0, rules: BalanceRules = BALANCE_RULES_V1): number {
   if (usage <= 95) return Math.min(1.03, 1 + 0.003 * (95 - usage));
   const threshold = 115 + usgCapDelta;
   if (usage <= threshold) return 1;
-  return Math.max(0.5, 1 - 0.008 * (usage - threshold));
+  return Math.max(rules.usagePenaltyFloor, 1 - rules.usagePenaltySlope * (usage - threshold));
 }
 
 export function calculateSpacing(spacingRating: number): Pick<
@@ -121,7 +127,7 @@ export function calculateSynergy(lineup: TeamLineup, rules: BalanceRules = BALAN
   const bench = lineup.SIXTH ? coachedStats(lineup.SIXTH.stats, lineup.coach) : null;
   const usgTeam = starters.reduce((total, stats) => total + (stats?.usgPct ?? 0), 0)
     + (bench?.usgPct ?? 0) * 0.4;
-  const phiUsg = calculateUsageModifier(usgTeam, coachDelta(lineup.coach, 'usgCap'));
+  const phiUsg = calculateUsageModifier(usgTeam, coachDelta(lineup.coach, 'usgCap'), rules);
   const spacingRating = starters.reduce(
     (total, stats) => total + (stats ? stats.threePtAttempts * stats.threePtPct : 0), 0,
   );

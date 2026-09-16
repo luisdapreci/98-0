@@ -1,10 +1,11 @@
 import type { TeamLineup } from './types.ts';
-import { HISTORICAL_ENTRY_ENGINE_VERSION } from './postseason-policy.ts';
-
-export const STAR_USAGE_ENGINE_VERSION = 'season-4';
+import {
+  HISTORICAL_ENTRY_ENGINE_VERSION, STAR_USAGE_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION,
+} from './engine-versions.ts';
 
 export function usageBaseCap(engineVersion: string): number {
-  return [STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION].includes(engineVersion) ? 135 : 115;
+  return [STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION]
+    .includes(engineVersion) ? 135 : 115;
 }
 
 export function usageCapForLineup(lineup: TeamLineup, engineVersion: string): number {

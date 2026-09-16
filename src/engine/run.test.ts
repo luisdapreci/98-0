@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { availablePlayers, availableSlots, createDraft } from './draft.ts';
 import { applyDraftAction, balanceForRun, createRun, finishSeason, recoverRun, startSeason } from './run.ts';
-import { BALANCE_RULES_V1, BALANCE_RULES_V2, calculateSynergy } from './math.ts';
+import { BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3, calculateSynergy } from './math.ts';
 import { advancePlayback, restorePlayback, visibleStandings } from './playback.ts';
 import { aggregateSeason, sampleOutcome, SCORE_RULES_V1, SCORE_RULES_V3, simulateSeason } from './season.ts';
 import type { RunData } from './run.ts';
@@ -118,7 +118,7 @@ test('full season playback and restored cursors match instant results without ch
 
 test('new runs use released scores while v1 drafts and interrupted seasons retain their pinned rules', () => {
   const fresh = createRun('new-version', data.coaches);
-  assert.equal(fresh.engineVersion, 'season-5');
+  assert.equal(fresh.engineVersion, 'season-6');
   assert.equal(fresh.scoreVersion, SCORE_RULES_V3.version);
   const oldDraft = { ...fresh, engineVersion: 'season-1', scoreVersion: SCORE_RULES_V1.version };
   assert.deepEqual(recoverRun({ run: oldDraft }, data, 'unused').run, oldDraft);
@@ -260,6 +260,35 @@ test('season-5 preserves gameplay and saves while applying historical postseason
     assert.equal(recoverRun({ run: corrupted }, data, 'unused').run, null);
   }
   assert.equal(recoverRun({ run: { ...current, scoreVersion: SCORE_RULES_V1.version } }, data, 'unused').run, null);
+});
+
+test('season-6 keeps the 135% cap and historical entry while making overload costlier', () => {
+  const ready = readyRun('season-6');
+  assert.equal(usageBaseCap(ready.engineVersion), 135);
+  assert.equal(balanceForRun(ready), BALANCE_RULES_V3);
+  assert.equal(usageCapForLineup(ready.draft.lineup, 'season-6'), usageCapForLineup(ready.draft.lineup, 'season-5'));
+  const lineup = structuredClone(ready.draft.lineup);
+  lineup.coach = { ...lineup.coach!, modifiers: [] };
+  lineup.SIXTH = null;
+  for (const [usage, expected] of [[95, 1], [135, 1], [140, 0.925], [170, 0.475], [200, 0.45]]) {
+    for (const position of ['PG', 'SG', 'SF', 'PF', 'C'] as const) lineup[position]!.stats.usgPct = usage! / 5;
+    const strict = calculateSynergy(lineupForUsagePolicy(lineup, 'season-6'), BALANCE_RULES_V3);
+    assert.ok(Math.abs(strict.phiUsg - expected!) < 1e-10);
+    assert.ok(strict.phiUsg <= calculateSynergy(lineupForUsagePolicy(lineup, 'season-5'), BALANCE_RULES_V2).phiUsg);
+  }
+  const adapted = lineupForUsagePolicy(ready.draft.lineup, ready.engineVersion);
+  const running = startSeason(ready);
+  assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: running })), data, 'unused').run, running);
+  const complete = finishSeason(running, data.opponents);
+  assert.deepEqual(complete.frozenLineup, ready.draft.lineup);
+  assert.deepEqual(complete.season, seasonForQualification(
+    simulateSeason(adapted, data.opponents, ready.seed, SCORE_RULES_V3, BALANCE_RULES_V3), 'season-6'));
+  assert.deepEqual(complete.season!.gameLog[0]!.evaluation.synergy, calculateSynergy(adapted, BALANCE_RULES_V3));
+  assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: complete })), data, 'unused').run, complete);
+  const legacy = finishSeason({ ...running, engineVersion: 'season-5' }, data.opponents);
+  assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: legacy })), data, 'unused').run, legacy);
+  assert.equal(recoverRun({ run: { ...complete, engineVersion: 'season-5' } }, data, 'unused').run, null);
+  assert.equal(recoverRun({ run: { ...complete, scoreVersion: SCORE_RULES_V1.version } }, data, 'unused').run, null);
 });
 
 test('the reference scoring-core roster usually contends for qualification without rewriting its old result', () => {

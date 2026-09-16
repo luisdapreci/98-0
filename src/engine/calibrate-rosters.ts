@@ -14,6 +14,13 @@ import type { Coach, GameContext, GameEvaluation, OpponentPool, Player, TeamLine
 
 const load = (path: string) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const fingerprint = (path: string) => createHash('sha256').update(readFileSync(new URL(path, import.meta.url))).digest('hex');
+// math.ts gained the season-6 (mid-iq-3) usage rules; mid-iq-1/mid-iq-2 evaluation is unchanged, so fits
+// recorded against the previous file remain replayable.
+const MATH_REVISIONS: Record<string, string> = {
+  '0c8598ec267cfae50a5228e65e8143e3ab6b979d1f5a605e77433ece68a8c800':
+    'a32b9121f2201c6426ad078a316e7922b546c2fe488c468e16f68fb0b3912c82',
+};
+const mathMatchesFit = (recorded: string) => [recorded, MATH_REVISIONS[recorded]].includes(fingerprint('./math.ts'));
 interface Roster { id: string; tier: string; family: string; coach: string; players: string[] }
 interface Variant { id: string; parent: string; replace: Record<string, string>; coach?: string }
 const catalog: {
@@ -142,7 +149,7 @@ function stress() {
   assert.equal(frozen.scope, 'development-only');
   assert.equal(frozen.candidateImplementationSha256, fingerprint('./roster-balance.ts'), 'Candidate implementation changed after fitting.');
   assert.equal(frozen.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
-  assert.equal(frozen.mathSha256, fingerprint('./math.ts'));
+  assert.ok(mathMatchesFit(frozen.mathSha256), 'Math implementation changed after fitting.');
   assert.equal(frozen.opponentSha256, fingerprint('../../data/processed/opponents.json'));
   const parameters: RosterBalanceParameters = frozen.fitted.parameters;
   const candidate: Evaluator = (lineup, context) => evaluateRosterCandidate(lineup, context, parameters);
@@ -466,7 +473,7 @@ function frozenFit() {
   assert.equal(report.scope, 'development-only');
   assert.equal(report.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
   assert.equal(report.candidateImplementationSha256, fingerprint('./roster-balance.ts'));
-  assert.equal(report.mathSha256, fingerprint('./math.ts'));
+  assert.ok(mathMatchesFit(report.mathSha256), 'Math implementation changed after fitting.');
   assert.equal(report.opponentSha256, fingerprint('../../data/processed/opponents.json'));
   if (validating) {
     assert.equal(report.poolPassed, development.length, 'Development pool bands must all pass before validation.');

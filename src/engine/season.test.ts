@@ -155,6 +155,7 @@ test('qualification thresholds describe entry without claiming postseason wins',
 test('historical entry qualifies at 40 only after 82 games without changing results or older rules', () => {
   const source = simulateSeason(completeDraft(), pool, 'qualification-boundaries');
   assert.equal(qualificationWinsForEngine('season-5'), 40);
+  assert.equal(qualificationWinsForEngine('season-6'), 40);
   for (const version of ['season-1', 'season-2', 'season-3', 'season-4']) {
     assert.equal(qualificationWinsForEngine(version), 60);
     assert.equal(seasonForQualification(source, version), source);

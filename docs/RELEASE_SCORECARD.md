@@ -99,6 +99,12 @@ On 2026-09-15, the user approved exploratory player feedback on the current game
 
 ## Sign-Off Record
 
+### User-Requested Overload Penalty
+
+On 2026-09-16 the user asked for a harsher over-cap penalty because the 135% cap is already generous. New `season-6` runs use the `mid-iq-3` balance rules: **1.5% offensive efficiency lost per usage point above the threshold, floored at 0.45**, replacing 0.8% and 0.50. The base cap, ball-movement bonus, 40-win entry, coaches, players and opponent pool are unchanged, and `season-1` through `season-5` saves keep their original slope, floor and results. The [design record](GAME_DESIGN.md#a-total-team-usage-rate-usg_team) states the values per rules version.
+
+Because the formula file changed, the frozen offline roster fits recorded against the previous `math.ts` are carried forward by an explicit hash-revision entry in [calibrate-rosters.ts](../src/engine/calibrate-rosters.ts); `mid-iq-1` and `mid-iq-2` evaluation is byte-for-byte unchanged, so those research artifacts were not rewritten or re-fitted. The 81-test suite and typecheck pass, covering the new slope and floor, unchanged legacy modifiers, old/new save recovery and cross-version rejection. This is a direct product change, not a balance-model cycle or release sign-off; no playtest evidence exists for the stricter penalty.
+
 ### User-Requested Entry Revision
 
 On 2026-09-15 the user requested a lower qualification requirement grounded in historical averages. New `season-5` runs use **40 wins for play-in entry**, retaining the `season-4` usage cap and all gameplay results. Earlier saves remain unchanged. The [design record](GAME_DESIGN.md#playoff-sliding-scale) specifies the source, normalization, 41-season coverage, 40.1533-win entry proxy, exclusions and limitations. Higher-seed challenge tiers remain unchanged; no real conference standings or postseason games have been implemented.

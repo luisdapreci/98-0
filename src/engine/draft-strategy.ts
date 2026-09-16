@@ -22,7 +22,7 @@ export function projectedChemistry(lineup: TeamLineup, rules: BalanceRules = BAL
   const usage = synergy.usgTeam + missing * 20 + (lineup.SIXTH ? 0 : 8);
   const cap = lineup.coach?.modifiers.filter((modifier) => modifier.stat === 'usgCap')
     .reduce((sum, modifier) => sum + modifier.delta, 0) ?? 0;
-  return synergy.ortgTeam * calculateUsageModifier(usage, cap) * (1 + synergy.spacingModifier)
+  return synergy.ortgTeam * calculateUsageModifier(usage, cap, rules) * (1 + synergy.spacingModifier)
     - synergy.drtgTeam + synergy.depthBonus;
 }
 

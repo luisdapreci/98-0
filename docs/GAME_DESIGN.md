@@ -91,19 +91,23 @@ For new `season-4` runs, the base cap is **135%**, raised from 115% at the user'
 
 $$\text{effective\_threshold} = 135 + \text{coach.usgCapDelta}$$
 
+**Overload severity (2026-09-16):** at the user's request — 135% is already generous — new `season-6` runs (`mid-iq-3` balance rules) charge **1.5% per usage point above the threshold with a 0.45 floor**, replacing 0.8% and 0.50. `season-1` through `season-5` saves keep the original slope and floor, and neither the base cap nor the ball-movement bonus changed.
+
 **Piecewise Efficiency Modifier ($\phi_{usg}$):**
 
-$$\phi_{usg} = \begin{cases} \min(1.03,\; 1.0 + 0.003 \times (95 - USG_{team})) & \text{if } USG_{team} \le 95 \quad \text{(ball movement bonus, max +3\%)} \\ 1.0 & \text{if } 95 < USG_{team} \le \text{effective\_threshold} \quad \text{(optimal range)} \\ \max\left(0.50,\; 1.0 - 0.008 \times (USG_{team} - \text{effective\_threshold})\right) & \text{if } USG_{team} > \text{effective\_threshold} \quad \text{(overload penalty, floor at 0.50)} \end{cases}$$
+$$\phi_{usg} = \begin{cases} \min(1.03,\; 1.0 + 0.003 \times (95 - USG_{team})) & \text{if } USG_{team} \le 95 \quad \text{(ball movement bonus, max +3\%)} \\ 1.0 & \text{if } 95 < USG_{team} \le \text{effective\_threshold} \quad \text{(optimal range)} \\ \max\left(floor,\; 1.0 - slope \times (USG_{team} - \text{effective\_threshold})\right) & \text{if } USG_{team} > \text{effective\_threshold} \quad \text{(overload penalty)} \end{cases}$$
 
-**Example Scenarios:**
+where $slope = 0.015$ and $floor = 0.45$ for `mid-iq-3` (`season-6`), and $slope = 0.008$ and $floor = 0.50$ for `mid-iq-1` and `mid-iq-2` (`season-1` through `season-5`).
 
-| Roster Type | $USG_{team}$ | $\phi_{usg}$ | Effect |
+**Example Scenarios** (135% threshold, no coach modifier):
+
+| Roster Type | $USG_{team}$ | $\phi_{usg}$ (`mid-iq-3`) | $\phi_{usg}$ (`mid-iq-2`) |
 |-------------|-------------|---------------|--------|
-| Role players + 1 star | ~88% | 1.021 | +2.1% efficiency bonus |
-| Balanced all-stars | ~110% | 1.000 | No modifier |
-| Ball-dominant trio | ~135% | 1.000 | No modifier |
-| 5 prime MVPs | ~155% | 0.840 | −16% penalty |
-| Nightmare (clamped) | ~200% | 0.500 | −50% cap |
+| Role players + 1 star | ~88% | 1.021 | 1.021 |
+| Balanced all-stars | ~110% | 1.000 | 1.000 |
+| Ball-dominant trio | ~135% | 1.000 | 1.000 |
+| 5 prime MVPs | ~155% | 0.700 | 0.840 |
+| Nightmare (clamped) | ~200% | 0.450 | 0.500 |
 
 #### B. Spacing Rating ($S_{team}$) — 4-Tier System
 
@@ -445,6 +449,8 @@ Each coach has **buffs and debuffs** (every coach has at least one tradeoff):
 | `dbpm` | Added to each player's DBPM → flows into DCS → DRTG | +0.5 = each player's DCS improves by 1.25 |
 | `pace` | Direct addition to team Net Rating every game | +2.0 = +2 points to Net Rating |
 | `usgCap` | Raises the usage threshold before penalties apply | +5 = threshold moves from 135% to 140% in new runs; older saves retain 115% to 120% |
+
+In `season-6` runs every point past that threshold costs 1.5% offensive efficiency, so a `usgCap` coach is worth more than in earlier versions.
 
 ### Coach Roster (12 Coaches)
 

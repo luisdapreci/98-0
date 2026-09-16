@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
-  BALANCE_RULES_V1, BALANCE_RULES_V2, calculateTeamOffense,
+  BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3, calculateTeamOffense,
   calculateDefenseBreakdown, calculateDefensiveComposite, calculateOffensiveContribution, calculateSixthManFRF,
   calculateSpacing, calculateSynergy, calculateUsageModifier, calculateWinProbability,
   evaluateGame, normalizeStats, STARTER_POSITIONS,
@@ -32,7 +32,7 @@ test('core offense preserves legacy averages, rewards supporting talent and is p
   }
   close(calculateTeamOffense([15, 15, 15, 15, 15], BALANCE_RULES_V2), 110);
   for (const weight of [-1, 2, NaN])
-    assert.throws(() => calculateTeamOffense(contributions, { version: 'invalid', coreOffenseWeight: weight }));
+    assert.throws(() => calculateTeamOffense(contributions, { ...BALANCE_RULES_V2, version: 'invalid', coreOffenseWeight: weight }));
   assert.throws(() => calculateTeamOffense([1, 2]));
 });
 
@@ -1801,6 +1801,16 @@ test('usage follows thresholds, bench weighting, bonus cap and penalty floor', (
   const lineup = makeLineup();
   lineup.SIXTH = { ...lineup.PG!, stats: { ...baseStats, usgPct: 40 } };
   close(calculateSynergy(lineup).usgTeam, 116);
+});
+
+test('strict usage rules keep the bonus and optimal range but punish overload harder', () => {
+  for (const [usage, expected] of [[0, 1.03], [88, 1.021], [95, 1], [115, 1],
+    [116, 0.985], [135, 0.7], [151, 0.46], [152, 0.45], [200, 0.45]]) {
+    close(calculateUsageModifier(usage!, 0, BALANCE_RULES_V3), expected!);
+    assert.ok(calculateUsageModifier(usage!, 0, BALANCE_RULES_V3) <= calculateUsageModifier(usage!));
+  }
+  close(calculateUsageModifier(140, 20, BALANCE_RULES_V3), 0.925);
+  assert.equal(calculateUsageModifier(135, 20, BALANCE_RULES_V3), 1);
 });
 
 test('spacing tier boundaries are inclusive at 2, 5 and 10', () => {

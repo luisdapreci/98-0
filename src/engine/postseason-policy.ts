@@ -1,14 +1,15 @@
 import { postseasonEntry } from './season.ts';
 import type { SeasonResult } from './types.ts';
+import { HISTORICAL_ENTRY_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION } from './engine-versions.ts';
 
-export const HISTORICAL_ENTRY_ENGINE_VERSION = 'season-5';
+const HISTORICAL_ENTRY_VERSIONS = [HISTORICAL_ENTRY_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION];
 
 export function qualificationWinsForEngine(engineVersion: string): number {
-  return engineVersion === HISTORICAL_ENTRY_ENGINE_VERSION ? 40 : 60;
+  return HISTORICAL_ENTRY_VERSIONS.includes(engineVersion) ? 40 : 60;
 }
 
 export function seasonForQualification(season: SeasonResult, engineVersion: string): SeasonResult {
-  if (engineVersion !== HISTORICAL_ENTRY_ENGINE_VERSION) return season;
+  if (!HISTORICAL_ENTRY_VERSIONS.includes(engineVersion)) return season;
   const qualified = season.gameLog.length === 82 && season.wins >= qualificationWinsForEngine(engineVersion);
   return {
     ...season,
