@@ -4,6 +4,12 @@ Date: 2026-09-15. Revision: `mid-iq-scorecard-1`. Status: **user-approved accept
 
 Approved as written on 2026-09-15, with no exceptions specified. This approval adopts the targets, measurement rules, playtest thresholds and validation budget below. It does not approve a candidate, fresh roster expectations or a replacement release.
 
+## Current Qualification Revision
+
+On 2026-09-16, the user raised new-run qualification from 40 to 45 wins. New runs use `season-7` / `mid-iq-3` / `conditional-score-3`: after all 82 games, fewer than 45 wins misses qualification and 45-64 wins enters the play-in. Higher seeding thresholds are unchanged. Season-6 scoring, usage, ratings and seeded game results are unchanged; existing saves retain their original version and qualification threshold.
+
+The focused run/season suite passes 23 tests, including 44/45-win boundaries, incomplete-season rejection, gameplay parity and save recovery. This is not a new balance or human-playtest sign-off. Frozen reports, including season-6 benchmarks measured at 40 wins, remain historical evidence and must not be relabeled as season-7 qualification results.
+
 ## Goal And Scope
 
 Build a replayable basketball drafting game: talent matters, fit creates meaningful tradeoffs, several basketball identities can succeed, and a loss leaves players understanding the outcome and wanting another attempt.
@@ -27,7 +33,7 @@ All four gates must pass for the frozen replacement candidate. A missing measure
 
 ## Difficulty Targets
 
-These concern **achievable legal drafts**, not hand-assembled all-star rosters. In this original scorecard, qualification means at least 60 regular-season wins, not a championship. The subsequent [user-requested entry revision](#user-requested-entry-revision) changes new-run qualification to 40; the original qualification-rate targets below must not be silently reused as targets for that different event. Automated policies are reproducible proxies, not labels for human ability.
+These concern **achievable legal drafts**, not hand-assembled all-star rosters. In this original scorecard, qualification means at least 60 regular-season wins, not a championship. The [user-requested entry revision](#user-requested-entry-revision) introduced 40-win qualification; the [current revision](#current-qualification-revision) raises new runs to 45. The original qualification-rate targets below must not be silently reused as targets for either different event. Automated policies are reproducible proxies, not labels for human ability.
 
 | Policy | Median Realized Regular-Season Wins | Share Qualifying | Authority |
 | --- | --- | --- | --- |

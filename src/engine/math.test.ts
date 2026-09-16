@@ -11,7 +11,7 @@ import {
 import type { Coach, OpponentPool, Player, PlayerStats, TeamLineup } from './types.ts';
 import { SCHEDULE_COUNTS } from './season.ts';
 import { evaluateRosterCandidate, INITIAL_ROSTER_BALANCE } from './roster-balance.ts';
-import { evaluatePossessionBudget } from './possession-prototype.ts';
+import { evaluatePossessionBudget, evaluatePossessionOffense } from './possession-prototype.ts';
 import { evaluateLineupOffense } from './lineup-prototype.ts';
 import { evaluateRoleAllocation } from './role-allocation.ts';
 
@@ -67,6 +67,45 @@ test('offline possession accounting conserves opportunities and separates points
   assert.throws(() => evaluatePossessionBudget(inputs.map((input) => ({ ...input, id: 'same' }))), /Five distinct/);
   assert.throws(() => evaluatePossessionBudget(inputs.map((input) => ({ ...input, fieldGoalAttempts: 0, freeThrowAttempts: 0 }))), /exposure/);
   close(evaluatePossessionBudget(inputs.map((input) => ({ ...input, turnovers: 0 }))).turnoverEnds, 0);
+});
+
+test('possession offense v2 conserves net possessions without regression weights or duplicate scoring bonuses', () => {
+  const inputs = Array.from({ length: 5 }, (_, index) => ({ id: `player${index}`, points: 18,
+    fieldGoalAttempts: 14, freeThrowAttempts: 0, turnovers: 2, offensiveRebounds: 1, threePointAttempts: 4 }));
+  const policy = { referencePossessionsPer36: 75, maxWorkloadMultiplier: null as number | null };
+  const snapshot = structuredClone(inputs);
+  const result = evaluatePossessionOffense(inputs, policy);
+  close(result.pointsPer100Possessions!, 120);
+  close(result.workloadMultiplier, 1);
+  close(result.shotEnds + result.turnoverEnds - result.reboundContinuations, 100);
+  close(result.players.reduce((sum, player) => sum + player.points, 0), 120);
+  close(evaluatePossessionOffense([...inputs].reverse(), policy).pointsPer100Possessions!, 120);
+  close(evaluatePossessionOffense(inputs.map((input) => ({ ...input, threePointAttempts: 8 })), policy).pointsPer100Possessions!, 120);
+  close(evaluatePossessionOffense(inputs.map((input) => ({ ...input, assists: 100 })), policy).pointsPer100Possessions!, 120);
+  const zeroRebounds = inputs.map((input) => ({ ...input, offensiveRebounds: 0 }));
+  close(evaluatePossessionOffense(zeroRebounds, policy).pointsPer100Possessions!, evaluatePossessionBudget(inputs).pointsPer100UsedEnds);
+  for (let index = 0; index < 5; index++) {
+    const replace = (field: 'points' | 'turnovers' | 'offensiveRebounds') => inputs.map((input, position) =>
+      position === index ? { ...input, [field]: input[field] + 1 } : input);
+    assert.ok(evaluatePossessionOffense(replace('points'), policy).pointsPer100Possessions! > 120);
+    assert.ok(evaluatePossessionOffense(replace('turnovers'), policy).pointsPer100Possessions! < 120);
+    assert.ok(evaluatePossessionOffense(replace('offensiveRebounds'), policy).pointsPer100Possessions! > 120);
+  }
+  const half = inputs.map((input) => ({ ...input, points: 9, fieldGoalAttempts: 7, turnovers: 1,
+    offensiveRebounds: 0.5, threePointAttempts: 2 }));
+  close(evaluatePossessionOffense(half, policy).pointsPer100Possessions!, 120);
+  close(evaluatePossessionOffense(half, policy).workloadMultiplier, 2);
+  const shortfall = evaluatePossessionOffense(half, { ...policy, maxWorkloadMultiplier: 1.25 });
+  assert.equal(shortfall.status, 'workload-shortfall');
+  assert.equal(shortfall.pointsPer100Possessions, null);
+  close(shortfall.unconstrainedPointsPer100Possessions, 120);
+  assert.deepEqual(inputs, snapshot);
+  for (const value of [null, NaN, Infinity, -1]) for (const field of ['offensiveRebounds', 'threePointAttempts'] as const)
+    assert.throws(() => evaluatePossessionOffense(inputs.map((input, index) => index ? input : { ...input, [field]: value }), policy), /Observed/);
+  assert.throws(() => evaluatePossessionOffense(inputs.map((input) => ({ ...input, threePointAttempts: 15 })), policy), /Three-point/);
+  assert.throws(() => evaluatePossessionOffense(inputs.map((input) => ({ ...input, offensiveRebounds: 20 })), policy), /possession/);
+  assert.throws(() => evaluatePossessionOffense(inputs, { ...policy, referencePossessionsPer36: 0 }), /reference/);
+  assert.throws(() => evaluatePossessionOffense(inputs, { ...policy, maxWorkloadMultiplier: NaN }), /reference/);
 });
 
 test('offline lineup allocation exposes workload expansion, turnover costs and unfilled capacity', () => {

@@ -177,6 +177,26 @@ test('historical entry qualifies at 40 only after 82 games without changing resu
   assert.equal(seasonForQualification(partial, 'season-5').postseasonEntry, 'MISSED');
 });
 
+test('season-7 requires 45 wins in a complete season and preserves seeding and game results', () => {
+  const source = simulateSeason(completeDraft(), pool, 'qualification-45-boundaries');
+  assert.equal(qualificationWinsForEngine('season-7'), 45);
+  for (const [wins, entry] of [[0, 'MISSED'], [40, 'MISSED'], [44, 'MISSED'], [45, 'PLAY_IN'],
+    [59, 'PLAY_IN'], [60, 'PLAY_IN'], [64, 'PLAY_IN'], [65, 'FOURTH_SEED'],
+    [70, 'SECOND_SEED'], [75, 'FIRST_SEED'], [82, 'FIRST_SEED']] as const) {
+    const aggregate = aggregateSeason(source.gameLog.map((game, index) => ({ ...game, won: index < wins })));
+    const before = structuredClone(aggregate);
+    const current = seasonForQualification(aggregate, 'season-7');
+    assert.equal(current.qualified, wins >= 45);
+    assert.equal(current.postseasonEntry, entry);
+    assert.deepEqual({ ...current, qualified: aggregate.qualified, postseasonEntry: aggregate.postseasonEntry }, aggregate);
+    assert.deepEqual(aggregate, before);
+    assert.equal(current.gameLog, aggregate.gameLog);
+  }
+  const partial = aggregateSeason(source.gameLog.slice(0, 81).map((game) => ({ ...game, won: true })));
+  assert.equal(seasonForQualification(partial, 'season-7').qualified, false);
+  assert.equal(seasonForQualification(partial, 'season-7').postseasonEntry, 'MISSED');
+});
+
 test('score-only candidate rules preserve every winner and keep conditional matchup ordering', () => {
   const candidate = { ...SCORE_RULES, regulationScale: 7, baseline: 110, baselineSpread: 25 };
   for (const deltaRating of [-30, -10, 0, 10, 30]) {

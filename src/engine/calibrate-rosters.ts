@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { BALANCE_RULES_V2, calculateUsageModifier, calculateWinProbability, evaluateGame, normalizeStats } from './math.ts';
+import { BALANCE_RULES_V2, BALANCE_RULES_V3, calculateUsageModifier, calculateWinProbability, evaluateGame, normalizeStats } from './math.ts';
+import { calculateDefenseBreakdown, calculateOffensiveContribution, calculateTeamOffense } from './math.ts';
 import { availablePlayers, availableSlots, DRAFT_SLOTS } from './draft.ts';
+import { STRICT_USAGE_ENGINE_VERSION } from './engine-versions.ts';
 import { applyDraftAction, createRun, recoverRun } from './run.ts';
+import { lineupForUsagePolicy, usageCapForLineup } from './usage-policy.ts';
+import { qualificationWinsForEngine } from './postseason-policy.ts';
 import { randomStream } from './random.ts';
 import { generateSchedule, requireCompleteLineup, SCHEDULE_COUNTS } from './season.ts';
 import { evaluateRosterCandidate, evaluateRosterFeatures, INITIAL_ROSTER_BALANCE, rosterBalanceFeatures } from './roster-balance.ts';
@@ -34,6 +38,67 @@ const mean = (values: number[]) => values.reduce((sum, value) => sum + value, 0)
 const quantile = (values: number[], probability: number) => [...values].sort((first, second) => first - second)[Math.floor((values.length - 1) * probability)]!;
 type Evaluator = (lineup: TeamLineup, context: GameContext) => GameEvaluation;
 const baseline: Evaluator = (lineup, context) => evaluateGame(lineup, context, BALANCE_RULES_V2);
+const released: Evaluator = (lineup, context) => evaluateGame(
+  lineupForUsagePolicy(lineup, STRICT_USAGE_ENGINE_VERSION), context, BALANCE_RULES_V3);
+const baselineProtected: Evaluator = (lineup, context) => {
+  const result = released(lineup, context);
+  if (result.synergy.phiUsg >= 1) return result;
+  const synergy = { ...result.synergy };
+  synergy.effectiveOrtg = (95 + (synergy.ortgTeam - 95) * synergy.phiUsg) * (1 + synergy.spacingModifier);
+  synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+  const deltaRating = result.deltaRating + synergy.netRating - result.synergy.netRating;
+  return { ...result, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+};
+const RESERVE_USAGE_WEIGHT = 0.4;
+function replacementWeightedUsage(starterUsage: readonly number[], reserveUsage: number | null) {
+  assert.equal(starterUsage.length, 5);
+  const starterWeight = reserveUsage === null ? 1 : 1 - RESERVE_USAGE_WEIGHT / starterUsage.length;
+  return starterUsage.reduce((total, usage) => total + usage, 0) * starterWeight
+    + (reserveUsage ?? 0) * RESERVE_USAGE_WEIGHT;
+}
+const reserveReplacement: Evaluator = (lineup, context) => {
+  const result = baselineProtected(lineup, context);
+  if (!lineup.SIXTH) return result;
+  const synergy = { ...result.synergy };
+  synergy.usgTeam = replacementWeightedUsage(DRAFT_SLOTS.slice(0, 5).map((slot) => lineup[slot]!.stats.usgPct),
+    lineup.SIXTH.stats.usgPct);
+  synergy.phiUsg = calculateUsageModifier(synergy.usgTeam,
+    usageCapForLineup(lineup, STRICT_USAGE_ENGINE_VERSION) - 115, BALANCE_RULES_V3);
+  synergy.effectiveOrtg = (synergy.phiUsg < 1 ? 95 + (synergy.ortgTeam - 95) * synergy.phiUsg
+    : synergy.ortgTeam * synergy.phiUsg) * (1 + synergy.spacingModifier);
+  synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+  const deltaRating = result.deltaRating + synergy.netRating - result.synergy.netRating;
+  return { ...result, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+};
+const noUsageBonus: Evaluator = (lineup, context) => {
+  const result = reserveReplacement(lineup, context);
+  if (result.synergy.phiUsg <= 1) return result;
+  const synergy = { ...result.synergy, phiUsg: 1 };
+  synergy.effectiveOrtg = synergy.ortgTeam * (1 + synergy.spacingModifier);
+  synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+  const deltaRating = result.deltaRating + synergy.netRating - result.synergy.netRating;
+  return { ...result, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+};
+const SCORING_TRANSLATION = { anchor: 110, scale: 2 } as const;
+const scoringTranslation: Evaluator = (lineup, context) => {
+  const result = noUsageBonus(lineup, context);
+  const synergy = { ...result.synergy };
+  synergy.ortgTeam = SCORING_TRANSLATION.anchor
+    + SCORING_TRANSLATION.scale * (synergy.ortgTeam - SCORING_TRANSLATION.anchor);
+  synergy.effectiveOrtg = (95 + (synergy.ortgTeam - 95) * synergy.phiUsg) * (1 + synergy.spacingModifier);
+  synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+  const deltaRating = result.deltaRating + synergy.netRating - result.synergy.netRating;
+  return { ...result, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+};
+const separateCreation: Evaluator = (lineup, context) => {
+  const result = noUsageBonus(lineup, context);
+  const features = rosterBalanceFeatures(lineup);
+  const synergy = { ...result.synergy, ortgTeam: 95 + features.scoringCore + features.sharedCreation };
+  synergy.effectiveOrtg = (95 + (synergy.ortgTeam - 95) * synergy.phiUsg) * (1 + synergy.spacingModifier);
+  synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+  const deltaRating = result.deltaRating + synergy.netRating - result.synergy.netRating;
+  return { ...result, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+};
 const usageCandidate: Evaluator = (lineup, context) => {
   const result = baseline(lineup, context);
   const synergy = { ...result.synergy };
@@ -85,8 +150,17 @@ function distributionFor(probabilities: number[]) {
 }
 
 const validating = process.argv[3] === 'validate';
-const seedPrefix = validating ? 'mid-iq-rosters-validation-1-' : 'mid-iq-rosters-development-1-';
-const schedules = Array.from({ length: validating ? 256 : 64 }, (_, index) => generateSchedule(`${seedPrefix}${index}`, pool));
+const supportAuditRun = process.argv[3] === 'support-audit';
+const noUsageBonusRun = process.argv[3] === 'no-usage-bonus';
+const scoringTranslationRun = process.argv[3] === 'scoring-translation';
+const separateCreationRun = process.argv[3] === 'separate-creation';
+const reserveReplacementRun = process.argv[3] === 'reserve-replacement';
+const baselineProtectedRun = process.argv[3] === 'baseline-protected';
+const offlineUsageRun = baselineProtectedRun || reserveReplacementRun || noUsageBonusRun || scoringTranslationRun || separateCreationRun;
+const releasedRun = process.argv[3] === 'released' || offlineUsageRun || supportAuditRun;
+const seedPrefix = validating ? 'mid-iq-rosters-validation-1-'
+  : releasedRun ? 'mid-iq-rosters-released-1-' : 'mid-iq-rosters-development-1-';
+const schedules = Array.from({ length: validating || releasedRun ? 256 : 64 }, (_, index) => generateSchedule(`${seedPrefix}${index}`, pool));
 function measure(lineup: TeamLineup, evaluator: Evaluator) {
   const neutral = evaluator(lineup, { opponentNetRating: 0, isHome: false, isBackToBack: false });
   let poolExpectedWins = 0;
@@ -118,7 +192,10 @@ function measure(lineup: TeamLineup, evaluator: Evaluator) {
     expectedWins: mean(expectations), poolExpectedWins,
     scheduleMeanStandardError: Math.sqrt(mean(expectations.map((value) => (value - mean(expectations)) ** 2)) / (expectations.length - 1)),
     scheduleExpectedWinsP05P95: [quantile(expectations, 0.05), quantile(expectations, 0.95)],
-    qualificationProbability: mixedDistribution.slice(60).reduce((sum, value) => sum + value, 0),
+    qualificationProbability: mixedDistribution.slice(releasedRun ? qualificationWinsForEngine(STRICT_USAGE_ENGINE_VERSION) : 60)
+      .reduce((sum, value) => sum + value, 0),
+    ...(releasedRun ? { qualificationWins: qualificationWinsForEngine(STRICT_USAGE_ENGINE_VERSION),
+      sixtyWinProbability: mixedDistribution.slice(60).reduce((sum, value) => sum + value, 0) } : {}),
     seasonWinsP05P50P95: [winQuantile(0.05), winQuantile(0.5), winQuantile(0.95)],
     undefeatedProbability: mixedDistribution[82], neutral,
   };
@@ -126,14 +203,14 @@ function measure(lineup: TeamLineup, evaluator: Evaluator) {
 
 const output = process.argv[2];
 const mode = process.argv[3] ?? 'baseline';
-assert.ok(['baseline', 'usage', 'spacing', 'fit', 'audit', 'validate', 'diagnose', 'possession', 'coach-audit', 'stress', 'position-stress', 'policy-stress', 'access-stress'].includes(mode), 'Choose baseline, usage, spacing, fit, audit, validate, diagnose, possession, coach-audit, stress, position-stress, policy-stress or access-stress.');
+assert.ok(['baseline', 'released', 'baseline-protected', 'reserve-replacement', 'support-audit', 'no-usage-bonus', 'scoring-translation', 'separate-creation', 'usage', 'spacing', 'fit', 'audit', 'validate', 'diagnose', 'possession', 'coach-audit', 'stress', 'position-stress', 'policy-stress', 'access-stress'].includes(mode), 'Choose baseline, released, baseline-protected, reserve-replacement, support-audit, no-usage-bonus, scoring-translation, separate-creation, usage, spacing, fit, audit, validate, diagnose, possession, coach-audit, stress, position-stress, policy-stress or access-stress.');
 assert.ok(output, 'A new output path is required.');
 assert.ok(!existsSync(output), 'Refusing to overwrite an existing report.');
 for (const [file, sha] of Object.entries(catalog.sourceSha256)) assert.equal(fingerprint(`../../data/processed/${file}`), sha);
 const development = catalog.rosters.filter((roster) => catalog.families[roster.family] === 'development');
 assert.equal(development.length, 15);
 function variantLineup(variant: Variant) {
-  const lineup = lineupFor(development.find((roster) => roster.id === variant.parent)!);
+  const lineup = lineupFor(catalog.rosters.find((roster) => roster.id === variant.parent)!);
   for (const [slot, id] of Object.entries(variant.replace)) {
     assert.ok(DRAFT_SLOTS.includes(slot as typeof DRAFT_SLOTS[number]));
     lineup[slot as typeof DRAFT_SLOTS[number]] = players.find((player) => player.id === id)!;
@@ -141,6 +218,260 @@ function variantLineup(variant: Variant) {
   if (variant.coach) lineup.coach = coaches.find((coach) => coach.id === variant.coach)!;
   requireCompleteLineup(lineup);
   return lineup;
+}
+if (supportAuditRun) {
+  const sourcePath = '../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json';
+  const source = load(sourcePath);
+  assert.equal(source.experiment, 'reserve-replacement');
+  assert.equal(source.released, false);
+  assert.equal(source.engineVersion, STRICT_USAGE_ENGINE_VERSION);
+  assert.deepEqual(source.balance, BALANCE_RULES_V3);
+  for (const [key, path] of Object.entries({ catalogSha256: '../../data/reference/mid-iq-roster-benchmarks.json',
+    mathSha256: './math.ts', opponentSha256: '../../data/processed/opponents.json',
+    usagePolicySha256: './usage-policy.ts', postseasonPolicySha256: './postseason-policy.ts' }))
+    assert.equal(source[key], fingerprint(path));
+  assert.equal(source.seedPrefix, seedPrefix);
+  assert.equal(source.schedules, schedules.length);
+  const rows = ['F05', 'C03', 'C04'].map((id) => {
+    const roster = catalog.rosters.find((entry) => entry.id === id)!;
+    const lineup = lineupFor(roster);
+    const control = measure(lineup, reserveReplacement);
+    const recorded = source.rosters.find((entry: { id: string }) => entry.id === id);
+    assert.ok(recorded);
+    for (const key of Object.keys(control) as (keyof typeof control)[])
+      assert.deepEqual(control[key], recorded[key], `Candidate replay mismatch: ${id}/${key}`);
+    const neutral = control.neutral;
+    const uncoached = reserveReplacement({ ...lineup, coach: null },
+      { opponentNetRating: 0, isHome: false, isBackToBack: false });
+    const fgDelta = lineup.coach!.modifiers.reduce((total, modifier) =>
+      total + (modifier.stat === 'fgPct' ? modifier.delta : 0), 0);
+    const starters = DRAFT_SLOTS.slice(0, 5).map((slot) => {
+      const player = lineup[slot]!;
+      const coached = { ...player.stats, fgPct: Math.min(1, Math.max(0, player.stats.fgPct + fgDelta)) };
+      const normalized = normalizeStats(coached);
+      return { slot, id: player.id, normalizedPoints: normalized.pts, coachedFgPct: normalized.fgPct,
+        normalizedAssists: normalized.ast, usage: player.stats.usgPct,
+        scoringProduct: normalized.pts * normalized.fgPct, contribution: calculateOffensiveContribution(coached) };
+    });
+    const contributions = starters.map((starter) => starter.contribution);
+    assert.ok(Math.abs(calculateTeamOffense(contributions, BALANCE_RULES_V3) - neutral.synergy.ortgTeam) < 1e-10);
+    const adjustedOffense = neutral.synergy.phiUsg < 1
+      ? 95 + (neutral.synergy.ortgTeam - 95) * neutral.synergy.phiUsg
+      : neutral.synergy.ortgTeam * neutral.synergy.phiUsg;
+    const components = {
+      baseline: 95 - 110,
+      uncoachedOffensiveContribution: uncoached.synergy.ortgTeam - 95,
+      coachOffensiveContribution: neutral.synergy.ortgTeam - uncoached.synergy.ortgTeam,
+      usageBeforeSpacing: adjustedOffense - neutral.synergy.ortgTeam,
+      spacingAfterUsage: neutral.synergy.effectiveOrtg - adjustedOffense,
+      rosterDefense: 110 - uncoached.synergy.drtgTeam,
+      coachDefense: uncoached.synergy.drtgTeam - neutral.synergy.drtgTeam,
+      reserveDepth: neutral.synergy.depthBonus,
+      coachPace: neutral.coachPaceModifier,
+    };
+    assert.ok(Math.abs(Object.values(components).reduce((sum, value) => sum + value, 0) - neutral.deltaRating) < 1e-10);
+    const defense = calculateDefenseBreakdown(lineup);
+    assert.equal(defense.total, neutral.synergy.drtgTeam);
+    const probes = ['no-low-usage-bonus', 'no-spacing', 'neutral-defense', 'no-defensive-coach', 'all-starter-mean'].map((probe) => {
+      const evaluator: Evaluator = (team, context) => {
+        const original = reserveReplacement(team, context);
+        const synergy = { ...original.synergy };
+        if (probe === 'no-low-usage-bonus') synergy.phiUsg = Math.min(1, synergy.phiUsg);
+        if (probe === 'no-spacing') { synergy.spacingModifier = 0; synergy.spacingTier = 'AVERAGE'; }
+        if (probe === 'neutral-defense') synergy.drtgTeam = 110;
+        if (probe === 'no-defensive-coach') synergy.drtgTeam = uncoached.synergy.drtgTeam;
+        if (probe === 'all-starter-mean') synergy.ortgTeam = calculateTeamOffense(contributions,
+          { ...BALANCE_RULES_V3, coreOffenseWeight: 0 });
+        synergy.effectiveOrtg = (synergy.phiUsg < 1 ? 95 + (synergy.ortgTeam - 95) * synergy.phiUsg
+          : synergy.ortgTeam * synergy.phiUsg) * (1 + synergy.spacingModifier);
+        synergy.netRating = synergy.effectiveOrtg - synergy.drtgTeam;
+        const deltaRating = original.deltaRating + synergy.netRating - original.synergy.netRating;
+        return { ...original, synergy, deltaRating, winProbability: calculateWinProbability(deltaRating) };
+      };
+      const result = measure(lineup, evaluator);
+      const shift = result.neutral.deltaRating - neutral.deltaRating;
+      const expectedShift = probe === 'no-low-usage-bonus'
+        ? -neutral.synergy.ortgTeam * Math.max(0, neutral.synergy.phiUsg - 1) * (1 + neutral.synergy.spacingModifier)
+        : probe === 'no-spacing' ? -components.spacingAfterUsage
+          : probe === 'neutral-defense' ? neutral.synergy.drtgTeam - 110
+            : probe === 'no-defensive-coach' ? -components.coachDefense
+              : (mean(contributions) + 95 - neutral.synergy.ortgTeam) * neutral.synergy.phiUsg
+                * (1 + neutral.synergy.spacingModifier);
+      assert.ok(Math.abs(shift - expectedShift) < 1e-10);
+      assert.equal(result.neutral.fatigueModifier, neutral.fatigueModifier);
+      assert.equal(result.neutral.synergy.sixthManFRF, neutral.synergy.sixthManFRF);
+      assert.ok(result.poolExpectedWins <= control.poolExpectedWins + 1e-10);
+      return { probe, ratingShift: shift, ...result,
+        poolExpectedWinDifference: result.poolExpectedWins - control.poolExpectedWins };
+    });
+    return { id, tier: roster.tier, target: catalog.targets[roster.tier]!.expectedWins, coach: roster.coach,
+      control, starters, topThreeMean: mean([...contributions].sort((first, second) => second - first).slice(0, 3)),
+      allStarterMean: mean(contributions), components, defense, probes };
+  });
+  writeFileSync(output, `${JSON.stringify({ version: 'mid-iq-support-component-audit-1',
+    scope: 'exposed-candidate-component-audit', released: false, sourceReport: sourcePath.slice(6),
+    sourceSha256: fingerprint(sourcePath), catalogSha256: source.catalogSha256,
+    playerCoachSha256: catalog.sourceSha256, mathSha256: fingerprint('./math.ts'),
+    evaluatorSha256: fingerprint('./calibrate-rosters.ts'), opponentSha256: source.opponentSha256,
+    usagePolicySha256: source.usagePolicySha256, postseasonPolicySha256: source.postseasonPolicySha256,
+    seedPrefix, schedules: schedules.length, rows,
+    method: 'Exact three-case candidate replay, additive neutral-rating reconciliation, then five fixed isolated ablations per roster using the same full-pool expectation and 256 schedule distributions.',
+    verification: 'Control replay, starter offense and defensive breakdown reconciliation, additive rating totals, analytical ablation shifts and unchanged reserve fatigue checked.',
+    limitations: ['Diagnosis only: no parameter fitting, new candidate selection, live-rule changes or independent validation.',
+      'Component-removal win effects are nonlinear, not additive or causal estimates. Neutral defense means model DRTG 110, not a legal player substitution.',
+      'Usage is attributed before spacing; the spacing term includes their interaction. Coach offense is a coached-minus-uncoached aggregation difference.',
+      'The all-starter-mean probe removes the existing top-three premium; it is not a proposed scoring-lead fix.',
+      'Three selected exposed rosters only; no claims about all-roster guardrails, human draft access or playoff/title outcomes.'],
+  }, null, 2)}\n`, { flag: 'wx' });
+  console.table(rows.map((row) => ({ id: row.id, wins: row.control.poolExpectedWins.toFixed(2),
+    ortg: row.control.neutral.synergy.ortgTeam.toFixed(2), effectiveOrtg: row.control.neutral.synergy.effectiveOrtg.toFixed(2),
+    drtg: row.control.neutral.synergy.drtgTeam.toFixed(2), usageBonus: row.components.usageBeforeSpacing.toFixed(2),
+    spacing: row.components.spacingAfterUsage.toFixed(2), defense: (row.components.rosterDefense + row.components.coachDefense).toFixed(2) })));
+  console.table(rows.flatMap((row) => row.probes.map((probe) => ({ id: row.id, probe: probe.probe,
+    wins: probe.poolExpectedWins.toFixed(2), difference: probe.poolExpectedWinDifference.toFixed(2) }))));
+  process.exit(0);
+}
+const controlPath = scoringTranslationRun || separateCreationRun ? '../../docs/MID_IQ_NO_USAGE_BONUS_1.json'
+  : noUsageBonusRun ? '../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json'
+  : reserveReplacementRun ? '../../docs/MID_IQ_BASELINE_PROTECTED_1.json'
+  : '../../docs/MID_IQ_ROSTER_RELEASED_2.json';
+const controlReport = offlineUsageRun ? load(controlPath) : undefined;
+if (controlReport) {
+  assert.equal(controlReport.engineVersion, STRICT_USAGE_ENGINE_VERSION);
+  assert.deepEqual(controlReport.balance, BALANCE_RULES_V3);
+  assert.equal(controlReport.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
+  assert.equal(controlReport.mathSha256, fingerprint('./math.ts'));
+  assert.equal(controlReport.opponentSha256, fingerprint('../../data/processed/opponents.json'));
+  assert.equal(controlReport.seedPrefix, seedPrefix);
+  assert.equal(controlReport.schedules, schedules.length);
+  if (scoringTranslationRun || separateCreationRun) {
+    assert.equal(controlReport.experiment, 'no-usage-bonus');
+    assert.equal(controlReport.released, false);
+    assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
+    assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json'));
+  }
+  if (noUsageBonusRun) {
+    assert.equal(controlReport.experiment, 'reserve-replacement');
+    assert.equal(controlReport.released, false);
+    assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
+    assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_BASELINE_PROTECTED_1.json'));
+  }
+  if (reserveReplacementRun) {
+    assert.equal(controlReport.experiment, 'baseline-protected');
+    assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
+    assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_ROSTER_RELEASED_2.json'));
+    assert.equal(replacementWeightedUsage([20, 20, 20, 20, 20], 20), 100);
+    assert.equal(replacementWeightedUsage([30, 30, 30, 30, 30], null), 150);
+    assert.equal(replacementWeightedUsage([10, 20, 30, 25, 15], 0), 92);
+    assert.equal(replacementWeightedUsage([10, 20, 30, 25, 15], 20),
+      replacementWeightedUsage([15, 25, 30, 20, 10], 20));
+  }
+}
+function compareControl(id: string, lineup: TeamLineup, candidate: ReturnType<typeof measure>) {
+  if (!controlReport) return {};
+  const control = measure(lineup, scoringTranslationRun || separateCreationRun ? noUsageBonus
+    : noUsageBonusRun ? reserveReplacement : reserveReplacementRun ? baselineProtected : released);
+  const recorded = [...controlReport.rosters, ...controlReport.variants].find((row: { id: string }) => row.id === id);
+  assert.ok(recorded, `Missing control: ${id}`);
+  for (const key of Object.keys(control) as (keyof typeof control)[])
+    assert.deepEqual(control[key], recorded[key], `Control replay mismatch: ${id}/${key}`);
+  const before = control.neutral;
+  const after = candidate.neutral;
+  if (scoringTranslationRun || separateCreationRun) {
+    const features = separateCreationRun ? rosterBalanceFeatures(lineup) : undefined;
+    const rawShift = features ? 95 + features.scoringCore + features.sharedCreation - before.synergy.ortgTeam
+      : (SCORING_TRANSLATION.scale - 1) * (before.synergy.ortgTeam - SCORING_TRANSLATION.anchor);
+    if (features) {
+      const normalized = DRAFT_SLOTS.slice(0, 5).map((slot) => normalizeStats(lineup[slot]!.stats));
+      const fgDelta = lineup.coach!.modifiers.reduce((total, modifier) => total + (modifier.stat === 'fgPct' ? modifier.delta : 0), 0);
+      const scoring = normalized.map((stats) => stats.pts * Math.min(1, Math.max(0, stats.fgPct + fgDelta)));
+      const passing = normalized.map((stats) => stats.ast);
+      assert.ok(Math.abs(calculateTeamOffense(scoring, BALANCE_RULES_V3) - 95 - features.scoringCore) < 1e-10);
+      assert.ok(Math.abs(0.6 * Math.max(...passing) + 0.4 * mean(passing) - features.sharedCreation) < 1e-10);
+      const context = { opponentNetRating: 0, isHome: false, isBackToBack: false };
+      for (const slot of DRAFT_SLOTS.slice(0, 5)) {
+        const player = lineup[slot]!;
+        for (const stat of ['pts', 'ast'] as const) {
+          const increased = { ...lineup, [slot]: { ...player, stats: { ...player.stats, [stat]: player.stats[stat] + 1 } } };
+          assert.ok(separateCreation(increased, context).synergy.ortgTeam > after.synergy.ortgTeam);
+        }
+      }
+    }
+    const shift = rawShift * before.synergy.phiUsg * (1 + before.synergy.spacingModifier);
+    assert.ok(Math.abs(after.synergy.ortgTeam - before.synergy.ortgTeam - rawShift) < 1e-10);
+    assert.ok(Math.abs(after.synergy.effectiveOrtg - before.synergy.effectiveOrtg - shift) < 1e-10);
+    assert.ok(Math.abs(after.deltaRating - before.deltaRating - shift) < 1e-10);
+    for (const key of Object.keys(before.synergy) as (keyof typeof before.synergy)[]) {
+      if (!['ortgTeam', 'effectiveOrtg', 'netRating'].includes(key)) assert.equal(after.synergy[key], before.synergy[key]);
+    }
+    assert.ok((candidate.poolExpectedWins - control.poolExpectedWins) * shift >= -1e-10);
+    return { noBonusExpectedWins: control.expectedWins, noBonusPoolExpectedWins: control.poolExpectedWins,
+      poolExpectedWinGain: candidate.poolExpectedWins - control.poolExpectedWins,
+      noBonusPoolExpectedWinDifference: recorded.poolExpectedWinDifference,
+      noBonusQualificationProbability: control.qualificationProbability,
+      noBonusSixtyWinProbability: control.sixtyWinProbability,
+      rawOffenseBefore: before.synergy.ortgTeam, rawOffenseShift: rawShift, ratingShift: shift,
+      ...(features ? { scoringCore: features.scoringCore, sharedCreation: features.sharedCreation } : {}) };
+  }
+  if (noUsageBonusRun) {
+    assert.equal(after.synergy.phiUsg, Math.min(1, before.synergy.phiUsg));
+    const loss = before.synergy.ortgTeam * Math.max(0, before.synergy.phiUsg - 1)
+      * (1 + before.synergy.spacingModifier);
+    assert.ok(Math.abs(before.synergy.effectiveOrtg - after.synergy.effectiveOrtg - loss) < 1e-10);
+    assert.ok(Math.abs(before.deltaRating - after.deltaRating - loss) < 1e-10);
+    for (const key of Object.keys(before.synergy) as (keyof typeof before.synergy)[]) {
+      if (!['phiUsg', 'effectiveOrtg', 'netRating'].includes(key)) assert.equal(after.synergy[key], before.synergy[key]);
+    }
+    assert.ok(candidate.poolExpectedWins <= control.poolExpectedWins + 1e-10);
+    if (before.synergy.phiUsg <= 1) assert.deepEqual(candidate, control);
+    return { step2ExpectedWins: control.expectedWins, step2PoolExpectedWins: control.poolExpectedWins,
+      poolExpectedWinGain: candidate.poolExpectedWins - control.poolExpectedWins,
+      step2PoolExpectedWinDifference: recorded.poolExpectedWinDifference,
+      step2QualificationProbability: control.qualificationProbability,
+      step2SixtyWinProbability: control.sixtyWinProbability };
+  }
+  if (reserveReplacementRun) {
+    const starterTotal = DRAFT_SLOTS.slice(0, 5).reduce((total, slot) => total + lineup[slot]!.stats.usgPct, 0);
+    assert.ok(Math.abs(before.synergy.usgTeam - after.synergy.usgTeam
+      - starterTotal * RESERVE_USAGE_WEIGHT / 5) < 1e-10);
+    const expectedPhi = calculateUsageModifier(after.synergy.usgTeam,
+      usageCapForLineup(lineup, STRICT_USAGE_ENGINE_VERSION) - 115, BALANCE_RULES_V3);
+    assert.equal(after.synergy.phiUsg, expectedPhi);
+    const expectedOffense = (expectedPhi < 1 ? 95 + (before.synergy.ortgTeam - 95) * expectedPhi
+      : before.synergy.ortgTeam * expectedPhi) * (1 + before.synergy.spacingModifier);
+    assert.ok(Math.abs(after.synergy.effectiveOrtg - expectedOffense) < 1e-10);
+    for (const key of Object.keys(before.synergy) as (keyof typeof before.synergy)[]) {
+      if (!['usgTeam', 'phiUsg', 'effectiveOrtg', 'netRating'].includes(key))
+        assert.equal(after.synergy[key], before.synergy[key]);
+    }
+    assert.ok(Math.abs(after.deltaRating - before.deltaRating
+      - (after.synergy.effectiveOrtg - before.synergy.effectiveOrtg)) < 1e-10);
+    assert.ok(candidate.poolExpectedWins >= control.poolExpectedWins - 1e-10);
+    const noReserve = { ...lineup, SIXTH: null };
+    const context = { opponentNetRating: 0, isHome: false, isBackToBack: false };
+    assert.deepEqual(reserveReplacement(noReserve, context), baselineProtected(noReserve, context));
+    return { step1ExpectedWins: control.expectedWins, step1PoolExpectedWins: control.poolExpectedWins,
+      poolExpectedWinGain: candidate.poolExpectedWins - control.poolExpectedWins,
+      step1PoolExpectedWinDifference: recorded.poolExpectedWinDifference,
+      step1QualificationProbability: control.qualificationProbability,
+      step1SixtyWinProbability: control.sixtyWinProbability };
+  }
+  const gain = 95 * Math.max(0, 1 - before.synergy.phiUsg) * (1 + before.synergy.spacingModifier);
+  assert.ok(Math.abs(after.synergy.effectiveOrtg - before.synergy.effectiveOrtg - gain) < 1e-10);
+  assert.ok(Math.abs(after.deltaRating - before.deltaRating - gain) < 1e-10);
+  const { effectiveOrtg: beforeOffense, netRating: beforeNet, ...beforeInputs } = before.synergy;
+  const { effectiveOrtg: afterOffense, netRating: afterNet, ...afterInputs } = after.synergy;
+  assert.deepEqual(afterInputs, beforeInputs);
+  assert.ok(candidate.poolExpectedWins >= control.poolExpectedWins - 1e-10);
+  if (before.synergy.phiUsg >= 1) assert.deepEqual(candidate, control);
+  return { releasedExpectedWins: control.expectedWins, releasedPoolExpectedWins: control.poolExpectedWins,
+    poolExpectedWinGain: candidate.poolExpectedWins - control.poolExpectedWins,
+    releasedPoolExpectedWinDifference: recorded.poolExpectedWinDifference,
+    releasedQualificationProbability: control.qualificationProbability,
+    releasedSixtyWinProbability: control.sixtyWinProbability };
 }
 function stress() {
   const fitPath = process.argv[4];
@@ -500,7 +831,10 @@ function frozenFit() {
 }
 const fitted = mode === 'fit' ? fit() : mode === 'audit' || mode === 'coach-audit' || mode === 'diagnose' || validating ? frozenFit() : undefined;
 const evaluator: Evaluator = fitted ? (lineup, context) => evaluateRosterCandidate(lineup, context, fitted.parameters)
-  : mode === 'spacing' ? spacingCandidate : mode === 'usage' ? usageCandidate : baseline;
+  : mode === 'spacing' ? spacingCandidate : mode === 'usage' ? usageCandidate
+    : separateCreationRun ? separateCreation : scoringTranslationRun ? scoringTranslation
+      : noUsageBonusRun ? noUsageBonus : reserveReplacementRun ? reserveReplacement
+      : baselineProtectedRun ? baselineProtected : releasedRun ? released : baseline;
 if (mode === 'possession') {
   const auditPath = process.argv[4];
   assert.ok(auditPath, 'Provide a frozen possession input audit.');
@@ -682,23 +1016,72 @@ if (mode === 'coach-audit') {
     [`${effect.stat} ${effect.delta}`, effect.ratingGain.toFixed(3)])) })));
   process.exit(0);
 }
-const evaluationRosters = validating ? catalog.rosters.filter((roster) => catalog.families[roster.family] === 'validation') : development;
+const evaluationRosters = validating ? catalog.rosters.filter((roster) => catalog.families[roster.family] === 'validation')
+  : releasedRun ? catalog.rosters : development;
 if (validating) assert.equal(evaluationRosters.length, 9);
+if (releasedRun) assert.equal(evaluationRosters.length, 24);
 const rosters = evaluationRosters.map((roster) => {
   const result = measure(lineupFor(roster), evaluator);
   const target = catalog.targets[roster.tier]!.expectedWins;
-  return { id: roster.id, target, ...result, inBand: result.expectedWins >= target[0]! && result.expectedWins <= target[1]!,
+  return { id: roster.id, target, ...result, ...compareControl(roster.id, lineupFor(roster), result),
+    inBand: result.expectedWins >= target[0]! && result.expectedWins <= target[1]!,
     poolInBand: result.poolExpectedWins >= target[0]! && result.poolExpectedWins <= target[1]! };
 });
-const variants = catalog.variants.filter((variant) => !validating && development.some((roster) => roster.id === variant.parent)).map((variant) => {
+const variants = catalog.variants.filter((variant) => !validating
+  && evaluationRosters.some((roster) => roster.id === variant.parent)).map((variant) => {
   const lineup = variantLineup(variant);
   const result = measure(lineup, evaluator);
-  return { id: variant.id, parent: variant.parent, ...result,
+  return { id: variant.id, parent: variant.parent, ...result, ...compareControl(variant.id, lineup, result),
     expectedWinDifference: result.expectedWins - rosters.find((roster) => roster.id === variant.parent)!.expectedWins,
     poolExpectedWinDifference: result.poolExpectedWins - rosters.find((roster) => roster.id === variant.parent)!.poolExpectedWins };
 });
+if (reserveReplacementRun) assert.equal(variants.find((variant) => variant.id === 'V06')!.poolExpectedWinDifference, 0);
+if (scoringTranslationRun || separateCreationRun) assert.equal(variants.find((variant) => variant.id === 'V06')!.poolExpectedWinDifference, 0);
+if (noUsageBonusRun) {
+  assert.equal(variants.find((variant) => variant.id === 'V06')!.poolExpectedWinDifference, 0);
+  for (const id of ['V03', 'V07']) assert.ok(variants.find((variant) => variant.id === id)!.poolExpectedWinDifference < 0);
+  for (const id of ['V04', 'V08']) assert.ok(variants.find((variant) => variant.id === id)!.poolExpectedWinDifference > 0);
+}
 const report = {
-  version: `mid-iq-rosters-${mode}-1`, scope: validating ? 'reserved-family-validation' : 'development-only', balance: BALANCE_RULES_V2, experiment: mode,
+  version: `mid-iq-rosters-${mode}-1`,
+  scope: offlineUsageRun ? 'exposed-families-offline-experiment'
+    : validating ? 'reserved-family-validation' : releasedRun ? 'all-families-released-engine' : 'development-only',
+  balance: releasedRun ? BALANCE_RULES_V3 : BALANCE_RULES_V2, engineVersion: releasedRun ? STRICT_USAGE_ENGINE_VERSION : 'season-3', experiment: mode,
+  ...(offlineUsageRun ? { released: false, controlReport: controlPath.slice(6),
+    controlSha256: fingerprint(controlPath), controlPoolPassed: controlReport.poolPassed,
+    usagePolicySha256: fingerprint('./usage-policy.ts'), postseasonPolicySha256: fingerprint('./postseason-policy.ts'),
+    change: separateCreationRun
+      ? 'Retain the no-bonus candidate. Raw offense = 95 + scoringCore + sharedCreation. scoringCore keeps the existing 20% all-starter / 80% top-three blend of PTS * coached FG%; sharedCreation = 0.6 * maximum normalized AST + 0.4 * mean normalized AST. Reuse rosterBalanceFeatures, without old fitted parameters or global rescaling.'
+      : scoringTranslationRun
+      ? 'Retain the no-bonus candidate and change raw offense only: newOrtg = 110 + 2 * (oldOrtg - 110). Keep the 95-point protected usage baseline, usage modifier, spacing rule, defense and reserve effects unchanged.'
+      : noUsageBonusRun
+      ? 'Retain baseline-protected offense and replacement-weighted reserve usage; cap the usage modifier at 1, removing only the low-usage reward. Overload penalties and all other terms remain unchanged.'
+      : reserveReplacementRun
+      ? 'Keep baseline-protected offense. Usage only: 0.92 * sum(starter usage) + 0.4 * reserve usage; without a reserve, use the unweighted starter sum. Recompute the existing usage modifier with the live cap, slope, floor and low-usage bonus.'
+      : 'For phiUsg < 1 only: effectiveOrtg = (95 + (ortgTeam - 95) * phiUsg) * (1 + spacingModifier). Otherwise identical to released rules.',
+    ...(scoringTranslationRun || separateCreationRun ? {
+      ...(scoringTranslationRun ? { scoringTranslation: SCORING_TRANSLATION } : {
+        mechanism: { scoringMeanWeight: 0.2, scoringTopThreeWeight: 0.8, assistLeadWeight: 0.6, assistMeanWeight: 0.4 },
+        featureImplementationSha256: fingerprint('./roster-balance.ts'),
+        comparisonCases: rosters.filter((roster) => ['F05', 'C03', 'C04'].includes(roster.id))
+          .map((roster) => ({ id: roster.id, expectedWins: roster.poolExpectedWins, target: roster.target, inBand: roster.poolInBand })) }),
+      selection: separateCreationRun ? 'One existing shared-creation mechanism isolated before measurement; no fitted parameters, roster-specific exceptions or release adoption.'
+        : 'Fixed doubled-spread diagnostic, not fitted or selected by target-band results; no release adoption.',
+      directionChecks: variants.filter((variant) => ['V03', 'V04', 'V06', 'V07', 'V08'].includes(variant.id))
+        .map((variant) => ({ id: variant.id, delta: variant.poolExpectedWinDifference,
+          passed: variant.id === 'V06' ? variant.poolExpectedWinDifference === 0
+            : ['V03', 'V07'].includes(variant.id) ? variant.poolExpectedWinDifference < 0 : variant.poolExpectedWinDifference > 0 })) } : {}),
+    ...(reserveReplacementRun || noUsageBonusRun || scoringTranslationRun || separateCreationRun ? { usageMinutes: { startersEach: 44.16, reserve: 19.2, total: 240 },
+      reserveWeight: RESERVE_USAGE_WEIGHT } : {}),
+    verification: separateCreationRun
+      ? 'All 32 no-bonus controls replayed exactly; independent scoring and passing reconciliation; 320 positive marginal starter PTS/AST probes; analytical rating shifts, unchanged usage/spacing/defense/reserve inputs and PF/C-swap equality checked.'
+      : scoringTranslationRun
+      ? 'All 32 no-bonus controls replayed exactly; analytical raw-offense and contextual rating shifts, unchanged usage/spacing/defense/reserve inputs, expected-win shift direction and PF/C-swap equality checked.'
+      : noUsageBonusRun
+      ? 'All 32 step-2 controls replayed exactly; analytical bonus removal, unchanged non-usage inputs and exact identity without a bonus checked. Jordan removal, prime-over-young Kobe, positive reserve upgrades and PF/C-swap equality retained.'
+      : reserveReplacementRun
+      ? 'All 32 step-1 controls replayed exactly; unchanged scoring, spacing, defense and reserve quality; usage accounting, modifier and offense formulas, nondecreasing wins, no-reserve identity and PF/C-swap invariance checked.'
+      : 'All 32 controls replayed exactly; unchanged non-offense inputs, analytical rating gain, nondecreasing expected wins and exact identity without overload checked.' } : {}),
   sourceFit: validating ? process.argv[4] : undefined,
   sourceFitSha256: validating ? createHash('sha256').update(readFileSync(process.argv[4]!)).digest('hex') : undefined,
   validationVerdict: validating ? rosters.every((row) => row.poolInBand) ? 'PASS' : 'FAIL' : undefined,
@@ -708,7 +1091,21 @@ const report = {
   opponentSha256: fingerprint('../../data/processed/opponents.json'), seedPrefix, schedules: schedules.length,
   method: `Full-pool expected wins determine band acceptance; exact conditional Bernoulli distributions mixed over ${schedules.length} seeded schedules describe season variation. Standard error measures schedule sampling only, not model uncertainty.`,
   rosters, variants, passed: rosters.filter((roster) => roster.inBand).length, poolPassed: rosters.filter((roster) => roster.poolInBand).length,
-  limitations: [validating ? 'These nine families are now exposed; retuning on them is not independent validation.' : 'Development cases only; prior reserved-family exposure is documented separately.', 'Not observed human draft or playoff/title outcomes.'],
+  limitations: [offlineUsageRun ? 'Single fixed-formula experiment on previously exposed cases, not independent validation, fitting or release approval. No live rules changed; no new acceptance gates for qualitative or provisional expectations.'
+    : validating ? 'These nine families are now exposed; retuning on them is not independent validation.'
+    : releasedRun ? 'All 24 families were already exposed by the earlier fit, validation and diagnosis steps; this is a measurement of the shipped rules, not fresh validation and not a tuning input.'
+      : 'Development cases only; prior reserved-family exposure is documented separately.',
+    ...releasedRun ? ['The catalog targets were written against the season-3 baseline and the roster-balance candidate; the released season-6 rules were never fitted to them, so band misses describe the gap, not a regression.'] : [],
+    ...reserveReplacementRun ? ['Usage-only accounting: equal relief across starters is a fixed abstraction, not position-legal rotations or fitted playing time. The existing 0.4 reserve coefficient is retained, not tuned. Scoring, defense, spacing and reserve quality are not minute-weighted.',
+      'Lower aggregate usage may increase the existing low-usage bonus. Higher reserve usage can still impose a real fit cost; this is not a guarantee that every reserve upgrade improves every roster.'] : [],
+    ...noUsageBonusRun ? ['Retains the step-2 equal-relief usage abstraction, not a position-legal rotation model. No scoring-lead, defense or spacing adjustment is included. Qualitative direction checks do not establish that provisional numeric reserve targets pass.'] : [],
+    ...scoringTranslationRun ? ['The 110 anchor is the existing defensive baseline, not an empirically estimated offensive average; doubling the spread is a sensitivity probe, not a calibrated scoring model.',
+      'Player contribution ranking and top-three weights are unchanged. Coached scoring contributions are rescaled too; coach modifiers and downstream spacing/usage formulas are fixed, but their effective rating impacts can change.',
+      'No new floor, historical scoring calibration or out-of-catalog extrapolation guarantee is introduced. This experiment does not isolate scoring-product versus assist weights or establish that one global scale can satisfy the targets.'] : [],
+    ...separateCreationRun ? ['Assists are a playmaking proxy, not measured self-created scoring or shot quality. Separating scoring and passing can reward different leaders without proving offensive creation capacity.',
+      'This mechanism was previously explored in multi-parameter fits; the present isolated test is not novel independent validation. No old fitted offense/defense scales, lead-pair weight, spacing or coach rules are imported.',
+      'C04 is evaluated against its unchanged target, not protected by a roster-specific floor or exception. Direction checks do not establish provisional numeric reserve targets.'] : [],
+    'Not observed human draft or playoff/title outcomes.'],
 };
 writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
 console.table(rosters.map((row) => ({ id: row.id, target: row.target.join('-'), expected: row.expectedWins.toFixed(2), poolExpected: row.poolExpectedWins.toFixed(2), qualified: row.qualificationProbability.toFixed(3), samplePass: row.inBand, poolPass: row.poolInBand })));

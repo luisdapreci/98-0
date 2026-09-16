@@ -12,7 +12,7 @@ import type { Coach, OpponentPool, Player, SeasonResult, TeamLineup } from './ty
 import { lineupForUsagePolicy } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
 import {
-  HISTORICAL_ENTRY_ENGINE_VERSION, STAR_USAGE_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION,
+  HISTORICAL_ENTRY_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION, STAR_USAGE_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION,
 } from './engine-versions.ts';
 
 export type DraftAction =
@@ -46,13 +46,13 @@ export interface RunData {
 
 function rulesForRun(run: RunSave): ScoreRules {
   if (run.engineVersion === 'season-1' && run.scoreVersion === SCORE_RULES_V1.version) return SCORE_RULES_V1;
-  if (['season-2', 'season-3', STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION].includes(run.engineVersion) && run.scoreVersion === SCORE_RULES_V3.version) return SCORE_RULES_V3;
+  if (['season-2', 'season-3', STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION].includes(run.engineVersion) && run.scoreVersion === SCORE_RULES_V3.version) return SCORE_RULES_V3;
   throw new Error('Unsupported engine/score version pair.');
 }
 
 export function balanceForRun(run: RunSave): BalanceRules {
   rulesForRun(run);
-  if (run.engineVersion === STRICT_USAGE_ENGINE_VERSION) return BALANCE_RULES_V3;
+  if ([STRICT_USAGE_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION].includes(run.engineVersion)) return BALANCE_RULES_V3;
   return ['season-3', STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION].includes(run.engineVersion) ? BALANCE_RULES_V2 : BALANCE_RULES_V1;
 }
 
@@ -62,7 +62,7 @@ export function createRun(seed: string, coaches: readonly Coach[], legacyDraft: 
   const draft = legacyDraft ? structuredClone(legacyDraft) : createDraft(coaches, random.next);
   return {
     schemaVersion: 1, id: seed, seed,
-    engineVersion: legacyDraft ? ENGINE_VERSION : STRICT_USAGE_ENGINE_VERSION, dataVersion: DATA_VERSION, randomVersion: RANDOM_VERSION,
+    engineVersion: legacyDraft ? ENGINE_VERSION : QUALIFICATION_45_ENGINE_VERSION, dataVersion: DATA_VERSION, randomVersion: RANDOM_VERSION,
     scoreVersion: SCORE_RULES.version,
     phase: draft.phase === 'COMPLETE' ? 'DRAFT_READY' : 'DRAFTING',
     draft, draftRandomState: random.state(), legacyDraft: legacyDraft ? structuredClone(legacyDraft) : null,

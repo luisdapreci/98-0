@@ -6,6 +6,63 @@ export interface PossessionInput {
   turnovers: number | null;
 }
 
+export interface PossessionOffenseInput extends PossessionInput {
+  offensiveRebounds: number | null;
+  threePointAttempts: number | null;
+}
+
+export interface PossessionOffensePolicy {
+  referencePossessionsPer36: number;
+  maxWorkloadMultiplier: number | null;
+}
+
+export function evaluatePossessionOffense(inputs: readonly PossessionOffenseInput[], policy: Readonly<PossessionOffensePolicy>) {
+  if (!Number.isFinite(policy.referencePossessionsPer36) || policy.referencePossessionsPer36 <= 0
+    || (policy.maxWorkloadMultiplier !== null && (!Number.isFinite(policy.maxWorkloadMultiplier) || policy.maxWorkloadMultiplier <= 0)))
+    throw new Error('Positive finite reference exposure and workload ceiling or null required.');
+  const budget = evaluatePossessionBudget(inputs);
+  for (const input of inputs) {
+    for (const field of ['offensiveRebounds', 'threePointAttempts'] as const)
+      if (input[field] === null || !Number.isFinite(input[field]) || input[field]! < 0)
+        throw new Error(`Observed finite nonnegative ${field} required for ${input.id}.`);
+    if (input.threePointAttempts! > input.fieldGoalAttempts!)
+      throw new Error(`Three-point attempts cannot exceed field-goal attempts for ${input.id}.`);
+  }
+  const sum = (field: keyof Omit<PossessionOffenseInput, 'id'>) => inputs.reduce((total, input) => total + input[field]!, 0);
+  const observedShotEnds = sum('fieldGoalAttempts') + 0.44 * sum('freeThrowAttempts');
+  const observedUsedEnds = observedShotEnds + sum('turnovers');
+  const observedRebounds = sum('offensiveRebounds');
+  const observedPossessions = observedUsedEnds - observedRebounds;
+  if (![observedUsedEnds, observedRebounds, observedPossessions].every(Number.isFinite)
+    || observedPossessions <= 0 || observedRebounds >= observedShotEnds)
+    throw new Error('Finite positive net possession exposure and rebounds below shot events required.');
+  const eventMultiplier = observedUsedEnds / observedPossessions;
+  const exposureScale = 100 / observedPossessions;
+  const workloadMultiplier = policy.referencePossessionsPer36 / observedPossessions;
+  const projectedPoints = budget.pointsPer100UsedEnds * eventMultiplier;
+  const players = budget.players.map((player, index) => ({ id: player.id, share: player.share,
+    points: player.points * eventMultiplier, shotEnds: player.shotEnds * eventMultiplier,
+    turnoverEnds: player.turnoverEnds * eventMultiplier,
+    reboundContinuations: inputs[index]!.offensiveRebounds! * exposureScale,
+    threePointAttempts: inputs[index]!.threePointAttempts! * exposureScale }));
+  const shotEnds = budget.shotEnds * eventMultiplier;
+  const turnoverEnds = budget.turnoverEnds * eventMultiplier;
+  const reboundContinuations = observedRebounds * exposureScale;
+  if (![projectedPoints, shotEnds, turnoverEnds, reboundContinuations, workloadMultiplier].every(Number.isFinite)
+    || players.some((player) => Object.values(player).some((value) => typeof value === 'number' && !Number.isFinite(value)))
+    || Math.abs(shotEnds + turnoverEnds - reboundContinuations - 100) > 1e-8)
+    throw new Error('Finite conserved possession accounting required.');
+  const supported = policy.maxWorkloadMultiplier === null || workloadMultiplier <= policy.maxWorkloadMultiplier;
+  return { version: 'possession-offense-prototype-2', scope: 'offline-box-possession-proxy',
+    status: supported ? 'accounted' : 'workload-shortfall', policy: { ...policy },
+    pointsPer100Possessions: supported ? projectedPoints : null,
+    unconstrainedPointsPer100Possessions: projectedPoints,
+    pointsPerShotEnd: sum('points') / observedShotEnds,
+    threePointAttemptShare: sum('fieldGoalAttempts') > 0 ? sum('threePointAttempts') / sum('fieldGoalAttempts') : 0,
+    observedPossessionsPer36: observedPossessions, workloadMultiplier,
+    shotEnds, turnoverEnds, reboundContinuations, players };
+}
+
 export function evaluatePossessionBudget(inputs: readonly PossessionInput[], shares?: readonly number[]) {
   if (inputs.length !== 5 || new Set(inputs.map((input) => input.id.split('_')[0])).size !== 5)
     throw new Error('Five distinct starter identities are required.');

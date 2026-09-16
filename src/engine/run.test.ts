@@ -118,7 +118,7 @@ test('full season playback and restored cursors match instant results without ch
 
 test('new runs use released scores while v1 drafts and interrupted seasons retain their pinned rules', () => {
   const fresh = createRun('new-version', data.coaches);
-  assert.equal(fresh.engineVersion, 'season-6');
+  assert.equal(fresh.engineVersion, 'season-7');
   assert.equal(fresh.scoreVersion, SCORE_RULES_V3.version);
   const oldDraft = { ...fresh, engineVersion: 'season-1', scoreVersion: SCORE_RULES_V1.version };
   assert.deepEqual(recoverRun({ run: oldDraft }, data, 'unused').run, oldDraft);
@@ -289,6 +289,34 @@ test('season-6 keeps the 135% cap and historical entry while making overload cos
   assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: legacy })), data, 'unused').run, legacy);
   assert.equal(recoverRun({ run: { ...complete, engineVersion: 'season-5' } }, data, 'unused').run, null);
   assert.equal(recoverRun({ run: { ...complete, scoreVersion: SCORE_RULES_V1.version } }, data, 'unused').run, null);
+});
+
+test('season-7 raises qualification to 45 while preserving gameplay and versioned saves', () => {
+  const ready = readyRun('season-7');
+  assert.equal(usageBaseCap(ready.engineVersion), 135);
+  assert.equal(balanceForRun(ready), BALANCE_RULES_V3);
+  const running = startSeason(ready);
+  assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: running })), data, 'unused').run, running);
+  const current = finishSeason(running, data.opponents);
+  const legacy = finishSeason({ ...running, engineVersion: 'season-6' }, data.opponents);
+  assert.deepEqual(current.season!.gameLog, legacy.season!.gameLog);
+  assert.deepEqual(current.frozenLineup, legacy.frozenLineup);
+  for (const run of [current, legacy])
+    assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run })), data, 'unused').run, run);
+  for (const wins of [39, 40, 44, 45, 59, 60, 65]) {
+    const gameLog = current.season!.gameLog.map((game, index) => ({
+      ...game, ...sampleOutcome(game.evaluation, () => index < wins ? 0 : 1 - Number.EPSILON, () => 0.5, SCORE_RULES_V3),
+    }));
+    const aggregate = aggregateSeason(gameLog);
+    const newSeason = seasonForQualification(aggregate, 'season-7');
+    const oldSeason = seasonForQualification(aggregate, 'season-6');
+    assert.equal(newSeason.qualified, wins >= 45);
+    assert.equal(oldSeason.qualified, wins >= 40);
+    for (const run of [{ ...current, season: newSeason }, { ...legacy, season: oldSeason }])
+      assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run })), data, 'unused').run, run);
+    assert.equal(recoverRun({ run: { ...current, season: { ...newSeason, qualified: !newSeason.qualified } } }, data, 'unused').run, null);
+  }
+  assert.equal(recoverRun({ run: { ...current, scoreVersion: SCORE_RULES_V1.version } }, data, 'unused').run, null);
 });
 
 test('the reference scoring-core roster usually contends for qualification without rewriting its old result', () => {

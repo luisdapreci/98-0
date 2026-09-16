@@ -1,0 +1,128 @@
+{
+  "version": "mid-iq-lineup-data-access-audit-1",
+  "auditDate": "2026-09-16",
+  "scope": "Local data inventory and public documentation/schema review, not a lineup-data ingestion or model-validation run.",
+  "decision": {
+    "status": "blocked-pending-data-permission-and-sample",
+    "technicalFeasibility": "Documented modern-era lineup sources exist with the required categories of fields.",
+    "suitableDatasetVerified": false,
+    "fixedValidationProtocolCreated": false,
+    "reason": "No local observed-lineup dataset. Usage permission for this game's research remains unresolved, and no structured statistical sample was obtained to verify coverage, joins or possession accounting.",
+    "recommendation": "Keep live rules and the retained candidate unchanged. Seek written provider permission or an appropriately licensed export; prioritize structured playtesting while access is unresolved.",
+    "notClaimed": "This audit does not establish that all sources are unavailable, that private research is categorically prohibited, or that a particular legal interpretation applies to this project. It does not validate hypothetical cross-era peak lineups."
+  },
+  "localInventory": {
+    "rawFiles": [
+      "data/raw/Advanced.csv",
+      "data/raw/Player Per Game.csv",
+      "data/raw/Team Abbrev.csv",
+      "data/raw/Team Summaries.csv"
+    ],
+    "processedFiles": [
+      "data/processed/coaches.json",
+      "data/processed/franchises.json",
+      "data/processed/opponents.json",
+      "data/processed/players.json"
+    ],
+    "referenceFiles": [
+      "data/reference/mid-iq-roster-benchmarks.json",
+      "data/reference/nba-scores-2024.json",
+      "data/reference/nba-scores-2025.json",
+      "data/reference/nba-scores.json"
+    ],
+    "observedFivePlayerDataset": null,
+    "limitation": "Season/player aggregates and synthetic benchmark rosters are not observations of five players sharing the court. Existing historical studies explicitly use minute-selected or synthetic units."
+  },
+  "sources": [
+    {
+      "id": "nba-stats",
+      "urls": [
+        "https://www.nba.com/stats/lineups/advanced",
+        "https://www.nba.com/stats/help/faq",
+        "https://www.nba.com/termsofuse",
+        "https://raw.githubusercontent.com/swar/nba_api/master/docs/nba_api/stats/endpoints/leaguedashlineups.md"
+      ],
+      "evidence": [
+        "The rendered advanced-lineup page returned five-player names, team, minutes and efficiency values. This was a page inspection, not a verified historical export.",
+        "The official FAQ states lineup data go back to 2008; advanced statistics from 1996-97 are a separate coverage claim and must not be treated as lineup coverage.",
+        "The official FAQ states statistics are for viewing and are not available for download for academic or personal use.",
+        "Terms section 9 limits statistics use and specifically restricts fantasy-game and commercial-product connections. Section 1 also addresses downloading and reuse. The page lists a July 13, 2026 update date.",
+        "The community nba_api endpoint documentation describes GroupQuantity=5, Base/Advanced measure types and season filters, but its recorded validation date is in 2020 and its displayed field list is Base data. It is not proof of current historical availability or data-use permission."
+      ],
+      "coverageStatus": "Provider-documented start year only; completeness and exact starting season not tested.",
+      "accessStatus": "Public page visible; no stats endpoint probe or statistical export performed after reviewing restrictions.",
+      "permissionStatus": "Unresolved for project use; public visibility or availability of a client library is not permission."
+    },
+    {
+      "id": "pbpstats",
+      "urls": [
+        "https://www.pbpstats.com/",
+        "https://api.pbpstats.com/docs",
+        "https://api.pbpstats.com/openapi.json",
+        "https://pbpstats.readthedocs.io/en/latest/",
+        "https://pbpstats.readthedocs.io/en/latest/quickstart.html",
+        "https://raw.githubusercontent.com/dblackrun/pbpstats/master/LICENSE"
+      ],
+      "evidence": [
+        "The homepage reports NBA statistics going back to 2000-01 and links to lineup totals and API documentation.",
+        "The public OpenAPI schema returned HTTP 200. It documents get-totals, get-game-logs and get-possessions endpoints. No statistical endpoint was called.",
+        "Totals and GameLog schemas include EntityId, TeamId, Name, SecondsPlayed, Minutes, OffPoss, DefPoss and PtsPer100Poss. Schema presence does not guarantee non-null fields or complete historical rows.",
+        "The game-log endpoint documents an EntityId for a lineup; totals supports season/type queries and date filters. The possession-finder documentation limits returned possessions to 500 when more match, so it cannot be assumed to provide exhaustive samples.",
+        "The quickstart identifies lineup IDs as hyphen-separated NBA player IDs sorted as strings. These differ from the Basketball Reference-style identities in the project's raw player data.",
+        "Package documentation describes lineups on every event, possession start/end context, and corrections for out-of-order play-by-play. Manual corrections and period-starter overrides may be required.",
+        "The homepage says possession counts exclude certain end-of-quarter heaves and may differ from NBA counts. Labels and denominators must come from one documented convention.",
+        "The repository LICENSE grants MIT rights for software and associated documentation. It does not independently establish rights to the source statistics or provider API data. No data license authorizing this project's intended use was verified."
+      ],
+      "coverageStatus": "Provider-documented 2000-01 start; no measured season, team, game or lineup completeness.",
+      "accessStatus": "Documentation and schema reachable; API data retrieval, quotas, full exports and rate limits unverified.",
+      "permissionStatus": "Clarification required from provider/rightsholder before adopting a data-acquisition pipeline.",
+      "unsuccessfulDocumentationProbe": {
+        "url": "https://www.pbpstats.com/faq",
+        "result": "HTTP 404; not evidence about data availability or licensing."
+      }
+    }
+  ],
+  "readiness": {
+    "documentedLineupIdentity": true,
+    "documentedMinutes": true,
+    "documentedOffensivePossessions": true,
+    "documentedOffensiveRating": true,
+    "permissionForIntendedUseVerified": false,
+    "structuredLineupRowsAcquired": 0,
+    "measuredEligibleLineups": null,
+    "measuredPossessionCoverage": null,
+    "playerIdentityCrosswalkVerified": false,
+    "gameMinuteAndPointReconciliationVerified": false,
+    "historicalEraCoverageVerified": false,
+    "validationReady": false
+  },
+  "resumeRequirements": [
+    "Clarify permission for private model research, storage, derived results and any eventual game use; record whether redistribution is allowed. Do not assume software licensing covers statistics.",
+    "Obtain a permitted, versioned sample with five stable player IDs, team, season/game/date, minutes, offensive possessions, points or a documented offensive rating, and preferably opponent context.",
+    "Build and audit an explicit NBA-ID to project-player-ID crosswalk. Do not join ambiguous abbreviated names or silently discard unmatched players.",
+    "Measure season/team/game coverage, missing fields, duplicate units and the distribution of lineup minutes/possessions before claiming adequate sample size.",
+    "Reconcile lineup time and scoring against game/team totals under the provider's documented possession convention. Document substitutions within possessions, incomplete lineups, heaves, team events and any correction overrides.",
+    "Only after data readiness, freeze chronological splits, information cutoffs, minimum exposures, possession weighting, clustered uncertainty, baselines and a primary success criterion before evaluating candidate predictions.",
+    "Keep whole games together across partitions; report repeated lineups and player overlap. Temporal evaluation alone is not evidence of generalization to unseen cross-era combinations.",
+    "Use lagged player inputs rather than career peaks selected using later seasons for a predictive historical test. Report that real modern lineups still cannot directly validate hypothetical cross-era peak combinations."
+  ],
+  "fallback": {
+    "recommendation": "Structured exploratory playtesting of the unchanged game rather than another formula experiment while data access is unresolved.",
+    "focus": ["Draft tradeoffs", "Credibility of surprising outcomes", "Understanding of reserve and overload effects", "Willingness to replay"],
+    "status": "Recommended only; no participants contacted, sessions run or human findings claimed."
+  },
+  "preservation": {
+    "liveRulesChanged": false,
+    "retainedCandidateChanged": false,
+    "priorReportsChanged": false,
+    "benchmarkTargetsChanged": false,
+    "dependenciesInstalled": false,
+    "statisticalDataImported": false
+  },
+  "limitations": [
+    "This is a bounded review of NBA Stats and pbpstats, not an exhaustive market or legal survey.",
+    "Public pages and schemas can change. Findings reflect the material retrieved during this audit; no versioned external dataset was obtained.",
+    "Reported provider date ranges are documentation claims, not measurements of completeness or availability for every season.",
+    "No fixed validation test was created because usable data, permissions and adequate coverage have not been established."
+  ]
+}
