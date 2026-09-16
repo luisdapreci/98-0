@@ -1,0 +1,1092 @@
+{
+  "version": "mid-iq-rosters-fit-1",
+  "scope": "development-only",
+  "balance": {
+    "version": "mid-iq-2",
+    "coreOffenseWeight": 0.8
+  },
+  "experiment": "fit",
+  "fitted": {
+    "parameters": {
+      "offenseBaseline": 87.52999999999983,
+      "offenseScale": 1.7319999999999949,
+      "leadScorerWeight": 0.34599999999999986,
+      "usageSlope": 0.007529999999999994,
+      "spacingLow": -5.470000000000018,
+      "spacingHigh": 7.3000000000000025,
+      "defenseScale": 0.4099999999999996,
+      "depthScale": 7,
+      "coachScale": 0.8,
+      "paceModel": "neutral"
+    },
+    "loss": 2.849827779912076,
+    "bounds": {
+      "offenseBaseline": [
+        86,
+        100,
+        1
+      ],
+      "offenseScale": [
+        0.8,
+        1.8,
+        0.1
+      ],
+      "leadScorerWeight": [
+        0,
+        0.8,
+        0.05
+      ],
+      "usageSlope": [
+        0.002,
+        0.01,
+        0.001
+      ],
+      "spacingLow": [
+        -8,
+        0,
+        1
+      ],
+      "spacingHigh": [
+        3,
+        8,
+        1
+      ],
+      "defenseScale": [
+        0.4,
+        1.1,
+        0.05
+      ],
+      "depthScale": [
+        2,
+        7,
+        0.5
+      ],
+      "coachScale": [
+        0.3,
+        0.8,
+        0.1
+      ]
+    },
+    "traces": [
+      {
+        "initial": {
+          "offenseBaseline": 91,
+          "offenseScale": 1.3,
+          "leadScorerWeight": 0.15,
+          "usageSlope": 0.006,
+          "spacingLow": -6,
+          "spacingHigh": 6,
+          "defenseScale": 0.9,
+          "depthScale": 5,
+          "coachScale": 0.6,
+          "paceModel": "neutral"
+        },
+        "parameters": {
+          "offenseBaseline": 93,
+          "offenseScale": 1.3349999999999993,
+          "leadScorerWeight": 0.5800000000000007,
+          "usageSlope": 0.006200000000000001,
+          "spacingLow": -7.999999999999999,
+          "spacingHigh": 5.950000000000001,
+          "defenseScale": 0.5950000000000008,
+          "depthScale": 7,
+          "coachScale": 0.7750000000000005,
+          "paceModel": "neutral"
+        },
+        "loss": 237.36907989521166
+      },
+      {
+        "initial": {
+          "offenseBaseline": 88,
+          "offenseScale": 1.6,
+          "leadScorerWeight": 0.3,
+          "usageSlope": 0.006,
+          "spacingLow": -6,
+          "spacingHigh": 6,
+          "defenseScale": 0.9,
+          "depthScale": 5,
+          "coachScale": 0.6,
+          "paceModel": "neutral"
+        },
+        "parameters": {
+          "offenseBaseline": 88.84999999999991,
+          "offenseScale": 1.6,
+          "leadScorerWeight": 0.42249999999999993,
+          "usageSlope": 0.0066500000000000005,
+          "spacingLow": -6.050000000000007,
+          "spacingHigh": 7.3999999999999995,
+          "defenseScale": 0.47249999999999964,
+          "depthScale": 7,
+          "coachScale": 0.8,
+          "paceModel": "neutral"
+        },
+        "loss": 21.671031242583577
+      },
+      {
+        "initial": {
+          "offenseBaseline": 91,
+          "offenseScale": 1.3,
+          "leadScorerWeight": 0.15,
+          "usageSlope": 0.003,
+          "spacingLow": -3,
+          "spacingHigh": 6,
+          "defenseScale": 0.7,
+          "depthScale": 5,
+          "coachScale": 0.6,
+          "paceModel": "neutral"
+        },
+        "parameters": {
+          "offenseBaseline": 92,
+          "offenseScale": 1.3649999999999987,
+          "leadScorerWeight": 0.5525000000000008,
+          "usageSlope": 0.00635,
+          "spacingLow": -7.449999999999997,
+          "spacingHigh": 6.700000000000005,
+          "defenseScale": 0.5875000000000005,
+          "depthScale": 6.999999999999994,
+          "coachScale": 0.8,
+          "paceModel": "neutral"
+        },
+        "loss": 200.682082890734
+      }
+    ],
+    "method": "Bounded single/pair coordinate search, 0.05-win interior selection margin, band-prioritized loss; no validation cases."
+  },
+  "candidateImplementationSha256": "43e5a5d6a078307561543e5d798583c49c8e618a0810238ed6337f4f24218b69",
+  "catalogVersion": "mid-iq-roster-review-2",
+  "catalogSha256": "04381262ed3d87b73993577e0b6420ab5d652cade304fbd743706f4de550c4ce",
+  "evaluatorSha256": "eb31e57466b8f84eb6e1929329884cba22569093e7f6286e1eeab2a1cde0a041",
+  "mathSha256": "0c8598ec267cfae50a5228e65e8143e3ab6b979d1f5a605e77433ece68a8c800",
+  "opponentSha256": "c0b79d76450f14034eb5ffebe364de687a26acdee51402ece13f5422c515a52b",
+  "seedPrefix": "mid-iq-rosters-development-1-",
+  "schedules": 64,
+  "method": "Exact conditional Bernoulli distributions mixed over 64 seeded schedules. Standard error measures schedule sampling only, not model uncertainty.",
+  "rosters": [
+    {
+      "id": "C01",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 62.43804646529861,
+      "scheduleMeanStandardError": 0.03375380191851442,
+      "scheduleExpectedWinsP05P95": [
+        61.991252429050824,
+        62.907890680807434
+      ],
+      "qualificationProbability": 0.7851165054008751,
+      "seasonWinsP05P50P95": [
+        56,
+        63,
+        68
+      ],
+      "undefeatedProbability": 9.973398108625376e-11,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 116.1,
+          "phiUsg": 1,
+          "spacingRating": 6.4633,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.023788437097821587,
+          "drtgTeam": 105.772930873,
+          "ortgTeam": 117.01626670778245,
+          "effectiveOrtg": 119.79990080778245,
+          "netRating": 14.026969934782443,
+          "sixthManFRF": 0.23152824999999996,
+          "depthBonus": 1.6206977499999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.647667684782443,
+        "winProbability": 0.8161164033164952
+      },
+      "inBand": true
+    },
+    {
+      "id": "C02",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 64.005246875456,
+      "scheduleMeanStandardError": 0.03244782642071748,
+      "scheduleExpectedWinsP05P95": [
+        63.57428757945047,
+        64.4591397741454
+      ],
+      "qualificationProbability": 0.88925889105086,
+      "seasonWinsP05P50P95": [
+        58,
+        64,
+        70
+      ],
+      "undefeatedProbability": 8.435616813609382e-10,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 106.6,
+          "phiUsg": 1,
+          "spacingRating": 5.4298,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.012195387416752926,
+          "drtgTeam": 106.23883932033333,
+          "ortgTeam": 120.03346429069416,
+          "effectiveOrtg": 121.49731889069415,
+          "netRating": 15.25847957036082,
+          "sixthManFRF": 0.22804225,
+          "depthBonus": 1.59629575
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.85477532036082,
+        "winProbability": 0.832746228209294
+      },
+      "inBand": true
+    },
+    {
+      "id": "C03",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.24686935552901,
+      "scheduleMeanStandardError": 0.028654493352152578,
+      "scheduleExpectedWinsP05P95": [
+        65.8686049280507,
+        66.64932135618731
+      ],
+      "qualificationProbability": 0.9691816925579275,
+      "seasonWinsP05P50P95": [
+        60,
+        66,
+        72
+      ],
+      "undefeatedProbability": 1.728416297753088e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 91.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 5.884,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.017392547780348096,
+          "drtgTeam": 105.51298715566666,
+          "ortgTeam": 117.51400805748358,
+          "effectiveOrtg": 119.55787605748357,
+          "netRating": 14.044888901816904,
+          "sixthManFRF": 0.589712,
+          "depthBonus": 4.127984
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.172872901816902,
+        "winProbability": 0.8495083027898175
+      },
+      "inBand": true
+    },
+    {
+      "id": "C05",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.06230045184725,
+      "scheduleMeanStandardError": 0.029950666532725254,
+      "scheduleExpectedWinsP05P95": [
+        65.6639211023292,
+        66.49442413590104
+      ],
+      "qualificationProbability": 0.9654160317707914,
+      "seasonWinsP05P50P95": [
+        60,
+        66,
+        72
+      ],
+      "undefeatedProbability": 1.307323932106289e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 107.4,
+          "phiUsg": 1,
+          "spacingRating": 7.9706,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.03955352954884217,
+          "drtgTeam": 107.722629744,
+          "ortgTeam": 119.0401022034158,
+          "effectiveOrtg": 123.7485584034158,
+          "netRating": 16.025928659415797,
+          "sixthManFRF": 0.33663442,
+          "depthBonus": 2.3564409399999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.382369599415796,
+        "winProbability": 0.8520413059938993
+      },
+      "inBand": true
+    },
+    {
+      "id": "C06",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.93979034651895,
+      "scheduleMeanStandardError": 0.02876597700206295,
+      "scheduleExpectedWinsP05P95": [
+        66.55268048000772,
+        67.35703575051411
+      ],
+      "qualificationProbability": 0.981350537141146,
+      "seasonWinsP05P50P95": [
+        61,
+        67,
+        72
+      ],
+      "undefeatedProbability": 4.0729290995287046e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 108.8,
+          "phiUsg": 1,
+          "spacingRating": 6.917400000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.028463331315789916,
+          "drtgTeam": 105.16059350866666,
+          "ortgTeam": 118.17027889964862,
+          "effectiveOrtg": 121.53379869964861,
+          "netRating": 16.37320519098195,
+          "sixthManFRF": 0.38611692999999997,
+          "depthBonus": 2.7028185099999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 19.07602370098195,
+        "winProbability": 0.8601773989417693
+      },
+      "inBand": true
+    },
+    {
+      "id": "C07",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 67.70150963294742,
+      "scheduleMeanStandardError": 0.027803003863125925,
+      "scheduleExpectedWinsP05P95": [
+        67.3265646937241,
+        68.10481646098938
+      ],
+      "qualificationProbability": 0.9898209281072793,
+      "seasonWinsP05P50P95": [
+        62,
+        68,
+        73
+      ],
+      "undefeatedProbability": 1.0718976818289118e-7,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 103.5,
+          "phiUsg": 1,
+          "spacingRating": 10.247800000000002,
+          "spacingTier": "ELITE",
+          "spacingModifier": 0.06324936451080199,
+          "drtgTeam": 105.81952140066667,
+          "ortgTeam": 115.41617937921382,
+          "effectiveOrtg": 122.71617937921381,
+          "netRating": 16.89665797854714,
+          "sixthManFRF": 0.40611693,
+          "depthBonus": 2.84281851
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 19.73947648854714,
+        "winProbability": 0.8676053995335651
+      },
+      "inBand": true
+    },
+    {
+      "id": "C10",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 64.03742548213606,
+      "scheduleMeanStandardError": 0.030903170835857235,
+      "scheduleExpectedWinsP05P95": [
+        63.64142612620148,
+        64.46496096318816
+      ],
+      "qualificationProbability": 0.8902053471682044,
+      "seasonWinsP05P50P95": [
+        58,
+        64,
+        70
+      ],
+      "undefeatedProbability": 9.580047005074617e-10,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 127.2,
+          "phiUsg": 0.9639865796101954,
+          "spacingRating": 5.1837,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.009902670161797906,
+          "drtgTeam": 105.161631615,
+          "ortgTeam": 117.15528409853388,
+          "effectiveOrtg": 117.23796118812598,
+          "netRating": 12.076329573125975,
+          "sixthManFRF": 0.6081399999999999,
+          "depthBonus": 4.2569799999999995
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.333309573125973,
+        "winProbability": 0.8257143531706788
+      },
+      "inBand": true
+    },
+    {
+      "id": "E02",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 69.42185143227098,
+      "scheduleMeanStandardError": 0.024363884542100124,
+      "scheduleExpectedWinsP05P95": [
+        69.10865089638999,
+        69.75942410573803
+      ],
+      "qualificationProbability": 0.9979955213849485,
+      "seasonWinsP05P50P95": [
+        64,
+        70,
+        74
+      ],
+      "undefeatedProbability": 9.297781809710951e-7,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 142.8,
+          "phiUsg": 0.8606332215646181,
+          "spacingRating": 4.1217,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.0017201388944997516,
+          "drtgTeam": 103.91223616866667,
+          "ortgTeam": 125.37451103618999,
+          "effectiveOrtg": 119.89365435161389,
+          "netRating": 15.981418182947223,
+          "sixthManFRF": 0.7124475699999999,
+          "depthBonus": 4.987132989999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.968551172947222,
+        "winProbability": 0.8804822500828846
+      },
+      "inBand": true
+    },
+    {
+      "id": "E03",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 71.63674717338468,
+      "scheduleMeanStandardError": 0.021347525230796457,
+      "scheduleExpectedWinsP05P95": [
+        71.35505530281497,
+        71.93599382455734
+      ],
+      "qualificationProbability": 0.9998796341391645,
+      "seasonWinsP05P50P95": [
+        67,
+        72,
+        76
+      ],
+      "undefeatedProbability": 0.000013143081973127558,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 141.6,
+          "phiUsg": 0.8863670682157669,
+          "spacingRating": 2.807,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.015317057028033312,
+          "drtgTeam": 102.48039736433334,
+          "ortgTeam": 127.65503934763487,
+          "effectiveOrtg": 121.21005248860537,
+          "netRating": 18.72965512427203,
+          "sixthManFRF": 0.6759949000000001,
+          "depthBonus": 4.7319643000000005
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 23.46161942427203,
+        "winProbability": 0.9032998797614563
+      },
+      "inBand": true
+    },
+    {
+      "id": "E04",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 70.42797199546409,
+      "scheduleMeanStandardError": 0.024535714823873744,
+      "scheduleExpectedWinsP05P95": [
+        70.09819599904466,
+        70.78645264719373
+      ],
+      "qualificationProbability": 0.9993893861543235,
+      "seasonWinsP05P50P95": [
+        65,
+        71,
+        75
+      ],
+      "undefeatedProbability": 0.0000030539867204471673,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 135.1,
+          "phiUsg": 0.9079299885380195,
+          "spacingRating": 8.01,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.039655649735975095,
+          "drtgTeam": 104.84858434233334,
+          "ortgTeam": 123.29522549201795,
+          "effectiveOrtg": 124.76109077102754,
+          "netRating": 19.9125064286942,
+          "sixthManFRF": 0.37411692999999996,
+          "depthBonus": 2.6188185099999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 22.5313249386942,
+        "winProbability": 0.8952794443619891
+      },
+      "inBand": true
+    },
+    {
+      "id": "E05",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 68.92809508177174,
+      "scheduleMeanStandardError": 0.025023556055417426,
+      "scheduleExpectedWinsP05P95": [
+        68.60680607375899,
+        69.27458906201417
+      ],
+      "qualificationProbability": 0.9966549252494886,
+      "seasonWinsP05P50P95": [
+        63,
+        69,
+        74
+      ],
+      "undefeatedProbability": 5.08131847166715e-7,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 134.9,
+          "phiUsg": 0.9095882802315242,
+          "spacingRating": 4.1954,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.0009386091603887433,
+          "drtgTeam": 104.20861934666667,
+          "ortgTeam": 123.0413499840001,
+          "effectiveOrtg": 119.7182335606464,
+          "netRating": 15.50961421397973,
+          "sixthManFRF": 0.7095004500000001,
+          "depthBonus": 4.96650315
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.476117363979732,
+        "winProbability": 0.8754582448886358
+      },
+      "inBand": false
+    },
+    {
+      "id": "F01",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.5075724854221,
+      "scheduleMeanStandardError": 0.027522910070843766,
+      "scheduleExpectedWinsP05P95": [
+        66.18169133207114,
+        66.8643616660528
+      ],
+      "qualificationProbability": 0.9740917921219269,
+      "seasonWinsP05P50P95": [
+        61,
+        67,
+        72
+      ],
+      "undefeatedProbability": 2.4830769523796186e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 165.4,
+          "phiUsg": 0.6106571296027428,
+          "spacingRating": 9.0516,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.054394937214910635,
+          "drtgTeam": 106.60363749,
+          "ortgTeam": 127.50104153416981,
+          "effectiveOrtg": 118.02749469048808,
+          "netRating": 11.423857200488087,
+          "sixthManFRF": 0.9307430999999999,
+          "depthBonus": 6.5152016999999995
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 17.939058900488085,
+        "winProbability": 0.8466392630224706
+      },
+      "inBand": true
+    },
+    {
+      "id": "F02",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 63.002619661152174,
+      "scheduleMeanStandardError": 0.032675442110040795,
+      "scheduleExpectedWinsP05P95": [
+        62.55435911913454,
+        63.45619994240108
+      ],
+      "qualificationProbability": 0.8269630999553478,
+      "seasonWinsP05P50P95": [
+        57,
+        63,
+        69
+      ],
+      "undefeatedProbability": 2.2629884970208403e-10,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 144.70000000000002,
+          "phiUsg": 0.8187295251608641,
+          "spacingRating": 7.1191,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.030819271450340385,
+          "drtgTeam": 107.91616794800001,
+          "ortgTeam": 124.1286118052494,
+          "effectiveOrtg": 121.11545476485861,
+          "netRating": 13.199286816858603,
+          "sixthManFRF": 0.3797083,
+          "depthBonus": 2.6579581
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.857244916858603,
+        "winProbability": 0.8190928900729035
+      },
+      "inBand": false
+    },
+    {
+      "id": "F03",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 63.03975892177271,
+      "scheduleMeanStandardError": 0.033206753514622996,
+      "scheduleExpectedWinsP05P95": [
+        62.60100390963362,
+        63.50258255642909
+      ],
+      "qualificationProbability": 0.8298901584945678,
+      "seasonWinsP05P50P95": [
+        57,
+        63,
+        69
+      ],
+      "undefeatedProbability": 2.2894131063986872e-10,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 96.19999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.3912,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.009633543750738598,
+          "drtgTeam": 102.75985082233333,
+          "ortgTeam": 118.27813621676358,
+          "effectiveOrtg": 117.13869861676358,
+          "netRating": 14.378847794430243,
+          "sixthManFRF": 0.24352824999999995,
+          "depthBonus": 1.7046977499999996
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.083545544430244,
+        "winProbability": 0.8222645895848062
+      },
+      "inBand": false
+    },
+    {
+      "id": "F04",
+      "target": [
+        30,
+        40
+      ],
+      "expectedWins": 39.957829822812336,
+      "scheduleMeanStandardError": 0.04665691851017909,
+      "scheduleExpectedWinsP05P95": [
+        39.44589258143486,
+        40.53403880251793
+      ],
+      "qualificationProbability": 0.0000028702454941823888,
+      "seasonWinsP05P50P95": [
+        33,
+        40,
+        47
+      ],
+      "undefeatedProbability": 1.1796605377350372e-27,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 111.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.9366999999999996,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.004102181192345638,
+          "drtgTeam": 107.81353771833334,
+          "ortgTeam": 107.95088740261049,
+          "effectiveOrtg": 107.50805330261048,
+          "netRating": -0.30548441572285867,
+          "sixthManFRF": 0.31599547,
+          "depthBonus": 2.21196829
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 1.9064838742771415,
+        "winProbability": 0.5452681761191152
+      },
+      "inBand": true
+    }
+  ],
+  "variants": [
+    {
+      "id": "V01",
+      "parent": "C01",
+      "expectedWins": 64.46766278607213,
+      "scheduleMeanStandardError": 0.032018188349506184,
+      "scheduleExpectedWinsP05P95": [
+        64.04167136938219,
+        64.91603863545652
+      ],
+      "qualificationProbability": 0.9120759192954154,
+      "seasonWinsP05P50P95": [
+        58,
+        65,
+        70
+      ],
+      "undefeatedProbability": 1.5684142539905737e-9,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 115,
+          "phiUsg": 1,
+          "spacingRating": 7.513800000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.03523872517330385,
+          "drtgTeam": 105.59035080733334,
+          "ortgTeam": 117.0621973329815,
+          "effectiveOrtg": 121.1873199329815,
+          "netRating": 15.596969125648158,
+          "sixthManFRF": 0.23152824999999996,
+          "depthBonus": 1.6206977499999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 17.217666875648156,
+        "winProbability": 0.8375047000451267
+      },
+      "expectedWinDifference": 2.0296163207735134
+    },
+    {
+      "id": "V02",
+      "parent": "C02",
+      "expectedWins": 61.80896483584441,
+      "scheduleMeanStandardError": 0.034268232445410114,
+      "scheduleExpectedWinsP05P95": [
+        61.352167075880494,
+        62.28505449937967
+      ],
+      "qualificationProbability": 0.7324622373158197,
+      "seasonWinsP05P50P95": [
+        55,
+        62,
+        68
+      ],
+      "undefeatedProbability": 4.155447346006309e-11,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 104.8,
+          "phiUsg": 1,
+          "spacingRating": 4.2148,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.0007305916625847551,
+          "drtgTeam": 106.36069794866667,
+          "ortgTeam": 120.04024202758401,
+          "effectiveOrtg": 119.95254162758401,
+          "netRating": 13.591843678917343,
+          "sixthManFRF": 0.22804225,
+          "depthBonus": 1.59629575
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.188139428917342,
+        "winProbability": 0.8094575718774747
+      },
+      "expectedWinDifference": -2.1962820396115887
+    },
+    {
+      "id": "V03",
+      "parent": "C03",
+      "expectedWins": 50.31196210696966,
+      "scheduleMeanStandardError": 0.04101811715608718,
+      "scheduleExpectedWinsP05P95": [
+        49.82021459189075,
+        50.79421952330915
+      ],
+      "qualificationProbability": 0.01442474921611615,
+      "seasonWinsP05P50P95": [
+        43,
+        50,
+        57
+      ],
+      "undefeatedProbability": 8.485164819750472e-19,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 69.3,
+          "phiUsg": 1,
+          "spacingRating": 5.991200000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.020388276792262582,
+          "drtgTeam": 105.90238108866667,
+          "ortgTeam": 106.96158494510934,
+          "effectiveOrtg": 109.14234734510933,
+          "netRating": 3.2399662564426563,
+          "sixthManFRF": 0.589712,
+          "depthBonus": 4.127984
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 7.367950256442656,
+        "winProbability": 0.6685666919776126
+      },
+      "expectedWinDifference": -15.934907248559355
+    },
+    {
+      "id": "V04",
+      "parent": "C01",
+      "expectedWins": 66.10843205047246,
+      "scheduleMeanStandardError": 0.028850573071345354,
+      "scheduleExpectedWinsP05P95": [
+        65.72616531476534,
+        66.51424002075298
+      ],
+      "qualificationProbability": 0.9661942824493098,
+      "seasonWinsP05P50P95": [
+        60,
+        66,
+        72
+      ],
+      "undefeatedProbability": 1.4439988545688701e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 116.1,
+          "phiUsg": 1,
+          "spacingRating": 6.4633,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.023788437097821587,
+          "drtgTeam": 105.772930873,
+          "ortgTeam": 117.01626670778245,
+          "effectiveOrtg": 119.79990080778245,
+          "netRating": 14.026969934782443,
+          "sixthManFRF": 0.577712,
+          "depthBonus": 4.043984
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.070953934782445,
+        "winProbability": 0.8482631623996486
+      },
+      "expectedWinDifference": 3.6703855851738467
+    },
+    {
+      "id": "V05",
+      "parent": "C06",
+      "expectedWins": 67.29574301450882,
+      "scheduleMeanStandardError": 0.028268315268156357,
+      "scheduleExpectedWinsP05P95": [
+        66.91304648136888,
+        67.70530784919015
+      ],
+      "qualificationProbability": 0.9858214255096427,
+      "seasonWinsP05P50P95": [
+        62,
+        67,
+        73
+      ],
+      "undefeatedProbability": 6.422779923276338e-8,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 108.8,
+          "phiUsg": 1,
+          "spacingRating": 6.6502,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.025575850612712583,
+          "drtgTeam": 104.66859350866667,
+          "ortgTeam": 118.17027889964862,
+          "effectiveOrtg": 121.19258429964862,
+          "netRating": 16.52399079098194,
+          "sixthManFRF": 0.40611693,
+          "depthBonus": 2.84281851
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 19.36680930098194,
+        "winProbability": 0.8634750980192079
+      },
+      "expectedWinDifference": 0.35595266798986813
+    },
+    {
+      "id": "V06",
+      "parent": "C01",
+      "expectedWins": 62.43804646529861,
+      "scheduleMeanStandardError": 0.03375380191851442,
+      "scheduleExpectedWinsP05P95": [
+        61.991252429050824,
+        62.907890680807434
+      ],
+      "qualificationProbability": 0.7851165054008751,
+      "seasonWinsP05P50P95": [
+        56,
+        63,
+        68
+      ],
+      "undefeatedProbability": 9.973398108625376e-11,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 116.1,
+          "phiUsg": 1,
+          "spacingRating": 6.4633,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.023788437097821587,
+          "drtgTeam": 105.772930873,
+          "ortgTeam": 117.01626670778245,
+          "effectiveOrtg": 119.79990080778245,
+          "netRating": 14.026969934782443,
+          "sixthManFRF": 0.23152824999999996,
+          "depthBonus": 1.6206977499999997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.647667684782443,
+        "winProbability": 0.8161164033164952
+      },
+      "expectedWinDifference": 0
+    },
+    {
+      "id": "V07",
+      "parent": "E02",
+      "expectedWins": 68.59128717076864,
+      "scheduleMeanStandardError": 0.02544815007595585,
+      "scheduleExpectedWinsP05P95": [
+        68.26512490901494,
+        68.9430911863108
+      ],
+      "qualificationProbability": 0.9953510359486399,
+      "seasonWinsP05P50P95": [
+        63,
+        69,
+        74
+      ],
+      "undefeatedProbability": 3.356598682918816e-7,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 134.39999999999998,
+          "phiUsg": 0.9323670281453638,
+          "spacingRating": 2.9672,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.013881766301575196,
+          "drtgTeam": 104.25041194500001,
+          "ortgTeam": 123.5199676828842,
+          "effectiveOrtg": 119.4049736115384,
+          "netRating": 15.154561666538385,
+          "sixthManFRF": 0.7124475699999999,
+          "depthBonus": 4.987132989999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.141694656538384,
+        "winProbability": 0.8719438995680477
+      },
+      "expectedWinDifference": -0.8305642615023459
+    },
+    {
+      "id": "V08",
+      "parent": "C05",
+      "expectedWins": 69.07555505513547,
+      "scheduleMeanStandardError": 0.024978027858859303,
+      "scheduleExpectedWinsP05P95": [
+        68.74947632047488,
+        69.42480376548647
+      ],
+      "qualificationProbability": 0.9971236859559038,
+      "seasonWinsP05P50P95": [
+        64,
+        69,
+        74
+      ],
+      "undefeatedProbability": 6.070316576850115e-7,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 107.4,
+          "phiUsg": 1,
+          "spacingRating": 7.9706,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.03955352954884217,
+          "drtgTeam": 107.722629744,
+          "ortgTeam": 119.0401022034158,
+          "effectiveOrtg": 123.7485584034158,
+          "netRating": 16.025928659415797,
+          "sixthManFRF": 0.66550045,
+          "depthBonus": 4.6585031500000005
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.6844318094158,
+        "winProbability": 0.8776053007473412
+      },
+      "expectedWinDifference": 3.0132546032882175
+    }
+  ],
+  "passed": 12,
+  "limitations": [
+    "No validation-family performance computed.",
+    "Not observed human draft or playoff/title outcomes."
+  ]
+}

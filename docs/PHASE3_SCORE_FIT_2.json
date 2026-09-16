@@ -1,0 +1,442 @@
+{
+  "version": "historical-score-fit-2",
+  "referenceSha256": "d316c97bbbd5890fb32d2dd5efdc98ca5f2bd7220e1ec3b95af0bfa8752d7c9c",
+  "sources": [
+    {
+      "season": 2024,
+      "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_2024.csv",
+      "sha256": "ae89a6e51dec1817b41e457d02ffc4cfc26d25b411d318906c1ec5f39a6c5527",
+      "completedGames": 1230,
+      "releaseAssetId": 493697559,
+      "assetUpdatedUtc": "2026-07-29T06:34:57Z"
+    }
+  ],
+  "splitDate": null,
+  "trainingCount": 1230,
+  "validationCount": 1230,
+  "matchupProxy": "Pregame mean point differential, ten-game zero prior, +2.5 home; fixed sigma 10.5.",
+  "outcomeConditioning": "Observed historical winner; not a win-prediction calibration.",
+  "tolerances": {
+    "meanTotal": 4,
+    "totalSD": 3,
+    "totalP10": 5,
+    "totalP90": 5,
+    "meanMargin": 1.5,
+    "medianMargin": 2,
+    "marginP90": 3,
+    "thirtyPointRate": 0.025,
+    "fiftyPointRate": 0.008,
+    "onePointRate": 0.025,
+    "overtimeRate": 0.02,
+    "overtimeMeanMargin": 1.5,
+    "overtimeMarginP90": 4,
+    "overtimeMeanTotal": 12,
+    "multipleOvertimeShare": 0.12
+  },
+  "rules": {
+    "version": "conditional-score-3-candidate",
+    "baseline": 113.445132,
+    "baselineSpread": 24.044916,
+    "regulationScale": 8,
+    "regulationOffset": 1,
+    "maxMargin": 100,
+    "overtimeProbability": 0.052149,
+    "overtimeScale": 3,
+    "overtimeMaxMargin": 30,
+    "overtimeBaseline": 9.477421,
+    "overtimeSpread": 6,
+    "overtimeContinuation": 0.119403,
+    "maxOvertimePeriods": 6
+  },
+  "trials": [
+    {
+      "parameter": "overtimeScale",
+      "value": 2,
+      "loss": 2.059279
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 2.5,
+      "loss": 0.777147
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 3,
+      "loss": 0.220802
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 3.5,
+      "loss": 0.491042
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 4,
+      "loss": 1.140976
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 4.5,
+      "loss": 3.014863
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 5,
+      "loss": 4.861656
+    }
+  ],
+  "observed": {
+    "meanTotal": 228.4227642276423,
+    "totalSD": 20.26607888405291,
+    "totalP10": 204,
+    "totalP90": 255,
+    "meanMargin": 12.583739837398374,
+    "medianMargin": 10,
+    "marginP90": 26,
+    "thirtyPointRate": 0.06260162601626017,
+    "fiftyPointRate": 0.005691056910569106,
+    "onePointRate": 0.03739837398373984,
+    "overtimeRate": 0.04796747967479675,
+    "overtimeMeanMargin": 4.983050847457627,
+    "overtimeMarginP90": 8.200000000000003,
+    "overtimeMeanTotal": 248.91525423728814,
+    "multipleOvertimeShare": 0.13559322033898305
+  },
+  "original": {
+    "count": 123000,
+    "summary": {
+      "meanTotal": 225.7810487804878,
+      "totalSD": 17.29751719218363,
+      "totalP10": 203,
+      "totalP90": 249,
+      "meanMargin": 15.043569105691057,
+      "medianMargin": 12,
+      "marginP90": 32,
+      "thirtyPointRate": 0.12695934959349595,
+      "fiftyPointRate": 0.020943089430894308,
+      "onePointRate": 0.0733170731707317,
+      "overtimeRate": 0.05483739837398374,
+      "overtimeMeanMargin": 4.216160118606375,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 247.47961452928095,
+      "multipleOvertimeShare": 0.12112676056338029
+    },
+    "capCounts": {
+      "regulationCap": 419,
+      "overtimeCap": 305,
+      "periodCap": 112
+    }
+  },
+  "candidate": {
+    "count": 123000,
+    "summary": {
+      "meanTotal": 228.46131707317073,
+      "totalSD": 20.297576439619846,
+      "totalP10": 201,
+      "totalP90": 256,
+      "meanMargin": 12.527186991869918,
+      "medianMargin": 10,
+      "marginP90": 26,
+      "thirtyPointRate": 0.06395934959349593,
+      "fiftyPointRate": 0.0057886178861788614,
+      "onePointRate": 0.03819512195121951,
+      "overtimeRate": 0.04785365853658537,
+      "overtimeMeanMargin": 4.282195039075773,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 249.25908936459396,
+      "multipleOvertimeShare": 0.1216445803601767
+    },
+    "capCounts": {
+      "regulationCap": 0,
+      "overtimeCap": 0,
+      "periodCap": 0
+    }
+  },
+  "trainingSeason": 2024,
+  "validationSeason": 2025,
+  "implementationSha256": {
+    "calibrate-scores.ts": "50a798b47eafd31347978300b5b5cbb282a693930ebadfb01ad61b111da3bfcf",
+    "season.ts": "18e8104f950dd063c8e950e07003937f5ee94aefede68d8900d250d43650a143",
+    "math.ts": "c3efb6ba058315a346a244180ddea32bb1da188f9e52096f1a376e49bd685c73",
+    "random.ts": "0de9081c0b04c9af183e6832525315c992c5781522aea2b61cf114c9f5aadf78"
+  },
+  "jointTrials": [
+    {
+      "scale": 5,
+      "offset": 0,
+      "worstError": 4.149593,
+      "squaredError": 52.181304
+    },
+    {
+      "scale": 5.25,
+      "offset": 0,
+      "worstError": 3.90813,
+      "squaredError": 45.941717
+    },
+    {
+      "scale": 5.5,
+      "offset": 0,
+      "worstError": 3.701626,
+      "squaredError": 40.283532
+    },
+    {
+      "scale": 5.75,
+      "offset": 0,
+      "worstError": 3.499187,
+      "squaredError": 33.267462
+    },
+    {
+      "scale": 6,
+      "offset": 0,
+      "worstError": 3.318699,
+      "squaredError": 28.634653
+    },
+    {
+      "scale": 6.25,
+      "offset": 0,
+      "worstError": 3.152846,
+      "squaredError": 25.880657
+    },
+    {
+      "scale": 6.5,
+      "offset": 0,
+      "worstError": 2.995935,
+      "squaredError": 21.922144
+    },
+    {
+      "scale": 6.75,
+      "offset": 0,
+      "worstError": 2.863415,
+      "squaredError": 17.166724
+    },
+    {
+      "scale": 7,
+      "offset": 0,
+      "worstError": 2.714634,
+      "squaredError": 14.019098
+    },
+    {
+      "scale": 7.25,
+      "offset": 0,
+      "worstError": 2.588618,
+      "squaredError": 12.230809
+    },
+    {
+      "scale": 7.5,
+      "offset": 0,
+      "worstError": 2.461789,
+      "squaredError": 9.093676
+    },
+    {
+      "scale": 7.75,
+      "offset": 0,
+      "worstError": 2.339837,
+      "squaredError": 7.164844
+    },
+    {
+      "scale": 8,
+      "offset": 0,
+      "worstError": 2.223577,
+      "squaredError": 5.757329
+    },
+    {
+      "scale": 8.25,
+      "offset": 0,
+      "worstError": 2.117073,
+      "squaredError": 5.019059
+    },
+    {
+      "scale": 8.5,
+      "offset": 0,
+      "worstError": 2.017886,
+      "squaredError": 4.25641
+    },
+    {
+      "scale": 8.75,
+      "offset": 0,
+      "worstError": 1.925203,
+      "squaredError": 4.283063
+    },
+    {
+      "scale": 9,
+      "offset": 0,
+      "worstError": 1.829268,
+      "squaredError": 4.909097
+    },
+    {
+      "scale": 9.25,
+      "offset": 0,
+      "worstError": 1.753659,
+      "squaredError": 6.549149
+    },
+    {
+      "scale": 9.5,
+      "offset": 0,
+      "worstError": 1.673984,
+      "squaredError": 7.777983
+    },
+    {
+      "scale": 9.75,
+      "offset": 0,
+      "worstError": 1.726016,
+      "squaredError": 10.298865
+    },
+    {
+      "scale": 10,
+      "offset": 0,
+      "worstError": 2.03252,
+      "squaredError": 13.313173
+    },
+    {
+      "scale": 10.25,
+      "offset": 0,
+      "worstError": 2.328455,
+      "squaredError": 17.847503
+    },
+    {
+      "scale": 10.5,
+      "offset": 0,
+      "worstError": 2.637398,
+      "squaredError": 20.976978
+    },
+    {
+      "scale": 5,
+      "offset": 1,
+      "worstError": 3.333333,
+      "squaredError": 27.247787
+    },
+    {
+      "scale": 5.25,
+      "offset": 1,
+      "worstError": 3,
+      "squaredError": 23.295154
+    },
+    {
+      "scale": 5.5,
+      "offset": 1,
+      "worstError": 2.666667,
+      "squaredError": 19.561324
+    },
+    {
+      "scale": 5.75,
+      "offset": 1,
+      "worstError": 2.333333,
+      "squaredError": 14.990012
+    },
+    {
+      "scale": 6,
+      "offset": 1,
+      "worstError": 2,
+      "squaredError": 11.955595
+    },
+    {
+      "scale": 6.25,
+      "offset": 1,
+      "worstError": 2,
+      "squaredError": 10.497687
+    },
+    {
+      "scale": 6.5,
+      "offset": 1,
+      "worstError": 1.666667,
+      "squaredError": 7.907652
+    },
+    {
+      "scale": 6.75,
+      "offset": 1,
+      "worstError": 1.333333,
+      "squaredError": 4.958979
+    },
+    {
+      "scale": 7,
+      "offset": 1,
+      "worstError": 1,
+      "squaredError": 3.181372
+    },
+    {
+      "scale": 7.25,
+      "offset": 1,
+      "worstError": 1,
+      "squaredError": 2.372772
+    },
+    {
+      "scale": 7.5,
+      "offset": 1,
+      "worstError": 0.666667,
+      "squaredError": 0.936063
+    },
+    {
+      "scale": 7.75,
+      "offset": 1,
+      "worstError": 0.333333,
+      "squaredError": 0.225788
+    },
+    {
+      "scale": 8,
+      "offset": 1,
+      "worstError": 0.096748,
+      "squaredError": 0.01316
+    },
+    {
+      "scale": 8.25,
+      "offset": 1,
+      "worstError": 0.338211,
+      "squaredError": 0.201693
+    },
+    {
+      "scale": 8.5,
+      "offset": 1,
+      "worstError": 0.594309,
+      "squaredError": 1.049823
+    },
+    {
+      "scale": 8.75,
+      "offset": 1,
+      "worstError": 0.886992,
+      "squaredError": 2.228404
+    },
+    {
+      "scale": 9,
+      "offset": 1,
+      "worstError": 1.200813,
+      "squaredError": 4.122702
+    },
+    {
+      "scale": 9.25,
+      "offset": 1,
+      "worstError": 1.525203,
+      "squaredError": 6.687903
+    },
+    {
+      "scale": 9.5,
+      "offset": 1,
+      "worstError": 1.810569,
+      "squaredError": 9.5776
+    },
+    {
+      "scale": 9.75,
+      "offset": 1,
+      "worstError": 2.152033,
+      "squaredError": 13.255981
+    },
+    {
+      "scale": 10,
+      "offset": 1,
+      "worstError": 2.456911,
+      "squaredError": 17.422422
+    },
+    {
+      "scale": 10.25,
+      "offset": 1,
+      "worstError": 2.795122,
+      "squaredError": 23.898577
+    },
+    {
+      "scale": 10.5,
+      "offset": 1,
+      "worstError": 3.133333,
+      "squaredError": 28.216114
+    }
+  ],
+  "method": "Full-season baseline; minimax joint regulation scale/offset, then least-squares OT scale."
+}

@@ -1,0 +1,4404 @@
+{
+  "version": "mid-iq-roster-diagnosis-1",
+  "scope": "exposed-family-diagnosis",
+  "sourceFit": "docs/MID_IQ_ROSTER_FIT_18.json",
+  "sourceFitSha256": "3e5fb3e9fe3de32b5f6c7a59871465c2df3dc555ab0cde55d719b46c4a23bc2b",
+  "validationSha256": "e7ecac8dd97641a95a20817f0b89bc01af3c9fcd963eced6c6bbc9ce4dcdb5e4",
+  "candidateImplementationSha256": "3cfc31d2da1b6ffed02e4c962286480755070e31c2d9161df6941f63e9a88054",
+  "evaluatorSha256": "4ab5b84ff124c603fe9bef5d67b324c5ee5c989ff64e1dafe417c66e721552ba",
+  "catalogSha256": "04381262ed3d87b73993577e0b6420ab5d652cade304fbd743706f4de550c4ce",
+  "mathSha256": "0c8598ec267cfae50a5228e65e8143e3ab6b979d1f5a605e77433ece68a8c800",
+  "opponentSha256": "c0b79d76450f14034eb5ffebe364de687a26acdee51402ece13f5422c515a52b",
+  "parameters": {
+    "offenseBaseline": 88.31016250713684,
+    "offenseScale": 1.4779619191774656,
+    "leadScorerWeight": 0.8,
+    "usageSlope": 0.007721216153758573,
+    "spacingLow": -4.458888850104075,
+    "spacingHigh": 5.744361247959544,
+    "defenseScale": 0.42209460013108485,
+    "depthScale": 6.985083954377567,
+    "coachScale": 0.8020455402115361,
+    "paceModel": "relative-style",
+    "offenseModel": "shared-creation",
+    "coachShootingModel": "made-shots",
+    "coachDefenseModel": "system",
+    "rolePenalty": 0
+  },
+  "rows": [
+    {
+      "id": "C01",
+      "family": "development",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 60.30509410878663,
+      "requiredRatingShift": [
+        -0.8972987238978292,
+        1.9639981719550905
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 116.1,
+          "phiUsg": 1,
+          "spacingRating": 6.4633,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.018509523997548672,
+          "drtgTeam": 105.23030358227591,
+          "ortgTeam": 115.38804488220438,
+          "effectiveOrtg": 117.52382266798176,
+          "netRating": 12.293519085705853,
+          "sixthManFRF": 0.23155893310317302,
+          "depthBonus": 1.6174585881117622
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.17437052529772365,
+        "deltaRating": 14.085348199115339,
+        "winProbability": 0.7927302201663142
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 18.98524867998224,
+        "creation": 8.092633695085302,
+        "usageLoss": 0,
+        "shootingCoach": 0,
+        "spacing": 2.1357777857773783,
+        "rosterDefense": 4.047855431533719,
+        "defensiveCoach": 0.7218409861903723,
+        "reserve": 1.6174585881117622,
+        "paceCoach": 0.17437052529772365
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -18.98524867998224,
+          "expectedWins": 28.050968737177733,
+          "winDifference": -32.2541253716089
+        },
+        {
+          "name": "creation",
+          "ratingShift": -8.092633695085302,
+          "expectedWins": 47.175230849899265,
+          "winDifference": -13.129863258887369
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 60.30509410878663,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 60.30509410878663,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -2.1357777857773783,
+          "expectedWins": 57.12690903590885,
+          "winDifference": -3.178185072877781
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.047855431533719,
+          "expectedWins": 54.08489387481989,
+          "winDifference": -6.220200233966743
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -0.7218409861903723,
+          "expectedWins": 59.25871719998218,
+          "winDifference": -1.0463769088044543
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -1.6174585881117622,
+          "expectedWins": 57.92065456476278,
+          "winDifference": -2.3844395440238557
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.17437052529772365,
+          "expectedWins": 60.0550088344593,
+          "winDifference": -0.25008527432733274
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.542069268466292,
+        "expectedWins": 67.31090090557316
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.4845517690755798,
+        "expectedWins": 58.121932342840175
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "brunsja01_NYK_2020s",
+          "points": 27,
+          "fgPct": 0.478,
+          "scoringProduct": 12.905999999999999,
+          "assists": 6.9,
+          "dbpm": -0.8,
+          "blocks": 0.1,
+          "steals": 0.9,
+          "rebounds": 3.3,
+          "rawThreePointAttempts": 6.7,
+          "threePtPct": 0.385
+        },
+        {
+          "slot": "SG",
+          "id": "tuckepj01_TOR_2010s",
+          "points": 6.107399999999999,
+          "fgPct": 0.406,
+          "scoringProduct": 2.4796044,
+          "assists": 1.1583,
+          "dbpm": 1.9,
+          "blocks": 0.2106,
+          "steals": 1.3689,
+          "rebounds": 5.6862,
+          "rawThreePointAttempts": 2.5,
+          "threePtPct": 0.4
+        },
+        {
+          "slot": "SF",
+          "id": "brookdi01_MEM_2010s",
+          "points": 11.1618,
+          "fgPct": 0.435,
+          "scoringProduct": 4.855383,
+          "assists": 1.5795,
+          "dbpm": -1.1,
+          "blocks": 0.2106,
+          "steals": 0.9477,
+          "rebounds": 3.0536999999999996,
+          "rawThreePointAttempts": 3.1,
+          "threePtPct": 0.358
+        },
+        {
+          "slot": "PF",
+          "id": "duncati01_SAS_2000s",
+          "points": 26.156200000000002,
+          "fgPct": 0.508,
+          "scoringProduct": 13.2873496,
+          "assists": 3.9564,
+          "dbpm": 2.6,
+          "blocks": 2.9673000000000003,
+          "steals": 0.8792,
+          "rebounds": 13.957299999999998,
+          "rawThreePointAttempts": 0.2,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "C",
+          "id": "townska01_NYK_2020s",
+          "points": 22.3,
+          "fgPct": 0.514,
+          "scoringProduct": 11.462200000000001,
+          "assists": 3.1,
+          "dbpm": 0.3,
+          "blocks": 0.6,
+          "steals": 1,
+          "rebounds": 12.4,
+          "rawThreePointAttempts": 4.4,
+          "threePtPct": 0.395
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 64.00021595962491,
+      "requiredRatingShift": [
+        -0.00017046347929473155,
+        3.443938270739979
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 106.6,
+          "phiUsg": 1,
+          "spacingRating": 5.4298,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.009004954319129899,
+          "drtgTeam": 106.1278887485057,
+          "ortgTeam": 120.07522190817592,
+          "effectiveOrtg": 121.15649379631843,
+          "netRating": 15.028605047812732,
+          "sixthManFRF": 0.22806401966170128,
+          "depthBonus": 1.5930463243097994
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.2079495553928057,
+        "deltaRating": 16.829600927515337,
+        "winProbability": 0.8324120295509705
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 24.55975265929419,
+        "creation": 7.20530674174489,
+        "usageLoss": 0,
+        "shootingCoach": 0,
+        "spacing": 1.0812718881425099,
+        "rosterDefense": 3.872111251494301,
+        "defensiveCoach": 2.220446049250313e-15,
+        "reserve": 1.5930463243097994,
+        "paceCoach": 0.2079495553928057
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -24.55975265929419,
+          "expectedWins": 23.640533777952438,
+          "winDifference": -40.35968218167247
+        },
+        {
+          "name": "creation",
+          "ratingShift": -7.20530674174489,
+          "expectedWins": 53.39821455990183,
+          "winDifference": -10.602001399723079
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 64.00021595962491,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 64.00021595962491,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -1.0812718881425099,
+          "expectedWins": 62.59494106139516,
+          "winDifference": -1.4052748982297487
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -3.872111251494301,
+          "expectedWins": 58.65020430953798,
+          "winDifference": -5.350011650086927
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -2.220446049250313e-15,
+          "expectedWins": 64.00021595962491,
+          "winDifference": 0
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -1.5930463243097994,
+          "expectedWins": 61.90534891437217,
+          "winDifference": -2.094867045252741
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.2079495553928057,
+          "expectedWins": 63.73545065270355,
+          "winDifference": -0.2647653069213618
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.301451381839046,
+        "expectedWins": 69.85815753152903
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -5.771670281138126,
+        "expectedWins": 55.72236323734792
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "fishede01_LAL_2000s",
+          "points": 11.9791,
+          "fgPct": 0.424,
+          "scoringProduct": 5.079138400000001,
+          "assists": 3.1871,
+          "dbpm": 0.3,
+          "blocks": 0.1099,
+          "steals": 1.099,
+          "rebounds": 2.4178,
+          "rawThreePointAttempts": 4,
+          "threePtPct": 0.405
+        },
+        {
+          "slot": "SG",
+          "id": "bryanko01_LAL_2000s",
+          "points": 34.2888,
+          "fgPct": 0.453,
+          "scoringProduct": 15.532826400000001,
+          "assists": 5.8247,
+          "dbpm": 0.5,
+          "blocks": 0.6594,
+          "steals": 2.0881,
+          "rebounds": 6.8138,
+          "rawThreePointAttempts": 5.2,
+          "threePtPct": 0.364
+        },
+        {
+          "slot": "SF",
+          "id": "bowenbr01_SAS_2000s",
+          "points": 8.3524,
+          "fgPct": 0.439,
+          "scoringProduct": 3.6667036,
+          "assists": 1.6484999999999999,
+          "dbpm": 1.4,
+          "blocks": 0.5495,
+          "steals": 0.8792,
+          "rebounds": 3.7365999999999997,
+          "rawThreePointAttempts": 3,
+          "threePtPct": 0.423
+        },
+        {
+          "slot": "PF",
+          "id": "horryro01_LAL_2000s",
+          "points": 7.0336,
+          "fgPct": 0.405,
+          "scoringProduct": 2.848608,
+          "assists": 2.7475,
+          "dbpm": 2.1,
+          "blocks": 1.099,
+          "steals": 1.2089,
+          "rebounds": 6.3742,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.324
+        },
+        {
+          "slot": "C",
+          "id": "onealsh01_LAL_2000s",
+          "points": 31.4314,
+          "fgPct": 0.575,
+          "scoringProduct": 18.073055,
+          "assists": 3.8465,
+          "dbpm": 1.2,
+          "blocks": 2.8574,
+          "steals": 0.6594,
+          "rebounds": 13.737499999999999,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.23234919060916,
+      "requiredRatingShift": [
+        -1.8322703826941602,
+        1.5900104511709667
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 91.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 5.884,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.013193648112689907,
+          "drtgTeam": 104.54475890470574,
+          "ortgTeam": 117.07933199391864,
+          "effectiveOrtg": 118.62403550151521,
+          "netRating": 14.079276596809464,
+          "sixthManFRF": 0.5897733662063461,
+          "depthBonus": 4.119616477007193
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": -0.05614766590240718,
+        "deltaRating": 18.142745407914248,
+        "winProbability": 0.8491411140760963
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 19.05388731247924,
+        "creation": 9.715282174302565,
+        "usageLoss": 0,
+        "shootingCoach": 0,
+        "spacing": 1.5447035075965658,
+        "rosterDefense": 4.01155912291348,
+        "defensiveCoach": 1.4436819723807748,
+        "reserve": 4.119616477007193,
+        "paceCoach": -0.05614766590240718
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -19.05388731247924,
+          "expectedWins": 35.5229246684589,
+          "winDifference": -30.709424522150258
+        },
+        {
+          "name": "creation",
+          "ratingShift": -9.715282174302565,
+          "expectedWins": 52.17538936778262,
+          "winDifference": -14.056959822826535
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 66.23234919060916,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 66.23234919060916,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -1.5447035075965658,
+          "expectedWins": 64.36418795004204,
+          "winDifference": -1.8681612405671189
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.01155912291348,
+          "expectedWins": 61.075390121324666,
+          "winDifference": -5.15695906928449
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.4436819723807748,
+          "expectedWins": 64.49090796091926,
+          "winDifference": -1.7414412296898973
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.119616477007193,
+          "expectedWins": 60.92294731177613,
+          "winDifference": -5.309401878833029
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0.05614766590240718,
+          "expectedWins": 66.29744911548427,
+          "winDifference": 0.0650999248751134
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.492374643753182,
+        "expectedWins": 71.68917851525906
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -3.2833720793944963,
+        "expectedWins": 62.084613379681315
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "portete01_POR_1990s",
+          "points": 18.92,
+          "fgPct": 0.479,
+          "scoringProduct": 9.06268,
+          "assists": 8.17,
+          "dbpm": 1.2,
+          "blocks": 0.1075,
+          "steals": 1.935,
+          "rebounds": 3.5475,
+          "rawThreePointAttempts": 3.6,
+          "threePtPct": 0.394
+        },
+        {
+          "slot": "SG",
+          "id": "jordami01_CHI_1990s",
+          "points": 34.2925,
+          "fgPct": 0.52,
+          "scoringProduct": 17.8321,
+          "assists": 5.805,
+          "dbpm": 2.5,
+          "blocks": 0.7525,
+          "steals": 2.795,
+          "rebounds": 6.9875,
+          "rawThreePointAttempts": 2.4,
+          "threePtPct": 0.372
+        },
+        {
+          "slot": "SF",
+          "id": "battish01_HOU_2000s",
+          "points": 10.0009,
+          "fgPct": 0.43,
+          "scoringProduct": 4.300387,
+          "assists": 2.3079,
+          "dbpm": 1.9,
+          "blocks": 0.9891,
+          "steals": 0.9891,
+          "rebounds": 5.0554,
+          "rawThreePointAttempts": 4.4,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "PF",
+          "id": "rodmade01_CHI_1990s",
+          "points": 5.59,
+          "fgPct": 0.451,
+          "scoringProduct": 2.52109,
+          "assists": 3.01,
+          "dbpm": 0.3,
+          "blocks": 0.32249999999999995,
+          "steals": 0.6449999999999999,
+          "rebounds": 16.4475,
+          "rawThreePointAttempts": 0.3,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "C",
+          "id": "lopezbr01_MIL_2020s",
+          "points": 13.8,
+          "fgPct": 0.508,
+          "scoringProduct": 7.010400000000001,
+          "assists": 1.6,
+          "dbpm": 0.8,
+          "blocks": 2.3,
+          "steals": 0.5,
+          "rebounds": 5.6,
+          "rawThreePointAttempts": 4.8,
+          "threePtPct": 0.371
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "family": "validation",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 55.327986454369274,
+      "requiredRatingShift": [
+        5.991439959776736,
+        9.42120201842365
+      ],
+      "nearestBandRatingShift": 5.991439959776736,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 100.49999999999999,
+          "phiUsg": 1,
+          "spacingRating": 4.5503,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": 0.0016728346688831032,
+          "drtgTeam": 102.66020957648944,
+          "ortgTeam": 109.93079318507627,
+          "effectiveOrtg": 110.11468922709409,
+          "netRating": 7.454479650604654,
+          "sixthManFRF": 0.44012728160846143,
+          "depthBonus": 3.074326012647081
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 10.528805663251735,
+        "winProbability": 0.7315976210903812
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 12.840590355275447,
+        "creation": 9.771669377443024,
+        "usageLoss": 0,
+        "shootingCoach": -0.9916290547790381,
+        "spacing": 0.1838960420178195,
+        "rosterDefense": 5.4148811270028725,
+        "defensiveCoach": 1.9249092965076917,
+        "reserve": 3.074326012647081,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -12.840590355275447,
+          "expectedWins": 32.76920272782422,
+          "winDifference": -22.55878372654505
+        },
+        {
+          "name": "creation",
+          "ratingShift": -9.771669377443024,
+          "expectedWins": 38.20626755966343,
+          "winDifference": -17.121718894705843
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 55.327986454369274,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0.9916290547790381,
+          "expectedWins": 56.89853612446093,
+          "winDifference": 1.5705496700916584
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -0.1838960420178195,
+          "expectedWins": 55.03154673309527,
+          "winDifference": -0.2964397212740053
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.4148811270028725,
+          "expectedWins": 46.064534180190954,
+          "winDifference": -9.26345227417832
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.9249092965076917,
+          "expectedWins": 52.15175231120504,
+          "winDifference": -3.176234143164237
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -3.074326012647081,
+          "expectedWins": 50.186157718837116,
+          "winDifference": -5.141828735532158
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 55.327986454369274,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 7.41371493966379,
+        "expectedWins": 65.74722359706966
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -0.9050246432040012,
+        "expectedWins": 53.85430765538319
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "billuch01_DET_2000s",
+          "points": 19.232499999999998,
+          "fgPct": 0.43,
+          "scoringProduct": 8.269974999999999,
+          "assists": 8.3524,
+          "dbpm": 0.6,
+          "blocks": 0.2198,
+          "steals": 1.2089,
+          "rebounds": 3.4069,
+          "rawThreePointAttempts": 4.7,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "SG",
+          "id": "hamilri01_DET_2000s",
+          "points": 20.1117,
+          "fgPct": 0.468,
+          "scoringProduct": 9.412275600000001,
+          "assists": 4.396,
+          "dbpm": 0.1,
+          "blocks": 0.2198,
+          "steals": 1.099,
+          "rebounds": 3.9564,
+          "rawThreePointAttempts": 1.5,
+          "threePtPct": 0.345
+        },
+        {
+          "slot": "SF",
+          "id": "princta01_DET_2000s",
+          "points": 15.495899999999999,
+          "fgPct": 0.466,
+          "scoringProduct": 7.221089399999999,
+          "assists": 3.2969999999999997,
+          "dbpm": 0.1,
+          "blocks": 0.7693,
+          "steals": 0.6594,
+          "rebounds": 5.6049,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.363
+        },
+        {
+          "slot": "PF",
+          "id": "wallara01_DET_2000s",
+          "points": 15.605799999999999,
+          "fgPct": 0.434,
+          "scoringProduct": 6.772917199999999,
+          "assists": 2.198,
+          "dbpm": 1.9,
+          "blocks": 1.7584,
+          "steals": 1.099,
+          "rebounds": 7.9128,
+          "rawThreePointAttempts": 4.2,
+          "threePtPct": 0.343
+        },
+        {
+          "slot": "C",
+          "id": "wallabe01_DET_2000s",
+          "points": 8.792,
+          "fgPct": 0.477,
+          "scoringProduct": 4.193784,
+          "assists": 1.7584,
+          "dbpm": 3.4,
+          "blocks": 3.5168,
+          "steals": 1.7584,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.097
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.65817971673528,
+      "requiredRatingShift": [
+        -2.2117948767980966,
+        1.2244017594962615
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 107.4,
+          "phiUsg": 1,
+          "spacingRating": 7.5362,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.026589095563472626,
+          "drtgTeam": 108.49131529073652,
+          "ortgTeam": 121.49659175457555,
+          "effectiveOrtg": 124.72707624337417,
+          "netRating": 16.235760952637648,
+          "sixthManFRF": 0.33660373689682693,
+          "depthBonus": 2.351205361581554
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.2942911588698804,
+        "deltaRating": 18.881257473089082,
+        "winProbability": 0.8579315089730254
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 17.81138408083954,
+        "creation": 13.939498342132769,
+        "usageLoss": 0,
+        "shootingCoach": 1.435546824466399,
+        "spacing": 3.2304844887986244,
+        "rosterDefense": 2.952366681644246,
+        "defensiveCoach": -1.443681972380769,
+        "reserve": 2.351205361581554,
+        "paceCoach": 0.2942911588698804
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -17.81138408083954,
+          "expectedWins": 38.55837382626993,
+          "winDifference": -28.099805890465348
+        },
+        {
+          "name": "creation",
+          "ratingShift": -13.939498342132769,
+          "expectedWins": 45.53309307478773,
+          "winDifference": -21.125086641947547
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 66.65817971673528,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.435546824466399,
+          "expectedWins": 64.9672847331192,
+          "winDifference": -1.6908949836160758
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -3.2304844887986244,
+          "expectedWins": 62.674686616768106,
+          "winDifference": -3.98349309996717
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -2.952366681644246,
+          "expectedWins": 63.0427712919994,
+          "winDifference": -3.6154084247358753
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 1.443681972380769,
+          "expectedWins": 68.2306218544825,
+          "winDifference": 1.5724421377472169
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.351205361581554,
+          "expectedWins": 63.822361387297924,
+          "winDifference": -2.835818329437352
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.2942911588698804,
+          "expectedWins": 66.32191527218555,
+          "winDifference": -0.3362644445497267
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 4.042194918355765,
+        "expectedWins": 70.74435359871366
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.3510152320050395,
+        "expectedWins": 65.07037938263218
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "nashst01_PHX_2000s",
+          "points": 19.452299999999997,
+          "fgPct": 0.515,
+          "scoringProduct": 10.017934499999999,
+          "assists": 12.3088,
+          "dbpm": -0.8,
+          "blocks": 0.1099,
+          "steals": 0.9891,
+          "rebounds": 4.0663,
+          "rawThreePointAttempts": 3.9,
+          "threePtPct": 0.442
+        },
+        {
+          "slot": "SG",
+          "id": "allenra02_MIL_2000s",
+          "points": 24.178,
+          "fgPct": 0.466,
+          "scoringProduct": 11.266948000000001,
+          "assists": 4.5059,
+          "dbpm": -0.8,
+          "blocks": 0.2198,
+          "steals": 1.5386,
+          "rebounds": 5.1653,
+          "rawThreePointAttempts": 6,
+          "threePtPct": 0.43
+        },
+        {
+          "slot": "SF",
+          "id": "battish01_HOU_2000s",
+          "points": 10.0009,
+          "fgPct": 0.43,
+          "scoringProduct": 4.300387,
+          "assists": 2.3079,
+          "dbpm": 1.9,
+          "blocks": 0.9891,
+          "steals": 0.9891,
+          "rebounds": 5.0554,
+          "rawThreePointAttempts": 4.4,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "PF",
+          "id": "nowitdi01_DAL_2000s",
+          "points": 28.4641,
+          "fgPct": 0.467,
+          "scoringProduct": 13.2927347,
+          "assists": 3.2969999999999997,
+          "dbpm": 1.1,
+          "blocks": 1.3188,
+          "steals": 1.2089,
+          "rebounds": 10.4405,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "C",
+          "id": "horfoal01_ATL_2010s",
+          "points": 16.4268,
+          "fgPct": 0.55,
+          "scoringProduct": 9.034740000000001,
+          "assists": 3.159,
+          "dbpm": 0.7,
+          "blocks": 1.1583,
+          "steals": 0.9477,
+          "rebounds": 10.3194,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.329
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.19948738681596,
+      "requiredRatingShift": [
+        -1.8097739471727634,
+        1.6232140245545794
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 108.8,
+          "phiUsg": 1,
+          "spacingRating": 6.6502,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.01960284584506279,
+          "drtgTeam": 105.29645765306128,
+          "ortgTeam": 118.68055018634671,
+          "effectiveOrtg": 121.0070267164569,
+          "netRating": 15.710569063395624,
+          "sixthManFRF": 0.3860964745978846,
+          "depthBonus": 2.6969162895554293
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.407485352951053,
+        "winProbability": 0.8523426012479794
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 17.045746355326038,
+        "creation": 12.46733003367848,
+        "usageLoss": 0,
+        "shootingCoach": 0.8573112902053528,
+        "spacing": 2.3264765301101984,
+        "rosterDefense": 5.184769671065654,
+        "defensiveCoach": -0.4812273241269356,
+        "reserve": 2.6969162895554293,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -17.045746355326038,
+          "expectedWins": 39.1847813891084,
+          "winDifference": -27.01470599770756
+        },
+        {
+          "name": "creation",
+          "ratingShift": -12.46733003367848,
+          "expectedWins": 47.417008531877414,
+          "winDifference": -18.782478854938546
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 66.19948738681596,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -0.8573112902053528,
+          "expectedWins": 65.18281229095575,
+          "winDifference": -1.016675095860208
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -2.3264765301101984,
+          "expectedWins": 63.33499576968288,
+          "winDifference": -2.8644916171330834
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.184769671065654,
+          "expectedWins": 59.36769282712413,
+          "winDifference": -6.831794559691829
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 0.4812273241269356,
+          "expectedWins": 66.75022613898938,
+          "winDifference": 0.550738752173416
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.6969162895554293,
+          "expectedWins": 62.84821105257783,
+          "winDifference": -3.351276334238129
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 66.19948738681596,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 7.098660795601019,
+        "expectedWins": 72.91962663361264
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.3916548431214864,
+        "expectedWins": 64.52613056117245
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "paulch01_LAC_2010s",
+          "points": 19.375199999999996,
+          "fgPct": 0.478,
+          "scoringProduct": 9.261345599999999,
+          "assists": 10.740599999999999,
+          "dbpm": 2.1,
+          "blocks": 0.1053,
+          "steals": 2.3166,
+          "rebounds": 4.4226,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.367
+        },
+        {
+          "slot": "SG",
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.165999999999997,
+          "fgPct": 0.467,
+          "scoringProduct": 10.818522,
+          "assists": 2.5271999999999997,
+          "dbpm": -1.1,
+          "blocks": 0.6317999999999999,
+          "steals": 0.9477,
+          "rebounds": 3.7908,
+          "rawThreePointAttempts": 7.9,
+          "threePtPct": 0.426
+        },
+        {
+          "slot": "SF",
+          "id": "battish01_HOU_2000s",
+          "points": 10.0009,
+          "fgPct": 0.43,
+          "scoringProduct": 4.300387,
+          "assists": 2.3079,
+          "dbpm": 1.9,
+          "blocks": 0.9891,
+          "steals": 0.9891,
+          "rebounds": 5.0554,
+          "rawThreePointAttempts": 4.4,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "PF",
+          "id": "garneke01_MIN_2000s",
+          "points": 25.3869,
+          "fgPct": 0.501,
+          "scoringProduct": 12.718836900000001,
+          "assists": 6.1544,
+          "dbpm": 2.9,
+          "blocks": 1.8682999999999998,
+          "steals": 1.6484999999999999,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.6,
+          "threePtPct": 0.26
+        },
+        {
+          "slot": "C",
+          "id": "horfoal01_ATL_2010s",
+          "points": 16.4268,
+          "fgPct": 0.55,
+          "scoringProduct": 9.034740000000001,
+          "assists": 3.159,
+          "dbpm": 0.7,
+          "blocks": 1.1583,
+          "steals": 0.9477,
+          "rebounds": 10.3194,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.329
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 67.99308563995427,
+      "requiredRatingShift": [
+        -3.4252338173695716,
+        0.006523604623614836
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 103.5,
+          "phiUsg": 1,
+          "spacingRating": 9.8414,
+          "spacingTier": "ELITE",
+          "spacingModifier": 0.047778560199535816,
+          "drtgTeam": 105.27826848506946,
+          "ortgTeam": 116.84189892056423,
+          "effectiveOrtg": 122.4244366219685,
+          "netRating": 17.146168136899036,
+          "sixthManFRF": 0.40614761310317304,
+          "depthBonus": 2.836975175395722
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.01094817226311877,
+        "deltaRating": 19.994091484557877,
+        "winProbability": 0.8703660531827837
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 18.38832039070283,
+        "creation": 8.883514765427872,
+        "usageLoss": 0,
+        "shootingCoach": 1.2599012572966946,
+        "spacing": 5.582537701404262,
+        "rosterDefense": 3.999890528740159,
+        "defensiveCoach": 0.7218409861903803,
+        "reserve": 2.836975175395722,
+        "paceCoach": 0.01094817226311877
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -18.38832039070283,
+          "expectedWins": 39.66639534792875,
+          "winDifference": -28.326690292025525
+        },
+        {
+          "name": "creation",
+          "ratingShift": -8.883514765427872,
+          "expectedWins": 56.18390509551759,
+          "winDifference": -11.809180544436686
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 67.99308563995427,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.2599012572966946,
+          "expectedWins": 66.6086863243916,
+          "winDifference": -1.3843993155626748
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -5.582537701404262,
+          "expectedWins": 61.11532839488828,
+          "winDifference": -6.877757245065993
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -3.999890528740159,
+          "expectedWins": 63.25910690101908,
+          "winDifference": -4.733978738935193
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -0.7218409861903803,
+          "expectedWins": 67.21188084563701,
+          "winDifference": -0.7812047943172615
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.836975175395722,
+          "expectedWins": 64.737408484719,
+          "winDifference": -3.2556771552352757
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.01094817226311877,
+          "expectedWins": 67.98147583661392,
+          "winDifference": -0.01160980334034889
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.47639873792651,
+        "expectedWins": 72.91671806994913
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -3.053729414788563,
+        "expectedWins": 64.46818055819648
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "whitede01_BOS_2020s",
+          "points": 16.1,
+          "fgPct": 0.431,
+          "scoringProduct": 6.939100000000001,
+          "assists": 5.1,
+          "dbpm": 1.1,
+          "blocks": 1.2,
+          "steals": 1,
+          "rebounds": 4.4,
+          "rawThreePointAttempts": 8.1,
+          "threePtPct": 0.368
+        },
+        {
+          "slot": "SG",
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.165999999999997,
+          "fgPct": 0.467,
+          "scoringProduct": 10.818522,
+          "assists": 2.5271999999999997,
+          "dbpm": -1.1,
+          "blocks": 0.6317999999999999,
+          "steals": 0.9477,
+          "rebounds": 3.7908,
+          "rawThreePointAttempts": 7.9,
+          "threePtPct": 0.426
+        },
+        {
+          "slot": "SF",
+          "id": "jamesle01_MIA_2010s",
+          "points": 28.220399999999998,
+          "fgPct": 0.535,
+          "scoringProduct": 15.097914,
+          "assists": 7.2657,
+          "dbpm": 2.3,
+          "blocks": 0.8424,
+          "steals": 1.7900999999999998,
+          "rebounds": 8.2134,
+          "rawThreePointAttempts": 3.1,
+          "threePtPct": 0.365
+        },
+        {
+          "slot": "PF",
+          "id": "horryro01_LAL_2000s",
+          "points": 7.0336,
+          "fgPct": 0.405,
+          "scoringProduct": 2.848608,
+          "assists": 2.7475,
+          "dbpm": 2.1,
+          "blocks": 1.099,
+          "steals": 1.2089,
+          "rebounds": 6.3742,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.324
+        },
+        {
+          "slot": "C",
+          "id": "horfoal01_BOS_2020s",
+          "points": 9.6,
+          "fgPct": 0.484,
+          "scoringProduct": 4.6464,
+          "assists": 3,
+          "dbpm": 2.2,
+          "blocks": 1.1,
+          "steals": 0.6,
+          "rebounds": 6.8,
+          "rawThreePointAttempts": 4.3,
+          "threePtPct": 0.399
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "family": "validation",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 70.44660955365916,
+      "requiredRatingShift": [
+        -5.905938952175548,
+        -2.4803025246553627
+      ],
+      "nearestBandRatingShift": -2.4803025246553627,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 103.6,
+          "phiUsg": 1,
+          "spacingRating": 11.318799999999998,
+          "spacingTier": "ELITE",
+          "spacingModifier": 0.04836383493175765,
+          "drtgTeam": 105.81556529425286,
+          "ortgTeam": 118.77389905215239,
+          "effectiveOrtg": 124.51826030011193,
+          "netRating": 18.70269500585907,
+          "sixthManFRF": 0.517424316896827,
+          "depthBonus": 3.6142522935607997
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 22.31694729941987,
+        "winProbability": 0.8933497671328074
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 17.221067846358125,
+        "creation": 9.726148150332358,
+        "usageLoss": 0,
+        "shootingCoach": 3.516520548325066,
+        "spacing": 5.744361247959545,
+        "rosterDefense": 4.906275691937502,
+        "defensiveCoach": -0.7218409861903652,
+        "reserve": 3.6142522935607997,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -17.221067846358125,
+          "expectedWins": 46.20001808000951,
+          "winDifference": -24.24659147364965
+        },
+        {
+          "name": "creation",
+          "ratingShift": -9.726148150332358,
+          "expectedWins": 58.69407700393171,
+          "winDifference": -11.752532549727448
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 70.44660955365916,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -3.516520548325066,
+          "expectedWins": 66.86694531568908,
+          "winDifference": -3.5796642379700785
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -5.744361247959545,
+          "expectedWins": 64.20505063972873,
+          "winDifference": -6.241558913930433
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.906275691937502,
+          "expectedWins": 65.24265674981451,
+          "winDifference": -5.203952803844643
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 0.7218409861903652,
+          "expectedWins": 71.09033288388662,
+          "winDifference": 0.6437233302274592
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -3.6142522935607997,
+          "expectedWins": 66.7566490318853,
+          "winDifference": -3.6899605217738554
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 70.44660955365916,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 6.717364341395829,
+        "expectedWins": 75.3638414560534
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -2.506042436371146,
+        "expectedWins": 67.97265693139697
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "curryst01_GSW_2010s",
+          "points": 27.378,
+          "fgPct": 0.487,
+          "scoringProduct": 13.333086,
+          "assists": 8.002799999999999,
+          "dbpm": 1.5,
+          "blocks": 0.2106,
+          "steals": 2.0006999999999997,
+          "rebounds": 4.9491,
+          "rawThreePointAttempts": 9.1,
+          "threePtPct": 0.44
+        },
+        {
+          "slot": "SG",
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.165999999999997,
+          "fgPct": 0.467,
+          "scoringProduct": 10.818522,
+          "assists": 2.5271999999999997,
+          "dbpm": -1.1,
+          "blocks": 0.6317999999999999,
+          "steals": 0.9477,
+          "rebounds": 3.7908,
+          "rawThreePointAttempts": 7.9,
+          "threePtPct": 0.426
+        },
+        {
+          "slot": "SF",
+          "id": "iguodan01_GSW_2010s",
+          "points": 8.634599999999999,
+          "fgPct": 0.491,
+          "scoringProduct": 4.239588599999999,
+          "assists": 3.6854999999999998,
+          "dbpm": 1.8,
+          "blocks": 0.4212,
+          "steals": 1.2635999999999998,
+          "rebounds": 4.212,
+          "rawThreePointAttempts": 2.6,
+          "threePtPct": 0.355
+        },
+        {
+          "slot": "PF",
+          "id": "greendr01_GSW_2010s",
+          "points": 12.741299999999999,
+          "fgPct": 0.452,
+          "scoringProduct": 5.7590676,
+          "assists": 6.423299999999999,
+          "dbpm": 3.2,
+          "blocks": 1.4741999999999997,
+          "steals": 1.7900999999999998,
+          "rebounds": 9.0558,
+          "rawThreePointAttempts": 3.6,
+          "threePtPct": 0.346
+        },
+        {
+          "slot": "C",
+          "id": "lopezbr01_MIL_2020s",
+          "points": 13.8,
+          "fgPct": 0.508,
+          "scoringProduct": 7.010400000000001,
+          "assists": 1.6,
+          "dbpm": 0.8,
+          "blocks": 2.3,
+          "steals": 0.5,
+          "rebounds": 5.6,
+          "rawThreePointAttempts": 4.8,
+          "threePtPct": 0.371
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "family": "validation",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 61.17986445239941,
+      "requiredRatingShift": [
+        2.115567638200604,
+        5.553950400082252
+      ],
+      "nearestBandRatingShift": 2.115567638200604,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 106.1,
+          "phiUsg": 1,
+          "spacingRating": 2.2891999999999997,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.017567670283331158,
+          "drtgTeam": 106.40498742367785,
+          "ortgTeam": 120.85614104847377,
+          "effectiveOrtg": 118.73298021081843,
+          "netRating": 12.327992787140573,
+          "sixthManFRF": 0.3048889418968269,
+          "depthBonus": 2.1296748559106797
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.14259983302812887,
+        "deltaRating": 14.600267476079381,
+        "winProbability": 0.8006723189363333
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 19.35796240948445,
+        "creation": 12.866604402068113,
+        "usageLoss": 0,
+        "shootingCoach": 0.3214117297843712,
+        "spacing": -2.1231608376553464,
+        "rosterDefense": 4.316853562512536,
+        "defensiveCoach": -0.7218409861903883,
+        "reserve": 2.1296748559106797,
+        "paceCoach": 0.14259983302812887
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -19.35796240948445,
+          "expectedWins": 28.40253324941056,
+          "winDifference": -32.77733120298885
+        },
+        {
+          "name": "creation",
+          "ratingShift": -12.866604402068113,
+          "expectedWins": 39.68892804031614,
+          "winDifference": -21.490936412083265
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 61.17986445239941,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -0.3214117297843712,
+          "expectedWins": 60.72816800607747,
+          "winDifference": -0.4516964463219395
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 2.1231608376553464,
+          "expectedWins": 64.00963477833005,
+          "winDifference": 2.829770325930646
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.316853562512536,
+          "expectedWins": 54.64337588138168,
+          "winDifference": -6.536488571017728
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 0.7218409861903883,
+          "expectedWins": 62.172229996832755,
+          "winDifference": 0.9923655444333477
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.1296748559106797,
+          "expectedWins": 58.07797814951191,
+          "winDifference": -3.1018863028875003
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.14259983302812887,
+          "expectedWins": 60.98020215790577,
+          "winDifference": -0.19966229449363482
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.910364604154138,
+        "expectedWins": 68.37314089711549
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.3242332511758406,
+        "expectedWins": 59.2808464294071
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "johnsma02_LAL_1980s",
+          "points": 21.384,
+          "fgPct": 0.523,
+          "scoringProduct": 11.183832,
+          "assists": 11.385,
+          "dbpm": 1.9,
+          "blocks": 0.396,
+          "steals": 2.079,
+          "rebounds": 7.821000000000001,
+          "rawThreePointAttempts": 1.1,
+          "threePtPct": 0.242
+        },
+        {
+          "slot": "SG",
+          "id": "millere01_IND_1990s",
+          "points": 24.724999999999998,
+          "fgPct": 0.491,
+          "scoringProduct": 12.139974999999998,
+          "assists": 3.9775,
+          "dbpm": -0.7,
+          "blocks": 0.215,
+          "steals": 1.2899999999999998,
+          "rebounds": 3.7624999999999997,
+          "rawThreePointAttempts": 5,
+          "threePtPct": 0.397
+        },
+        {
+          "slot": "SF",
+          "id": "kerseje01_POR_1990s",
+          "points": 15.587499999999999,
+          "fgPct": 0.474,
+          "scoringProduct": 7.388474999999999,
+          "assists": 3.01,
+          "dbpm": 1.4,
+          "blocks": 0.9675,
+          "steals": 1.6124999999999998,
+          "rebounds": 8.385,
+          "rawThreePointAttempts": 0.2,
+          "threePtPct": 0.19
+        },
+        {
+          "slot": "PF",
+          "id": "willibu01_POR_1990s",
+          "points": 13.114999999999998,
+          "fgPct": 0.583,
+          "scoringProduct": 7.646044999999998,
+          "assists": 1.3975,
+          "dbpm": 0.5,
+          "blocks": 0.5375,
+          "steals": 0.7525,
+          "rebounds": 10.105,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        },
+        {
+          "slot": "C",
+          "id": "abdulka01_LAL_1980s",
+          "points": 24.75,
+          "fgPct": 0.586,
+          "scoringProduct": 14.503499999999999,
+          "assists": 3.6630000000000003,
+          "dbpm": 1.7,
+          "blocks": 2.9699999999999998,
+          "steals": 0.792,
+          "rebounds": 9.9,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 64.27336425962137,
+      "requiredRatingShift": [
+        -0.2154195730179163,
+        3.206083102867849
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 127.2,
+          "phiUsg": 0.9631057985437735,
+          "spacingRating": 5.415700000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.009236481100189852,
+          "drtgTeam": 104.32234967629498,
+          "ortgTeam": 116.57871547207571,
+          "effectiveOrtg": 116.57465216298324,
+          "netRating": 12.252302486688265,
+          "sixthManFRF": 0.6081911385052883,
+          "depthBonus": 4.248266162767913
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.500568649456177,
+        "winProbability": 0.8279948802194177
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 19.20343984734079,
+        "creation": 9.824119290030794,
+        "usageLoss": -1.0709486145967144,
+        "shootingCoach": -0.7590061724327053,
+        "spacing": 1.0668853055042393,
+        "rosterDefense": 4.474582013387717,
+        "defensiveCoach": 1.203068310317306,
+        "reserve": 4.248266162767913,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -19.20343984734079,
+          "expectedWins": 32.41141526829674,
+          "winDifference": -31.86194899132463
+        },
+        {
+          "name": "creation",
+          "ratingShift": -9.824119290030794,
+          "expectedWins": 49.19691798275215,
+          "winDifference": -15.076446276869227
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 1.0709486145967144,
+          "expectedWins": 65.58950933890704,
+          "winDifference": 1.3161450792856613
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0.7590061724327053,
+          "expectedWins": 65.21353125623094,
+          "winDifference": 0.9401669966095625
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -1.0668853055042393,
+          "expectedWins": 62.8914450574064,
+          "winDifference": -1.3819192022149736
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.474582013387717,
+          "expectedWins": 58.022066944629664,
+          "winDifference": -6.25129731499171
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.203068310317306,
+          "expectedWins": 62.7100151495489,
+          "winDifference": -1.5633491100724726
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.248266162767913,
+          "expectedWins": 58.3659328546518,
+          "winDifference": -5.9074314049695715
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 64.27336425962137,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 6.126316486612282,
+        "expectedWins": 70.8452920373273
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.0378988001272091,
+        "expectedWins": 62.929916131886316
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "paytoga01_OKC_1990s",
+          "points": 21.6075,
+          "fgPct": 0.471,
+          "scoringProduct": 10.1771325,
+          "assists": 8.17,
+          "dbpm": 1.2,
+          "blocks": 0.215,
+          "steals": 2.6875,
+          "rebounds": 4.8374999999999995,
+          "rawThreePointAttempts": 4.4,
+          "threePtPct": 0.326
+        },
+        {
+          "slot": "SG",
+          "id": "allenra02_OKC_2000s",
+          "points": 26.9255,
+          "fgPct": 0.441,
+          "scoringProduct": 11.8741455,
+          "assists": 4.5059,
+          "dbpm": -1.3,
+          "blocks": 0.1099,
+          "steals": 1.4287,
+          "rebounds": 5.0554,
+          "rawThreePointAttempts": 7.7,
+          "threePtPct": 0.387
+        },
+        {
+          "slot": "SF",
+          "id": "schrede01_OKC_1990s",
+          "points": 18.5975,
+          "fgPct": 0.502,
+          "scoringProduct": 9.335945,
+          "assists": 4.515,
+          "dbpm": 0.1,
+          "blocks": 0.32249999999999995,
+          "steals": 1.075,
+          "rebounds": 7.095,
+          "rawThreePointAttempts": 2.2,
+          "threePtPct": 0.434
+        },
+        {
+          "slot": "PF",
+          "id": "kempsh01_OKC_1990s",
+          "points": 20.21,
+          "fgPct": 0.549,
+          "scoringProduct": 11.095290000000002,
+          "assists": 2.365,
+          "dbpm": 1.1,
+          "blocks": 1.8275,
+          "steals": 1.505,
+          "rebounds": 11.825,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.318
+        },
+        {
+          "slot": "C",
+          "id": "ewingpa01_NYK_1990s",
+          "points": 27.627499999999998,
+          "fgPct": 0.524,
+          "scoringProduct": 14.476809999999999,
+          "assists": 2.2575,
+          "dbpm": 2.2,
+          "blocks": 3.44,
+          "steals": 1.1825,
+          "rebounds": 11.9325,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.148
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "family": "validation",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 69.37490468144027,
+      "requiredRatingShift": [
+        -4.780482431197461,
+        -1.3493935092697649
+      ],
+      "nearestBandRatingShift": -1.3493935092697649,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 108.4,
+          "phiUsg": 1,
+          "spacingRating": 7.5202,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.02660956902931883,
+          "drtgTeam": 105.57242846316585,
+          "ortgTeam": 120.78960336036704,
+          "effectiveOrtg": 124.00376264900876,
+          "netRating": 18.431334185842914,
+          "sixthManFRF": 0.41731999999999997,
+          "depthBonus": 2.915015235840846
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": -0.013032404564333213,
+        "deltaRating": 21.333317017119427,
+        "winProbability": 0.884089962936006
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 19.320903390102785,
+        "creation": 11.758310318115313,
+        "usageLoss": 0,
+        "shootingCoach": 1.4002271450121033,
+        "spacing": 3.214159288641724,
+        "rosterDefense": 4.427571536834155,
+        "defensiveCoach": -4.440892098500626e-15,
+        "reserve": 2.915015235840846,
+        "paceCoach": -0.013032404564333213
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -19.320903390102785,
+          "expectedWins": 40.424343997567775,
+          "winDifference": -28.950560683872496
+        },
+        {
+          "name": "creation",
+          "ratingShift": -11.758310318115313,
+          "expectedWins": 53.72499146769956,
+          "winDifference": -15.64991321374071
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 69.37490468144027,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.4002271450121033,
+          "expectedWins": 67.94604261040801,
+          "winDifference": -1.4288620710322562
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -3.214159288641724,
+          "expectedWins": 65.91645558110176,
+          "winDifference": -3.4584491003385125
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.427571536834155,
+          "expectedWins": 64.44504029712758,
+          "winDifference": -4.929864384312694
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 4.440892098500626e-15,
+          "expectedWins": 69.37490468144027,
+          "winDifference": 0
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.915015235840846,
+          "expectedWins": 66.26517895029293,
+          "winDifference": -3.1097257311473356
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0.013032404564333213,
+          "expectedWins": 69.3876485045077,
+          "winDifference": 0.012743823067424387
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 6.061952696499172,
+        "expectedWins": 74.27101099936542
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -2.6430890667870557,
+        "expectedWins": 66.57735953586993
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "murraja01_DEN_2020s",
+          "points": 22.9,
+          "fgPct": 0.479,
+          "scoringProduct": 10.9691,
+          "assists": 6.6,
+          "dbpm": -1,
+          "blocks": 0.5,
+          "steals": 1.1,
+          "rebounds": 4.1,
+          "rawThreePointAttempts": 6.5,
+          "threePtPct": 0.418
+        },
+        {
+          "slot": "SG",
+          "id": "caldwke01_DEN_2020s",
+          "points": 10.4,
+          "fgPct": 0.461,
+          "scoringProduct": 4.7944,
+          "assists": 2.4,
+          "dbpm": 0.7,
+          "blocks": 0.6,
+          "steals": 1.4,
+          "rebounds": 2.5,
+          "rawThreePointAttempts": 4.1,
+          "threePtPct": 0.414
+        },
+        {
+          "slot": "SF",
+          "id": "princta01_DET_2000s",
+          "points": 15.495899999999999,
+          "fgPct": 0.466,
+          "scoringProduct": 7.221089399999999,
+          "assists": 3.2969999999999997,
+          "dbpm": 0.1,
+          "blocks": 0.7693,
+          "steals": 0.6594,
+          "rebounds": 5.6049,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.363
+        },
+        {
+          "slot": "PF",
+          "id": "gordoaa01_DEN_2020s",
+          "points": 15,
+          "fgPct": 0.546,
+          "scoringProduct": 8.190000000000001,
+          "assists": 3,
+          "dbpm": -0.4,
+          "blocks": 0.7,
+          "steals": 0.7,
+          "rebounds": 6.3,
+          "rawThreePointAttempts": 2.6,
+          "threePtPct": 0.323
+        },
+        {
+          "slot": "C",
+          "id": "jokicni01_DEN_2020s",
+          "points": 27.9,
+          "fgPct": 0.576,
+          "scoringProduct": 16.0704,
+          "assists": 9.9,
+          "dbpm": 3.9,
+          "blocks": 0.8,
+          "steals": 1.5,
+          "rebounds": 12.7,
+          "rawThreePointAttempts": 4,
+          "threePtPct": 0.385
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "family": "validation",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 66.35768287505928,
+      "requiredRatingShift": [
+        -1.9447794369161835,
+        1.4848446021841275
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 113.5,
+          "phiUsg": 1,
+          "spacingRating": 12.181099999999999,
+          "spacingTier": "ELITE",
+          "spacingModifier": 0.04980440992707338,
+          "drtgTeam": 105.73087599430798,
+          "ortgTeam": 115.33840590362952,
+          "effectiveOrtg": 121.08276715158907,
+          "netRating": 15.351891157281088,
+          "sixthManFRF": 0.4425506831031731,
+          "depthBonus": 3.0912536755428057
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.018426996286360017,
+        "deltaRating": 18.461571829110255,
+        "winProbability": 0.852989714554672
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 18.246574178753377,
+        "creation": 7.188806774879193,
+        "usageLoss": 0,
+        "shootingCoach": 1.5928624428601121,
+        "spacing": 5.744361247959547,
+        "rosterDefense": 3.5472830195016356,
+        "defensiveCoach": 0.7218409861903852,
+        "reserve": 3.0912536755428057,
+        "paceCoach": 0.018426996286360017
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -18.246574178753377,
+          "expectedWins": 37.23750441308039,
+          "winDifference": -29.120178461978895
+        },
+        {
+          "name": "creation",
+          "ratingShift": -7.188806774879193,
+          "expectedWins": 56.51586921214054,
+          "winDifference": -9.841813662918746
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 66.35768287505928,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.5928624428601121,
+          "expectedWins": 64.44399375229519,
+          "winDifference": -1.9136891227640973
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -5.744361247959547,
+          "expectedWins": 58.73221257752168,
+          "winDifference": -7.625470297537603
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -3.5472830195016356,
+          "expectedWins": 61.88243083321861,
+          "winDifference": -4.475252041840669
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -0.7218409861903852,
+          "expectedWins": 65.50996091058079,
+          "winDifference": -0.8477219644784952
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -3.0912536755428057,
+          "expectedWins": 62.50088361385585,
+          "winDifference": -3.8567992612034345
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.018426996286360017,
+          "expectedWins": 66.33644478676538,
+          "winDifference": -0.021238088293898727
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 4.85671698049836,
+        "expectedWins": 71.23436019506482
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -2.8698031943860673,
+        "expectedWins": 62.79668843978124
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "whitede01_BOS_2020s",
+          "points": 16.1,
+          "fgPct": 0.431,
+          "scoringProduct": 6.939100000000001,
+          "assists": 5.1,
+          "dbpm": 1.1,
+          "blocks": 1.2,
+          "steals": 1,
+          "rebounds": 4.4,
+          "rawThreePointAttempts": 8.1,
+          "threePtPct": 0.368
+        },
+        {
+          "slot": "SG",
+          "id": "holidjr01_BOS_2020s",
+          "points": 11.9,
+          "fgPct": 0.463,
+          "scoringProduct": 5.5097000000000005,
+          "assists": 4.4,
+          "dbpm": 1.1,
+          "blocks": 0.6,
+          "steals": 1,
+          "rebounds": 4.9,
+          "rawThreePointAttempts": 4.8,
+          "threePtPct": 0.394
+        },
+        {
+          "slot": "SF",
+          "id": "brownja02_BOS_2020s",
+          "points": 26.4,
+          "fgPct": 0.481,
+          "scoringProduct": 12.6984,
+          "assists": 4.1,
+          "dbpm": -0.1,
+          "blocks": 0.4,
+          "steals": 1.1,
+          "rebounds": 6.6,
+          "rawThreePointAttempts": 6.7,
+          "threePtPct": 0.346
+        },
+        {
+          "slot": "PF",
+          "id": "tatumja01_BOS_2020s",
+          "points": 28,
+          "fgPct": 0.463,
+          "scoringProduct": 12.964,
+          "assists": 5.2,
+          "dbpm": 0.7,
+          "blocks": 0.6,
+          "steals": 1.1,
+          "rebounds": 8.5,
+          "rawThreePointAttempts": 9.2,
+          "threePtPct": 0.356
+        },
+        {
+          "slot": "C",
+          "id": "horfoal01_BOS_2020s",
+          "points": 9.6,
+          "fgPct": 0.484,
+          "scoringProduct": 4.6464,
+          "assists": 3,
+          "dbpm": 2.2,
+          "blocks": 1.1,
+          "steals": 0.6,
+          "rebounds": 6.8,
+          "rawThreePointAttempts": 4.3,
+          "threePtPct": 0.399
+        }
+      ]
+    },
+    {
+      "id": "E01",
+      "family": "validation",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 74.02289890424223,
+      "requiredRatingShift": [
+        -6.0467582220831755,
+        -0.034175203854824
+      ],
+      "nearestBandRatingShift": -0.034175203854824,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 120.1,
+          "phiUsg": 0.9981357455098286,
+          "spacingRating": 12.453199999999999,
+          "spacingTier": "ELITE",
+          "spacingModifier": 0.047063744804782266,
+          "drtgTeam": 105.90766097540005,
+          "ortgTeam": 122.11070822539904,
+          "effectiveOrtg": 127.79927361812534,
+          "netRating": 21.891612642725292,
+          "sixthManFRF": 0.677469766896827,
+          "depthBonus": 4.732183198326937
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 26.623795841052228,
+        "winProbability": 0.9266001065446574
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 19.966607686054953,
+        "creation": 9.962704823268226,
+        "usageLoss": -0.05579585523324752,
+        "shootingCoach": 3.8712332089390205,
+        "spacing": 5.744361247959549,
+        "rosterDefense": 4.814180010790323,
+        "defensiveCoach": -0.7218409861903714,
+        "reserve": 4.732183198326937,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -19.966607686054953,
+          "expectedWins": 49.313349973072775,
+          "winDifference": -24.70954893116945
+        },
+        {
+          "name": "creation",
+          "ratingShift": -9.962704823268226,
+          "expectedWins": 64.593469709309,
+          "winDifference": -9.42942919493322
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0.05579585523324752,
+          "expectedWins": 74.060161909968,
+          "winDifference": 0.037263005725776566
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -3.8712332089390205,
+          "expectedWins": 71.04342357607334,
+          "winDifference": -2.9794753281688884
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -5.744361247959549,
+          "expectedWins": 69.30090494046065,
+          "winDifference": -4.721993963781571
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.814180010790323,
+          "expectedWins": 70.19207727349206,
+          "winDifference": -3.8308216307501652
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 0.7218409861903714,
+          "expectedWins": 74.49337299665878,
+          "winDifference": 0.470474092416552
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.732183198326937,
+          "expectedWins": 70.26817016373784,
+          "winDifference": -3.7547287405043903
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 74.02289890424223,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 6.591272722543011,
+        "expectedWins": 77.48870067650788
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.7846194140725231,
+        "expectedWins": 72.7484979689344
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "curryst01_GSW_2010s",
+          "points": 27.378,
+          "fgPct": 0.487,
+          "scoringProduct": 13.333086,
+          "assists": 8.002799999999999,
+          "dbpm": 1.5,
+          "blocks": 0.2106,
+          "steals": 2.0006999999999997,
+          "rebounds": 4.9491,
+          "rawThreePointAttempts": 9.1,
+          "threePtPct": 0.44
+        },
+        {
+          "slot": "SG",
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.165999999999997,
+          "fgPct": 0.467,
+          "scoringProduct": 10.818522,
+          "assists": 2.5271999999999997,
+          "dbpm": -1.1,
+          "blocks": 0.6317999999999999,
+          "steals": 0.9477,
+          "rebounds": 3.7908,
+          "rawThreePointAttempts": 7.9,
+          "threePtPct": 0.426
+        },
+        {
+          "slot": "SF",
+          "id": "duranke01_GSW_2010s",
+          "points": 27.272699999999997,
+          "fgPct": 0.524,
+          "scoringProduct": 14.290894799999998,
+          "assists": 5.6862,
+          "dbpm": 0.9,
+          "blocks": 1.5795,
+          "steals": 0.8424,
+          "rebounds": 7.476299999999999,
+          "rawThreePointAttempts": 5.4,
+          "threePtPct": 0.381
+        },
+        {
+          "slot": "PF",
+          "id": "greendr01_GSW_2010s",
+          "points": 12.741299999999999,
+          "fgPct": 0.452,
+          "scoringProduct": 5.7590676,
+          "assists": 6.423299999999999,
+          "dbpm": 3.2,
+          "blocks": 1.4741999999999997,
+          "steals": 1.7900999999999998,
+          "rebounds": 9.0558,
+          "rawThreePointAttempts": 3.6,
+          "threePtPct": 0.346
+        },
+        {
+          "slot": "C",
+          "id": "lopezbr01_MIL_2020s",
+          "points": 13.8,
+          "fgPct": 0.508,
+          "scoringProduct": 7.010400000000001,
+          "assists": 1.6,
+          "dbpm": 0.8,
+          "blocks": 2.3,
+          "steals": 0.5,
+          "rebounds": 5.6,
+          "rawThreePointAttempts": 4.8,
+          "threePtPct": 0.371
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "family": "development",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 70.99678859912686,
+      "requiredRatingShift": [
+        -2.1217190755445774,
+        3.8892239175524725
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 142.8,
+          "phiUsg": 0.8576571306558385,
+          "spacingRating": 4.1217,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.0020829908816488154,
+          "drtgTeam": 103.73265307297774,
+          "ortgTeam": 127.19418471218937,
+          "effectiveOrtg": 121.4059061626949,
+          "netRating": 17.673253089717164,
+          "sixthManFRF": 0.7125062440708736,
+          "depthBonus": 4.976915932853285
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 22.65016902257045,
+        "winProbability": 0.8963358616972102
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 25.45576862630628,
+        "creation": 13.428253578746252,
+        "usageLoss": -5.534863292309268,
+        "shootingCoach": 0,
+        "spacing": -0.2534152571851962,
+        "rosterDefense": 6.267346927022257,
+        "defensiveCoach": 2.6645352591003757e-15,
+        "reserve": 4.976915932853285,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -25.45576862630628,
+          "expectedWins": 32.43619127900466,
+          "winDifference": -38.5605973201222
+        },
+        {
+          "name": "creation",
+          "ratingShift": -13.428253578746252,
+          "expectedWins": 53.76700038716385,
+          "winDifference": -17.22978821196301
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 5.534863292309268,
+          "expectedWins": 75.03972468687526,
+          "winDifference": 4.0429360877484015
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 70.99678859912686,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 0.2534152571851962,
+          "expectedWins": 71.21766390031932,
+          "winDifference": 0.22087530119246424
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -6.267346927022257,
+          "expectedWins": 64.30353551181253,
+          "winDifference": -6.693253087314332
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -2.6645352591003757e-15,
+          "expectedWins": 70.99678859912686,
+          "winDifference": 0
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.976915932853285,
+          "expectedWins": 65.8804100428449,
+          "winDifference": -5.116378556281958
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 70.99678859912686,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 8.580857539644416,
+        "expectedWins": 76.6510950860883
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.8762162392549158,
+        "expectedWins": 69.24478976073972
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "paulch01_LAC_2010s",
+          "points": 19.375199999999996,
+          "fgPct": 0.478,
+          "scoringProduct": 9.261345599999999,
+          "assists": 10.740599999999999,
+          "dbpm": 2.1,
+          "blocks": 0.1053,
+          "steals": 2.3166,
+          "rebounds": 4.4226,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.367
+        },
+        {
+          "slot": "SG",
+          "id": "bryanko01_LAL_2000s",
+          "points": 34.2888,
+          "fgPct": 0.453,
+          "scoringProduct": 15.532826400000001,
+          "assists": 5.8247,
+          "dbpm": 0.5,
+          "blocks": 0.6594,
+          "steals": 2.0881,
+          "rebounds": 6.8138,
+          "rawThreePointAttempts": 5.2,
+          "threePtPct": 0.364
+        },
+        {
+          "slot": "SF",
+          "id": "pippesc01_CHI_1990s",
+          "points": 23.005,
+          "fgPct": 0.493,
+          "scoringProduct": 11.341465,
+          "assists": 6.449999999999999,
+          "dbpm": 2.7,
+          "blocks": 1.075,
+          "steals": 2.6875,
+          "rebounds": 8.7075,
+          "rawThreePointAttempts": 2.5,
+          "threePtPct": 0.286
+        },
+        {
+          "slot": "PF",
+          "id": "garneke01_MIN_2000s",
+          "points": 25.3869,
+          "fgPct": 0.501,
+          "scoringProduct": 12.718836900000001,
+          "assists": 6.1544,
+          "dbpm": 2.9,
+          "blocks": 1.8682999999999998,
+          "steals": 1.6484999999999999,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.6,
+          "threePtPct": 0.26
+        },
+        {
+          "slot": "C",
+          "id": "onealsh01_LAL_2000s",
+          "points": 31.4314,
+          "fgPct": 0.575,
+          "scoringProduct": 18.073055,
+          "assists": 3.8465,
+          "dbpm": 1.2,
+          "blocks": 2.8574,
+          "steals": 0.6594,
+          "rebounds": 13.737499999999999,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "family": "development",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 73.99511018965978,
+      "requiredRatingShift": [
+        -6.005368588938493,
+        0.007286777171026763
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 141.6,
+          "phiUsg": 0.8839096695435391,
+          "spacingRating": 2.807,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.01272834168657865,
+          "drtgTeam": 101.8406435462787,
+          "ortgTeam": 130.15595388925402,
+          "effectiveOrtg": 123.70322559191429,
+          "netRating": 21.86258204563559,
+          "sixthManFRF": 0.6759949000000001,
+          "depthBonus": 4.721881129231068
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 26.58446317486666,
+        "winProbability": 0.9263449269608359
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 24.204583705364858,
+        "creation": 17.641207676752327,
+        "usageLoss": -4.857891749762107,
+        "shootingCoach": 0,
+        "spacing": -1.5948365475776214,
+        "rosterDefense": 7.437515467530919,
+        "defensiveCoach": 0.7218409861903821,
+        "reserve": 4.721881129231068,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -24.204583705364858,
+          "expectedWins": 41.638926311324404,
+          "winDifference": -32.35618387833538
+        },
+        {
+          "name": "creation",
+          "ratingShift": -17.641207676752327,
+          "expectedWins": 53.22650841813749,
+          "winDifference": -20.76860177152229
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 4.857891749762107,
+          "expectedWins": 76.7245777183915,
+          "winDifference": 2.7294675287317176
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 73.99511018965978,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 1.5948365475776214,
+          "expectedWins": 75.00494339638944,
+          "winDifference": 1.0098332067296525
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -7.437515467530919,
+          "expectedWins": 67.49901637083762,
+          "winDifference": -6.49609381882216
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -0.7218409861903821,
+          "expectedWins": 73.49767268202017,
+          "winDifference": -0.49743750763961714
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.721881129231068,
+          "expectedWins": 70.23935156525819,
+          "winDifference": -3.7557586244015937
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 73.99511018965978,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 10.182978765802414,
+        "expectedWins": 78.71787037362871
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -0.945589209942554,
+        "expectedWins": 73.33815906352612
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "stockjo01_UTA_1990s",
+          "points": 17.952499999999997,
+          "fgPct": 0.501,
+          "scoringProduct": 8.994202499999998,
+          "assists": 15.157499999999999,
+          "dbpm": 2.5,
+          "blocks": 0.215,
+          "steals": 3.1174999999999997,
+          "rebounds": 3.1174999999999997,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.389
+        },
+        {
+          "slot": "SG",
+          "id": "jordami01_CHI_1990s",
+          "points": 34.2925,
+          "fgPct": 0.52,
+          "scoringProduct": 17.8321,
+          "assists": 5.805,
+          "dbpm": 2.5,
+          "blocks": 0.7525,
+          "steals": 2.795,
+          "rebounds": 6.9875,
+          "rawThreePointAttempts": 2.4,
+          "threePtPct": 0.372
+        },
+        {
+          "slot": "SF",
+          "id": "birdla01_BOS_1980s",
+          "points": 28.610999999999997,
+          "fgPct": 0.525,
+          "scoringProduct": 15.020774999999999,
+          "assists": 6.732,
+          "dbpm": 1.7,
+          "blocks": 0.99,
+          "steals": 1.683,
+          "rebounds": 9.603,
+          "rawThreePointAttempts": 2.5,
+          "threePtPct": 0.414
+        },
+        {
+          "slot": "PF",
+          "id": "duncati01_SAS_2000s",
+          "points": 26.156200000000002,
+          "fgPct": 0.508,
+          "scoringProduct": 13.2873496,
+          "assists": 3.9564,
+          "dbpm": 2.6,
+          "blocks": 2.9673000000000003,
+          "steals": 0.8792,
+          "rebounds": 13.957299999999998,
+          "rawThreePointAttempts": 0.2,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "C",
+          "id": "robinda01_SAS_1990s",
+          "points": 29.5625,
+          "fgPct": 0.517,
+          "scoringProduct": 15.2838125,
+          "assists": 3.87,
+          "dbpm": 3.4,
+          "blocks": 3.5475,
+          "steals": 1.72,
+          "rebounds": 12.04,
+          "rawThreePointAttempts": 0.2,
+          "threePtPct": 0.326
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "family": "development",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 71.33554591603534,
+      "requiredRatingShift": [
+        -2.5223604631126957,
+        3.51116000191937
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 135.1,
+          "phiUsg": 0.905812183597366,
+          "spacingRating": 7.4244,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.025312832450387124,
+          "drtgTeam": 105.39317739471653,
+          "ortgTeam": 126.53758697241851,
+          "effectiveOrtg": 126.23231231165971,
+          "netRating": 20.83913491694318,
+          "sixthManFRF": 0.37406579149471153,
+          "depthBonus": 2.612880958051254
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.09041905512636401,
+        "deltaRating": 23.5424349301208,
+        "winProbability": 0.9039700979769927
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 22.05574233935733,
+        "creation": 14.27259548762931,
+        "usageLoss": -3.42168681346108,
+        "shootingCoach": 1.8990866382950349,
+        "spacing": 3.116412152702278,
+        "rosterDefense": 5.809890915600769,
+        "defensiveCoach": -1.2030683103172999,
+        "reserve": 2.612880958051254,
+        "paceCoach": 0.09041905512636401
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -22.05574233935733,
+          "expectedWins": 39.385403942877794,
+          "winDifference": -31.95014197315755
+        },
+        {
+          "name": "creation",
+          "ratingShift": -14.27259548762931,
+          "expectedWins": 53.12604995174731,
+          "winDifference": -18.20949596428803
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 3.42168681346108,
+          "expectedWins": 73.93995771760983,
+          "winDifference": 2.6044118015744857
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.8990866382950349,
+          "expectedWins": 69.61181077622808,
+          "winDifference": -1.7237351398072605
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -3.116412152702278,
+          "expectedWins": 68.39515606064239,
+          "winDifference": -2.940389855392951
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.809890915600769,
+          "expectedWins": 65.38171287574606,
+          "winDifference": -5.9538330402892825
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 1.2030683103172999,
+          "expectedWins": 72.3220084705386,
+          "winDifference": 0.9864625545032624
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.612880958051254,
+          "expectedWins": 68.9092102471753,
+          "winDifference": -2.426335668860048
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.09041905512636401,
+          "expectedWins": 71.2581638936334,
+          "winDifference": -0.0773820224019488
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 7.954537517732567,
+        "expectedWins": 76.52774028789263
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -0.9373251031762919,
+        "expectedWins": 70.51082831149166
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "nashst01_PHX_2000s",
+          "points": 19.452299999999997,
+          "fgPct": 0.515,
+          "scoringProduct": 10.017934499999999,
+          "assists": 12.3088,
+          "dbpm": -0.8,
+          "blocks": 0.1099,
+          "steals": 0.9891,
+          "rebounds": 4.0663,
+          "rawThreePointAttempts": 3.9,
+          "threePtPct": 0.442
+        },
+        {
+          "slot": "SG",
+          "id": "millere01_IND_1990s",
+          "points": 24.724999999999998,
+          "fgPct": 0.491,
+          "scoringProduct": 12.139974999999998,
+          "assists": 3.9775,
+          "dbpm": -0.7,
+          "blocks": 0.215,
+          "steals": 1.2899999999999998,
+          "rebounds": 3.7624999999999997,
+          "rawThreePointAttempts": 5,
+          "threePtPct": 0.397
+        },
+        {
+          "slot": "SF",
+          "id": "duranke01_OKC_2010s",
+          "points": 31.063499999999998,
+          "fgPct": 0.506,
+          "scoringProduct": 15.718131,
+          "assists": 5.265,
+          "dbpm": 1.6,
+          "blocks": 1.1583,
+          "steals": 1.2635999999999998,
+          "rebounds": 8.2134,
+          "rawThreePointAttempts": 5.6,
+          "threePtPct": 0.399
+        },
+        {
+          "slot": "PF",
+          "id": "nowitdi01_DAL_2000s",
+          "points": 28.4641,
+          "fgPct": 0.467,
+          "scoringProduct": 13.2927347,
+          "assists": 3.2969999999999997,
+          "dbpm": 1.1,
+          "blocks": 1.3188,
+          "steals": 1.2089,
+          "rebounds": 10.4405,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "C",
+          "id": "olajuha01_HOU_1990s",
+          "points": 27.842499999999998,
+          "fgPct": 0.52,
+          "scoringProduct": 14.4781,
+          "assists": 3.5475,
+          "dbpm": 3.6,
+          "blocks": 4.515,
+          "steals": 1.935,
+          "rebounds": 13.8675,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.197
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "family": "development",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 69.41727437625177,
+      "requiredRatingShift": [
+        -0.4207366655174542,
+        5.590338847568043
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 134.9,
+          "phiUsg": 0.9075047335685028,
+          "spacingRating": 4.3826,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": 0.00010716524229101026,
+          "drtgTeam": 103.34122447550918,
+          "ortgTeam": 122.54698244155611,
+          "effectiveOrtg": 119.33821059399588,
+          "netRating": 15.996986118486703,
+          "sixthManFRF": 0.7095515885052884,
+          "depthBonus": 4.956277415671404
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.953263534158108,
+        "winProbability": 0.8803289491834092
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 21.322948589486394,
+        "creation": 13.506502794595187,
+        "usageLoss": -3.2215593854335043,
+        "shootingCoach": -0.5926314496623044,
+        "spacing": 0.012787537873274024,
+        "rosterDefense": 5.455707214173515,
+        "defensiveCoach": 1.203068310317306,
+        "reserve": 4.956277415671404,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -21.322948589486394,
+          "expectedWins": 36.73531446245622,
+          "winDifference": -32.681959913795545
+        },
+        {
+          "name": "creation",
+          "ratingShift": -13.506502794595187,
+          "expectedWins": 50.75540159851189,
+          "winDifference": -18.66187277773988
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 3.2215593854335043,
+          "expectedWins": 72.26775996209886,
+          "winDifference": 2.850485585847096
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0.5926314496623044,
+          "expectedWins": 69.98697107955246,
+          "winDifference": 0.5696967033006928
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -0.012787537873274024,
+          "expectedWins": 69.40474965061553,
+          "winDifference": -0.012524725636239964
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.455707214173515,
+          "expectedWins": 63.15654767490819,
+          "winDifference": -6.260726701343579
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.203068310317306,
+          "expectedWins": 68.19544625416663,
+          "winDifference": -1.2218281220851424
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.956277415671404,
+          "expectedWins": 63.806779588754324,
+          "winDifference": -5.610494787497444
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 69.41727437625177,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 7.4696114524931545,
+        "expectedWins": 75.17718710461321
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.4192509267615776,
+        "expectedWins": 67.96649364393181
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "johnsma02_LAL_1980s",
+          "points": 21.384,
+          "fgPct": 0.523,
+          "scoringProduct": 11.183832,
+          "assists": 11.385,
+          "dbpm": 1.9,
+          "blocks": 0.396,
+          "steals": 2.079,
+          "rebounds": 7.821000000000001,
+          "rawThreePointAttempts": 1.1,
+          "threePtPct": 0.242
+        },
+        {
+          "slot": "SG",
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.165999999999997,
+          "fgPct": 0.467,
+          "scoringProduct": 10.818522,
+          "assists": 2.5271999999999997,
+          "dbpm": -1.1,
+          "blocks": 0.6317999999999999,
+          "steals": 0.9477,
+          "rebounds": 3.7908,
+          "rawThreePointAttempts": 7.9,
+          "threePtPct": 0.426
+        },
+        {
+          "slot": "SF",
+          "id": "pippesc01_CHI_1990s",
+          "points": 23.005,
+          "fgPct": 0.493,
+          "scoringProduct": 11.341465,
+          "assists": 6.449999999999999,
+          "dbpm": 2.7,
+          "blocks": 1.075,
+          "steals": 2.6875,
+          "rebounds": 8.7075,
+          "rawThreePointAttempts": 2.5,
+          "threePtPct": 0.286
+        },
+        {
+          "slot": "PF",
+          "id": "duncati01_SAS_2000s",
+          "points": 26.156200000000002,
+          "fgPct": 0.508,
+          "scoringProduct": 13.2873496,
+          "assists": 3.9564,
+          "dbpm": 2.6,
+          "blocks": 2.9673000000000003,
+          "steals": 0.8792,
+          "rebounds": 13.957299999999998,
+          "rawThreePointAttempts": 0.2,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "C",
+          "id": "abdulka01_MIL_1970s",
+          "points": 28.9501,
+          "fgPct": 0.556,
+          "scoringProduct": 16.0962556,
+          "assists": 4.5264,
+          "dbpm": 0.9,
+          "blocks": 1.886,
+          "steals": 0.6600999999999999,
+          "rebounds": 14.805099999999998,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "E06",
+      "family": "validation",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 73.12130968304803,
+      "requiredRatingShift": [
+        -4.762125102456613,
+        1.2516423478300622
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 137.3,
+          "phiUsg": 0.886533112169913,
+          "spacingRating": 6.7654,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.02007238606268417,
+          "drtgTeam": 103.38988223258158,
+          "ortgTeam": 125.92805058663068,
+          "effectiveOrtg": 124.20422941832183,
+          "netRating": 20.814347185740246,
+          "sixthManFRF": 0.653980683103173,
+          "depthBonus": 4.568109976016854
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": -0.010422656986818322,
+        "deltaRating": 25.37203450477028,
+        "winProbability": 0.9180681813935548
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 22.64724974375055,
+        "creation": 14.084515965642462,
+        "usageLoss": -4.1678391395487315,
+        "shootingCoach": 0.8861223701008316,
+        "spacing": 2.444017971239884,
+        "rosterDefense": 5.888276781228031,
+        "defensiveCoach": 0.7218409861903847,
+        "reserve": 4.568109976016854,
+        "paceCoach": -0.010422656986818322
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -22.64724974375055,
+          "expectedWins": 42.2177072716435,
+          "winDifference": -30.903602411404528
+        },
+        {
+          "name": "creation",
+          "ratingShift": -14.084515965642462,
+          "expectedWins": 56.97427058954109,
+          "winDifference": -16.147039093506933
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 4.1678391395487315,
+          "expectedWins": 75.75800226615664,
+          "winDifference": 2.636692583108612
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -0.8861223701008316,
+          "expectedWins": 72.45033941067899,
+          "winDifference": -0.6709702723690327
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -2.444017971239884,
+          "expectedWins": 71.16724787820785,
+          "winDifference": -1.9540618048401797
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.888276781228031,
+          "expectedWins": 67.83059714409707,
+          "winDifference": -5.290712538950956
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -0.7218409861903847,
+          "expectedWins": 72.57788203801734,
+          "winDifference": -0.5434276450306896
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -4.568109976016854,
+          "expectedWins": 69.19365071183776,
+          "winDifference": -3.9276589712102634
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0.010422656986818322,
+          "expectedWins": 73.12895611134648,
+          "winDifference": 0.007646428298457408
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 8.061858518771968,
+        "expectedWins": 77.56169773103876
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.3671788997969543,
+        "expectedWins": 72.06846417292067
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "paulch01_LAC_2010s",
+          "points": 19.375199999999996,
+          "fgPct": 0.478,
+          "scoringProduct": 9.261345599999999,
+          "assists": 10.740599999999999,
+          "dbpm": 2.1,
+          "blocks": 0.1053,
+          "steals": 2.3166,
+          "rebounds": 4.4226,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.367
+        },
+        {
+          "slot": "SG",
+          "id": "allenra02_MIL_2000s",
+          "points": 24.178,
+          "fgPct": 0.466,
+          "scoringProduct": 11.266948000000001,
+          "assists": 4.5059,
+          "dbpm": -0.8,
+          "blocks": 0.2198,
+          "steals": 1.5386,
+          "rebounds": 5.1653,
+          "rawThreePointAttempts": 6,
+          "threePtPct": 0.43
+        },
+        {
+          "slot": "SF",
+          "id": "jamesle01_MIA_2010s",
+          "points": 28.220399999999998,
+          "fgPct": 0.535,
+          "scoringProduct": 15.097914,
+          "assists": 7.2657,
+          "dbpm": 2.3,
+          "blocks": 0.8424,
+          "steals": 1.7900999999999998,
+          "rebounds": 8.2134,
+          "rawThreePointAttempts": 3.1,
+          "threePtPct": 0.365
+        },
+        {
+          "slot": "PF",
+          "id": "garneke01_MIN_2000s",
+          "points": 25.3869,
+          "fgPct": 0.501,
+          "scoringProduct": 12.718836900000001,
+          "assists": 6.1544,
+          "dbpm": 2.9,
+          "blocks": 1.8682999999999998,
+          "steals": 1.6484999999999999,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.6,
+          "threePtPct": 0.26
+        },
+        {
+          "slot": "C",
+          "id": "jokicni01_DEN_2020s",
+          "points": 27.9,
+          "fgPct": 0.576,
+          "scoringProduct": 16.0704,
+          "assists": 9.9,
+          "dbpm": 3.9,
+          "blocks": 0.8,
+          "steals": 1.5,
+          "rebounds": 12.7,
+          "rawThreePointAttempts": 4,
+          "threePtPct": 0.385
+        }
+      ]
+    },
+    {
+      "id": "F01",
+      "family": "development",
+      "target": [
+        64,
+        68
+      ],
+      "expectedWins": 64.01086599982621,
+      "requiredRatingShift": [
+        -0.008496091422821421,
+        3.40404771957971
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 165.4,
+          "phiUsg": 0.6046787084589171,
+          "spacingRating": 8.466,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.03713944119334525,
+          "drtgTeam": 107.33931385658552,
+          "ortgTeam": 127.14341957550222,
+          "effectiveOrtg": 116.70598838147467,
+          "netRating": 9.366674524889149,
+          "sixthManFRF": 0.9307430999999999,
+          "depthBonus": 6.501318693457635
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.867993218346783,
+        "winProbability": 0.8192445243762807
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 23.93939803904229,
+        "creation": 13.034613201192528,
+        "usageLoss": -14.616613876944143,
+        "shootingCoach": 1.8592458281305688,
+        "spacing": 4.179182682916589,
+        "rosterDefense": 4.104368115795244,
+        "defensiveCoach": -1.4436819723807632,
+        "reserve": 6.501318693457635,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -23.93939803904229,
+          "expectedWins": 24.231415064483702,
+          "winDifference": -39.77945093534251
+        },
+        {
+          "name": "creation",
+          "ratingShift": -13.034613201192528,
+          "expectedWins": 43.01481022505517,
+          "winDifference": -20.996055774771037
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 14.616613876944143,
+          "expectedWins": 76.43900925552909,
+          "winDifference": 12.428143255702878
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.8592458281305688,
+          "expectedWins": 61.52668729490413,
+          "winDifference": -2.48417870492208
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -4.179182682916589,
+          "expectedWins": 58.13824455925142,
+          "winDifference": -5.87262144057479
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -4.104368115795244,
+          "expectedWins": 58.25226388745234,
+          "winDifference": -5.758602112373872
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 1.4436819723807632,
+          "expectedWins": 65.79155393765406,
+          "winDifference": 1.7806879378278495
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -6.501318693457635,
+          "expectedWins": 54.455766250011,
+          "winDifference": -9.555099749815206
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 64.01086599982621,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 5.619442884204754,
+        "expectedWins": 70.20987971425475
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -0.9984085912062284,
+        "expectedWins": 62.703263097994494
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "westbru01_OKC_2010s",
+          "points": 29.1681,
+          "fgPct": 0.435,
+          "scoringProduct": 12.6881235,
+          "assists": 10.4247,
+          "dbpm": 1.7,
+          "blocks": 0.31589999999999996,
+          "steals": 2.0006999999999997,
+          "rebounds": 9.1611,
+          "rawThreePointAttempts": 5.3,
+          "threePtPct": 0.314
+        },
+        {
+          "slot": "SG",
+          "id": "hardeja01_HOU_2010s",
+          "points": 33.5907,
+          "fgPct": 0.443,
+          "scoringProduct": 14.8806801,
+          "assists": 9.687599999999998,
+          "dbpm": 1.4,
+          "blocks": 0.6317999999999999,
+          "steals": 1.8954,
+          "rebounds": 7.160399999999999,
+          "rawThreePointAttempts": 10.9,
+          "threePtPct": 0.36
+        },
+        {
+          "slot": "SF",
+          "id": "anthoca01_NYK_2010s",
+          "points": 27.378,
+          "fgPct": 0.445,
+          "scoringProduct": 12.18321,
+          "assists": 3.4748999999999994,
+          "dbpm": -1,
+          "blocks": 0.6317999999999999,
+          "steals": 1.053,
+          "rebounds": 8.002799999999999,
+          "rawThreePointAttempts": 5.3,
+          "threePtPct": 0.375
+        },
+        {
+          "slot": "PF",
+          "id": "barklch01_PHX_1990s",
+          "points": 25.799999999999997,
+          "fgPct": 0.503,
+          "scoringProduct": 12.9774,
+          "assists": 4.6225,
+          "dbpm": 0.9,
+          "blocks": 0.86,
+          "steals": 1.72,
+          "rebounds": 12.577499999999999,
+          "rawThreePointAttempts": 2.9,
+          "threePtPct": 0.307
+        },
+        {
+          "slot": "C",
+          "id": "onealsh01_LAL_2000s",
+          "points": 31.4314,
+          "fgPct": 0.575,
+          "scoringProduct": 18.073055,
+          "assists": 3.8465,
+          "dbpm": 1.2,
+          "blocks": 2.8574,
+          "steals": 0.6594,
+          "rebounds": 13.737499999999999,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "family": "development",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 62.99254588145954,
+      "requiredRatingShift": [
+        -2.846239122934384,
+        0.005654086053955877
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 144.70000000000002,
+          "phiUsg": 0.8149780456049516,
+          "spacingRating": 6.559100000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.018712876554915058,
+          "drtgTeam": 108.55125172496665,
+          "ortgTeam": 125.98984554910702,
+          "effectiveOrtg": 121.59117232361697,
+          "netRating": 13.039920598650326,
+          "sixthManFRF": 0.3796571614947116,
+          "depthBonus": 2.651937146921243
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.1370860748835722,
+        "deltaRating": 15.828943820455141,
+        "winProbability": 0.8186931513944599
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 21.437087041899467,
+        "creation": 14.408378805067983,
+        "usageLoss": -6.632198147206878,
+        "shootingCoach": 1.8342171950027262,
+        "spacing": 2.2335249217168385,
+        "rosterDefense": 2.6518165853506632,
+        "defensiveCoach": -1.2030683103173105,
+        "reserve": 2.651937146921243,
+        "paceCoach": 0.1370860748835722
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -21.437087041899467,
+          "expectedWins": 27.148919617287703,
+          "winDifference": -35.84362626417184
+        },
+        {
+          "name": "creation",
+          "ratingShift": -14.408378805067983,
+          "expectedWins": 39.27763503555651,
+          "winDifference": -23.714910845903034
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 6.632198147206878,
+          "expectedWins": 70.38761303525797,
+          "winDifference": 7.395067153798429
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -1.8342171950027262,
+          "expectedWins": 60.473496427776944,
+          "winDifference": -2.519049453682598
+        },
+        {
+          "name": "spacing",
+          "ratingShift": -2.2335249217168385,
+          "expectedWins": 59.89901458033527,
+          "winDifference": -3.0935313011242727
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -2.6518165853506632,
+          "expectedWins": 59.287537423051994,
+          "winDifference": -3.7050084584075478
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 1.2030683103173105,
+          "expectedWins": 64.53464427986566,
+          "winDifference": 1.542098398406118
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.651937146921243,
+          "expectedWins": 59.2873597697845,
+          "winDifference": -3.70518611167504
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.1370860748835722,
+          "expectedWins": 62.81122420178525,
+          "winDifference": -0.1813216796742907
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 3.6307006146493377,
+        "expectedWins": 67.37452975005222
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -0.6173980421740453,
+        "expectedWins": 62.16697586096434
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "nashst01_PHX_2000s",
+          "points": 19.452299999999997,
+          "fgPct": 0.515,
+          "scoringProduct": 10.017934499999999,
+          "assists": 12.3088,
+          "dbpm": -0.8,
+          "blocks": 0.1099,
+          "steals": 0.9891,
+          "rebounds": 4.0663,
+          "rawThreePointAttempts": 3.9,
+          "threePtPct": 0.442
+        },
+        {
+          "slot": "SG",
+          "id": "iversal01_PHI_2000s",
+          "points": 34.7284,
+          "fgPct": 0.43,
+          "scoringProduct": 14.933212,
+          "assists": 7.3633,
+          "dbpm": 0,
+          "blocks": 0.2198,
+          "steals": 2.5277,
+          "rebounds": 4.0663,
+          "rawThreePointAttempts": 4,
+          "threePtPct": 0.317
+        },
+        {
+          "slot": "SF",
+          "id": "anthoca01_DEN_2000s",
+          "points": 29.673,
+          "fgPct": 0.483,
+          "scoringProduct": 14.332059,
+          "assists": 3.6266999999999996,
+          "dbpm": -1,
+          "blocks": 0.5495,
+          "steals": 1.3188,
+          "rebounds": 6.703899999999999,
+          "rawThreePointAttempts": 2.1,
+          "threePtPct": 0.288
+        },
+        {
+          "slot": "PF",
+          "id": "nowitdi01_DAL_2000s",
+          "points": 28.4641,
+          "fgPct": 0.467,
+          "scoringProduct": 13.2927347,
+          "assists": 3.2969999999999997,
+          "dbpm": 1.1,
+          "blocks": 1.3188,
+          "steals": 1.2089,
+          "rebounds": 10.4405,
+          "rawThreePointAttempts": 3.7,
+          "threePtPct": 0.395
+        },
+        {
+          "slot": "C",
+          "id": "townska01_MIN_2010s",
+          "points": 24.8508,
+          "fgPct": 0.536,
+          "scoringProduct": 13.320028800000001,
+          "assists": 2.9483999999999995,
+          "dbpm": 0,
+          "blocks": 1.4741999999999997,
+          "steals": 0.8424,
+          "rebounds": 12.9519,
+          "rawThreePointAttempts": 3.8,
+          "threePtPct": 0.395
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "family": "development",
+      "target": [
+        59,
+        63
+      ],
+      "expectedWins": 61.48412484338471,
+      "requiredRatingShift": [
+        -1.7358606631211329,
+        1.1245998545016869
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 96.19999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.3912,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.008580234189239441,
+          "drtgTeam": 101.71040773464551,
+          "ortgTeam": 116.40272920537515,
+          "effectiveOrtg": 115.40396652852641,
+          "netRating": 13.693558793880896,
+          "sixthManFRF": 0.24358961620634603,
+          "depthBonus": 1.7014939196159373
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": -0.48797952496743896,
+        "deltaRating": 14.907073188529395,
+        "winProbability": 0.8052947144318446
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 15.782663256342941,
+        "creation": 12.309903441895374,
+        "usageLoss": 0,
+        "shootingCoach": 0,
+        "spacing": -0.9987626768487416,
+        "rosterDefense": 6.845910292973711,
+        "defensiveCoach": 1.4436819723807748,
+        "reserve": 1.7014939196159373,
+        "paceCoach": -0.48797952496743896
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -15.782663256342941,
+          "expectedWins": 34.910225470578396,
+          "winDifference": -26.573899372806316
+        },
+        {
+          "name": "creation",
+          "ratingShift": -12.309903441895374,
+          "expectedWins": 41.11967804886945,
+          "winDifference": -20.36444679451526
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 61.48412484338471,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 61.48412484338471,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 0.9987626768487416,
+          "expectedWins": 62.83413218663366,
+          "winDifference": 1.3500073432489472
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -6.845910292973711,
+          "expectedWins": 50.80220080709192,
+          "winDifference": -10.681924036292791
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.4436819723807748,
+          "expectedWins": 59.43001349064828,
+          "winDifference": -2.0541113527364345
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -1.7014939196159373,
+          "expectedWins": 59.05082269317981,
+          "winDifference": -2.433302150204902
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0.48797952496743896,
+          "expectedWins": 62.15111907935408,
+          "winDifference": 0.6669942359693692
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 9.37299014035962,
+        "expectedWins": 71.77808307095675
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -2.683879195121847,
+        "expectedWins": 57.572993523144085
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "kiddja01_BKN_2000s",
+          "points": 17.1444,
+          "fgPct": 0.403,
+          "scoringProduct": 6.909193200000001,
+          "assists": 10.0009,
+          "dbpm": 2,
+          "blocks": 0.3297,
+          "steals": 2.3079,
+          "rebounds": 7.693,
+          "rawThreePointAttempts": 4.6,
+          "threePtPct": 0.338
+        },
+        {
+          "slot": "SG",
+          "id": "wadedw01_MIA_2000s",
+          "points": 31.211599999999997,
+          "fgPct": 0.492,
+          "scoringProduct": 15.356107199999999,
+          "assists": 7.9128,
+          "dbpm": 2,
+          "blocks": 1.2089,
+          "steals": 2.3079,
+          "rebounds": 5.7148,
+          "rawThreePointAttempts": 2.1,
+          "threePtPct": 0.251
+        },
+        {
+          "slot": "SF",
+          "id": "rodmade01_CHI_1990s",
+          "points": 5.59,
+          "fgPct": 0.451,
+          "scoringProduct": 2.52109,
+          "assists": 3.01,
+          "dbpm": 0.3,
+          "blocks": 0.32249999999999995,
+          "steals": 0.6449999999999999,
+          "rebounds": 16.4475,
+          "rawThreePointAttempts": 0.3,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "PF",
+          "id": "greendr01_GSW_2010s",
+          "points": 12.741299999999999,
+          "fgPct": 0.452,
+          "scoringProduct": 5.7590676,
+          "assists": 6.423299999999999,
+          "dbpm": 3.2,
+          "blocks": 1.4741999999999997,
+          "steals": 1.7900999999999998,
+          "rebounds": 9.0558,
+          "rawThreePointAttempts": 3.6,
+          "threePtPct": 0.346
+        },
+        {
+          "slot": "C",
+          "id": "wallabe01_DET_2000s",
+          "points": 8.792,
+          "fgPct": 0.477,
+          "scoringProduct": 4.193784,
+          "assists": 1.7584,
+          "dbpm": 3.4,
+          "blocks": 3.5168,
+          "steals": 1.7584,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.097
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "family": "development",
+      "target": [
+        30,
+        40
+      ],
+      "expectedWins": 39.969275044727965,
+      "requiredRatingShift": [
+        -5.6804636896906455,
+        0.017037143707583115
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 111.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.9366999999999996,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.004096884754389867,
+          "drtgTeam": 107.74903921345904,
+          "ortgTeam": 107.92966131780324,
+          "effectiveOrtg": 107.48748593380387,
+          "netRating": -0.2615532796551747,
+          "sixthManFRF": 0.31602952793769107,
+          "depthBonus": 2.2074927847070827
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": -0.06942297497137785,
+        "deltaRating": 1.87651653008053,
+        "winProbability": 0.5445604254713602
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 11.775818933095026,
+        "creation": 7.843679877571374,
+        "usageLoss": 0,
+        "shootingCoach": 0,
+        "spacing": -0.44217538399936984,
+        "rosterDefense": 2.250960786540955,
+        "defensiveCoach": 2.6645352591003757e-15,
+        "reserve": 2.2074927847070827,
+        "paceCoach": -0.06942297497137785
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -11.775818933095026,
+          "expectedWins": 20.66135063488418,
+          "winDifference": -19.307924409843785
+        },
+        {
+          "name": "creation",
+          "ratingShift": -7.843679877571374,
+          "expectedWins": 26.475343350414214,
+          "winDifference": -13.493931694313751
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 39.969275044727965,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0,
+          "expectedWins": 39.969275044727965,
+          "winDifference": 0
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 0.44217538399936984,
+          "expectedWins": 40.767075392489524,
+          "winDifference": 0.7978003477615587
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -2.250960786540955,
+          "expectedWins": 35.93509883765384,
+          "winDifference": -4.034176207074125
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -2.6645352591003757e-15,
+          "expectedWins": 39.969275044727965,
+          "winDifference": 0
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -2.2074927847070827,
+          "expectedWins": 36.012298974709296,
+          "winDifference": -3.956976070018669
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0.06942297497137785,
+          "expectedWins": 40.094481915942104,
+          "winDifference": 0.12520687121413943
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 3.0818740467923815,
+        "expectedWins": 45.51855385643132
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.0274768396519534,
+        "expectedWins": 38.120195597726116
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "nashst01_LAL_2010s",
+          "points": 12.320099999999998,
+          "fgPct": 0.479,
+          "scoringProduct": 5.901327899999999,
+          "assists": 6.8445,
+          "dbpm": -1.5,
+          "blocks": 0.1053,
+          "steals": 0.6317999999999999,
+          "rebounds": 2.8431,
+          "rawThreePointAttempts": 2.4,
+          "threePtPct": 0.421
+        },
+        {
+          "slot": "SG",
+          "id": "wadedw01_CHI_2010s",
+          "points": 19.2699,
+          "fgPct": 0.434,
+          "scoringProduct": 8.3631366,
+          "assists": 4.001399999999999,
+          "dbpm": 0.9,
+          "blocks": 0.7370999999999999,
+          "steals": 1.4741999999999997,
+          "rebounds": 4.7385,
+          "rawThreePointAttempts": 2.4,
+          "threePtPct": 0.31
+        },
+        {
+          "slot": "SF",
+          "id": "anthoca01_LAL_2020s",
+          "points": 13.3,
+          "fgPct": 0.441,
+          "scoringProduct": 5.8653,
+          "assists": 1,
+          "dbpm": -0.8,
+          "blocks": 0.8,
+          "steals": 0.7,
+          "rebounds": 4.2,
+          "rawThreePointAttempts": 5.8,
+          "threePtPct": 0.375
+        },
+        {
+          "slot": "PF",
+          "id": "garneke01_BKN_2010s",
+          "points": 6.949799999999999,
+          "fgPct": 0.447,
+          "scoringProduct": 3.1065605999999995,
+          "assists": 1.5795,
+          "dbpm": 1.5,
+          "blocks": 0.5265,
+          "steals": 0.9477,
+          "rebounds": 7.0550999999999995,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.073
+        },
+        {
+          "slot": "C",
+          "id": "onealsh01_CLE_2010s",
+          "points": 12.636,
+          "fgPct": 0.566,
+          "scoringProduct": 7.151975999999999,
+          "assists": 1.5795,
+          "dbpm": 0.8,
+          "blocks": 1.2635999999999998,
+          "steals": 0.31589999999999996,
+          "rebounds": 7.0550999999999995,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    },
+    {
+      "id": "F05",
+      "family": "validation",
+      "target": [
+        35,
+        44
+      ],
+      "expectedWins": 38.088052949142565,
+      "requiredRatingShift": [
+        -1.736048258936276,
+        3.284884901866551
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 73.8,
+          "phiUsg": 1,
+          "spacingRating": 3.6247000000000003,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.007417003070055603,
+          "drtgTeam": 102.63111196464607,
+          "ortgTeam": 102.53693842050049,
+          "effectiveOrtg": 101.77642163344153,
+          "netRating": -0.8546903312045373,
+          "sixthManFRF": 0.2516100716084614,
+          "depthBonus": 1.7575174739520543
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 0.902827142747517,
+        "winProbability": 0.5214826505767094
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 10.690259746755146,
+        "creation": 4.258422118487648,
+        "usageLoss": 0,
+        "shootingCoach": -0.7219059518791396,
+        "spacing": -0.7605167870589619,
+        "rosterDefense": 5.443978738846255,
+        "defensiveCoach": 1.9249092965076784,
+        "reserve": 1.7575174739520543,
+        "paceCoach": 0
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -10.690259746755146,
+          "expectedWins": 20.732292423096787,
+          "winDifference": -17.355760526045778
+        },
+        {
+          "name": "creation",
+          "ratingShift": -4.258422118487648,
+          "expectedWins": 30.642273417463112,
+          "winDifference": -7.445779531679452
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 38.088052949142565,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": 0.7219059518791396,
+          "expectedWins": 39.38449398073055,
+          "winDifference": 1.2964410315879817
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 0.7605167870589619,
+          "expectedWins": 39.45395921221672,
+          "winDifference": 1.3659062630741587
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -5.443978738846255,
+          "expectedWins": 28.66912846583245,
+          "winDifference": -9.418924483310114
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": -1.9249092965076784,
+          "expectedWins": 34.667588589722214,
+          "winDifference": -3.4204643594203503
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -1.7575174739520543,
+          "expectedWins": 34.96217101797118,
+          "winDifference": -3.125881931171385
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": 0,
+          "expectedWins": 38.088052949142565,
+          "winDifference": 0
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 7.453553561153754,
+        "expectedWins": 51.3231423500024
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -1.1850779939660612,
+        "expectedWins": 35.97420949627725
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "fishede01_LAL_2000s",
+          "points": 11.9791,
+          "fgPct": 0.424,
+          "scoringProduct": 5.079138400000001,
+          "assists": 3.1871,
+          "dbpm": 0.3,
+          "blocks": 0.1099,
+          "steals": 1.099,
+          "rebounds": 2.4178,
+          "rawThreePointAttempts": 4,
+          "threePtPct": 0.405
+        },
+        {
+          "slot": "SG",
+          "id": "bowenbr01_SAS_2000s",
+          "points": 8.3524,
+          "fgPct": 0.439,
+          "scoringProduct": 3.6667036,
+          "assists": 1.6484999999999999,
+          "dbpm": 1.4,
+          "blocks": 0.5495,
+          "steals": 0.8792,
+          "rebounds": 3.7365999999999997,
+          "rawThreePointAttempts": 3,
+          "threePtPct": 0.423
+        },
+        {
+          "slot": "SF",
+          "id": "princta01_DET_2000s",
+          "points": 15.495899999999999,
+          "fgPct": 0.466,
+          "scoringProduct": 7.221089399999999,
+          "assists": 3.2969999999999997,
+          "dbpm": 0.1,
+          "blocks": 0.7693,
+          "steals": 0.6594,
+          "rebounds": 5.6049,
+          "rawThreePointAttempts": 2,
+          "threePtPct": 0.363
+        },
+        {
+          "slot": "PF",
+          "id": "willibu01_POR_1990s",
+          "points": 13.114999999999998,
+          "fgPct": 0.583,
+          "scoringProduct": 7.646044999999998,
+          "assists": 1.3975,
+          "dbpm": 0.5,
+          "blocks": 0.5375,
+          "steals": 0.7525,
+          "rebounds": 10.105,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        },
+        {
+          "slot": "C",
+          "id": "wallabe01_DET_2000s",
+          "points": 8.792,
+          "fgPct": 0.477,
+          "scoringProduct": 4.193784,
+          "assists": 1.7584,
+          "dbpm": 3.4,
+          "blocks": 3.5168,
+          "steals": 1.7584,
+          "rebounds": 14.946399999999999,
+          "rawThreePointAttempts": 0.1,
+          "threePtPct": 0.097
+        }
+      ]
+    },
+    {
+      "id": "F06",
+      "family": "validation",
+      "target": [
+        69,
+        74
+      ],
+      "expectedWins": 73.66863599066922,
+      "requiredRatingShift": [
+        -5.518915293161639,
+        0.4846337452504184
+      ],
+      "nearestBandRatingShift": 0,
+      "neutral": {
+        "synergy": {
+          "usgTeam": 110.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 1.2129999999999999,
+          "spacingTier": "POOR",
+          "spacingModifier": -0.025907034833207318,
+          "drtgTeam": 102.0932937425348,
+          "ortgTeam": 124.3382206395932,
+          "effectiveOrtg": 121.11698602638424,
+          "netRating": 19.023692283849442,
+          "sixthManFRF": 0.950942096896827,
+          "depthBonus": 6.642410382576183
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0.06467261630395647,
+        "deltaRating": 25.73077528272958,
+        "winProbability": 0.9206016639183483
+      },
+      "components": {
+        "baseline": -21.689837492863163,
+        "scoring": 22.22507022146522,
+        "creation": 13.610906024565882,
+        "usageLoss": 0,
+        "shootingCoach": 0.1920818864252609,
+        "spacing": -3.2212346132089604,
+        "rosterDefense": 8.628547243655584,
+        "defensiveCoach": -0.7218409861903812,
+        "reserve": 6.642410382576183,
+        "paceCoach": 0.06467261630395647
+      },
+      "removeTerm": [
+        {
+          "name": "scoring",
+          "ratingShift": -22.22507022146522,
+          "expectedWins": 44.27890022484645,
+          "winDifference": -29.389735765822763
+        },
+        {
+          "name": "creation",
+          "ratingShift": -13.610906024565882,
+          "expectedWins": 58.82877153180791,
+          "winDifference": -14.839864458861307
+        },
+        {
+          "name": "usageLoss",
+          "ratingShift": 0,
+          "expectedWins": 73.66863599066922,
+          "winDifference": 0
+        },
+        {
+          "name": "shootingCoach",
+          "ratingShift": -0.1920818864252609,
+          "expectedWins": 73.53404612338035,
+          "winDifference": -0.13458986728886657
+        },
+        {
+          "name": "spacing",
+          "ratingShift": 3.2212346132089604,
+          "expectedWins": 75.66261090584138,
+          "winDifference": 1.99397491517216
+        },
+        {
+          "name": "rosterDefense",
+          "ratingShift": -8.628547243655584,
+          "expectedWins": 65.57209546931111,
+          "winDifference": -8.096540521358108
+        },
+        {
+          "name": "defensiveCoach",
+          "ratingShift": 0.7218409861903812,
+          "expectedWins": 74.15796274071546,
+          "winDifference": 0.4893267500462457
+        },
+        {
+          "name": "reserve",
+          "ratingShift": -6.642410382576183,
+          "expectedWins": 67.83102312661889,
+          "winDifference": -5.837612864050328
+        },
+        {
+          "name": "paceCoach",
+          "ratingShift": -0.06467261630395647,
+          "expectedWins": 73.62352871510257,
+          "winDifference": -0.04510727556665017
+        }
+      ],
+      "uncompressedRosterDefense": {
+        "ratingShift": 11.813664623011084,
+        "expectedWins": 79.04648886865284
+      },
+      "coreOnlyScoring": {
+        "ratingShift": -2.6384055528672263,
+        "expectedWins": 71.65045133545559
+      },
+      "starterInputs": [
+        {
+          "slot": "PG",
+          "id": "johnsma02_LAL_1980s",
+          "points": 21.384,
+          "fgPct": 0.523,
+          "scoringProduct": 11.183832,
+          "assists": 11.385,
+          "dbpm": 1.9,
+          "blocks": 0.396,
+          "steals": 2.079,
+          "rebounds": 7.821000000000001,
+          "rawThreePointAttempts": 1.1,
+          "threePtPct": 0.242
+        },
+        {
+          "slot": "SG",
+          "id": "jordami01_CHI_1990s",
+          "points": 34.2925,
+          "fgPct": 0.52,
+          "scoringProduct": 17.8321,
+          "assists": 5.805,
+          "dbpm": 2.5,
+          "blocks": 0.7525,
+          "steals": 2.795,
+          "rebounds": 6.9875,
+          "rawThreePointAttempts": 2.4,
+          "threePtPct": 0.372
+        },
+        {
+          "slot": "SF",
+          "id": "rodmade01_CHI_1990s",
+          "points": 5.59,
+          "fgPct": 0.451,
+          "scoringProduct": 2.52109,
+          "assists": 3.01,
+          "dbpm": 0.3,
+          "blocks": 0.32249999999999995,
+          "steals": 0.6449999999999999,
+          "rebounds": 16.4475,
+          "rawThreePointAttempts": 0.3,
+          "threePtPct": 0.18
+        },
+        {
+          "slot": "PF",
+          "id": "russebi01_BOS_1960s",
+          "points": 12.704,
+          "fgPct": 0.443,
+          "scoringProduct": 5.627872,
+          "assists": 3.8112,
+          "dbpm": 5,
+          "blocks": 6.352,
+          "steals": 0.794,
+          "rebounds": 19.1354,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        },
+        {
+          "slot": "C",
+          "id": "chambwi01_PHI_1960s",
+          "points": 21.6762,
+          "fgPct": 0.606,
+          "scoringProduct": 13.1357772,
+          "assists": 5.7168,
+          "dbpm": 5,
+          "blocks": 4.764,
+          "steals": 0.5558,
+          "rebounds": 19.2148,
+          "rawThreePointAttempts": 0,
+          "threePtPct": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "All 24 families were previously measured. This is not fresh validation or parameter selection.",
+    "Additive rating terms reconcile exactly; isolated win changes are nonlinear and must not be summed.",
+    "Term removal holds other terms and reserve fatigue fixed; it is not a legal player substitution or historical causal estimate.",
+    "Defense scale one and lead weight zero are diagnostic ablations, not calibrated alternatives or release candidates."
+  ]
+}

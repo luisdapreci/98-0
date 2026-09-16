@@ -1,0 +1,211 @@
+{
+  "version": "historical-score-validation-1",
+  "referenceSha256": "890835339a011a86ab588126de8c4314fff0840b81020819d5ab793464a71677",
+  "fitSha256": "ffa0addc62557a2a8ab57f52eb5c3a4a4b6d644610ada4500d0facf97f58c392",
+  "rules": {
+    "version": "conditional-score-2",
+    "baseline": 108.016342,
+    "baselineSpread": 23.094216,
+    "regulationScale": 7.5,
+    "regulationOffset": 1,
+    "maxMargin": 100,
+    "overtimeProbability": 0.043954,
+    "overtimeScale": 3,
+    "overtimeMaxMargin": 30,
+    "overtimeBaseline": 9.151142,
+    "overtimeSpread": 6,
+    "overtimeContinuation": 0.184211,
+    "maxOvertimePeriods": 6
+  },
+  "count": 480,
+  "observed": {
+    "meanTotal": 227.125,
+    "totalSD": 19.263983016673023,
+    "totalP10": 202.9,
+    "totalP90": 251,
+    "meanMargin": 12.975,
+    "medianMargin": 11,
+    "marginP90": 28,
+    "thirtyPointRate": 0.08333333333333333,
+    "fiftyPointRate": 0.004166666666666667,
+    "onePointRate": 0.03333333333333333,
+    "overtimeRate": 0.05625,
+    "overtimeMeanMargin": 4.7407407407407405,
+    "overtimeMarginP90": 8,
+    "overtimeMeanTotal": 247.62962962962962,
+    "multipleOvertimeShare": 0.07407407407407407
+  },
+  "original": {
+    "count": 96000,
+    "summary": {
+      "meanTotal": 225.66273958333332,
+      "totalSD": 17.329811597206575,
+      "totalP10": 203,
+      "totalP90": 249,
+      "meanMargin": 14.97378125,
+      "medianMargin": 12,
+      "marginP90": 32,
+      "thirtyPointRate": 0.12609375,
+      "fiftyPointRate": 0.020364583333333332,
+      "onePointRate": 0.07292708333333334,
+      "overtimeRate": 0.05454166666666667,
+      "overtimeMeanMargin": 4.2272727272727275,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 247.0313216195569,
+      "multipleOvertimeShare": 0.11726508785332315
+    },
+    "capCounts": {
+      "regulationCap": 263,
+      "overtimeCap": 222,
+      "periodCap": 65
+    }
+  },
+  "candidate": {
+    "count": 96000,
+    "summary": {
+      "meanTotal": 217.32425,
+      "totalSD": 19.571431333387682,
+      "totalP10": 191,
+      "totalP90": 243,
+      "meanMargin": 11.841416666666667,
+      "medianMargin": 10,
+      "marginP90": 24,
+      "thirtyPointRate": 0.05082291666666667,
+      "fiftyPointRate": 0.003416666666666667,
+      "onePointRate": 0.037125,
+      "overtimeRate": 0.040197916666666667,
+      "overtimeMeanMargin": 4.34646281420057,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 238.88546255506608,
+      "multipleOvertimeShare": 0.1855402954133195
+    },
+    "capCounts": {
+      "regulationCap": 1,
+      "overtimeCap": 1,
+      "periodCap": 0
+    }
+  },
+  "gates": [
+    {
+      "metric": "meanTotal",
+      "observed": 227.125,
+      "candidate": 217.32425,
+      "tolerance": 4,
+      "difference": -9.800749999999994,
+      "passed": false
+    },
+    {
+      "metric": "totalSD",
+      "observed": 19.263983016673023,
+      "candidate": 19.571431333387682,
+      "tolerance": 3,
+      "difference": 0.3074483167146589,
+      "passed": true
+    },
+    {
+      "metric": "totalP10",
+      "observed": 202.9,
+      "candidate": 191,
+      "tolerance": 5,
+      "difference": -11.900000000000006,
+      "passed": false
+    },
+    {
+      "metric": "totalP90",
+      "observed": 251,
+      "candidate": 243,
+      "tolerance": 5,
+      "difference": -8,
+      "passed": false
+    },
+    {
+      "metric": "meanMargin",
+      "observed": 12.975,
+      "candidate": 11.841416666666667,
+      "tolerance": 1.5,
+      "difference": -1.1335833333333323,
+      "passed": true
+    },
+    {
+      "metric": "medianMargin",
+      "observed": 11,
+      "candidate": 10,
+      "tolerance": 2,
+      "difference": -1,
+      "passed": true
+    },
+    {
+      "metric": "marginP90",
+      "observed": 28,
+      "candidate": 24,
+      "tolerance": 3,
+      "difference": -4,
+      "passed": false
+    },
+    {
+      "metric": "thirtyPointRate",
+      "observed": 0.08333333333333333,
+      "candidate": 0.05082291666666667,
+      "tolerance": 0.025,
+      "difference": -0.03251041666666666,
+      "passed": false
+    },
+    {
+      "metric": "fiftyPointRate",
+      "observed": 0.004166666666666667,
+      "candidate": 0.003416666666666667,
+      "tolerance": 0.008,
+      "difference": -0.0007499999999999998,
+      "passed": true
+    },
+    {
+      "metric": "onePointRate",
+      "observed": 0.03333333333333333,
+      "candidate": 0.037125,
+      "tolerance": 0.025,
+      "difference": 0.0037916666666666654,
+      "passed": true
+    },
+    {
+      "metric": "overtimeRate",
+      "observed": 0.05625,
+      "candidate": 0.040197916666666667,
+      "tolerance": 0.02,
+      "difference": -0.016052083333333335,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMeanMargin",
+      "observed": 4.7407407407407405,
+      "candidate": 4.34646281420057,
+      "tolerance": 1.5,
+      "difference": -0.3942779265401706,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMarginP90",
+      "observed": 8,
+      "candidate": 9,
+      "tolerance": 4,
+      "difference": 1,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMeanTotal",
+      "observed": 247.62962962962962,
+      "candidate": 238.88546255506608,
+      "tolerance": 12,
+      "difference": -8.744167074563535,
+      "passed": true
+    },
+    {
+      "metric": "multipleOvertimeShare",
+      "observed": 0.07407407407407407,
+      "candidate": 0.1855402954133195,
+      "tolerance": 0.12,
+      "difference": 0.11146622133924544,
+      "passed": true
+    }
+  ],
+  "passed": false
+}

@@ -1,0 +1,115 @@
+{
+  "version": "mid-iq-offense-experiment-1",
+  "status": "offline-development-only",
+  "formula": "ORTG = 95 + (1 - weight) * mean(all five OC) + weight * mean(top three OC)",
+  "reference": {
+    "seed": "50b9c2a6-c5c3-4bf3-8497-db022533d443",
+    "coach": "gregg_popovich",
+    "lineup": [
+      "brunsja01_NYK_2020s",
+      "tuckepj01_TOR_2010s",
+      "brookdi01_MEM_2010s",
+      "duncati01_SAS_2000s",
+      "townska01_NYK_2020s",
+      "thompla01_IND_1990s"
+    ],
+    "scheduleExpectedWins": 53.93620965736469
+  },
+  "candidates": [
+    {
+      "weight": 0,
+      "reference": {
+        "expectedWins": 53.93620965736469,
+        "qualificationProbability": 0.08658853278651539
+      },
+      "policies": {
+        "random": {
+          "medianExpectedWins": 32.62056005277951,
+          "meanQualificationProbability": 0.0013382103297487405
+        },
+        "chemistry": {
+          "medianExpectedWins": 60.37546984794348,
+          "meanQualificationProbability": 0.5506807041046577
+        },
+        "reroll-aware": {
+          "medianExpectedWins": 61.26231751356656,
+          "meanQualificationProbability": 0.5860153691552635
+        },
+        "balanced": {
+          "medianExpectedWins": 59.334776122542436,
+          "meanQualificationProbability": 0.47141464986849324
+        },
+        "overloaded": {
+          "medianExpectedWins": 4.038814435107474,
+          "meanQualificationProbability": 2.4048619797208246e-31
+        },
+        "non-shooting": {
+          "medianExpectedWins": 17.20696914033281,
+          "meanQualificationProbability": 4.1332824756397007e-10
+        },
+        "defensive": {
+          "medianExpectedWins": 40.04478300706678,
+          "meanQualificationProbability": 0.08406268113611574
+        },
+        "bench-heavy": {
+          "medianExpectedWins": 59.19331894827263,
+          "meanQualificationProbability": 0.47072566790000087
+        },
+        "lookahead": {
+          "medianExpectedWins": 66.81692629118108,
+          "meanQualificationProbability": 0.8690985131983868
+        }
+      }
+    },
+    {
+      "weight": 0.8,
+      "reference": {
+        "expectedWins": 60.04797040197311,
+        "qualificationProbability": 0.5631660499436092
+      },
+      "policies": {
+        "random": {
+          "medianExpectedWins": 34.46799096729025,
+          "meanQualificationProbability": 0.003565319190682934
+        },
+        "chemistry": {
+          "medianExpectedWins": 63.31222782629814,
+          "meanQualificationProbability": 0.724875806477848
+        },
+        "reroll-aware": {
+          "medianExpectedWins": 63.982547161120436,
+          "meanQualificationProbability": 0.7158607949206257
+        },
+        "balanced": {
+          "medianExpectedWins": 62.22286758714683,
+          "meanQualificationProbability": 0.6461569328202091
+        },
+        "overloaded": {
+          "medianExpectedWins": 4.553042178460396,
+          "meanQualificationProbability": 8.944631609530263e-29
+        },
+        "non-shooting": {
+          "medianExpectedWins": 18.82614651090686,
+          "meanQualificationProbability": 7.89036847540244e-9
+        },
+        "defensive": {
+          "medianExpectedWins": 43.5812591919431,
+          "meanQualificationProbability": 0.17651297278807543
+        },
+        "bench-heavy": {
+          "medianExpectedWins": 61.92444319742346,
+          "meanQualificationProbability": 0.6344027769011235
+        },
+        "lookahead": {
+          "medianExpectedWins": 69.51666843167743,
+          "meanQualificationProbability": 0.9406068730335184
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Exposed retained rosters and schedules; not fresh validation.",
+    "Fixed-roster evaluation; policies have not redrafted for the candidate.",
+    "Qualification probabilities are exact conditional Bernoulli sums, not observed rates."
+  ]
+}

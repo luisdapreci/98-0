@@ -1,0 +1,254 @@
+{
+  "version": "mid-iq-roster-review-2",
+  "status": "expectations-approved-pending-record-checks",
+  "reviewedOn": "2026-09-14",
+  "baselineEngine": "season-3",
+  "dataVersion": "2026-09-14",
+  "sourceSha256": {
+    "players.json": "af1bb36eb845672846ea6b57100404abb7b137ec489399f8392f47050c43149d",
+    "coaches.json": "958f27872687f13fc3d37f8f18fb98789182e47474c97a7a469e8d543f453815"
+  },
+  "performanceEvaluated": false,
+  "slotOrder": ["PG", "SG", "SF", "PF", "C", "SIXTH"],
+  "targets": {
+    "qualification-contender": { "expectedWins": [59, 63] },
+    "strong-contender": { "expectedWins": [64, 68] },
+    "exceptional": { "expectedWins": [69, 74] },
+    "below-500-support": { "expectedWins": [35, 44] },
+    "below-500-late-career": { "expectedWins": [30, 40] }
+  },
+  "influenceExpectations": {
+    "coachFit": {
+      "expectedWinDifference": [2, 4],
+      "scope": "A well-suited versus poorly suited coach on the same roster; similar fits may be much closer. No universal ranking or required V05 delta."
+    },
+    "reserveUpgrade": {
+      "expectedWinGain": [2, 4],
+      "scope": "A clear reserve upgrade, provisional until selected records are checked; V04 is the proposed example, not yet a firm numeric gate."
+    },
+    "interpretation": "Contextual design expectations, not fixed bonuses or independently additive effects."
+  },
+  "families": {
+    "reference": "development",
+    "inside-out": "development",
+    "jordan-support": "development",
+    "collective-defense": "validation",
+    "pick-and-roll": "development",
+    "lebron-support": "development",
+    "perimeter-motion": "validation",
+    "traditional": "validation",
+    "sonics-style": "development",
+    "passing-big": "validation",
+    "modern-wings": "validation",
+    "twin-big": "development",
+    "star-stacking": "development",
+    "offense-only": "development",
+    "no-shooting": "development",
+    "late-career": "development"
+  },
+  "rosters": [
+    {
+      "id": "C01", "name": "Your Brunson-Towns-Duncan team", "group": "contender", "tier": "qualification-contender", "family": "reference", "coach": "gregg_popovich",
+      "players": ["brunsja01_NYK_2020s", "tuckepj01_TOR_2010s", "brookdi01_MEM_2010s", "duncati01_SAS_2000s", "townska01_NYK_2020s", "thompla01_IND_1990s"],
+      "strength": "Three complementary scoring options, a defensive anchor and usable shooting.",
+      "weakness": "Early-career Brooks and modest bench support; three scorers must share possessions.",
+      "selectionStory": "User-provided completed draft; the anchor for credible qualification contention.",
+      "exposure": "Previously measured and used for the season-3 adjustment; never a fresh validation case."
+    },
+    {
+      "id": "C02", "name": "Shaq and Kobe with support", "group": "contender", "tier": "strong-contender", "family": "inside-out", "coach": "phil_jackson",
+      "players": ["fishede01_LAL_2000s", "bryanko01_LAL_2000s", "bowenbr01_SAS_2000s", "horryro01_LAL_2000s", "onealsh01_LAL_2000s", "thompla01_IND_1990s"],
+      "strength": "Dominant inside-out scoring with low-demand perimeter support.",
+      "weakness": "Limited secondary creation and a modest reserve.",
+      "selectionStory": "Two headline picks followed by familiar championship role players."
+    },
+    {
+      "id": "C03", "name": "Jordan with specialists", "group": "contender", "tier": "strong-contender", "family": "jordan-support", "coach": "larry_brown",
+      "players": ["portete01_POR_1990s", "jordami01_CHI_1990s", "battish01_HOU_2000s", "rodmade01_CHI_1990s", "lopezbr01_MIL_2020s", "horfoal01_ATL_2010s"],
+      "strength": "An elite perimeter scorer with playmaking, defensive support and a stretch center.",
+      "weakness": "Heavy dependence on Jordan for difficult scoring.",
+      "selectionStory": "One marquee star, then deliberately complementary picks."
+    },
+    {
+      "id": "C04", "name": "Detroit collective defense", "group": "contender", "tier": "strong-contender", "family": "collective-defense", "coach": "chuck_daly",
+      "players": ["billuch01_DET_2000s", "hamilri01_DET_2000s", "princta01_DET_2000s", "wallara01_DET_2000s", "wallabe01_DET_2000s", "robincl02_DET_2000s"],
+      "strength": "Five compatible roles, defensive coverage and a dependable lead guard.",
+      "weakness": "Less individual scoring dominance than the exceptional group.",
+      "selectionStory": "A recognizable team identity; repeated Detroit rolls may be rare. These are franchise-decade peaks, not one historical season."
+    },
+    {
+      "id": "C05", "name": "Nash and Dirk spacing", "group": "contender", "tier": "strong-contender", "family": "pick-and-roll", "coach": "don_nelson",
+      "players": ["nashst01_PHX_2000s", "allenra02_MIL_2000s", "battish01_HOU_2000s", "nowitdi01_DAL_2000s", "horfoal01_ATL_2010s", "fishede01_LAL_2000s"],
+      "strength": "Elite orchestration, shooting and an interior connector.",
+      "weakness": "Perimeter defense and no dominant rim protector.",
+      "selectionStory": "A playmaker and scoring big followed by shooting and defensive support."
+    },
+    {
+      "id": "C06", "name": "Paul and Garnett two-way fit", "group": "contender", "tier": "strong-contender", "family": "pick-and-roll", "coach": "jerry_sloan",
+      "players": ["paulch01_LAC_2010s", "thompkl01_GSW_2010s", "battish01_HOU_2000s", "garneke01_MIN_2000s", "horfoal01_ATL_2010s", "iguodan01_GSW_2010s"],
+      "strength": "A lead creator, off-ball shooting and versatile defenders.",
+      "weakness": "Relies on Paul and Garnett for most self-created offense.",
+      "selectionStory": "Users pair a top point guard with a two-way big and fill defensive roles."
+    },
+    {
+      "id": "C07", "name": "LeBron with shooting and support", "group": "contender", "tier": "strong-contender", "family": "lebron-support", "coach": "erik_spoelstra",
+      "players": ["whitede01_BOS_2020s", "thompkl01_GSW_2010s", "jamesle01_MIA_2010s", "horryro01_LAL_2000s", "horfoal01_BOS_2020s", "iguodan01_GSW_2010s"],
+      "strength": "An elite offensive hub with shooting and secondary decision-making.",
+      "weakness": "No dominant interior scorer; a large burden on LeBron.",
+      "selectionStory": "An iconic first pick followed by players who can contribute without dominating the ball."
+    },
+    {
+      "id": "C08", "name": "Curry motion and rim support", "group": "contender", "tier": "strong-contender", "family": "perimeter-motion", "coach": "steve_kerr",
+      "players": ["curryst01_GSW_2010s", "thompkl01_GSW_2010s", "iguodan01_GSW_2010s", "greendr01_GSW_2010s", "lopezbr01_MIL_2020s", "whitede01_BOS_2020s"],
+      "strength": "Off-ball shooting, passing and defensive support around Curry.",
+      "weakness": "Less high-volume wing creation than the Durant variant.",
+      "selectionStory": "A familiar Warriors-style core with a center and reserve chosen for fit."
+    },
+    {
+      "id": "C09", "name": "Magic and Kareem with one shooter", "group": "contender", "tier": "strong-contender", "family": "traditional", "coach": "red_auerbach",
+      "players": ["johnsma02_LAL_1980s", "millere01_IND_1990s", "kerseje01_POR_1990s", "willibu01_POR_1990s", "abdulka01_LAL_1980s", "portete01_SAS_2000s"],
+      "strength": "Elite passing and interior scoring, plus a dedicated perimeter threat.",
+      "weakness": "Limited shooting outside Miller and an older reserve guard.",
+      "selectionStory": "Traditional stars should remain useful with deliberate shooting support."
+    },
+    {
+      "id": "C10", "name": "Payton and Kemp with Ewing", "group": "contender", "tier": "strong-contender", "family": "sonics-style", "coach": "pat_riley",
+      "players": ["paytoga01_OKC_1990s", "allenra02_OKC_2000s", "schrede01_OKC_1990s", "kempsh01_OKC_1990s", "ewingpa01_NYK_1990s", "robincl02_POR_1990s"],
+      "strength": "Two-way guard play, a shooting wing and strong interior options.",
+      "weakness": "Two interior scorers share space and possessions.",
+      "selectionStory": "Recognizable Seattle-era picks supplemented by a center; OKC is the dataset's Seattle franchise identity."
+    },
+    {
+      "id": "C11", "name": "Jokic passing hub", "group": "contender", "tier": "strong-contender", "family": "passing-big", "coach": "rick_adelman",
+      "players": ["murraja01_DEN_2020s", "caldwke01_DEN_2020s", "princta01_DET_2000s", "gordoaa01_DEN_2020s", "jokicni01_DEN_2020s", "horfoal01_BOS_2020s"],
+      "strength": "A passing center with a perimeter partner, cutters and defensive wings.",
+      "weakness": "No second dominant interior defender in the starting five.",
+      "selectionStory": "An iconic hub with several attainable-looking supporting roles, not five MVPs."
+    },
+    {
+      "id": "C12", "name": "Boston wing depth", "group": "contender", "tier": "strong-contender", "family": "modern-wings", "coach": "erik_spoelstra",
+      "players": ["whitede01_BOS_2020s", "holidjr01_BOS_2020s", "brownja02_BOS_2020s", "tatumja01_BOS_2020s", "horfoal01_BOS_2020s", "lopezbr01_MIL_2020s"],
+      "strength": "Multiple capable scorers, shooting and defensive coverage without a single indispensable role.",
+      "weakness": "Older centers and less singular offensive dominance than the exceptional group.",
+      "selectionStory": "A recognizable modern team identity; repeated franchise rolls are an accessibility question."
+    },
+    {
+      "id": "E01", "name": "Durant motion superteam", "group": "exceptional", "tier": "exceptional", "family": "perimeter-motion", "coach": "steve_kerr",
+      "players": ["curryst01_GSW_2010s", "thompkl01_GSW_2010s", "duranke01_GSW_2010s", "greendr01_GSW_2010s", "lopezbr01_MIL_2020s", "ginobma01_SAS_2000s"],
+      "strength": "Elite shooting and creation with passing, rim support and a strong sixth man.",
+      "weakness": "Usage sharing and reserve opportunity cost still matter.",
+      "selectionStory": "An exceptional ceiling case, not an ordinary obtainable draft."
+    },
+    {
+      "id": "E02", "name": "All-time inside-out balance", "group": "exceptional", "tier": "exceptional", "family": "inside-out", "coach": "phil_jackson",
+      "players": ["paulch01_LAC_2010s", "bryanko01_LAL_2000s", "pippesc01_CHI_1990s", "garneke01_MIN_2000s", "onealsh01_LAL_2000s", "ginobma01_SAS_2000s"],
+      "strength": "Elite creation, a dominant center and defensive versatility.",
+      "weakness": "Several stars must reduce individual possession demands; not unlimited shooting.",
+      "selectionStory": "Tests whether extraordinary but role-compatible talent retains exceptional value."
+    },
+    {
+      "id": "E03", "name": "Jordan-Bird with twin anchors", "group": "exceptional", "tier": "exceptional", "family": "jordan-support", "coach": "gregg_popovich",
+      "players": ["stockjo01_UTA_1990s", "jordami01_CHI_1990s", "birdla01_BOS_1980s", "duncati01_SAS_2000s", "robinda01_SAS_1990s", "allenra02_MIL_2000s"],
+      "strength": "Passing, perimeter shot creation and two elite interior defenders.",
+      "weakness": "Frontcourt overlap and high aggregate usage; historical shooting volume differs from modern teams.",
+      "selectionStory": "A ceiling test for complementary historical greatness rather than modern shooting alone."
+    },
+    {
+      "id": "E04", "name": "Shooting around Hakeem", "group": "exceptional", "tier": "exceptional", "family": "pick-and-roll", "coach": "mike_dantoni",
+      "players": ["nashst01_PHX_2000s", "millere01_IND_1990s", "duranke01_OKC_2010s", "nowitdi01_DAL_2000s", "olajuha01_HOU_1990s", "iguodan01_GSW_2010s"],
+      "strength": "Elite spacing and orchestration around a two-way center.",
+      "weakness": "Perimeter defense and several high-demand offensive options.",
+      "selectionStory": "An offensive ceiling roster that still invests in a defensive anchor."
+    },
+    {
+      "id": "E05", "name": "Magic's two-big all-time team", "group": "exceptional", "tier": "exceptional", "family": "twin-big", "coach": "pat_riley",
+      "players": ["johnsma02_LAL_1980s", "thompkl01_GSW_2010s", "pippesc01_CHI_1990s", "duncati01_SAS_2000s", "abdulka01_MIL_1970s", "ginobma01_SAS_2000s"],
+      "strength": "Elite passing, interior talent and perimeter defense with a dedicated shooter.",
+      "weakness": "Only one high-volume starting shooter and two interior scorers.",
+      "selectionStory": "Tests an exceptional traditional lineup without making every starter a shooter."
+    },
+    {
+      "id": "E06", "name": "LeBron-Jokic shared creation", "group": "exceptional", "tier": "exceptional", "family": "passing-big", "coach": "erik_spoelstra",
+      "players": ["paulch01_LAC_2010s", "allenra02_MIL_2000s", "jamesle01_MIA_2010s", "garneke01_MIN_2000s", "jokicni01_DEN_2020s", "holidjr01_MIL_2020s"],
+      "strength": "Exceptional passing, scoring and defensive support.",
+      "weakness": "Overlapping creators and usage sharing; no automatic perfect-season expectation.",
+      "selectionStory": "An exceptional multi-hub roster, reserved alongside the simpler passing-big family."
+    },
+    {
+      "id": "F01", "name": "Every scorer wants the ball", "group": "contender", "tier": "strong-contender", "family": "star-stacking", "coach": "don_nelson",
+      "players": ["westbru01_OKC_2010s", "hardeja01_HOU_2010s", "anthoca01_NYK_2010s", "barklch01_PHX_1990s", "onealsh01_LAL_2000s", "iversal01_PHI_2000s"],
+      "strength": "Overwhelming individual scoring talent.",
+      "weakness": "Extreme possession overlap, uneven defense and a high-demand reserve.",
+      "selectionStory": "A plausible famous-name instinct; should expose fit costs without assuming great players become worthless."
+    },
+    {
+      "id": "F02", "name": "Offense without defensive coverage", "group": "contender", "tier": "qualification-contender", "family": "offense-only", "coach": "mike_dantoni",
+      "players": ["nashst01_PHX_2000s", "iversal01_PHI_2000s", "anthoca01_DEN_2000s", "nowitdi01_DAL_2000s", "townska01_MIN_2010s", "hardeja01_OKC_2010s"],
+      "strength": "Creation, shooting and scoring at every position.",
+      "weakness": "Limited defensive coverage, overlapping scorers and bench usage.",
+      "selectionStory": "Users prioritize recognizable offensive talent at every pick."
+    },
+    {
+      "id": "F03", "name": "Defense with no shooting outlet", "group": "contender", "tier": "qualification-contender", "family": "no-shooting", "coach": "larry_brown",
+      "players": ["kiddja01_BKN_2000s", "wadedw01_MIA_2000s", "rodmade01_CHI_1990s", "greendr01_GSW_2010s", "wallabe01_DET_2000s", "thompla01_IND_1990s"],
+      "strength": "Passing, rebounding and substantial defensive talent.",
+      "weakness": "Very limited shooting and too many starters who need space near the basket.",
+      "selectionStory": "A user overcorrects toward defense around one perimeter scorer."
+    },
+    {
+      "id": "F04", "name": "Familiar names, wrong career versions", "group": "flawed", "tier": "below-500-late-career", "family": "late-career", "coach": "phil_jackson",
+      "targetStatus": "provisional-pending-player-record-check",
+      "players": ["nashst01_LAL_2010s", "wadedw01_CHI_2010s", "anthoca01_LAL_2020s", "garneke01_BKN_2010s", "onealsh01_CLE_2010s", "fishede01_UTA_2000s"],
+      "strength": "Recognizable names and some retained skill.",
+      "weakness": "These are late-career franchise records, not prime versions; confirm the stored talent supports the provisional 30-40 target before simulation.",
+      "selectionStory": "A novice recognizes the names but misses the version labels. Selected-version talent, not reputation, should determine team strength."
+    },
+    {
+      "id": "F05", "name": "All support, no scoring lead", "group": "flawed", "tier": "below-500-support", "family": "collective-defense", "coach": "chuck_daly",
+      "players": ["fishede01_LAL_2000s", "bowenbr01_SAS_2000s", "princta01_DET_2000s", "willibu01_POR_1990s", "wallabe01_DET_2000s", "thompla01_IND_1990s"],
+      "strength": "Defense, rebounding and low-demand support roles.",
+      "weakness": "No proven high-volume offensive lead; this is a negative control, not a contender.",
+      "selectionStory": "Tests whether chemistry bonuses can incorrectly substitute for scoring talent."
+    },
+    {
+      "id": "F06", "name": "Historical greatness, crowded frontcourt", "group": "exceptional", "tier": "exceptional", "family": "traditional", "coach": "red_auerbach",
+      "players": ["johnsma02_LAL_1980s", "jordami01_CHI_1990s", "rodmade01_CHI_1990s", "russebi01_BOS_1960s", "chambwi01_PHI_1960s", "abdulka01_MIL_1970s"],
+      "strength": "Exceptional historical talent, defense and rebounding.",
+      "weakness": "Redundant frontcourt roles, little perimeter shooting and an expensive reserve role.",
+      "selectionStory": "User approved exceptional status: extraordinary selected-version talent should outweigh spacing and positional overlap on this team."
+    }
+  ],
+  "variants": [
+    { "id": "V01", "parent": "C01", "name": "Later Brooks", "replace": { "SF": "brookdi01_HOU_2020s" }, "expectation": "Direction pending player-record review", "rationale": "Do not assume the later version is better in every respect; inspect the whole-player tradeoff before assigning a direction." },
+    { "id": "V02", "parent": "C02", "name": "Trade wing shooting for rebounding", "replace": { "SF": "rodmade01_CHI_1990s" }, "expectation": "Tradeoff, not a mandatory downgrade", "rationale": "Less shooting but more rebounding and defense; review the acceptable cost before setting a numeric delta." },
+    { "id": "V03", "parent": "C03", "name": "Remove the lead scorer", "replace": { "SG": "tuckepj01_TOR_2010s" }, "expectation": "Meaningfully weaker", "rationale": "Removing Jordan should not be rewarded merely for lowering usage." },
+    { "id": "V04", "parent": "C01", "name": "More capable reserve big", "replace": { "SIXTH": "horfoal01_ATL_2010s" }, "expectation": "Clear reserve upgrade should add roughly 2-4 expected wins, provisional", "rationale": "Confirm the selected records make this a clear upgrade before applying the range; higher historical usage should not automatically make a better reserve harmful." },
+    { "id": "V05", "parent": "C06", "name": "Popovich instead of Sloan", "replace": {}, "coach": "gregg_popovich", "expectation": "Contextual coach tradeoff", "rationale": "Measure a coach change on the same players; do not assume a universal coach ranking." },
+    { "id": "V06", "parent": "C01", "name": "Swap Duncan and Towns slots", "replace": { "PF": "townska01_NYK_2020s", "C": "duncati01_SAS_2000s" }, "expectation": "Identical under current role model", "rationale": "Both assignments are legal; the shared PF/C anchor calculation should not depend on which big occupies which of these two slots." },
+    { "id": "V07", "parent": "E02", "name": "Young Kobe instead of prime Kobe", "replace": { "SG": "bryanko01_LAL_1990s" }, "expectation": "Weaker if stored records confirm the talent gap", "rationale": "Career versions should matter; lower usage alone should not turn a confirmed talent loss into an upgrade." },
+    { "id": "V08", "parent": "C05", "name": "Manu instead of Fisher off the bench", "replace": { "SIXTH": "ginobma01_SAS_2000s" }, "expectation": "Improvement if stored records confirm a clear upgrade", "rationale": "Account for team fit without automatically penalizing a better reserve for higher historical usage; no fixed name-based bonus." }
+  ],
+  "reviewDecisions": [
+    "1: F06 exceptional, 69-74; greatness outweighs awkward fit on this roster.",
+    "2: F04 below .500, 30-40 provisionally; check selected career records before freezing the target.",
+    "3: F05 below .500, 35-44; defense matters but cannot replace an offensive lead.",
+    "4: F01 strong contender, 64-68; stars can share possessions despite overlap.",
+    "5: C03 strong contender, 64-68; Jordan with capable support should usually qualify.",
+    "6: C04 strong contender, 64-68; collective defense and credible offense provide another route.",
+    "7: F03 qualification contender, 59-63; creation and defense compensate partly for limited shooting.",
+    "8: F02 qualification contender, 59-63; elite offense compensates partly for defensive weaknesses.",
+    "9: Retain C01 at 59-63 and C02/C05-C12 at 64-68, including their proposed coaches and reserves.",
+    "10: Retain E01-E06 at 69-74; a shared band does not require identical results or rankings.",
+    "11: Coach fit contrast roughly 2-4 expected wins; similar fits may be closer, with no universal best coach.",
+    "12: Clear reserve upgrade roughly 2-4 expected wins provisionally; confirm V04 player records first.",
+    "13: Approve remaining comparison rules; conditional record checks remain, with no invented numeric delta for every substitution."
+  ],
+  "evaluationConstraints": [
+    "Expectation-setting only; no authorization to simulate, tune or change live rules in this review step.",
+    "Stable roster IDs retain their original prefixes; group and tier fields, not prefixes, define current classifications.",
+    "Keep the existing 15 development and 9 validation rosters and their family assignments; future variants inherit parent reservations.",
+    "Check F04 and conditional substitutions against stored player records without using benchmark performance to choose expectations.",
+    "Qualification probabilities are reporting requirements, not approved universal bands; numerical gates for qualitative comparisons remain unspecified.",
+    "Evaluate roll and coach-offer accessibility separately; legal placement is not proof of an obtainable draft history."
+  ]
+}

@@ -1,0 +1,3104 @@
+{
+  "version": "mid-iq-possession-prototype-1",
+  "scope": "exposed-offensive-accounting",
+  "sourceAudit": "docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json",
+  "sourceAuditSha256": "2aafafdbda28257efcbdddb190bac37e1428381d523f6261bb837d83e5e71111",
+  "implementationSha256": "b0dd382c7537c22aedda15d52683cd6ae5b4545bea9afb55bb4df51cf6b7aa1d",
+  "evaluatorSha256": "3601331b569428a11fdc5ebf3be18660b167b7ed52ee3bcb58a8a09913049230",
+  "sourceSha256": {
+    "data/raw/Player Per Game.csv": "2deb3c12f6cf2c0f4102e35251cdec6baec52406df82a7d2503ca505c650f393",
+    "data/raw/Advanced.csv": "e1616ffe7759c22b014cbbb7c7ce10a591615e7ef1e08cc0dba4d2a02872948d",
+    "data/processed/players.json": "af1bb36eb845672846ea6b57100404abb7b137ec489399f8392f47050c43149d",
+    "data/reference/mid-iq-roster-benchmarks.json": "04381262ed3d87b73993577e0b6420ab5d652cade304fbd743706f4de550c4ce",
+    "scripts/data_pipeline/process_players.py": "b63717aded14bd6190d6c52e86b3deffd8c98d71c96147e0769da7d8d19b5308",
+    "scripts/data_pipeline/franchise_map.py": "210489a4a9c570ff0a148ea1f703c22a04cbdab04cce30fabe54d7cf5e5df31a",
+    "scripts/data_pipeline/curated_defense.py": "5a6332219368d198f319f264101b1b55364e397dc9f8a98bcd020e39d5a8d4aa"
+  },
+  "supportedPlayers": 3697,
+  "totalPlayers": 4411,
+  "supportedRosters": 22,
+  "rows": [
+    {
+      "id": "C01",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "brunsja01_NYK_2020s",
+          "points": 27.5260476840668,
+          "fieldGoalAttempts": 20.431729860308792,
+          "freeThrowAttempts": 6.4789412876798655,
+          "turnovers": 2.4808843608864612
+        },
+        {
+          "id": "tuckepj01_TOR_2010s",
+          "points": 8.220472440944883,
+          "fieldGoalAttempts": 7.511811023622048,
+          "freeThrowAttempts": 0.9921259842519686,
+          "turnovers": 0.8503937007874016
+        },
+        {
+          "id": "brookdi01_MEM_2010s",
+          "points": 13.915312360220664,
+          "fieldGoalAttempts": 11.985686596093633,
+          "freeThrowAttempts": 2.611301625167735,
+          "turnovers": 1.9162069479648127
+        },
+        {
+          "id": "duncati01_SAS_2000s",
+          "points": 21.975458900850864,
+          "fieldGoalAttempts": 16.226468538045346,
+          "freeThrowAttempts": 7.629073125394174,
+          "turnovers": 2.7874616891091963
+        },
+        {
+          "id": "townska01_NYK_2020s",
+          "points": 24.25486068111455,
+          "fieldGoalAttempts": 16.731640866873065,
+          "freeThrowAttempts": 6.114427244582044,
+          "turnovers": 2.837647058823529
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 101.7495553717113,
+        "shotEnds": 88.46327299240411,
+        "turnoverEnds": 11.536727007595905,
+        "players": [
+          {
+            "id": "brunsja01_NYK_2020s",
+            "share": 0.27337057171326706,
+            "allocatedEnds": 27.337057171326705,
+            "shotEnds": 24.704632356499978,
+            "turnoverEnds": 2.6324248148267286,
+            "points": 29.207427851151433
+          },
+          {
+            "id": "tuckepj01_TOR_2010s",
+            "share": 0.09336195711067906,
+            "allocatedEnds": 9.336195711067905,
+            "shotEnds": 8.43385720806521,
+            "turnoverEnds": 0.902338503002697,
+            "points": 8.722605529026072
+          },
+          {
+            "id": "brookdi01_MEM_2010s",
+            "share": 0.15970221929659426,
+            "allocatedEnds": 15.970221929659425,
+            "shotEnds": 13.936966853488297,
+            "turnoverEnds": 2.0332550761711286,
+            "points": 14.765304719814148
+          },
+          {
+            "id": "duncati01_SAS_2000s",
+            "share": 0.23737198599795387,
+            "allocatedEnds": 23.737198599795388,
+            "shotEnds": 20.77946972033727,
+            "turnoverEnds": 2.957728879458116,
+            "points": 23.317791123135788
+          },
+          {
+            "id": "townska01_NYK_2020s",
+            "share": 0.23619326588150585,
+            "allocatedEnds": 23.619326588150585,
+            "shotEnds": 20.60834685401335,
+            "turnoverEnds": 3.010979734137235,
+            "points": 25.73642614858386
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 99.98429800878361,
+        "shotEnds": 88.5531482218247,
+        "turnoverEnds": 11.446851778175299,
+        "players": [
+          {
+            "id": "brunsja01_NYK_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.074097882351563,
+            "turnoverEnds": 1.92590211764844,
+            "points": 21.368377487088495
+          },
+          {
+            "id": "tuckepj01_TOR_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.067010309278352,
+            "turnoverEnds": 1.9329896907216495,
+            "points": 18.68556701030928
+          },
+          {
+            "id": "brookdi01_MEM_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.453692146387738,
+            "turnoverEnds": 2.5463078536122623,
+            "points": 18.49104512742238
+          },
+          {
+            "id": "duncati01_SAS_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.50793770627709,
+            "turnoverEnds": 2.4920622937229093,
+            "points": 19.64662428475177
+          },
+          {
+            "id": "townska01_NYK_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.450410177529964,
+            "turnoverEnds": 2.549589822470038,
+            "points": 21.79268409921169
+          }
+        ]
+      }
+    },
+    {
+      "id": "C02",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "fishede01_LAL_2000s",
+          "points": 13.802772942800553,
+          "fieldGoalAttempts": 11.521037152631896,
+          "freeThrowAttempts": 2.3325130544385093,
+          "turnovers": 1.2262169137506753
+        },
+        {
+          "id": "bryanko01_LAL_2000s",
+          "points": 27.758447451584157,
+          "fieldGoalAttempts": 21.120573697431325,
+          "freeThrowAttempts": 8.267806498662996,
+          "turnovers": 2.8777246576452478
+        },
+        {
+          "id": "bowenbr01_SAS_2000s",
+          "points": 8.470588235294116,
+          "fieldGoalAttempts": 7.2817337461300315,
+          "freeThrowAttempts": 1.3003095975232197,
+          "turnovers": 0.891640866873065
+        },
+        {
+          "id": "horryro01_LAL_2000s",
+          "points": 8.775933609958505,
+          "fieldGoalAttempts": 7.6235088174273855,
+          "freeThrowAttempts": 2.262253630705394,
+          "turnovers": 1.6168957468879668
+        },
+        {
+          "id": "onealsh01_LAL_2000s",
+          "points": 26.64525918345742,
+          "fieldGoalAttempts": 18.26655845301528,
+          "freeThrowAttempts": 10.619570203606338,
+          "turnovers": 2.5830128092028652
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 99.46436537487453,
+        "shotEnds": 89.29676359129985,
+        "turnoverEnds": 10.70323640870015,
+        "players": [
+          {
+            "id": "fishede01_LAL_2000s",
+            "share": 0.16031951630404,
+            "allocatedEnds": 16.031951630404002,
+            "shotEnds": 14.604677162485949,
+            "turnoverEnds": 1.427274467918053,
+            "points": 16.065954715525148
+          },
+          {
+            "id": "bryanko01_LAL_2000s",
+            "share": 0.32167512033716217,
+            "allocatedEnds": 32.167512033716214,
+            "shotEnds": 28.817939145350056,
+            "turnoverEnds": 3.3495728883661546,
+            "points": 32.30988161426279
+          },
+          {
+            "id": "bowenbr01_SAS_2000s",
+            "share": 0.10179474924073453,
+            "allocatedEnds": 10.179474924073453,
+            "shotEnds": 9.141635509554495,
+            "turnoverEnds": 1.0378394145189587,
+            "points": 9.859474437930105
+          },
+          {
+            "id": "horryro01_LAL_2000s",
+            "share": 0.11914115974718925,
+            "allocatedEnds": 11.914115974718925,
+            "shotEnds": 10.032104732711447,
+            "turnoverEnds": 1.8820112420074782,
+            "points": 10.214885990542212
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.29706945437087395,
+            "allocatedEnds": 29.706945437087395,
+            "shotEnds": 26.70040704119789,
+            "turnoverEnds": 3.0065383958895047,
+            "points": 31.014168616614267
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 97.52983377714645,
+        "shotEnds": 88.91437080749651,
+        "turnoverEnds": 11.085629192503482,
+        "players": [
+          {
+            "id": "fishede01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.219462607145992,
+            "turnoverEnds": 1.7805373928540051,
+            "points": 20.042419146346052
+          },
+          {
+            "id": "bryanko01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.91741873922029,
+            "turnoverEnds": 2.0825812607797065,
+            "points": 20.088517620136336
+          },
+          {
+            "id": "bowenbr01_SAS_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.960917587085813,
+            "turnoverEnds": 2.0390824129141887,
+            "points": 19.371282922684788
+          },
+          {
+            "id": "horryro01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.8407035049835,
+            "turnoverEnds": 3.159296495016498,
+            "points": 17.14753492784126
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.975868369060915,
+            "turnoverEnds": 2.024131630939084,
+            "points": 20.880079160138006
+          }
+        ]
+      }
+    },
+    {
+      "id": "C03",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "portete01_POR_1990s",
+          "points": 18.65886437858903,
+          "fieldGoalAttempts": 13.318457186562906,
+          "freeThrowAttempts": 5.162524736247861,
+          "turnovers": 2.7224319829061905
+        },
+        {
+          "id": "jordami01_CHI_1990s",
+          "points": 30.23746701846966,
+          "fieldGoalAttempts": 21.846965699208443,
+          "freeThrowAttempts": 7.820580474934038,
+          "turnovers": 2.5013192612137205
+        },
+        {
+          "id": "battish01_HOU_2000s",
+          "points": 9.134043519967689,
+          "fieldGoalAttempts": 7.388297066693593,
+          "freeThrowAttempts": 1.2940879487050034,
+          "turnovers": 0.9169485535416773
+        },
+        {
+          "id": "rodmade01_CHI_1990s",
+          "points": 5.4422736377623595,
+          "fieldGoalAttempts": 4.98086916132029,
+          "freeThrowAttempts": 1.6136093128574334,
+          "turnovers": 2.0629953261532212
+        },
+        {
+          "id": "lopezbr01_MIL_2020s",
+          "points": 16.06034376834546,
+          "fieldGoalAttempts": 11.950032083225253,
+          "freeThrowAttempts": 2.2485562548636806,
+          "turnovers": 1.3574890439198875
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 103.25322953003953,
+        "shotEnds": 87.58725008812561,
+        "turnoverEnds": 12.41274991187439,
+        "players": [
+          {
+            "id": "portete01_POR_1990s",
+            "share": 0.23773963367042852,
+            "allocatedEnds": 23.773963367042853,
+            "shotEnds": 20.239582398842206,
+            "turnoverEnds": 3.534380968200645,
+            "points": 24.223758595990034
+          },
+          {
+            "id": "jordami01_CHI_1990s",
+            "share": 0.3607734420442173,
+            "allocatedEnds": 36.07734420442173,
+            "shotEnds": 32.83002149893759,
+            "turnoverEnds": 3.247322705484136,
+            "points": 39.25560992072595
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.11521453675556408,
+            "allocatedEnds": 11.521453675556408,
+            "shotEnds": 10.331030724016873,
+            "turnoverEnds": 1.1904229515395344,
+            "points": 11.858217131738217
+          },
+          {
+            "id": "rodmade01_CHI_1990s",
+            "share": 0.10066392541372053,
+            "allocatedEnds": 10.066392541372053,
+            "shotEnds": 7.388121251575032,
+            "turnoverEnds": 2.6782712897970224,
+            "points": 7.065399058570411
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.18560846211606968,
+            "allocatedEnds": 18.560846211606968,
+            "shotEnds": 16.798494214753916,
+            "turnoverEnds": 1.7623519968530523,
+            "points": 20.850244823014915
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 99.22940675276922,
+        "shotEnds": 85.93981962302935,
+        "turnoverEnds": 14.060180376970646,
+        "players": [
+          {
+            "id": "portete01_POR_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.026679217399437,
+            "turnoverEnds": 2.97332078260056,
+            "points": 20.378393137065835
+          },
+          {
+            "id": "jordami01_CHI_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.199799471333517,
+            "turnoverEnds": 1.8002005286664844,
+            "points": 21.76191778324674
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.93355424573706,
+            "turnoverEnds": 2.0664457542629404,
+            "points": 20.584585010997834
+          },
+          {
+            "id": "rodmade01_CHI_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 14.678786310409523,
+            "turnoverEnds": 5.321213689590477,
+            "points": 14.03759893036596
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.101000378149816,
+            "turnoverEnds": 1.8989996218501837,
+            "points": 22.466911891092852
+          }
+        ]
+      }
+    },
+    {
+      "id": "C04",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "billuch01_DET_2000s",
+          "points": 18.116201817612033,
+          "fieldGoalAttempts": 12.175694139768098,
+          "freeThrowAttempts": 6.269031651519899,
+          "turnovers": 2.138564713256032
+        },
+        {
+          "id": "hamilri01_DET_2000s",
+          "points": 18.568821178067733,
+          "fieldGoalAttempts": 15.212911984312543,
+          "freeThrowAttempts": 4.395806621917188,
+          "turnovers": 2.2522060487216233
+        },
+        {
+          "id": "princta01_DET_2000s",
+          "points": 14.251407129455908,
+          "fieldGoalAttempts": 11.95497185741088,
+          "freeThrowAttempts": 3.0056285178236393,
+          "turnovers": 1.3170731707317074
+        },
+        {
+          "id": "wallara01_DET_2000s",
+          "points": 15.339310609451942,
+          "fieldGoalAttempts": 13.779778729935412,
+          "freeThrowAttempts": 2.4302359787683057,
+          "turnovers": 1.377195114152331
+        },
+        {
+          "id": "wallabe01_DET_2000s",
+          "points": 7.652425451135041,
+          "fieldGoalAttempts": 6.765635769895705,
+          "freeThrowAttempts": 2.901998892642855,
+          "turnovers": 1.1434705476898044
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 96.6650519317223,
+        "shotEnds": 89.2407813108773,
+        "turnoverEnds": 10.759218689122699,
+        "players": [
+          {
+            "id": "billuch01_DET_2000s",
+            "share": 0.22323385245540636,
+            "allocatedEnds": 22.323385245540635,
+            "shotEnds": 19.527096906034025,
+            "turnoverEnds": 2.796288339506611,
+            "points": 23.687907868641677
+          },
+          {
+            "id": "hamilri01_DET_2000s",
+            "share": 0.25365592352409944,
+            "allocatedEnds": 25.365592352409944,
+            "shotEnds": 22.420711857015487,
+            "turnoverEnds": 2.9448804953944587,
+            "points": 24.2797320168809
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.1908312161452866,
+            "allocatedEnds": 19.083121614528658,
+            "shotEnds": 17.360977633210123,
+            "turnoverEnds": 1.7221439813185344,
+            "points": 18.634481028626187
+          },
+          {
+            "id": "wallara01_DET_2000s",
+            "share": 0.21216730442730333,
+            "allocatedEnds": 21.216730442730334,
+            "shotEnds": 19.415973788017595,
+            "turnoverEnds": 1.8007566547127387,
+            "points": 20.056973318321692
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.12011170344790421,
+            "allocatedEnds": 12.011170344790422,
+            "shotEnds": 10.516021126600068,
+            "turnoverEnds": 1.4951492181903554,
+            "points": 10.005957699251855
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 95.46398020973983,
+        "shotEnds": 89.18082393663634,
+        "turnoverEnds": 10.819176063363656,
+        "players": [
+          {
+            "id": "billuch01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.49474525592824,
+            "turnoverEnds": 2.5052547440717605,
+            "points": 21.222505106723116
+          },
+          {
+            "id": "hamilri01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.678051074478716,
+            "turnoverEnds": 2.3219489255212844,
+            "points": 19.143832069487726
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.195112921140318,
+            "turnoverEnds": 1.804887078859682,
+            "points": 19.52980377637912
+          },
+          {
+            "id": "wallara01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.30251257650328,
+            "turnoverEnds": 1.6974874234967217,
+            "points": 18.90675226558669
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.510402108585794,
+            "turnoverEnds": 2.4895978914142085,
+            "points": 16.66108699156318
+          }
+        ]
+      }
+    },
+    {
+      "id": "C05",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "nashst01_PHX_2000s",
+          "points": 18.158049652876965,
+          "fieldGoalAttempts": 12.905078304499561,
+          "freeThrowAttempts": 3.4305940212869013,
+          "turnovers": 3.6340242675641776
+        },
+        {
+          "id": "allenra02_MIL_2000s",
+          "points": 21.12812048689911,
+          "fieldGoalAttempts": 15.959562616051167,
+          "freeThrowAttempts": 4.30699401691768,
+          "turnovers": 2.245100061893955
+        },
+        {
+          "id": "battish01_HOU_2000s",
+          "points": 9.134043519967689,
+          "fieldGoalAttempts": 7.388297066693593,
+          "freeThrowAttempts": 1.2940879487050034,
+          "turnovers": 0.9169485535416773
+        },
+        {
+          "id": "nowitdi01_DAL_2000s",
+          "points": 24.189664704543233,
+          "fieldGoalAttempts": 17.539302091124917,
+          "freeThrowAttempts": 7.263455722137304,
+          "turnovers": 1.893915249276399
+        },
+        {
+          "id": "horfoal01_ATL_2010s",
+          "points": 15.686067529462802,
+          "fieldGoalAttempts": 12.288482394620779,
+          "freeThrowAttempts": 2.860096883811727,
+          "turnovers": 1.6701612320150385
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 104.0377128443382,
+        "shotEnds": 87.79280029590934,
+        "turnoverEnds": 12.207199704090641,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.21266336677005776,
+            "allocatedEnds": 21.266336677005775,
+            "shotEnds": 16.984423511103998,
+            "turnoverEnds": 4.281913165901779,
+            "points": 21.395341954572956
+          },
+          {
+            "id": "allenra02_MIL_2000s",
+            "share": 0.23683204952630116,
+            "allocatedEnds": 23.683204952630117,
+            "shotEnds": 21.037839152628383,
+            "turnoverEnds": 2.6453658000017337,
+            "points": 24.894929318744488
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.10456852664877286,
+            "allocatedEnds": 10.456852664877287,
+            "shotEnds": 9.376426725262847,
+            "turnoverEnds": 1.0804259396144391,
+            "points": 10.762498631382288
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.2666355428405852,
+            "allocatedEnds": 26.66355428405852,
+            "shotEnds": 24.43198397965478,
+            "turnoverEnds": 2.231570304403738,
+            "points": 28.50229832024753
+          },
+          {
+            "id": "horfoal01_ATL_2010s",
+            "share": 0.179300514214283,
+            "allocatedEnds": 17.9300514214283,
+            "shotEnds": 15.962126927259348,
+            "turnoverEnds": 1.9679244941689518,
+            "points": 18.482644619390943
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 103.7247925727695,
+        "shotEnds": 87.80366872893794,
+        "turnoverEnds": 12.196331271062075,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 15.973059929469096,
+            "turnoverEnds": 4.0269400705309035,
+            "points": 20.12132346019582
+          },
+          {
+            "id": "allenra02_MIL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.766040698213903,
+            "turnoverEnds": 2.2339593017861,
+            "points": 21.023277355018458
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.93355424573706,
+            "turnoverEnds": 2.0664457542629404,
+            "points": 20.584585010997834
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.3261269066908,
+            "turnoverEnds": 1.673873093309198,
+            "points": 21.379219001788034
+          },
+          {
+            "id": "horfoal01_ATL_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.80488694882707,
+            "turnoverEnds": 2.1951130511729318,
+            "points": 20.616387744769362
+          }
+        ]
+      }
+    },
+    {
+      "id": "C06",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "paulch01_LAC_2010s",
+          "points": 19.235274940230383,
+          "fieldGoalAttempts": 14.155292327754836,
+          "freeThrowAttempts": 4.836448598130841,
+          "turnovers": 2.4069767441860463
+        },
+        {
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.985023738147014,
+          "fieldGoalAttempts": 18.796443781120136,
+          "freeThrowAttempts": 3.226072076476719,
+          "turnovers": 1.8856194434080005
+        },
+        {
+          "id": "battish01_HOU_2000s",
+          "points": 9.134043519967689,
+          "fieldGoalAttempts": 7.388297066693593,
+          "freeThrowAttempts": 1.2940879487050034,
+          "turnovers": 0.9169485535416773
+        },
+        {
+          "id": "garneke01_MIN_2000s",
+          "points": 21.1728813559322,
+          "fieldGoalAttempts": 16.566101694915254,
+          "freeThrowAttempts": 5.6440677966101696,
+          "turnovers": 2.471186440677966
+        },
+        {
+          "id": "horfoal01_ATL_2010s",
+          "points": 15.686067529462802,
+          "fieldGoalAttempts": 12.288482394620779,
+          "freeThrowAttempts": 2.860096883811727,
+          "turnovers": 1.6701612320150385
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 103.25104512029856,
+        "shotEnds": 89.17774019087547,
+        "turnoverEnds": 10.822259809124525,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.21631235118299147,
+            "allocatedEnds": 21.63123511829915,
+            "shotEnds": 18.845519431785725,
+            "turnoverEnds": 2.7857156865134223,
+            "points": 22.261954655286257
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2557922203528681,
+            "allocatedEnds": 25.579222035286808,
+            "shotEnds": 23.396899470274786,
+            "turnoverEnds": 2.182322565012021,
+            "points": 27.759078699095426
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.10271073847166767,
+            "allocatedEnds": 10.271073847166768,
+            "shotEnds": 9.209843000006824,
+            "turnoverEnds": 1.0612308471599448,
+            "points": 10.571289638062046
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.24906966940740582,
+            "allocatedEnds": 24.90696694074058,
+            "shotEnds": 22.046938131270796,
+            "turnoverEnds": 2.860028809469786,
+            "points": 24.504444367555944
+          },
+          {
+            "id": "horfoal01_ATL_2010s",
+            "share": 0.17611502058506692,
+            "allocatedEnds": 17.61150205850669,
+            "shotEnds": 15.678540157537341,
+            "turnoverEnds": 1.9329619009693495,
+            "points": 18.154277760298886
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 103.16530454806676,
+        "shotEnds": 89.15990563112095,
+        "turnoverEnds": 10.840094368879058,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.424358182712535,
+            "turnoverEnds": 2.575641817287465,
+            "points": 20.58315628630336
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.293675576214568,
+            "turnoverEnds": 1.7063244237854331,
+            "points": 21.704396373589066
+          },
+          {
+            "id": "battish01_HOU_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.93355424573706,
+            "turnoverEnds": 2.0664457542629404,
+            "points": 20.584585010997834
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.703430677629715,
+            "turnoverEnds": 2.2965693223702863,
+            "points": 19.676779132407145
+          },
+          {
+            "id": "horfoal01_ATL_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.80488694882707,
+            "turnoverEnds": 2.1951130511729318,
+            "points": 20.616387744769362
+          }
+        ]
+      }
+    },
+    {
+      "id": "C07",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "whitede01_BOS_2020s",
+          "points": 17.21916669963993,
+          "fieldGoalAttempts": 13.79764966565109,
+          "freeThrowAttempts": 2.4362758675266094,
+          "turnovers": 1.7549163138527282
+        },
+        {
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.985023738147014,
+          "fieldGoalAttempts": 18.796443781120136,
+          "freeThrowAttempts": 3.226072076476719,
+          "turnovers": 1.8856194434080005
+        },
+        {
+          "id": "jamesle01_MIA_2010s",
+          "points": 25.36053007036974,
+          "fieldGoalAttempts": 17.45372766183832,
+          "freeThrowAttempts": 7.390128890286073,
+          "turnovers": 3.1479215534544047
+        },
+        {
+          "id": "horryro01_LAL_2000s",
+          "points": 8.775933609958505,
+          "fieldGoalAttempts": 7.6235088174273855,
+          "freeThrowAttempts": 2.262253630705394,
+          "turnovers": 1.6168957468879668
+        },
+        {
+          "id": "horfoal01_BOS_2020s",
+          "points": 11.934830905949148,
+          "fieldGoalAttempts": 9.271361568572134,
+          "freeThrowAttempts": 0.939450576577212,
+          "turnovers": 0.9229467150968016
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 104.61822507785622,
+        "shotEnds": 88.81804936466467,
+        "turnoverEnds": 11.181950635335308,
+        "players": [
+          {
+            "id": "whitede01_BOS_2020s",
+            "share": 0.19928030704258703,
+            "allocatedEnds": 19.928030704258703,
+            "shotEnds": 17.824390376567326,
+            "turnoverEnds": 2.103640327691376,
+            "points": 20.64083238196097
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2649338879171914,
+            "allocatedEnds": 26.49338879171914,
+            "shotEnds": 24.233072973511458,
+            "turnoverEnds": 2.260315818207681,
+            "points": 28.75115058075371
+          },
+          {
+            "id": "jamesle01_MIA_2010s",
+            "share": 0.2859325877863315,
+            "allocatedEnds": 28.593258778633153,
+            "shotEnds": 24.81980549428965,
+            "turnoverEnds": 3.773453284343503,
+            "points": 30.39998737634202
+          },
+          {
+            "id": "horryro01_LAL_2000s",
+            "share": 0.1226977800711937,
+            "allocatedEnds": 12.26977800711937,
+            "shotEnds": 10.331584674493234,
+            "turnoverEnds": 1.9381933326261371,
+            "points": 10.519822346696895
+          },
+          {
+            "id": "horfoal01_BOS_2020s",
+            "share": 0.1271554371826963,
+            "allocatedEnds": 12.71554371826963,
+            "shotEnds": 11.609195845803018,
+            "turnoverEnds": 1.106347872466612,
+            "points": 14.306432392102638
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 103.33332560359908,
+        "shotEnds": 88.64359057537095,
+        "turnoverEnds": 11.356409424629051,
+        "players": [
+          {
+            "id": "whitede01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.8887624583579,
+            "turnoverEnds": 2.111237541642104,
+            "points": 20.715375932805983
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.293675576214568,
+            "turnoverEnds": 1.7063244237854331,
+            "points": 21.704396373589066
+          },
+          {
+            "id": "jamesle01_MIA_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.360599354164354,
+            "turnoverEnds": 2.6394006458356443,
+            "points": 21.263744445287905
+          },
+          {
+            "id": "horryro01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.8407035049835,
+            "turnoverEnds": 3.159296495016498,
+            "points": 17.14753492784126
+          },
+          {
+            "id": "horfoal01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.25984968165063,
+            "turnoverEnds": 1.740150318349371,
+            "points": 22.502273924074874
+          }
+        ]
+      }
+    },
+    {
+      "id": "C08",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "curryst01_GSW_2010s",
+          "points": 27.133597883597883,
+          "fieldGoalAttempts": 19.049382716049383,
+          "freeThrowAttempts": 4.805555555555555,
+          "turnovers": 3.5498236331569664
+        },
+        {
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.985023738147014,
+          "fieldGoalAttempts": 18.796443781120136,
+          "freeThrowAttempts": 3.226072076476719,
+          "turnovers": 1.8856194434080005
+        },
+        {
+          "id": "iguodan01_GSW_2010s",
+          "points": 10.391831525207404,
+          "fieldGoalAttempts": 8.074419517942175,
+          "freeThrowAttempts": 2.0417259830150707,
+          "turnovers": 1.4508860635216734
+        },
+        {
+          "id": "greendr01_GSW_2010s",
+          "points": 13.129537146681768,
+          "fieldGoalAttempts": 10.370179683879936,
+          "freeThrowAttempts": 3.4400453071101267,
+          "turnovers": 2.668537301137826
+        },
+        {
+          "id": "lopezbr01_MIL_2020s",
+          "points": 16.06034376834546,
+          "fieldGoalAttempts": 11.950032083225253,
+          "freeThrowAttempts": 2.2485562548636806,
+          "turnovers": 1.3574890439198875
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 105.3576068400516,
+        "shotEnds": 87.32419598237557,
+        "turnoverEnds": 12.675804017624445,
+        "players": [
+          {
+            "id": "curryst01_GSW_2010s",
+            "share": 0.28707403680790394,
+            "allocatedEnds": 28.707403680790396,
+            "shotEnds": 24.58392468193573,
+            "turnoverEnds": 4.123478998854668,
+            "points": 31.518416856355408
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.25673167057874335,
+            "allocatedEnds": 25.673167057874334,
+            "shotEnds": 23.482829458535605,
+            "turnoverEnds": 2.1903375993387293,
+            "points": 27.8610296994737
+          },
+          {
+            "id": "iguodan01_GSW_2010s",
+            "share": 0.12108140634035075,
+            "allocatedEnds": 12.108140634035076,
+            "shotEnds": 10.422789802297572,
+            "turnoverEnds": 1.6853508317375034,
+            "points": 12.071162818790619
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.1690401041730486,
+            "allocatedEnds": 16.90401041730486,
+            "shotEnds": 13.804234581648414,
+            "turnoverEnds": 3.0997758356564464,
+            "points": 15.251284650690296
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.16607278209995346,
+            "allocatedEnds": 16.607278209995346,
+            "shotEnds": 15.030417457958249,
+            "turnoverEnds": 1.5768607520370979,
+            "points": 18.655712814741584
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 104.1131935456504,
+        "shotEnds": 87.07057809609756,
+        "turnoverEnds": 12.929421903902444,
+        "players": [
+          {
+            "id": "curryst01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.127236552141497,
+            "turnoverEnds": 2.872763447858505,
+            "points": 21.958388997362384
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.293675576214568,
+            "turnoverEnds": 1.7063244237854331,
+            "points": 21.704396373589066
+          },
+          {
+            "id": "iguodan01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.216169050762247,
+            "turnoverEnds": 2.783830949237753,
+            "points": 19.93892073711051
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.33249653882943,
+            "turnoverEnds": 3.6675034611705692,
+            "points": 18.044575546495587
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.101000378149816,
+            "turnoverEnds": 1.8989996218501837,
+            "points": 22.466911891092852
+          }
+        ]
+      }
+    },
+    {
+      "id": "C09",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "johnsma02_LAL_1980s",
+          "points": 20.894508423606606,
+          "fieldGoalAttempts": 14.30748727061477,
+          "freeThrowAttempts": 6.687899395140621,
+          "turnovers": 3.724703550558726
+        },
+        {
+          "id": "millere01_IND_1990s",
+          "points": 22.17740167492437,
+          "fieldGoalAttempts": 14.597623536633488,
+          "freeThrowAttempts": 6.707282851756041,
+          "turnovers": 2.160126277020213
+        },
+        {
+          "id": "kerseje01_POR_1990s",
+          "points": 15.600293825792233,
+          "fieldGoalAttempts": 13.118703042643402,
+          "freeThrowAttempts": 4.5646610049357585,
+          "turnovers": 2.07657512532701
+        },
+        {
+          "id": "willibu01_POR_1990s",
+          "points": 13.452430327246978,
+          "fieldGoalAttempts": 8.678164989125488,
+          "freeThrowAttempts": 4.634059986849426,
+          "turnovers": 1.94830812806636
+        },
+        {
+          "id": "abdulka01_LAL_1980s",
+          "points": 24.347232648604383,
+          "fieldGoalAttempts": 16.95789258172388,
+          "freeThrowAttempts": 6.012693646352283,
+          "turnovers": 3.1578516344775815
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 103.38375449725893,
+        "shotEnds": 85.9961878438918,
+        "turnoverEnds": 14.003812156108177,
+        "players": [
+          {
+            "id": "johnsma02_LAL_1980s",
+            "share": 0.22477645807169716,
+            "allocatedEnds": 22.477645807169715,
+            "shotEnds": 18.486079666498966,
+            "turnoverEnds": 3.991566140670749,
+            "points": 22.391530283562336
+          },
+          {
+            "id": "millere01_IND_1990s",
+            "share": 0.21121035126158705,
+            "allocatedEnds": 21.121035126158706,
+            "shotEnds": 18.806143003902783,
+            "turnoverEnds": 2.314892122255919,
+            "points": 23.76633855878383
+          },
+          {
+            "id": "kerseje01_POR_1990s",
+            "share": 0.18436318831295354,
+            "allocatedEnds": 18.436318831295353,
+            "shotEnds": 16.210964022166703,
+            "turnoverEnds": 2.225354809128648,
+            "points": 16.718002862323484
+          },
+          {
+            "id": "willibu01_POR_1990s",
+            "share": 0.13572897454934188,
+            "allocatedEnds": 13.572897454934187,
+            "shotEnds": 11.484999545739043,
+            "turnoverEnds": 2.0878979091951435,
+            "points": 14.416252105732449
+          },
+          {
+            "id": "abdulka01_LAL_1980s",
+            "share": 0.24392102780442032,
+            "allocatedEnds": 24.39210278044203,
+            "shotEnds": 21.008001605584315,
+            "turnoverEnds": 3.3841011748577174,
+            "points": 26.09163068685683
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 103.20043138694098,
+        "shotEnds": 85.99096784198744,
+        "turnoverEnds": 14.009032158012555,
+        "players": [
+          {
+            "id": "johnsma02_LAL_1980s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.44841263634686,
+            "turnoverEnds": 3.551587363653142,
+            "points": 19.923376741188875
+          },
+          {
+            "id": "millere01_IND_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.807974743255937,
+            "turnoverEnds": 2.1920252567440617,
+            "points": 22.504899420719088
+          },
+          {
+            "id": "kerseje01_POR_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.585901144917123,
+            "turnoverEnds": 2.4140988550828753,
+            "points": 18.135944615955484
+          },
+          {
+            "id": "willibu01_POR_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.92343080594612,
+            "turnoverEnds": 3.076569194053883,
+            "points": 21.24270393053279
+          },
+          {
+            "id": "abdulka01_LAL_1980s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.225248511521407,
+            "turnoverEnds": 2.774751488478593,
+            "points": 21.393506678544753
+          }
+        ]
+      }
+    },
+    {
+      "id": "C10",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "paytoga01_OKC_1990s",
+          "points": 18.620780911974123,
+          "fieldGoalAttempts": 15.285879313603996,
+          "freeThrowAttempts": 3.922790951670832,
+          "turnovers": 2.654008527441137
+        },
+        {
+          "id": "allenra02_OKC_2000s",
+          "points": 22.408228847659203,
+          "fieldGoalAttempts": 17.575071755221995,
+          "freeThrowAttempts": 4.640344974387849,
+          "turnovers": 2.1753162036337668
+        },
+        {
+          "id": "schrede01_OKC_1990s",
+          "points": 17.634794615119088,
+          "fieldGoalAttempts": 12.073639397077436,
+          "freeThrowAttempts": 5.490737544586353,
+          "turnovers": 2.2842020480957315
+        },
+        {
+          "id": "kempsh01_OKC_1990s",
+          "points": 20.53053898270806,
+          "fieldGoalAttempts": 13.323895237132167,
+          "freeThrowAttempts": 7.897866316108808,
+          "turnovers": 3.818333501870766
+        },
+        {
+          "id": "ewingpa01_NYK_1990s",
+          "points": 24.229158588600235,
+          "fieldGoalAttempts": 18.220240403257076,
+          "freeThrowAttempts": 6.749903063202792,
+          "turnovers": 2.886777820860799
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 100.48327386970851,
+        "shotEnds": 86.57421213967396,
+        "turnoverEnds": 13.42578786032603,
+        "players": [
+          {
+            "id": "paytoga01_OKC_1990s",
+            "share": 0.19106833283092237,
+            "allocatedEnds": 19.106833283092236,
+            "shotEnds": 16.528275598452094,
+            "turnoverEnds": 2.578557684640142,
+            "points": 18.091410490253693
+          },
+          {
+            "id": "allenra02_OKC_2000s",
+            "share": 0.21172610724453342,
+            "allocatedEnds": 21.172610724453342,
+            "shotEnds": 19.059136613347093,
+            "turnoverEnds": 2.1134741111062523,
+            "points": 21.771185019520654
+          },
+          {
+            "id": "schrede01_OKC_1990s",
+            "share": 0.16296904354926495,
+            "allocatedEnds": 16.296904354926493,
+            "shotEnds": 14.077639916440761,
+            "turnoverEnds": 2.2192644384857316,
+            "points": 17.133454810602313
+          },
+          {
+            "id": "kempsh01_OKC_1990s",
+            "share": 0.20031160715976964,
+            "allocatedEnds": 20.031160715976963,
+            "shotEnds": 16.32137866668544,
+            "turnoverEnds": 3.709782049291526,
+            "points": 19.946876024059797
+          },
+          {
+            "id": "ewingpa01_NYK_1990s",
+            "share": 0.23392490921550954,
+            "allocatedEnds": 23.392490921550955,
+            "shotEnds": 20.587781344748574,
+            "turnoverEnds": 2.804709576802379,
+            "points": 23.540347525272033
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 100.57143095786685,
+        "shotEnds": 86.47897311788586,
+        "turnoverEnds": 13.521026882114151,
+        "players": [
+          {
+            "id": "paytoga01_OKC_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.300905234859695,
+            "turnoverEnds": 2.6990947651403068,
+            "points": 18.937110322999366
+          },
+          {
+            "id": "allenra02_OKC_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.003577226623932,
+            "turnoverEnds": 1.9964227733760689,
+            "points": 20.565423228015984
+          },
+          {
+            "id": "schrede01_OKC_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.276458902681284,
+            "turnoverEnds": 2.7235410973187144,
+            "points": 21.026637252642324
+          },
+          {
+            "id": "kempsh01_OKC_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.29598893255089,
+            "turnoverEnds": 3.7040110674491107,
+            "points": 19.915846422369384
+          },
+          {
+            "id": "ewingpa01_NYK_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.60204282117005,
+            "turnoverEnds": 2.3979571788299516,
+            "points": 20.126413731839783
+          }
+        ]
+      }
+    },
+    {
+      "id": "C11",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "murraja01_DEN_2020s",
+          "points": 23.834511410519024,
+          "fieldGoalAttempts": 17.977150111075847,
+          "freeThrowAttempts": 4.262542915668907,
+          "turnovers": 2.269928738351461
+        },
+        {
+          "id": "caldwke01_DEN_2020s",
+          "points": 11.961844197138316,
+          "fieldGoalAttempts": 9.157392686804453,
+          "freeThrowAttempts": 1.7742448330683627,
+          "turnovers": 1.2019077901430844
+        },
+        {
+          "id": "princta01_DET_2000s",
+          "points": 14.251407129455908,
+          "fieldGoalAttempts": 11.95497185741088,
+          "freeThrowAttempts": 3.0056285178236393,
+          "turnovers": 1.3170731707317074
+        },
+        {
+          "id": "gordoaa01_DEN_2020s",
+          "points": 17.373131667310492,
+          "fieldGoalAttempts": 12.35283629988411,
+          "freeThrowAttempts": 4.361334799274952,
+          "turnovers": 1.777909844590378
+        },
+        {
+          "id": "jokicni01_DEN_2020s",
+          "points": 28.355401618105866,
+          "fieldGoalAttempts": 18.60869335307493,
+          "freeThrowAttempts": 6.489080429379726,
+          "turnovers": 3.37184707313204
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 107.92600472017938,
+        "shotEnds": 88.80056313766016,
+        "turnoverEnds": 11.199436862339848,
+        "players": [
+          {
+            "id": "murraja01_DEN_2020s",
+            "share": 0.24928961407314537,
+            "allocatedEnds": 24.92896140731454,
+            "shotEnds": 22.37108070088001,
+            "turnoverEnds": 2.557880706434529,
+            "points": 26.858040014303167
+          },
+          {
+            "id": "caldwke01_DEN_2020s",
+            "share": 0.12553129645257058,
+            "allocatedEnds": 12.553129645257059,
+            "shotEnds": 11.198753758746587,
+            "turnoverEnds": 1.3543758865104716,
+            "points": 13.479264775270886
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.16445910626236743,
+            "allocatedEnds": 16.445910626236742,
+            "shotEnds": 14.961760046767951,
+            "turnoverEnds": 1.4841505794687917,
+            "points": 16.05927037271359
+          },
+          {
+            "id": "gordoaa01_DEN_2020s",
+            "share": 0.1808572351074416,
+            "allocatedEnds": 18.08572351074416,
+            "shotEnds": 16.082276789081654,
+            "turnoverEnds": 2.0034467216625047,
+            "points": 19.57700149407937
+          },
+          {
+            "id": "jokicni01_DEN_2020s",
+            "share": 0.2798627481044752,
+            "allocatedEnds": 27.98627481044752,
+            "shotEnds": 24.18669184218397,
+            "turnoverEnds": 3.7995829682635502,
+            "points": 31.952428063812363
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 107.03648670297771,
+        "shotEnds": 89.05432766492954,
+        "turnoverEnds": 10.945672335070459,
+        "players": [
+          {
+            "id": "murraja01_DEN_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.947864201286777,
+            "turnoverEnds": 2.0521357987132247,
+            "points": 21.547660630917907
+          },
+          {
+            "id": "caldwke01_DEN_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.842170160295932,
+            "turnoverEnds": 2.157829839704069,
+            "points": 21.47554459515002
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.195112921140318,
+            "turnoverEnds": 1.804887078859682,
+            "points": 19.52980377637912
+          },
+          {
+            "id": "gordoaa01_DEN_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.784499226174365,
+            "turnoverEnds": 2.215500773825631,
+            "points": 21.649121731236562
+          },
+          {
+            "id": "jokicni01_DEN_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.284681156032146,
+            "turnoverEnds": 2.715318843967853,
+            "points": 22.834355969294094
+          }
+        ]
+      }
+    },
+    {
+      "id": "C12",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "whitede01_BOS_2020s",
+          "points": 17.21916669963993,
+          "fieldGoalAttempts": 13.79764966565109,
+          "freeThrowAttempts": 2.4362758675266094,
+          "turnovers": 1.7549163138527282
+        },
+        {
+          "id": "holidjr01_BOS_2020s",
+          "points": 13.418229016440728,
+          "fieldGoalAttempts": 10.90625901355639,
+          "freeThrowAttempts": 1.2408422267089703,
+          "turnovers": 1.7184886068647245
+        },
+        {
+          "id": "brownja02_BOS_2020s",
+          "points": 27.400110398709188,
+          "fieldGoalAttempts": 21.070697634919966,
+          "freeThrowAttempts": 6.0685321217782695,
+          "turnovers": 3.2003736571695476
+        },
+        {
+          "id": "tatumja01_BOS_2020s",
+          "points": 27.68773457438823,
+          "fieldGoalAttempts": 20.047440324275637,
+          "freeThrowAttempts": 7.010659060201171,
+          "turnovers": 2.7401291097432816
+        },
+        {
+          "id": "horfoal01_BOS_2020s",
+          "points": 11.934830905949148,
+          "fieldGoalAttempts": 9.271361568572134,
+          "freeThrowAttempts": 0.939450576577212,
+          "turnovers": 0.9229467150968016
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 104.76705257426065,
+        "shotEnds": 88.91090543991554,
+        "turnoverEnds": 11.089094560084478,
+        "players": [
+          {
+            "id": "whitede01_BOS_2020s",
+            "share": 0.17834338062901892,
+            "allocatedEnds": 17.834338062901892,
+            "shotEnds": 15.951711860465135,
+            "turnoverEnds": 1.88262620243676,
+            "points": 18.472250874288175
+          },
+          {
+            "id": "holidjr01_BOS_2020s",
+            "share": 0.14129186100117,
+            "allocatedEnds": 14.129186100117,
+            "shotEnds": 12.285638544980376,
+            "turnoverEnds": 1.8435475551366247,
+            "points": 14.394708931270715
+          },
+          {
+            "id": "brownja02_BOS_2020s",
+            "share": 0.2890180945481933,
+            "allocatedEnds": 28.901809454819333,
+            "shotEnds": 25.468536165936243,
+            "turnoverEnds": 3.433273288883093,
+            "points": 29.394088697609988
+          },
+          {
+            "id": "tatumja01_BOS_2020s",
+            "share": 0.27755051974162764,
+            "allocatedEnds": 27.755051974162765,
+            "shotEnds": 24.815516442273392,
+            "turnoverEnds": 2.9395355318893714,
+            "points": 29.702644043134615
+          },
+          {
+            "id": "horfoal01_BOS_2020s",
+            "share": 0.11379614407999016,
+            "allocatedEnds": 11.379614407999016,
+            "shotEnds": 10.389502426260389,
+            "turnoverEnds": 0.9901119817386288,
+            "points": 12.80336002795715
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 105.33757081187406,
+        "shotEnds": 89.04503522611745,
+        "turnoverEnds": 10.954964773882555,
+        "players": [
+          {
+            "id": "whitede01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.8887624583579,
+            "turnoverEnds": 2.111237541642104,
+            "points": 20.715375932805983
+          },
+          {
+            "id": "holidjr01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.390440550398925,
+            "turnoverEnds": 2.6095594496010763,
+            "points": 20.37585014348635
+          },
+          {
+            "id": "brownja02_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.62418107817772,
+            "turnoverEnds": 2.375818921822281,
+            "points": 20.34065634787345
+          },
+          {
+            "id": "tatumja01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.881801457532276,
+            "turnoverEnds": 2.118198542467722,
+            "points": 21.40341446363341
+          },
+          {
+            "id": "horfoal01_BOS_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.25984968165063,
+            "turnoverEnds": 1.740150318349371,
+            "points": 22.502273924074874
+          }
+        ]
+      }
+    },
+    {
+      "id": "E01",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "curryst01_GSW_2010s",
+          "points": 27.133597883597883,
+          "fieldGoalAttempts": 19.049382716049383,
+          "freeThrowAttempts": 4.805555555555555,
+          "turnovers": 3.5498236331569664
+        },
+        {
+          "id": "thompkl01_GSW_2010s",
+          "points": 23.985023738147014,
+          "fieldGoalAttempts": 18.796443781120136,
+          "freeThrowAttempts": 3.226072076476719,
+          "turnovers": 1.8856194434080005
+        },
+        {
+          "id": "duranke01_GSW_2010s",
+          "points": 27.294283459240045,
+          "fieldGoalAttempts": 18.405908219641443,
+          "freeThrowAttempts": 6.558462058856692,
+          "turnovers": 2.8748449656105537
+        },
+        {
+          "id": "greendr01_GSW_2010s",
+          "points": 13.129537146681768,
+          "fieldGoalAttempts": 10.370179683879936,
+          "freeThrowAttempts": 3.4400453071101267,
+          "turnovers": 2.668537301137826
+        },
+        {
+          "id": "lopezbr01_MIL_2020s",
+          "points": 16.06034376834546,
+          "fieldGoalAttempts": 11.950032083225253,
+          "freeThrowAttempts": 2.2485562548636806,
+          "turnovers": 1.3574890439198875
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 107.78506668738699,
+        "shotEnds": 87.64278771598178,
+        "turnoverEnds": 12.357212284018223,
+        "players": [
+          {
+            "id": "curryst01_GSW_2010s",
+            "share": 0.24755516079120532,
+            "allocatedEnds": 24.755516079120532,
+            "shotEnds": 21.199678992871988,
+            "turnoverEnds": 3.555837086248548,
+            "points": 27.179562594789388
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.22138975261229796,
+            "allocatedEnds": 22.138975261229795,
+            "shotEnds": 20.250161550938902,
+            "turnoverEnds": 1.8888137102908944,
+            "points": 24.025654718740704
+          },
+          {
+            "id": "duranke01_GSW_2010s",
+            "share": 0.24207414855356937,
+            "allocatedEnds": 24.207414855356937,
+            "shotEnds": 21.32769986037794,
+            "turnoverEnds": 2.879714994978997,
+            "points": 27.340520374144038
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.14576988791474363,
+            "allocatedEnds": 14.576988791474363,
+            "shotEnds": 11.903930949165522,
+            "turnoverEnds": 2.673057842308841,
+            "points": 13.151778774408927
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.1432110501281837,
+            "allocatedEnds": 14.32110501281837,
+            "shotEnds": 12.961316362627427,
+            "turnoverEnds": 1.3597886501909426,
+            "points": 16.087550225303925
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 106.76282308332793,
+        "shotEnds": 87.47520828210989,
+        "turnoverEnds": 12.524791717890125,
+        "players": [
+          {
+            "id": "curryst01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.127236552141497,
+            "turnoverEnds": 2.872763447858505,
+            "points": 21.958388997362384
+          },
+          {
+            "id": "thompkl01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.293675576214568,
+            "turnoverEnds": 1.7063244237854331,
+            "points": 21.704396373589066
+          },
+          {
+            "id": "duranke01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.620799236774566,
+            "turnoverEnds": 2.379200763225434,
+            "points": 22.58855027478803
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.33249653882943,
+            "turnoverEnds": 3.6675034611705692,
+            "points": 18.044575546495587
+          },
+          {
+            "id": "lopezbr01_MIL_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.101000378149816,
+            "turnoverEnds": 1.8989996218501837,
+            "points": 22.466911891092852
+          }
+        ]
+      }
+    },
+    {
+      "id": "E02",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "paulch01_LAC_2010s",
+          "points": 19.235274940230383,
+          "fieldGoalAttempts": 14.155292327754836,
+          "freeThrowAttempts": 4.836448598130841,
+          "turnovers": 2.4069767441860463
+        },
+        {
+          "id": "bryanko01_LAL_2000s",
+          "points": 27.758447451584157,
+          "fieldGoalAttempts": 21.120573697431325,
+          "freeThrowAttempts": 8.267806498662996,
+          "turnovers": 2.8777246576452478
+        },
+        {
+          "id": "pippesc01_CHI_1990s",
+          "points": 20.11918663176968,
+          "fieldGoalAttempts": 15.95369438292732,
+          "freeThrowAttempts": 5.18381316690155,
+          "turnovers": 3.032816589490638
+        },
+        {
+          "id": "garneke01_MIN_2000s",
+          "points": 21.1728813559322,
+          "fieldGoalAttempts": 16.566101694915254,
+          "freeThrowAttempts": 5.6440677966101696,
+          "turnovers": 2.471186440677966
+        },
+        {
+          "id": "onealsh01_LAL_2000s",
+          "points": 26.64525918345742,
+          "fieldGoalAttempts": 18.26655845301528,
+          "freeThrowAttempts": 10.619570203606338,
+          "turnovers": 2.5830128092028652
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 100.25677731389528,
+        "shotEnds": 88.33556917079153,
+        "turnoverEnds": 11.664430829208477,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.16303948317922112,
+            "allocatedEnds": 16.303948317922114,
+            "shotEnds": 14.204291764195423,
+            "turnoverEnds": 2.099656553726691,
+            "points": 16.779335815580183
+          },
+          {
+            "id": "bryanko01_LAL_2000s",
+            "share": 0.24107581580762916,
+            "allocatedEnds": 24.107581580762915,
+            "shotEnds": 21.597281698622172,
+            "turnoverEnds": 2.5102998821407434,
+            "points": 24.2142788682015
+          },
+          {
+            "id": "pippesc01_CHI_1990s",
+            "share": 0.18551991543225546,
+            "allocatedEnds": 18.551991543225547,
+            "shotEnds": 15.906401699552822,
+            "turnoverEnds": 2.6455898436727256,
+            "points": 17.55039061722669
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.18772941052011416,
+            "allocatedEnds": 18.772941052011415,
+            "shotEnds": 16.617273026475658,
+            "turnoverEnds": 2.155668025535759,
+            "points": 18.46955073730638
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.2226353750607802,
+            "allocatedEnds": 22.26353750607802,
+            "shotEnds": 20.010320981945462,
+            "turnoverEnds": 2.2532165241325584,
+            "points": 23.243221275580527
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 100.14875494308738,
+        "shotEnds": 88.16899419884841,
+        "turnoverEnds": 11.831005801151594,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.424358182712535,
+            "turnoverEnds": 2.575641817287465,
+            "points": 20.58315628630336
+          },
+          {
+            "id": "bryanko01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.91741873922029,
+            "turnoverEnds": 2.0825812607797065,
+            "points": 20.088517620136336
+          },
+          {
+            "id": "pippesc01_CHI_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.14791823022495,
+            "turnoverEnds": 2.852081769775052,
+            "points": 18.920222744102528
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.703430677629715,
+            "turnoverEnds": 2.2965693223702863,
+            "points": 19.676779132407145
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.975868369060915,
+            "turnoverEnds": 2.024131630939084,
+            "points": 20.880079160138006
+          }
+        ]
+      }
+    },
+    {
+      "id": "E03",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "stockjo01_UTA_1990s",
+          "points": 16.15808383233533,
+          "fieldGoalAttempts": 11.334131736526947,
+          "freeThrowAttempts": 4.920558882235529,
+          "turnovers": 3.4139720558882236
+        },
+        {
+          "id": "jordami01_CHI_1990s",
+          "points": 30.23746701846966,
+          "fieldGoalAttempts": 21.846965699208443,
+          "freeThrowAttempts": 7.820580474934038,
+          "turnovers": 2.5013192612137205
+        },
+        {
+          "id": "birdla01_BOS_1980s",
+          "points": 26.217168397528596,
+          "fieldGoalAttempts": 19.429998685421324,
+          "freeThrowAttempts": 5.376889706848956,
+          "turnovers": 2.7511502563428425
+        },
+        {
+          "id": "duncati01_SAS_2000s",
+          "points": 21.975458900850864,
+          "fieldGoalAttempts": 16.226468538045346,
+          "freeThrowAttempts": 7.629073125394174,
+          "turnovers": 2.7874616891091963
+        },
+        {
+          "id": "robinda01_SAS_1990s",
+          "points": 25.719353871202706,
+          "fieldGoalAttempts": 17.44547752688633,
+          "freeThrowAttempts": 10.020352200179955,
+          "turnovers": 2.6202922147478467
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 103.62859504347887,
+        "shotEnds": 87.87699257738146,
+        "turnoverEnds": 12.123007422618555,
+        "players": [
+          {
+            "id": "stockjo01_UTA_1990s",
+            "share": 0.1456838081373061,
+            "allocatedEnds": 14.568380813730611,
+            "shotEnds": 11.627707676079995,
+            "turnoverEnds": 2.940673137650615,
+            "points": 13.917994144006816
+          },
+          {
+            "id": "jordami01_CHI_1990s",
+            "share": 0.23936741543141613,
+            "allocatedEnds": 23.93674154314161,
+            "shotEnds": 21.782194804115786,
+            "turnoverEnds": 2.1545467390258266,
+            "points": 26.045470073033727
+          },
+          {
+            "id": "birdla01_BOS_1980s",
+            "share": 0.2114388891549105,
+            "allocatedEnds": 21.14388891549105,
+            "shotEnds": 18.774146713730953,
+            "turnoverEnds": 2.3697422017600958,
+            "points": 22.582528969123803
+          },
+          {
+            "id": "duncati01_SAS_2000s",
+            "share": 0.19269338284390036,
+            "allocatedEnds": 19.269338284390038,
+            "shotEnds": 16.868318716214052,
+            "turnoverEnds": 2.401019568175985,
+            "points": 18.928872474459716
+          },
+          {
+            "id": "robinda01_SAS_1990s",
+            "share": 0.21081650443246694,
+            "allocatedEnds": 21.081650443246694,
+            "shotEnds": 18.824624667240663,
+            "turnoverEnds": 2.257025776006033,
+            "points": 22.1537293828548
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 102.893550110615,
+        "shotEnds": 87.28791307889924,
+        "turnoverEnds": 12.712086921100754,
+        "players": [
+          {
+            "id": "stockjo01_UTA_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 15.962937576591834,
+            "turnoverEnds": 4.037062423408164,
+            "points": 19.107125660648837
+          },
+          {
+            "id": "jordami01_CHI_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.199799471333517,
+            "turnoverEnds": 1.8002005286664844,
+            "points": 21.76191778324674
+          },
+          {
+            "id": "birdla01_BOS_1980s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.758461358521508,
+            "turnoverEnds": 2.24153864147849,
+            "points": 21.360809318837024
+          },
+          {
+            "id": "duncati01_SAS_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.50793770627709,
+            "turnoverEnds": 2.4920622937229093,
+            "points": 19.64662428475177
+          },
+          {
+            "id": "robinda01_SAS_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.858776966175295,
+            "turnoverEnds": 2.1412230338247067,
+            "points": 21.01707306313063
+          }
+        ]
+      }
+    },
+    {
+      "id": "E04",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "nashst01_PHX_2000s",
+          "points": 18.158049652876965,
+          "fieldGoalAttempts": 12.905078304499561,
+          "freeThrowAttempts": 3.4305940212869013,
+          "turnovers": 3.6340242675641776
+        },
+        {
+          "id": "millere01_IND_1990s",
+          "points": 22.17740167492437,
+          "fieldGoalAttempts": 14.597623536633488,
+          "freeThrowAttempts": 6.707282851756041,
+          "turnovers": 2.160126277020213
+        },
+        {
+          "id": "duranke01_OKC_2010s",
+          "points": 28.174392485195018,
+          "fieldGoalAttempts": 18.382274862160504,
+          "freeThrowAttempts": 8.380641208903409,
+          "turnovers": 3.344905043904431
+        },
+        {
+          "id": "nowitdi01_DAL_2000s",
+          "points": 24.189664704543233,
+          "fieldGoalAttempts": 17.539302091124917,
+          "freeThrowAttempts": 7.263455722137304,
+          "turnovers": 1.893915249276399
+        },
+        {
+          "id": "olajuha01_HOU_1990s",
+          "points": 23.581881533101047,
+          "fieldGoalAttempts": 18.30089596814335,
+          "freeThrowAttempts": 6.16351418616227,
+          "turnovers": 3.188899950223992
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 105.70741374756744,
+        "shotEnds": 87.07138623819593,
+        "turnoverEnds": 12.928613761804067,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.16407328939525814,
+            "allocatedEnds": 16.407328939525815,
+            "shotEnds": 13.103762421677924,
+            "turnoverEnds": 3.3035665178478912,
+            "points": 16.50685863550153
+          },
+          {
+            "id": "millere01_IND_1990s",
+            "share": 0.17916732698818927,
+            "allocatedEnds": 17.916732698818926,
+            "shotEnds": 15.95303616911176,
+            "turnoverEnds": 1.963696529707164,
+            "points": 20.160713366741437
+          },
+          {
+            "id": "duranke01_OKC_2010s",
+            "share": 0.23103595460405357,
+            "allocatedEnds": 23.10359546040536,
+            "shotEnds": 20.062857288387065,
+            "turnoverEnds": 3.0407381720182918,
+            "points": 25.612371525846388
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.205713711994635,
+            "allocatedEnds": 20.5713711994635,
+            "shotEnds": 18.84967796230061,
+            "turnoverEnds": 1.721693237162886,
+            "points": 21.989992502020254
+          },
+          {
+            "id": "olajuha01_HOU_1990s",
+            "share": 0.22000971701786406,
+            "allocatedEnds": 22.000971701786405,
+            "shotEnds": 19.102052396718573,
+            "turnoverEnds": 2.898919305067833,
+            "points": 21.437477717457842
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 105.66495970904333,
+        "shotEnds": 86.83963275172793,
+        "turnoverEnds": 13.160367248272067,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 15.973059929469096,
+            "turnoverEnds": 4.0269400705309035,
+            "points": 20.12132346019582
+          },
+          {
+            "id": "millere01_IND_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.807974743255937,
+            "turnoverEnds": 2.1920252567440617,
+            "points": 22.504899420719088
+          },
+          {
+            "id": "duranke01_OKC_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.36773596366897,
+            "turnoverEnds": 2.632264036331029,
+            "points": 22.171762459865203
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.3261269066908,
+            "turnoverEnds": 1.673873093309198,
+            "points": 21.379219001788034
+          },
+          {
+            "id": "olajuha01_HOU_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.364735208643125,
+            "turnoverEnds": 2.635264791356875,
+            "points": 19.48775536647519
+          }
+        ]
+      }
+    },
+    {
+      "id": "E05",
+      "status": "unsupported-data",
+      "unsupportedIds": [
+        "abdulka01_MIL_1970s"
+      ]
+    },
+    {
+      "id": "E06",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "paulch01_LAC_2010s",
+          "points": 19.235274940230383,
+          "fieldGoalAttempts": 14.155292327754836,
+          "freeThrowAttempts": 4.836448598130841,
+          "turnovers": 2.4069767441860463
+        },
+        {
+          "id": "allenra02_MIL_2000s",
+          "points": 21.12812048689911,
+          "fieldGoalAttempts": 15.959562616051167,
+          "freeThrowAttempts": 4.30699401691768,
+          "turnovers": 2.245100061893955
+        },
+        {
+          "id": "jamesle01_MIA_2010s",
+          "points": 25.36053007036974,
+          "fieldGoalAttempts": 17.45372766183832,
+          "freeThrowAttempts": 7.390128890286073,
+          "turnovers": 3.1479215534544047
+        },
+        {
+          "id": "garneke01_MIN_2000s",
+          "points": 21.1728813559322,
+          "fieldGoalAttempts": 16.566101694915254,
+          "freeThrowAttempts": 5.6440677966101696,
+          "turnovers": 2.471186440677966
+        },
+        {
+          "id": "jokicni01_DEN_2020s",
+          "points": 28.355401618105866,
+          "fieldGoalAttempts": 18.60869335307493,
+          "freeThrowAttempts": 6.489080429379726,
+          "turnovers": 3.37184707313204
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 105.73619786559965,
+        "shotEnds": 87.48343015046966,
+        "turnoverEnds": 12.516569849530324,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.17147106920689956,
+            "allocatedEnds": 17.147106920689957,
+            "shotEnds": 14.93886663916854,
+            "turnoverEnds": 2.2082402815214173,
+            "points": 17.647079080325767
+          },
+          {
+            "id": "allenra02_MIL_2000s",
+            "share": 0.1844016803384045,
+            "allocatedEnds": 18.44016803384045,
+            "shotEnds": 16.380438788555622,
+            "turnoverEnds": 2.059729245284829,
+            "points": 19.38363835242866
+          },
+          {
+            "id": "jamesle01_MIA_2010s",
+            "share": 0.2188381384353942,
+            "allocatedEnds": 21.88381384353942,
+            "shotEnds": 18.99580622394017,
+            "turnoverEnds": 2.888007619599248,
+            "points": 23.266591252863797
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.19743783601227394,
+            "allocatedEnds": 19.743783601227392,
+            "shotEnds": 17.476635214922574,
+            "turnoverEnds": 2.2671483863048185,
+            "points": 19.424703457969677
+          },
+          {
+            "id": "jokicni01_DEN_2020s",
+            "share": 0.22785127600702765,
+            "allocatedEnds": 22.785127600702765,
+            "shotEnds": 19.69168328388275,
+            "turnoverEnds": 3.0934443168200128,
+            "points": 26.01418572201174
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 105.38131318831095,
+        "shotEnds": 87.53911006875265,
+        "turnoverEnds": 12.460889931247348,
+        "players": [
+          {
+            "id": "paulch01_LAC_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.424358182712535,
+            "turnoverEnds": 2.575641817287465,
+            "points": 20.58315628630336
+          },
+          {
+            "id": "allenra02_MIL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.766040698213903,
+            "turnoverEnds": 2.2339593017861,
+            "points": 21.023277355018458
+          },
+          {
+            "id": "jamesle01_MIA_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.360599354164354,
+            "turnoverEnds": 2.6394006458356443,
+            "points": 21.263744445287905
+          },
+          {
+            "id": "garneke01_MIN_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.703430677629715,
+            "turnoverEnds": 2.2965693223702863,
+            "points": 19.676779132407145
+          },
+          {
+            "id": "jokicni01_DEN_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.284681156032146,
+            "turnoverEnds": 2.715318843967853,
+            "points": 22.834355969294094
+          }
+        ]
+      }
+    },
+    {
+      "id": "F01",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "westbru01_OKC_2010s",
+          "points": 28.959309870982523,
+          "fieldGoalAttempts": 22.288724330101534,
+          "freeThrowAttempts": 9.504542331475685,
+          "turnovers": 4.929536605847775
+        },
+        {
+          "id": "hardeja01_HOU_2010s",
+          "points": 31.672307471676472,
+          "fieldGoalAttempts": 21.03441847124624,
+          "freeThrowAttempts": 10.618528610354224,
+          "turnovers": 5.02724795640327
+        },
+        {
+          "id": "anthoca01_NYK_2010s",
+          "points": 25.254229223275438,
+          "fieldGoalAttempts": 20.00530922477805,
+          "freeThrowAttempts": 6.542667885450971,
+          "turnovers": 2.4666858666933797
+        },
+        {
+          "id": "barklch01_PHX_1990s",
+          "points": 23.583825603109876,
+          "fieldGoalAttempts": 16.80841495483822,
+          "freeThrowAttempts": 7.606387438545677,
+          "turnovers": 2.7682457410724495
+        },
+        {
+          "id": "onealsh01_LAL_2000s",
+          "points": 26.64525918345742,
+          "fieldGoalAttempts": 18.26655845301528,
+          "freeThrowAttempts": 10.619570203606338,
+          "turnovers": 2.5830128092028652
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 100.13567999204425,
+        "shotEnds": 86.92366402919433,
+        "turnoverEnds": 13.076335970805673,
+        "players": [
+          {
+            "id": "westbru01_OKC_2010s",
+            "share": 0.23100230899757218,
+            "allocatedEnds": 23.100230899757218,
+            "shotEnds": 19.473718399127225,
+            "turnoverEnds": 3.6265125006299916,
+            "points": 21.304497289289166
+          },
+          {
+            "id": "hardeja01_HOU_2010s",
+            "share": 0.2260995054223771,
+            "allocatedEnds": 22.609950542237712,
+            "shotEnds": 18.91155472628299,
+            "turnoverEnds": 3.6983958159547194,
+            "points": 23.300368402493675
+          },
+          {
+            "id": "anthoca01_NYK_2010s",
+            "share": 0.186498017742363,
+            "allocatedEnds": 18.6498017742363,
+            "shotEnds": 16.835134829664042,
+            "turnoverEnds": 1.8146669445722552,
+            "points": 18.578780379344195
+          },
+          {
+            "id": "barklch01_PHX_1990s",
+            "share": 0.16864111456870717,
+            "allocatedEnds": 16.864111456870717,
+            "shotEnds": 14.827595940806612,
+            "turnoverEnds": 2.0365155160641044,
+            "points": 17.34991444447278
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.18775905326898068,
+            "allocatedEnds": 18.77590532689807,
+            "shotEnds": 16.875660133313467,
+            "turnoverEnds": 1.9002451935846012,
+            "points": 19.60211947644443
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 100.43604244115133,
+        "shotEnds": 87.20333519514007,
+        "turnoverEnds": 12.796664804859935,
+        "players": [
+          {
+            "id": "westbru01_OKC_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.860193721554438,
+            "turnoverEnds": 3.13980627844556,
+            "points": 18.445267825884002
+          },
+          {
+            "id": "hardeja01_HOU_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.72852374529017,
+            "turnoverEnds": 3.2714762547098335,
+            "points": 20.61072036311286
+          },
+          {
+            "id": "anthoca01_NYK_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.053955782973393,
+            "turnoverEnds": 1.946044217026607,
+            "points": 19.92383683671082
+          },
+          {
+            "id": "barklch01_PHX_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.584793576261152,
+            "turnoverEnds": 2.4152064237388498,
+            "points": 20.576138255305633
+          },
+          {
+            "id": "onealsh01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.975868369060915,
+            "turnoverEnds": 2.024131630939084,
+            "points": 20.880079160138006
+          }
+        ]
+      }
+    },
+    {
+      "id": "F02",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "nashst01_PHX_2000s",
+          "points": 18.158049652876965,
+          "fieldGoalAttempts": 12.905078304499561,
+          "freeThrowAttempts": 3.4305940212869013,
+          "turnovers": 3.6340242675641776
+        },
+        {
+          "id": "iversal01_PHI_2000s",
+          "points": 26.77961048640591,
+          "fieldGoalAttempts": 21.18189183058427,
+          "freeThrowAttempts": 9.070676301889236,
+          "turnovers": 3.2046404614537085
+        },
+        {
+          "id": "anthoca01_DEN_2000s",
+          "points": 26.14722107463122,
+          "fieldGoalAttempts": 19.73005419329753,
+          "freeThrowAttempts": 8.181778415028313,
+          "turnovers": 3.0799776422270293
+        },
+        {
+          "id": "nowitdi01_DAL_2000s",
+          "points": 24.189664704543233,
+          "fieldGoalAttempts": 17.539302091124917,
+          "freeThrowAttempts": 7.263455722137304,
+          "turnovers": 1.893915249276399
+        },
+        {
+          "id": "townska01_MIN_2010s",
+          "points": 24.066338112657167,
+          "fieldGoalAttempts": 16.79045860337101,
+          "freeThrowAttempts": 5.397946341406037,
+          "turnovers": 2.5732130464954888
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 101.82311858752124,
+        "shotEnds": 87.72588250461902,
+        "turnoverEnds": 12.27411749538099,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.1539925802848539,
+            "allocatedEnds": 15.399258028485391,
+            "shotEnds": 12.298663567917764,
+            "turnoverEnds": 3.1005944605676277,
+            "points": 15.492672591908596
+          },
+          {
+            "id": "iversal01_PHI_2000s",
+            "share": 0.24212144852304063,
+            "allocatedEnds": 24.212144852304064,
+            "shotEnds": 21.47790596689498,
+            "turnoverEnds": 2.734238885409088,
+            "points": 22.84869494995538
+          },
+          {
+            "id": "anthoca01_DEN_2000s",
+            "share": 0.22533350944083402,
+            "allocatedEnds": 22.533350944083402,
+            "shotEnds": 19.90547591820684,
+            "turnoverEnds": 2.6278750258765626,
+            "points": 22.309132480719445
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.1930746035920255,
+            "allocatedEnds": 19.30746035920255,
+            "shotEnds": 17.691548439432395,
+            "turnoverEnds": 1.6159119197701546,
+            "points": 20.63892116938662
+          },
+          {
+            "id": "townska01_MIN_2010s",
+            "share": 0.18547785815924595,
+            "allocatedEnds": 18.547785815924595,
+            "shotEnds": 16.352288612167037,
+            "turnoverEnds": 2.1954972037575584,
+            "points": 20.533697395551194
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 102.3166794240459,
+        "shotEnds": 87.3407916483928,
+        "turnoverEnds": 12.659208351607202,
+        "players": [
+          {
+            "id": "nashst01_PHX_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 15.973059929469096,
+            "turnoverEnds": 4.0269400705309035,
+            "points": 20.12132346019582
+          },
+          {
+            "id": "iversal01_PHI_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.74143191188707,
+            "turnoverEnds": 2.258568088112932,
+            "points": 18.87374711272724
+          },
+          {
+            "id": "anthoca01_DEN_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.667568367973637,
+            "turnoverEnds": 2.3324316320263634,
+            "points": 19.80098968509357
+          },
+          {
+            "id": "nowitdi01_DAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.3261269066908,
+            "turnoverEnds": 1.673873093309198,
+            "points": 21.379219001788034
+          },
+          {
+            "id": "townska01_MIN_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.632604532372195,
+            "turnoverEnds": 2.367395467627805,
+            "points": 22.141400164241226
+          }
+        ]
+      }
+    },
+    {
+      "id": "F03",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "kiddja01_BKN_2000s",
+          "points": 15.017215784459264,
+          "fieldGoalAttempts": 13.128398289499922,
+          "freeThrowAttempts": 3.565462078745042,
+          "turnovers": 3.0908647774355793
+        },
+        {
+          "id": "wadedw01_MIA_2000s",
+          "points": 26.61257029692915,
+          "fieldGoalAttempts": 18.791768753253017,
+          "freeThrowAttempts": 9.65295215365671,
+          "turnovers": 3.4403666230815126
+        },
+        {
+          "id": "rodmade01_CHI_1990s",
+          "points": 5.4422736377623595,
+          "fieldGoalAttempts": 4.98086916132029,
+          "freeThrowAttempts": 1.6136093128574334,
+          "turnovers": 2.0629953261532212
+        },
+        {
+          "id": "greendr01_GSW_2010s",
+          "points": 13.129537146681768,
+          "fieldGoalAttempts": 10.370179683879936,
+          "freeThrowAttempts": 3.4400453071101267,
+          "turnovers": 2.668537301137826
+        },
+        {
+          "id": "wallabe01_DET_2000s",
+          "points": 7.652425451135041,
+          "fieldGoalAttempts": 6.765635769895705,
+          "freeThrowAttempts": 2.901998892642855,
+          "turnovers": 1.1434705476898044
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 89.56482638614995,
+        "shotEnds": 83.62422435814143,
+        "turnoverEnds": 16.375775641858546,
+        "players": [
+          {
+            "id": "kiddja01_BKN_2000s",
+            "share": 0.23479596681380943,
+            "allocatedEnds": 23.479596681380944,
+            "shotEnds": 19.39976828328082,
+            "turnoverEnds": 4.079828398100121,
+            "points": 19.822175290588632
+          },
+          {
+            "id": "wadedw01_MIA_2000s",
+            "share": 0.3495188431054011,
+            "allocatedEnds": 34.95188431054011,
+            "shotEnds": 30.41072626597201,
+            "turnoverEnds": 4.541158044568099,
+            "points": 35.127618922859924
+          },
+          {
+            "id": "rodmade01_CHI_1990s",
+            "share": 0.10234801665359469,
+            "allocatedEnds": 10.23480166535947,
+            "shotEnds": 7.51172332876176,
+            "turnoverEnds": 2.723078336597711,
+            "points": 7.183602045507892
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.1920855220162436,
+            "allocatedEnds": 19.20855220162436,
+            "shotEnds": 15.686180617447716,
+            "turnoverEnds": 3.522371584176645,
+            "points": 17.330508567050746
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.12125165141095107,
+            "allocatedEnds": 12.125165141095106,
+            "shotEnds": 10.615825862679136,
+            "turnoverEnds": 1.5093392784159723,
+            "points": 10.10092156014275
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 85.72841555572181,
+        "shotEnds": 82.44795357880703,
+        "turnoverEnds": 17.552046421192966,
+        "players": [
+          {
+            "id": "kiddja01_BKN_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.524788348400055,
+            "turnoverEnds": 3.4752116515999427,
+            "points": 16.884596068302482
+          },
+          {
+            "id": "wadedw01_MIA_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.401480272582234,
+            "turnoverEnds": 2.598519727417766,
+            "points": 20.1005580189946
+          },
+          {
+            "id": "rodmade01_CHI_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 14.678786310409523,
+            "turnoverEnds": 5.321213689590477,
+            "points": 14.03759893036596
+          },
+          {
+            "id": "greendr01_GSW_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.33249653882943,
+            "turnoverEnds": 3.6675034611705692,
+            "points": 18.044575546495587
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.510402108585794,
+            "turnoverEnds": 2.4895978914142085,
+            "points": 16.66108699156318
+          }
+        ]
+      }
+    },
+    {
+      "id": "F04",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "nashst01_LAL_2010s",
+          "points": 13.686871292236265,
+          "fieldGoalAttempts": 10.576218725818933,
+          "freeThrowAttempts": 2.581377353623936,
+          "turnovers": 2.90637090533918
+        },
+        {
+          "id": "wadedw01_CHI_2010s",
+          "points": 22.03344481605351,
+          "fieldGoalAttempts": 19.1438127090301,
+          "freeThrowAttempts": 5.65886287625418,
+          "turnovers": 2.769230769230769
+        },
+        {
+          "id": "anthoca01_LAL_2020s",
+          "points": 18.415384615384617,
+          "fieldGoalAttempts": 14.538461538461538,
+          "freeThrowAttempts": 3.1846153846153844,
+          "turnovers": 1.2461538461538462
+        },
+        {
+          "id": "garneke01_BKN_2010s",
+          "points": 11.695039804041642,
+          "fieldGoalAttempts": 11.562767911818739,
+          "freeThrowAttempts": 1.6644213104715249,
+          "turnovers": 2.138395590936926
+        },
+        {
+          "id": "onealsh01_CLE_2010s",
+          "points": 18.461538461538463,
+          "fieldGoalAttempts": 13.384615384615385,
+          "freeThrowAttempts": 6.615384615384616,
+          "turnovers": 3.0769230769230775
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 93.64455973114659,
+        "shotEnds": 86.51630988694609,
+        "turnoverEnds": 13.483690113053912,
+        "players": [
+          {
+            "id": "nashst01_LAL_2010s",
+            "share": 0.16240315751378162,
+            "allocatedEnds": 16.240315751378162,
+            "shotEnds": 13.01148118776888,
+            "turnoverEnds": 3.228834563609282,
+            "points": 15.20543816856256
+          },
+          {
+            "id": "wadedw01_CHI_2010s",
+            "share": 0.27110464852158744,
+            "allocatedEnds": 27.110464852158746,
+            "shotEnds": 24.03398620799232,
+            "turnoverEnds": 3.0764786441664254,
+            "points": 24.47806921228069
+          },
+          {
+            "id": "anthoca01_LAL_2020s",
+            "share": 0.19092626465696835,
+            "allocatedEnds": 19.092626465696835,
+            "shotEnds": 17.708211075821943,
+            "turnoverEnds": 1.3844153898748914,
+            "points": 20.45858298370673
+          },
+          {
+            "id": "garneke01_BKN_2010s",
+            "share": 0.16034915660019808,
+            "allocatedEnds": 16.03491566001981,
+            "shotEnds": 13.65926374924586,
+            "turnoverEnds": 2.3756519107739518,
+            "points": 12.992611738820427
+          },
+          {
+            "id": "onealsh01_CLE_2010s",
+            "share": 0.21521677270746462,
+            "allocatedEnds": 21.521677270746462,
+            "shotEnds": 18.1033676661171,
+            "turnoverEnds": 3.4183096046293624,
+            "points": 20.50985762777617
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 93.4795620835445,
+        "shotEnds": 86.16416425773905,
+        "turnoverEnds": 13.835835742260963,
+        "players": [
+          {
+            "id": "nashst01_LAL_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.023680065043955,
+            "turnoverEnds": 3.9763199349560443,
+            "points": 18.72554499720514
+          },
+          {
+            "id": "wadedw01_CHI_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.730412472863627,
+            "turnoverEnds": 2.269587527136373,
+            "points": 18.058022498519833
+          },
+          {
+            "id": "anthoca01_LAL_2020s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.5497905252981,
+            "turnoverEnds": 1.4502094747019014,
+            "points": 21.430873348372547
+          },
+          {
+            "id": "garneke01_BKN_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.03690127077224,
+            "turnoverEnds": 2.963098729227762,
+            "points": 16.205400782013687
+          },
+          {
+            "id": "onealsh01_CLE_2010s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.82337992376112,
+            "turnoverEnds": 3.176620076238882,
+            "points": 19.059720457433293
+          }
+        ]
+      }
+    },
+    {
+      "id": "F05",
+      "status": "accounting-only",
+      "inputs": [
+        {
+          "id": "fishede01_LAL_2000s",
+          "points": 13.802772942800553,
+          "fieldGoalAttempts": 11.521037152631896,
+          "freeThrowAttempts": 2.3325130544385093,
+          "turnovers": 1.2262169137506753
+        },
+        {
+          "id": "bowenbr01_SAS_2000s",
+          "points": 8.470588235294116,
+          "fieldGoalAttempts": 7.2817337461300315,
+          "freeThrowAttempts": 1.3003095975232197,
+          "turnovers": 0.891640866873065
+        },
+        {
+          "id": "princta01_DET_2000s",
+          "points": 14.251407129455908,
+          "fieldGoalAttempts": 11.95497185741088,
+          "freeThrowAttempts": 3.0056285178236393,
+          "turnovers": 1.3170731707317074
+        },
+        {
+          "id": "willibu01_POR_1990s",
+          "points": 13.452430327246978,
+          "fieldGoalAttempts": 8.678164989125488,
+          "freeThrowAttempts": 4.634059986849426,
+          "turnovers": 1.94830812806636
+        },
+        {
+          "id": "wallabe01_DET_2000s",
+          "points": 7.652425451135041,
+          "fieldGoalAttempts": 6.765635769895705,
+          "freeThrowAttempts": 2.901998892642855,
+          "turnovers": 1.1434705476898044
+        }
+      ],
+      "observedDemand": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "observed-per36-demand",
+        "pointsPer100UsedEnds": 97.73524526867975,
+        "shotEnds": 88.93122111551452,
+        "turnoverEnds": 11.068778884485484,
+        "players": [
+          {
+            "id": "fishede01_LAL_2000s",
+            "share": 0.23358858705701158,
+            "allocatedEnds": 23.35885870570116,
+            "shotEnds": 21.279292636706447,
+            "turnoverEnds": 2.079566068994711,
+            "points": 23.408401847996856
+          },
+          {
+            "id": "bowenbr01_SAS_2000s",
+            "share": 0.14831688738301652,
+            "allocatedEnds": 14.83168873830165,
+            "shotEnds": 13.319536955297236,
+            "turnoverEnds": 1.5121517830044162,
+            "points": 14.365441938541952
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.24751144371183145,
+            "allocatedEnds": 24.751144371183145,
+            "shotEnds": 22.517493338056198,
+            "turnoverEnds": 2.23365103312695,
+            "points": 24.16924964050187
+          },
+          {
+            "id": "willibu01_POR_1990s",
+            "share": 0.21479608993144914,
+            "allocatedEnds": 21.479608993144915,
+            "shotEnds": 18.175433826713295,
+            "turnoverEnds": 3.3041751664316195,
+            "points": 22.814248719249345
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.15578699191669132,
+            "allocatedEnds": 15.578699191669132,
+            "shotEnds": 13.639464358741348,
+            "turnoverEnds": 1.9392348329277855,
+            "points": 12.97790312238972
+          }
+        ]
+      },
+      "equalShares": {
+        "version": "possession-accounting-prototype-1",
+        "allocation": "explicit-shares",
+        "pointsPer100UsedEnds": 96.84729676750594,
+        "shotEnds": 88.80932602990404,
+        "turnoverEnds": 11.190673970095967,
+        "players": [
+          {
+            "id": "fishede01_LAL_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.219462607145992,
+            "turnoverEnds": 1.7805373928540051,
+            "points": 20.042419146346052
+          },
+          {
+            "id": "bowenbr01_SAS_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.960917587085813,
+            "turnoverEnds": 2.0390824129141887,
+            "points": 19.371282922684788
+          },
+          {
+            "id": "princta01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 18.195112921140318,
+            "turnoverEnds": 1.804887078859682,
+            "points": 19.52980377637912
+          },
+          {
+            "id": "willibu01_POR_1990s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 16.92343080594612,
+            "turnoverEnds": 3.076569194053883,
+            "points": 21.24270393053279
+          },
+          {
+            "id": "wallabe01_DET_2000s",
+            "share": 0.2,
+            "allocatedEnds": 20,
+            "shotEnds": 17.510402108585794,
+            "turnoverEnds": 2.4895978914142085,
+            "points": 16.66108699156318
+          }
+        ]
+      }
+    },
+    {
+      "id": "F06",
+      "status": "unsupported-data",
+      "unsupportedIds": [
+        "russebi01_BOS_1960s",
+        "chambwi01_PHI_1960s",
+        "abdulka01_MIL_1970s"
+      ]
+    }
+  ],
+  "method": "A fixed 100 used-event budget (FGA + 0.44 FTA + TOV). Default shares follow observed pooled per36 demand; equal shares are an unfitted sensitivity comparison.",
+  "limitations": [
+    "Not ORTG or true possessions: offensive rebounds, opponent effects and exact free-throw sequences are not represented.",
+    "Five-starter equal-time accounting only. Reserve, fatigue, defense, coach, spacing and assist redistribution are not implemented.",
+    "No era-efficiency normalization, load-efficiency tradeoff, win estimates, fitting, band acceptance or independent validation.",
+    "Higher shot volume alone can lower output when it reallocates demand to a less efficient scorer. This is not a complete talent-value model.",
+    "Any missing required peak field blocks the entire roster; no partial-season fallback or zero-filled historical turnovers."
+  ]
+}

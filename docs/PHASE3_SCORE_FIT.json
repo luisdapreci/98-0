@@ -1,0 +1,213 @@
+{
+  "version": "historical-score-fit-1",
+  "referenceSha256": "890835339a011a86ab588126de8c4314fff0840b81020819d5ab793464a71677",
+  "sources": [
+    {
+      "season": 2022,
+      "url": "https://raw.githubusercontent.com/sportsdataverse/hoopR-data/24a404292a6dc1b853e89ecd7c040fb11ea28446/nba/schedules/csv/nba_schedule_2022.csv",
+      "sha256": "217c9c8cdda09137b22f8e11ce27516dc777d9e5b22bcabd5fb98ea80b94f775",
+      "completedGames": 1230
+    }
+  ],
+  "splitDate": "2022-02-01",
+  "trainingCount": 750,
+  "validationCount": 480,
+  "matchupProxy": "Pregame mean point differential, ten-game zero prior, +2.5 home; fixed sigma 10.5.",
+  "outcomeConditioning": "Observed historical winner; not a win-prediction calibration.",
+  "tolerances": {
+    "meanTotal": 4,
+    "totalSD": 3,
+    "totalP10": 5,
+    "totalP90": 5,
+    "meanMargin": 1.5,
+    "medianMargin": 2,
+    "marginP90": 3,
+    "thirtyPointRate": 0.025,
+    "fiftyPointRate": 0.008,
+    "onePointRate": 0.025,
+    "overtimeRate": 0.02,
+    "overtimeMeanMargin": 1.5,
+    "overtimeMarginP90": 4,
+    "overtimeMeanTotal": 12,
+    "multipleOvertimeShare": 0.12
+  },
+  "rules": {
+    "version": "conditional-score-2",
+    "baseline": 108.016342,
+    "baselineSpread": 23.094216,
+    "regulationScale": 7.5,
+    "regulationOffset": 1,
+    "maxMargin": 100,
+    "overtimeProbability": 0.043954,
+    "overtimeScale": 3,
+    "overtimeMaxMargin": 30,
+    "overtimeBaseline": 9.151142,
+    "overtimeSpread": 6,
+    "overtimeContinuation": 0.184211,
+    "maxOvertimePeriods": 6
+  },
+  "trials": [
+    {
+      "parameter": "regulationScale",
+      "value": 5,
+      "loss": 19.086928
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 5.5,
+      "loss": 13.216314
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 6,
+      "loss": 8.221073
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 6.5,
+      "loss": 4.310139
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 7,
+      "loss": 1.450604
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 7.5,
+      "loss": 0.323838
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 8,
+      "loss": 0.427224
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 8.5,
+      "loss": 3.008162
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 9,
+      "loss": 6.427631
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 9.5,
+      "loss": 13.818227
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 10,
+      "loss": 21.425722
+    },
+    {
+      "parameter": "regulationScale",
+      "value": 10.5,
+      "loss": 34.645875
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 2,
+      "loss": 1.084045
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 2.5,
+      "loss": 0.294351
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 3,
+      "loss": 0.063562
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 3.5,
+      "loss": 0.421984
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 4,
+      "loss": 1.73477
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 4.5,
+      "loss": 3.288071
+    },
+    {
+      "parameter": "overtimeScale",
+      "value": 5,
+      "loss": 6.129414
+    }
+  ],
+  "observed": {
+    "meanTotal": 217.46,
+    "totalSD": 19.52940688636839,
+    "totalP10": 193,
+    "totalP90": 241.10000000000002,
+    "meanMargin": 11.988,
+    "medianMargin": 10,
+    "marginP90": 24,
+    "thirtyPointRate": 0.052,
+    "fiftyPointRate": 0.0026666666666666666,
+    "onePointRate": 0.032,
+    "overtimeRate": 0.04133333333333333,
+    "overtimeMeanMargin": 4.258064516129032,
+    "overtimeMarginP90": 8,
+    "overtimeMeanTotal": 238.96774193548387,
+    "multipleOvertimeShare": 0.16129032258064516
+  },
+  "original": {
+    "count": 75000,
+    "summary": {
+      "meanTotal": 225.8992,
+      "totalSD": 17.30701667031827,
+      "totalP10": 203,
+      "totalP90": 249,
+      "meanMargin": 14.69808,
+      "medianMargin": 12,
+      "marginP90": 32,
+      "thirtyPointRate": 0.12118666666666666,
+      "fiftyPointRate": 0.018546666666666666,
+      "onePointRate": 0.07482666666666667,
+      "overtimeRate": 0.057146666666666665,
+      "overtimeMeanMargin": 4.171255249650024,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 246.93747083527765,
+      "multipleOvertimeShare": 0.12225851609892674
+    },
+    "capCounts": {
+      "regulationCap": 236,
+      "overtimeCap": 181,
+      "periodCap": 54
+    }
+  },
+  "candidate": {
+    "count": 75000,
+    "summary": {
+      "meanTotal": 217.49682666666666,
+      "totalSD": 19.54702406838354,
+      "totalP10": 191,
+      "totalP90": 243,
+      "meanMargin": 11.653866666666667,
+      "medianMargin": 9,
+      "marginP90": 24,
+      "thirtyPointRate": 0.047986666666666664,
+      "fiftyPointRate": 0.003853333333333333,
+      "onePointRate": 0.03868,
+      "overtimeRate": 0.04164,
+      "overtimeMeanMargin": 4.34934357989113,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 238.47486391290425,
+      "multipleOvertimeShare": 0.18315722062119758
+    },
+    "capCounts": {
+      "regulationCap": 0,
+      "overtimeCap": 1,
+      "periodCap": 2
+    }
+  }
+}

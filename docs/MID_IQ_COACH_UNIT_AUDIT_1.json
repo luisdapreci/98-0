@@ -1,0 +1,1125 @@
+{
+  "version": "mid-iq-coach-unit-audit-1",
+  "scope": "development-only",
+  "sourceFit": "docs/MID_IQ_ROSTER_FIT_13.json",
+  "sourceFitSha256": "5a7cb5c63d943f22b242614432b75c4f96adab8686a49effd70df3179cc9833f",
+  "candidateImplementationSha256": "658a585c6eafa74fb71dcf41d2bc8ce76c21a17549c4916fba3321bce31f7ef6",
+  "evaluatorSha256": "2684f27e21352454a320a5140deca8185b9d46ad30055b26c00687abcb4606b5",
+  "parameters": {
+    "offenseBaseline": 87.61900000000006,
+    "offenseScale": 1.4721000000000024,
+    "leadScorerWeight": 0.7477999999999994,
+    "usageSlope": 0.008835999999999993,
+    "spacingLow": -4.201000000000012,
+    "spacingHigh": 6.260000000000002,
+    "defenseScale": 0.5114500000000002,
+    "depthScale": 7,
+    "coachScale": 0.8,
+    "paceModel": "relative-style",
+    "offenseModel": "shared-creation",
+    "coachShootingModel": "made-shots",
+    "rolePenalty": 0
+  },
+  "rows": [
+    {
+      "id": "C01",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 116.1,
+          "phiUsg": 0.999643741631924,
+          "spacingRating": 6.4633,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.022363569637895733,
+          "drtgTeam": 105.09523301218499,
+          "ortgTeam": 114.49300278312002,
+          "effectiveOrtg": 117.04368682474484,
+          "netRating": 11.948453812559848,
+          "sixthManFRF": 0.21952824999999998,
+          "depthBonus": 1.5366977499999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 13.485151562559848,
+        "winProbability": 0.7831808677944365
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.9738065883873528,
+          "offenseGain": 0.9142085883873534,
+          "defenseGain": 0,
+          "reserveGain": 0.05959800000000004
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.2395951999999966,
+          "offenseGain": 1.2395951999999966,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224400000000387,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08399999999999985
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.009574088375174483,
+          "offenseGain": 0.009574088375174483,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": -0.11595054000000005,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0.11595054000000005,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 106.6,
+          "phiUsg": 1,
+          "spacingRating": 5.4298,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.0125567597917462,
+          "drtgTeam": 105.30818139118166,
+          "ortgTeam": 117.79422434856522,
+          "effectiveOrtg": 119.27333812856521,
+          "netRating": 13.965156737383552,
+          "sixthManFRF": 0.21952824999999998,
+          "depthBonus": 1.5366977499999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 15.501854487383552,
+        "winProbability": 0.8140232245194039
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.145561372452013,
+          "offenseGain": 1.0859633724520137,
+          "defenseGain": 0,
+          "reserveGain": 0.05959800000000004
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.123617600000001,
+          "offenseGain": 1.1236176000000029,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224400000000387,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08399999999999985
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": -0.20741920000000036,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0.20741920000000036,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 91.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 5.884,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.016838196145127392,
+          "drtgTeam": 105.13921307503833,
+          "ortgTeam": 116.0606743831948,
+          "effectiveOrtg": 118.0149267831948,
+          "netRating": 12.875713708156468,
+          "sixthManFRF": 0.565712,
+          "depthBonus": 3.959984
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.835697708156466,
+        "winProbability": 0.8324930153051624
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.029592663610579,
+          "offenseGain": 0.8916075436105757,
+          "defenseGain": 0,
+          "reserveGain": 0.13798512000000018
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.181383199999999,
+          "offenseGain": 1.181383199999999,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522439999999932,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.08400000000000007
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.02800223333333207,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.02800223333333207,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 107.4,
+          "phiUsg": 1,
+          "spacingRating": 7.5362,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.030905823161681154,
+          "drtgTeam": 106.42263146968,
+          "ortgTeam": 119.15614739444713,
+          "effectiveOrtg": 122.83876621444713,
+          "netRating": 16.416134744767135,
+          "sixthManFRF": 0.34863442,
+          "depthBonus": 2.4404409400000002
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.856575684767137,
+        "winProbability": 0.8576447592107974
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.0024456489560052,
+          "offenseGain": 0.901821208956008,
+          "defenseGain": 0,
+          "reserveGain": 0.10062443999999937
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.431885600000001,
+          "offenseGain": 1.431885600000001,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522440000000003,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08399999999999963
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.09784686583333269,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.09784686583333269,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 108.8,
+          "phiUsg": 1,
+          "spacingRating": 6.6502,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.023568819487748638,
+          "drtgTeam": 103.71763948782333,
+          "ortgTeam": 116.92457576979963,
+          "effectiveOrtg": 119.68034998979962,
+          "netRating": 15.96271050197629,
+          "sixthManFRF": 0.3941169299999999,
+          "depthBonus": 2.7588185099999993
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.721529011976287,
+        "winProbability": 0.856067250432191
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.9089489516916203,
+          "offenseGain": 0.8364183116916166,
+          "defenseGain": 0,
+          "reserveGain": 0.07253064000000009
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.282687199999998,
+          "offenseGain": 1.282687199999998,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522440000000074,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08400000000000052
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.1751036275000004,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.1751036275000004,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 103.5,
+          "phiUsg": 1,
+          "spacingRating": 9.8414,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.05318436879299359,
+          "drtgTeam": 105.15335185456333,
+          "ortgTeam": 114.58420356025405,
+          "effectiveOrtg": 120.67829210025405,
+          "netRating": 15.524940245690729,
+          "sixthManFRF": 0.3941169299999999,
+          "depthBonus": 2.7588185099999993
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 18.283758755690727,
+        "winProbability": 0.8508534287723609
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.9416818996271346,
+          "offenseGain": 0.8691512596271309,
+          "defenseGain": 0,
+          "reserveGain": 0.07253064000000009
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.8850319999999954,
+          "offenseGain": 1.8850319999999954,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522439999999932,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.08400000000000052
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": -0.021840499999999707,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0.021840499999999707,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 127.2,
+          "phiUsg": 0.95800274851244,
+          "spacingRating": 5.415700000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.012705966384357278,
+          "drtgTeam": 104.578170462175,
+          "ortgTeam": 116.46139120953347,
+          "effectiveOrtg": 116.71445382240411,
+          "netRating": 12.136283360229115,
+          "sixthManFRF": 0.5881399999999999,
+          "depthBonus": 4.116979999999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 16.253263360229113,
+        "winProbability": 0.8246145358329331
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.0849350110456655,
+          "offenseGain": 0.8998200110456622,
+          "defenseGain": 0,
+          "reserveGain": 0.18511500000000058
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.1356056000000052,
+          "offenseGain": 1.1356056000000052,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522439999999932,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.0840000000000014
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.41788045205063895,
+          "offenseGain": 0.41788045205063895,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.11043784583333505,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.11043784583333505,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 142.8,
+          "phiUsg": 0.8145795790356133,
+          "spacingRating": 4.1217,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": 0.0009372143933411748,
+          "drtgTeam": 102.40588582552333,
+          "ortgTeam": 125.0715082405024,
+          "effectiveOrtg": 118.23775876637629,
+          "netRating": 15.83187294085296,
+          "sixthManFRF": 0.68950045,
+          "depthBonus": 4.826503150000001
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.65837609085296,
+        "winProbability": 0.8773385027803672
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.0829141696032138,
+          "offenseGain": 0.9222843296032153,
+          "defenseGain": 0,
+          "reserveGain": 0.16062983999999858
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 0.9329615999999987,
+          "offenseGain": 0.9329615999999987,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224400000000387,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08399999999999963
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.964088898675243,
+          "offenseGain": 0.964088898675243,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 141.6,
+          "phiUsg": 0.8275405458345338,
+          "spacingRating": 2.807,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.010361032982190136,
+          "drtgTeam": 100.98799822436166,
+          "ortgTeam": 129.22929553651443,
+          "effectiveOrtg": 120.78860938062341,
+          "netRating": 19.800611156261752,
+          "sixthManFRF": 0.6759949000000001,
+          "depthBonus": 4.7319643000000005
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 24.532575456261753,
+        "winProbability": 0.9118500131597638
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.123246776075085,
+          "offenseGain": 0.9201515760750851,
+          "defenseGain": 0,
+          "reserveGain": 0.20309519999999992
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 0.5500655999999964,
+          "offenseGain": 0.5500655999999964,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.36824400000000423,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 1.0546057994743023,
+          "offenseGain": 1.0546057994743023,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 135.1,
+          "phiUsg": 0.8936595118582237,
+          "spacingRating": 7.4244,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.02973982162746787,
+          "drtgTeam": 102.96018307777166,
+          "ortgTeam": 123.73599949160302,
+          "effectiveOrtg": 123.46096497544967,
+          "netRating": 20.50078189767801,
+          "sixthManFRF": 0.3941169299999999,
+          "depthBonus": 2.7588185099999993
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 23.259600407678008,
+        "winProbability": 0.9016061994148417
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.9953543729650178,
+          "offenseGain": 0.9228237329650142,
+          "defenseGain": 0,
+          "reserveGain": 0.07253064000000009
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.420682400000004,
+          "offenseGain": 1.420682400000004,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.4522440000000074,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08400000000000052
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.7895679385692631,
+          "offenseGain": 0.7895679385692631,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.04509422499999971,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.04509422499999971,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 134.9,
+          "phiUsg": 0.895545261622318,
+          "spacingRating": 4.3826,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": 0.0032348401699322194,
+          "drtgTeam": 103.38934576793334,
+          "ortgTeam": 122.20867013638437,
+          "effectiveOrtg": 118.97925305171802,
+          "netRating": 15.589907283784683,
+          "sixthManFRF": 0.68950045,
+          "depthBonus": 4.826503150000001
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 20.416410433784684,
+        "winProbability": 0.8748369283729792
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.0179116644064123,
+          "offenseGain": 0.8572818244064138,
+          "defenseGain": 0,
+          "reserveGain": 0.16062983999999858
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 0.8866799999999984,
+          "offenseGain": 0.8866799999999984,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224400000000387,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08399999999999963
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.751181264486334,
+          "offenseGain": 0.751181264486334,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.06540986999999987,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.06540986999999987,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "F01",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 165.4,
+          "phiUsg": 0.5720294337607856,
+          "spacingRating": 8.466,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.04285687004683744,
+          "drtgTeam": 105.02675686405,
+          "ortgTeam": 124.33905473975916,
+          "effectiveOrtg": 113.27923472044951,
+          "netRating": 8.252477856399508,
+          "sixthManFRF": 0.9307430999999999,
+          "depthBonus": 6.5152016999999995
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 14.767679556399507,
+        "winProbability": 0.8032047274630538
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.9365498926009757,
+          "offenseGain": 0.6448313326009725,
+          "defenseGain": 0,
+          "reserveGain": 0.2917185600000014
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.8545040000000057,
+          "offenseGain": 1.8545040000000057,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224400000000564,
+          "offenseGain": 0,
+          "defenseGain": 0.36824400000000423,
+          "reserveGain": 0.08400000000000052
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.8703902708978717,
+          "offenseGain": 0.8703902708978717,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 144.70000000000002,
+          "phiUsg": 0.7937736975382541,
+          "spacingRating": 6.559100000000001,
+          "spacingTier": "GOOD",
+          "spacingModifier": 0.022950902848069655,
+          "drtgTeam": 106.78680657806,
+          "ortgTeam": 123.27305991706238,
+          "effectiveOrtg": 118.58072948261707,
+          "netRating": 11.793922904557078,
+          "sixthManFRF": 0.3997083,
+          "depthBonus": 2.7979581000000002
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 14.591881004557079,
+        "winProbability": 0.8005448170260778
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 1.0025284206746292,
+          "offenseGain": 0.88754082067463,
+          "defenseGain": 0,
+          "reserveGain": 0.11498759999999963
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 1.3721543999999994,
+          "offenseGain": 1.3721543999999994,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224399999998965,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.08400000000000007
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0.9350609047979219,
+          "offenseGain": 0.9350609047979219,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.0683682250000004,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.0683682250000004,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "F03",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 96.19999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.3912,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.005661352577872619,
+          "drtgTeam": 101.70484337337166,
+          "ortgTeam": 115.425716913318,
+          "effectiveOrtg": 114.77225123331799,
+          "netRating": 13.067407859946329,
+          "sixthManFRF": 0.21952824999999998,
+          "depthBonus": 1.5366977499999999
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 14.604105609946329,
+        "winProbability": 0.8007306507545084
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.8704568478517469,
+          "offenseGain": 0.8108588478517476,
+          "defenseGain": 0,
+          "reserveGain": 0.05959800000000004
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 0.834227999999996,
+          "offenseGain": 0.834227999999996,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224399999998965,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.08399999999999985
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.24336749000000069,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.24336749000000069,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    },
+    {
+      "id": "F04",
+      "uncoached": {
+        "synergy": {
+          "usgTeam": 111.69999999999999,
+          "phiUsg": 1,
+          "spacingRating": 3.9366999999999996,
+          "spacingTier": "AVERAGE",
+          "spacingModifier": -0.0007773214779078467,
+          "drtgTeam": 107.27252162449166,
+          "ortgTeam": 106.54295854903161,
+          "effectiveOrtg": 106.4601404190316,
+          "netRating": -0.8123812054600563,
+          "sixthManFRF": 0.30267559,
+          "depthBonus": 2.11872913
+        },
+        "fatigueModifier": 0,
+        "homeCourtBonus": 0,
+        "coachPaceModifier": 0,
+        "deltaRating": 1.3063479245399439,
+        "winProbability": 0.5310634634155625
+      },
+      "effects": [
+        {
+          "stat": "fgPct",
+          "delta": 0.03,
+          "ratingGain": 0.642782114725652,
+          "offenseGain": 0.5495429547256521,
+          "defenseGain": 0,
+          "reserveGain": 0.09323915999999999
+        },
+        {
+          "stat": "threePtPct",
+          "delta": 0.03,
+          "ratingGain": 0.7890984000000003,
+          "offenseGain": 0.7890984000000003,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "dbpm",
+          "delta": 0.3,
+          "ratingGain": 0.45224399999998965,
+          "offenseGain": 0,
+          "defenseGain": 0.36824399999999,
+          "reserveGain": 0.08399999999999963
+        },
+        {
+          "stat": "usgCap",
+          "delta": 3,
+          "ratingGain": 0,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": 1,
+          "ratingGain": 0.06924591833333338,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        },
+        {
+          "stat": "pace",
+          "delta": -1,
+          "ratingGain": -0.06924591833333338,
+          "offenseGain": 0,
+          "defenseGain": 0,
+          "reserveGain": 0
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Isolated modifier probes at neutral context, not fitted parameters or additive attribution of full coaches.",
+    "Different stat doses are explicitly recorded; equal percentages are not claims of equal coaching value.",
+    "No validation-family performance or human behavior measured."
+  ]
+}

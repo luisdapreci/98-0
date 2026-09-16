@@ -1,0 +1,54 @@
+{
+  "version": "baseline-playtest-observations-1",
+  "study": "exploratory-current-game-baseline",
+  "status": "awaiting-participants",
+  "releaseAcceptanceEvidence": false,
+  "testedBuild": {
+    "buildId": "04J5fbvLnRaPr0gRGzkzG",
+    "sourceManifestSha256": "25c5351d4f9a12efccac4f1d3c266573e08f66d13f6360a7b6d7093a7c45ede4",
+    "sourcePaths": [
+      "data/processed/coaches.json", "data/processed/franchises.json", "data/processed/opponents.json", "data/processed/players.json",
+      "package-lock.json", "package.json", "src/app/globals.css", "src/app/layout.tsx", "src/app/page.tsx",
+      "src/components/defense-breakdown.tsx", "src/components/draft-room.tsx", "src/components/season-ticker.tsx",
+      "src/engine/calibrate-balance.ts", "src/engine/calibrate-lineups.ts", "src/engine/calibrate-roles.ts", "src/engine/calibrate-rosters.ts",
+      "src/engine/calibrate-scores.ts", "src/engine/calibrate.ts", "src/engine/draft-strategy.ts", "src/engine/draft.ts",
+      "src/engine/lineup-prototype.ts", "src/engine/math.ts", "src/engine/playback.ts", "src/engine/possession-prototype.ts",
+      "src/engine/random.ts", "src/engine/role-allocation.ts", "src/engine/roster-balance.ts", "src/engine/run.ts",
+      "src/engine/season.ts", "src/engine/types.ts", "src/lib/draft-store.ts", "tsconfig.json"
+    ],
+    "engine": "season-3",
+    "balance": "mid-iq-2",
+    "score": "conditional-score-3",
+    "node": "v24.14.0",
+    "next": "16.3.5"
+  },
+  "technicalReadiness": {
+    "date": "2026-09-15",
+    "status": "limited-local-smoke-passed",
+    "url": "http://127.0.0.1:4173",
+    "publicDeployment": false,
+    "buildExitCode": 0,
+    "browserChecks": "Integrated Playwright tool assertions; no process exit code",
+    "desktopViewport": { "width": 1440, "height": 1000 },
+    "narrowViewport": { "width": 320, "height": 800 },
+    "physicalTouchVerified": false,
+    "qualifiedResultVerified": false,
+    "completeAccessibilityAudit": false,
+    "humanEvidence": false
+  },
+  "recordTemplates": {
+    "session": { "date": null, "testedBuildId": null, "browser": null, "device": null, "viewport": null, "interruptionNotes": [], "deleteParticipantNotesBy": null },
+    "run": { "number": null, "seed": null, "status": null, "activeDraftSeconds": null, "activeSeasonSeconds": null, "coach": null, "picks": [], "rerollsUsed": null, "wins": null, "qualified": null, "helpRequests": [], "decisionMoments": [], "resultReactions": [], "technicalIssues": [], "withdrawalReason": null },
+    "freePeriod": { "offered": null, "durationSeconds": null, "thirdRunFirstPick": null, "secondsToFirstPick": null, "prompted": null, "obstacles": [] },
+    "answers": { "choiceAndTradeoff": null, "qualificationMeaning": null, "favoredTeamLoss": null, "credibilityRating": null, "credibilityReason": null, "continueOrStop": null, "unexpectedMoment": null }
+  },
+  "participants": [
+    { "id": "B01", "targetGroup": "strategy-regular", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null },
+    { "id": "B02", "targetGroup": "casual", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null },
+    { "id": "B03", "targetGroup": "strategy-regular", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null },
+    { "id": "B04", "targetGroup": "casual", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null },
+    { "id": "B05", "targetGroup": "strategy-regular", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null },
+    { "id": "B06", "targetGroup": "casual", "confirmedGroup": null, "status": "not-recruited", "consent": null, "session": null, "runs": [], "freePeriod": null, "answers": null }
+  ],
+  "findings": []
+}

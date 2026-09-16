@@ -1,0 +1,6187 @@
+{
+  "engineVersion": "season-1",
+  "dataVersion": "2026-09-14",
+  "scoreRules": {
+    "version": "conditional-score-1",
+    "baseline": 112,
+    "baselineSpread": 20,
+    "maxMargin": 70,
+    "overtimeProbability": 0.06,
+    "overtimeScale": 3,
+    "overtimeMaxMargin": 12,
+    "overtimeBaseline": 10,
+    "overtimeSpread": 6,
+    "overtimeContinuation": 0.12,
+    "maxOvertimePeriods": 3
+  },
+  "calibrationVersion": "p3-review-1",
+  "strategyVersion": "legal-greedy-1",
+  "lookaheadRules": {
+    "version": "legal-rollout-1",
+    "samples": 12,
+    "shortlist": 6
+  },
+  "seedPrefix": "p3-pilot-",
+  "sampleSize": 20,
+  "strategyResults": {
+    "chemistry": {
+      "policyVersion": "legal-greedy-1",
+      "count": 20,
+      "wins": {
+        "mean": 56.35,
+        "min": 44,
+        "p10": 48,
+        "median": 55.5,
+        "p90": 65.1,
+        "p99": 66.81,
+        "max": 67
+      },
+      "medianApprox95": [
+        53,
+        63
+      ],
+      "qualified": 0.35,
+      "qualifiedWilson95": [
+        0.1812,
+        0.5671
+      ],
+      "expectedWins": {
+        "mean": 56.5541,
+        "min": 46.46783804353822,
+        "p10": 52.0975,
+        "median": 54.9642,
+        "p90": 62.9795,
+        "p99": 64.2495,
+        "max": 64.47480162273334
+      },
+      "meanExpectedWins": {
+        "mean": 56.5541,
+        "approximate95": [
+          54.4386,
+          58.6696
+        ]
+      },
+      "winResidual": {
+        "mean": -0.1808,
+        "approximate95": [
+          -1.8081,
+          1.4465
+        ]
+      },
+      "observations": [
+        {
+          "seed": "p3-pilot-0",
+          "wins": 48,
+          "expectedWins": 52.24804089660589,
+          "scheduleExpectedWins": 52.32228503043492,
+          "coach": "phil_jackson",
+          "lineup": [
+            "roberos01_SAC_1960s",
+            "mccloge01_DAL_1990s",
+            "chanedo01_LAL_1970s",
+            "tylerte01_DET_1980s",
+            "thurmna01_GSW_1960s",
+            "jonesed02_CHA_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "tylerte01_DET_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberos01_SAC_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thurmna01_GSW_1960s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccloge01_DAL_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "chanedo01_LAL_1970s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesed02_CHA_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-1",
+          "wins": 59,
+          "expectedWins": 61.6257678585493,
+          "scheduleExpectedWins": 61.451327974247434,
+          "coach": "don_nelson",
+          "lineup": [
+            "blaylmo01_ATL_1990s",
+            "johnske02_PHX_1980s",
+            "kerseje01_POR_1990s",
+            "thurmna01_GSW_1960s",
+            "wallage01_POR_2010s",
+            "mchalke01_BOS_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thurmna01_GSW_1960s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "blaylmo01_ATL_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnske02_PHX_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kerseje01_POR_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wallage01_POR_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mchalke01_BOS_1980s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-2",
+          "wins": 63,
+          "expectedWins": 61.377186425522474,
+          "scheduleExpectedWins": 61.21053565816632,
+          "coach": "don_nelson",
+          "lineup": [
+            "rosste01_ORL_2010s",
+            "paulch01_SAS_2020s",
+            "roberal01_SAS_1980s",
+            "ricegl01_CHA_1990s",
+            "gasolma01_MEM_2010s",
+            "capelca01_HOU_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ricegl01_CHA_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gasolma01_MEM_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "rosste01_ORL_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "paulch01_SAS_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_SAS_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "capelca01_HOU_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-3",
+          "wins": 49,
+          "expectedWins": 46.46783804353822,
+          "scheduleExpectedWins": 46.13141176727524,
+          "coach": "pat_riley",
+          "lineup": [
+            "mccarjo01_ATL_1960s",
+            "parkeso01_GSW_1970s",
+            "owensbi01_GSW_1990s",
+            "mccloge01_DAL_1990s",
+            "reedwi01_NYK_1960s",
+            "anthogr01_MEM_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "pat_riley"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccloge01_DAL_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "reedwi01_NYK_1960s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "parkeso01_GSW_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "owensbi01_GSW_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccarjo01_ATL_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "anthogr01_MEM_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-4",
+          "wins": 65,
+          "expectedWins": 64.47480162273334,
+          "scheduleExpectedWins": 64.9671178733831,
+          "coach": "rick_adelman",
+          "lineup": [
+            "tinslja01_IND_2000s",
+            "tatumja01_BOS_2020s",
+            "thompam01_HOU_2020s",
+            "presspa01_MIL_1980s",
+            "greendr01_GSW_2010s",
+            "roberal01_DET_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "presspa01_MIL_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "tatumja01_BOS_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greendr01_GSW_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "tinslja01_IND_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thompam01_HOU_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_DET_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-5",
+          "wins": 53,
+          "expectedWins": 54.67374402326874,
+          "scheduleExpectedWins": 54.58713249784401,
+          "coach": "rick_adelman",
+          "lineup": [
+            "atkinch01_LAL_2000s",
+            "debusda01_DET_1960s",
+            "smithjr01_CLE_2010s",
+            "gilmoar01_CHI_1980s",
+            "webbech01_SAC_1990s",
+            "jonesed02_CHA_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gilmoar01_CHI_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "debusda01_DET_1960s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "atkinch01_LAL_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "smithjr01_CLE_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "webbech01_SAC_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesed02_CHA_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-6",
+          "wins": 44,
+          "expectedWins": 53.616202939536095,
+          "scheduleExpectedWins": 53.53151592572359,
+          "coach": "steve_kerr",
+          "lineup": [
+            "havlijo01_BOS_1960s",
+            "schrode01_BKN_2020s",
+            "mcglojo01_MIL_1970s",
+            "stojape01_SAC_2000s",
+            "turiaro01_GSW_2000s",
+            "wattssl01_OKC_1970s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "steve_kerr"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stojape01_SAC_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "turiaro01_GSW_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "havlijo01_BOS_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "schrode01_BKN_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mcglojo01_MIL_1970s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wattssl01_OKC_1970s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-7",
+          "wins": 53,
+          "expectedWins": 53.00884600622739,
+          "scheduleExpectedWins": 52.97404681692605,
+          "coach": "larry_brown",
+          "lineup": [
+            "simmobe01_BKN_2020s",
+            "havlijo01_BOS_1970s",
+            "gallida01_NYK_2010s",
+            "gilmoar01_CHI_1980s",
+            "kauffbo01_LAC_1970s",
+            "stockjo01_UTA_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "larry_brown"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gilmoar01_CHI_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "havlijo01_BOS_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gallida01_NYK_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "simmobe01_BKN_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kauffbo01_LAC_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-8",
+          "wins": 61,
+          "expectedWins": 54.60045314673009,
+          "scheduleExpectedWins": 54.62831545932455,
+          "coach": "don_nelson",
+          "lineup": [
+            "allenra02_BOS_2010s",
+            "wilkele01_OKC_1960s",
+            "divindo01_MIN_2020s",
+            "laettch01_WAS_2000s",
+            "kenonla01_SAS_1970s",
+            "roseja01_IND_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "allenra02_BOS_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wilkele01_OKC_1960s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "laettch01_WAS_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "divindo01_MIN_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kenonla01_SAS_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roseja01_IND_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-9",
+          "wins": 61,
+          "expectedWins": 59.691192907914974,
+          "scheduleExpectedWins": 59.56821204514039,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "stockjo01_UTA_1980s",
+            "sloanje01_CHI_1970s",
+            "ginobma01_SAS_2000s",
+            "johnsge02_SAS_1980s",
+            "brandel01_CHI_2000s",
+            "thurmna01_GSW_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge02_SAS_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sloanje01_CHI_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ginobma01_SAS_2000s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "brandel01_CHI_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thurmna01_GSW_1960s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-10",
+          "wins": 55,
+          "expectedWins": 52.67642688910276,
+          "scheduleExpectedWins": 52.139770084571076,
+          "coach": "jerry_sloan",
+          "lineup": [
+            "millere01_IND_1990s",
+            "grantga01_LAC_1980s",
+            "gasolpa01_LAL_2010s",
+            "nancela01_CLE_1980s",
+            "rollitr01_ATL_1980s",
+            "mournal01_MIA_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "jerry_sloan"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "millere01_IND_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "nancela01_CLE_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gasolpa01_LAL_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "grantga01_LAC_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "rollitr01_ATL_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mournal01_MIA_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-11",
+          "wins": 52,
+          "expectedWins": 54.23102703466248,
+          "scheduleExpectedWins": 54.36953903647145,
+          "coach": "chuck_daly",
+          "lineup": [
+            "stricro02_POR_1990s",
+            "alstora01_MIA_2000s",
+            "gillke01_BKN_1990s",
+            "sikmaja01_OKC_1980s",
+            "carran01_SAS_1990s",
+            "grantho01_CHI_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "chuck_daly"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sikmaja01_OKC_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stricro02_POR_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "alstora01_MIA_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "gillke01_BKN_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "carran01_SAS_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "grantho01_CHI_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-12",
+          "wins": 53,
+          "expectedWins": 57.421371228440094,
+          "scheduleExpectedWins": 57.40624715939832,
+          "coach": "phil_jackson",
+          "lineup": [
+            "atkinch01_LAL_2000s",
+            "ellinwa01_DET_2010s",
+            "drexlcl01_HOU_1990s",
+            "antetgi01_MIL_2010s",
+            "nordmbe01_NYK_1960s",
+            "willima01_MIL_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "atkinch01_LAL_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "antetgi01_MIL_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ellinwa01_DET_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "drexlcl01_HOU_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "nordmbe01_NYK_1960s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "willima01_MIL_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-13",
+          "wins": 56,
+          "expectedWins": 53.993119061639156,
+          "scheduleExpectedWins": 53.53181035867342,
+          "coach": "phil_jackson",
+          "lineup": [
+            "portete01_POR_1980s",
+            "riverdo01_ATL_1980s",
+            "longgr01_MIA_1980s",
+            "ervinju01_PHI_1980s",
+            "jonesju01_CHA_2000s",
+            "birdla01_BOS_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ervinju01_PHI_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "portete01_POR_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "longgr01_MIA_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "riverdo01_ATL_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesju01_CHA_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "birdla01_BOS_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-14",
+          "wins": 64,
+          "expectedWins": 62.945085065506625,
+          "scheduleExpectedWins": 62.999389121277915,
+          "coach": "red_auerbach",
+          "lineup": [
+            "richami01_NYK_1980s",
+            "georgpa01_IND_2010s",
+            "knuepko01_CHA_2020s",
+            "unselwe01_WAS_1960s",
+            "allenja01_CLE_2020s",
+            "lucasje01_SAC_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "unselwe01_WAS_1960s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "georgpa01_IND_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "knuepko01_CHA_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "allenja01_CLE_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "richami01_NYK_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "lucasje01_SAC_1960s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-15",
+          "wins": 67,
+          "expectedWins": 61.243475042473655,
+          "scheduleExpectedWins": 61.41431832103955,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "greerha01_PHI_1960s",
+            "davisba01_GSW_2000s",
+            "holmgch01_OKC_2020s",
+            "mccloge01_DAL_1990s",
+            "bolma01_GSW_1980s",
+            "harteis01_OKC_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccloge01_DAL_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "bolma01_GSW_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greerha01_PHI_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "davisba01_GSW_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "holmgch01_OKC_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "harteis01_OKC_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-16",
+          "wins": 48,
+          "expectedWins": 50.742792649379766,
+          "scheduleExpectedWins": 50.57006121310308,
+          "coach": "erik_spoelstra",
+          "lineup": [
+            "barbole01_PHX_2000s",
+            "roberal01_MIL_1990s",
+            "sheltlo01_OKC_1980s",
+            "bradlsh01_BKN_1990s",
+            "longgr01_MIA_1990s",
+            "leonaka01_SAS_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "erik_spoelstra"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "barbole01_PHX_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "bradlsh01_BKN_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_MIL_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sheltlo01_OKC_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "longgr01_MIA_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "leonaka01_SAS_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-17",
+          "wins": 66,
+          "expectedWins": 63.28896963817391,
+          "scheduleExpectedWins": 63.63491697305898,
+          "coach": "phil_jackson",
+          "lineup": [
+            "terryja01_DAL_2000s",
+            "westbru01_WAS_2020s",
+            "covinro01_MIN_2020s",
+            "laceysa01_SAC_1980s",
+            "robinda01_SAS_2000s",
+            "johnsla02_CHA_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "terryja01_DAL_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "laceysa01_SAC_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "westbru01_WAS_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "covinro01_MIN_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "robinda01_SAS_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsla02_CHA_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-18",
+          "wins": 53,
+          "expectedWins": 55.25467301492215,
+          "scheduleExpectedWins": 55.51135344518755,
+          "coach": "steve_kerr",
+          "lineup": [
+            "kennalu01_DET_2020s",
+            "kojisdo01_HOU_1960s",
+            "marshdo01_TOR_2000s",
+            "adamsal01_PHX_1980s",
+            "mutomdi01_ATL_1990s",
+            "olajuha01_HOU_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "steve_kerr"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "adamsal01_PHX_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "marshdo01_TOR_2000s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kojisdo01_HOU_1960s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kennalu01_DET_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mutomdi01_ATL_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "olajuha01_HOU_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-19",
+          "wins": 57,
+          "expectedWins": 57.5011088269733,
+          "scheduleExpectedWins": 57.66653488164243,
+          "coach": "pat_riley",
+          "lineup": [
+            "busedo01_PHX_1970s",
+            "lowryky01_TOR_2010s",
+            "presspa01_MIL_1980s",
+            "reedwi01_NYK_1970s",
+            "carrojo01_GSW_1980s",
+            "vanvlfr01_TOR_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "pat_riley"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "reedwi01_NYK_1970s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "busedo01_PHX_1970s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "lowryky01_TOR_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "presspa01_MIL_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "carrojo01_GSW_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "vanvlfr01_TOR_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "mean": 114.557,
+        "min": 111.98,
+        "p10": 112.276,
+        "median": 114.28,
+        "p90": 117.624,
+        "p99": 118.2144,
+        "max": 118.26
+      },
+      "spacing": {
+        "mean": 4.272,
+        "min": 2.0608,
+        "p10": 2.1743,
+        "median": 4.2298,
+        "p90": 6.7275,
+        "p99": 7.3203,
+        "max": 7.379899999999999
+      },
+      "defense": {
+        "mean": 99.7907,
+        "min": 96.5533669,
+        "p10": 97.3426,
+        "median": 99.4801,
+        "p90": 102.1945,
+        "p99": 105.0437,
+        "max": 105.5941361
+      },
+      "benchFRF": {
+        "mean": 0.651,
+        "min": 0.44869575000000006,
+        "p10": 0.4664,
+        "median": 0.6171,
+        "p90": 0.8545,
+        "p99": 0.9825,
+        "max": 0.983647625
+      },
+      "byCoach": {
+        "phil_jackson": {
+          "count": 4,
+          "wins": {
+            "mean": 55.75,
+            "min": 48,
+            "p10": 49.5,
+            "median": 54.5,
+            "p90": 63,
+            "p99": 65.7,
+            "max": 66
+          },
+          "medianApprox95": [
+            48,
+            66
+          ],
+          "qualified": 0.25,
+          "qualifiedWilson95": [
+            0.0456,
+            0.6994
+          ]
+        },
+        "don_nelson": {
+          "count": 3,
+          "wins": {
+            "mean": 61,
+            "min": 59,
+            "p10": 59.4,
+            "median": 61,
+            "p90": 62.6,
+            "p99": 62.96,
+            "max": 63
+          },
+          "medianApprox95": [
+            59,
+            63
+          ],
+          "qualified": 0.6666666666666666,
+          "qualifiedWilson95": [
+            0.2077,
+            0.9385
+          ]
+        },
+        "pat_riley": {
+          "count": 2,
+          "wins": {
+            "mean": 53,
+            "min": 49,
+            "p10": 49.8,
+            "median": 53,
+            "p90": 56.2,
+            "p99": 56.92,
+            "max": 57
+          },
+          "medianApprox95": [
+            49,
+            57
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.6576
+          ]
+        },
+        "rick_adelman": {
+          "count": 2,
+          "wins": {
+            "mean": 59,
+            "min": 53,
+            "p10": 54.2,
+            "median": 59,
+            "p90": 63.8,
+            "p99": 64.88,
+            "max": 65
+          },
+          "medianApprox95": [
+            53,
+            65
+          ],
+          "qualified": 0.5,
+          "qualifiedWilson95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "steve_kerr": {
+          "count": 2,
+          "wins": {
+            "mean": 48.5,
+            "min": 44,
+            "p10": 44.9,
+            "median": 48.5,
+            "p90": 52.1,
+            "p99": 52.91,
+            "max": 53
+          },
+          "medianApprox95": [
+            44,
+            53
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.6576
+          ]
+        },
+        "larry_brown": {
+          "count": 1,
+          "wins": {
+            "mean": 53,
+            "min": 53,
+            "p10": 53,
+            "median": 53,
+            "p90": 53,
+            "p99": 53,
+            "max": 53
+          },
+          "medianApprox95": [
+            53,
+            53
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.7935
+          ]
+        },
+        "mike_dantoni": {
+          "count": 2,
+          "wins": {
+            "mean": 64,
+            "min": 61,
+            "p10": 61.6,
+            "median": 64,
+            "p90": 66.4,
+            "p99": 66.94,
+            "max": 67
+          },
+          "medianApprox95": [
+            61,
+            67
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.3424,
+            1
+          ]
+        },
+        "jerry_sloan": {
+          "count": 1,
+          "wins": {
+            "mean": 55,
+            "min": 55,
+            "p10": 55,
+            "median": 55,
+            "p90": 55,
+            "p99": 55,
+            "max": 55
+          },
+          "medianApprox95": [
+            55,
+            55
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.7935
+          ]
+        },
+        "chuck_daly": {
+          "count": 1,
+          "wins": {
+            "mean": 52,
+            "min": 52,
+            "p10": 52,
+            "median": 52,
+            "p90": 52,
+            "p99": 52,
+            "max": 52
+          },
+          "medianApprox95": [
+            52,
+            52
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.7935
+          ]
+        },
+        "red_auerbach": {
+          "count": 1,
+          "wins": {
+            "mean": 64,
+            "min": 64,
+            "p10": 64,
+            "median": 64,
+            "p90": 64,
+            "p99": 64,
+            "max": 64
+          },
+          "medianApprox95": [
+            64,
+            64
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.2065,
+            1
+          ]
+        },
+        "erik_spoelstra": {
+          "count": 1,
+          "wins": {
+            "mean": 48,
+            "min": 48,
+            "p10": 48,
+            "median": 48,
+            "p90": 48,
+            "p99": 48,
+            "max": 48
+          },
+          "medianApprox95": [
+            48,
+            48
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.7935
+          ]
+        }
+      },
+      "byEraExposure": {
+        "1960s": {
+          "count": 11,
+          "wins": {
+            "mean": 55.6364,
+            "min": 44,
+            "p10": 48,
+            "median": 53,
+            "p90": 64,
+            "p99": 66.7,
+            "max": 67
+          },
+          "medianApprox95": [
+            49,
+            64
+          ],
+          "qualified": 0.36363636363636365,
+          "qualifiedWilson95": [
+            0.1517,
+            0.6462
+          ]
+        },
+        "1990s": {
+          "count": 15,
+          "wins": {
+            "mean": 56,
+            "min": 48,
+            "p10": 48.4,
+            "median": 53,
+            "p90": 65.6,
+            "p99": 66.86,
+            "max": 67
+          },
+          "medianApprox95": [
+            52,
+            65
+          ],
+          "qualified": 0.26666666666666666,
+          "qualifiedWilson95": [
+            0.109,
+            0.5195
+          ]
+        },
+        "1970s": {
+          "count": 7,
+          "wins": {
+            "mean": 53.2857,
+            "min": 44,
+            "p10": 46.4,
+            "median": 53,
+            "p90": 61,
+            "p99": 61,
+            "max": 61
+          },
+          "medianApprox95": [
+            44,
+            61
+          ],
+          "qualified": 0.2857142857142857,
+          "qualifiedWilson95": [
+            0.0822,
+            0.6411
+          ]
+        },
+        "1980s": {
+          "count": 16,
+          "wins": {
+            "mean": 57.5,
+            "min": 48,
+            "p10": 50,
+            "median": 56.5,
+            "p90": 65.5,
+            "p99": 66.85,
+            "max": 67
+          },
+          "medianApprox95": [
+            53,
+            64
+          ],
+          "qualified": 0.375,
+          "qualifiedWilson95": [
+            0.1848,
+            0.6136
+          ]
+        },
+        "2000s": {
+          "count": 13,
+          "wins": {
+            "mean": 55.9231,
+            "min": 44,
+            "p10": 48,
+            "median": 53,
+            "p90": 65.8,
+            "p99": 66.88,
+            "max": 67
+          },
+          "medianApprox95": [
+            48,
+            66
+          ],
+          "qualified": 0.38461538461538464,
+          "qualifiedWilson95": [
+            0.1771,
+            0.6448
+          ]
+        },
+        "2010s": {
+          "count": 11,
+          "wins": {
+            "mean": 57.3636,
+            "min": 48,
+            "p10": 53,
+            "median": 57,
+            "p90": 64,
+            "p99": 64.9,
+            "max": 65
+          },
+          "medianApprox95": [
+            53,
+            64
+          ],
+          "qualified": 0.36363636363636365,
+          "qualifiedWilson95": [
+            0.1517,
+            0.6462
+          ]
+        },
+        "2020s": {
+          "count": 10,
+          "wins": {
+            "mean": 59.3,
+            "min": 44,
+            "p10": 52.1,
+            "median": 62,
+            "p90": 66.1,
+            "p99": 66.91,
+            "max": 67
+          },
+          "medianApprox95": [
+            53,
+            67
+          ],
+          "qualified": 0.6,
+          "qualifiedWilson95": [
+            0.3127,
+            0.8318
+          ]
+        }
+      }
+    },
+    "reroll-aware": {
+      "policyVersion": "legal-greedy-1",
+      "count": 20,
+      "wins": {
+        "mean": 60.95,
+        "min": 52,
+        "p10": 54.8,
+        "median": 60.5,
+        "p90": 68.1,
+        "p99": 69.81,
+        "max": 70
+      },
+      "medianApprox95": [
+        57,
+        65
+      ],
+      "qualified": 0.55,
+      "qualifiedWilson95": [
+        0.3421,
+        0.7418
+      ],
+      "expectedWins": {
+        "mean": 60.2667,
+        "min": 47.71786846139422,
+        "p10": 53.2766,
+        "median": 60.9073,
+        "p90": 65.4118,
+        "p99": 69.5422,
+        "max": 70.09388937943497
+      },
+      "meanExpectedWins": {
+        "mean": 60.2667,
+        "approximate95": [
+          57.9709,
+          62.5626
+        ]
+      },
+      "winResidual": {
+        "mean": 0.6905,
+        "approximate95": [
+          -0.3595,
+          1.7405
+        ]
+      },
+      "observations": [
+        {
+          "seed": "p3-pilot-0",
+          "wins": 70,
+          "expectedWins": 70.09388937943497,
+          "scheduleExpectedWins": 70.19905803225382,
+          "coach": "red_auerbach",
+          "lineup": [
+            "richaja01_CHA_2000s",
+            "mccloge01_DAL_1990s",
+            "lucasjo01_HOU_1970s",
+            "dantlad01_IND_1970s",
+            "chambwi01_LAL_1970s",
+            "stockjo01_UTA_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "dantlad01_IND_1970s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccloge01_DAL_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "chambwi01_LAL_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "richaja01_CHA_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "lucasjo01_HOU_1970s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1980s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-1",
+          "wins": 69,
+          "expectedWins": 67.19038597691616,
+          "scheduleExpectedWins": 67.06586228391144,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "blaylmo01_ATL_1990s",
+            "korveky01_ATL_2010s",
+            "birdla01_BOS_1980s",
+            "thurmna01_GSW_1960s",
+            "williro04_BOS_2020s",
+            "mournal01_MIA_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thurmna01_GSW_1960s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "blaylmo01_ATL_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "korveky01_ATL_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "birdla01_BOS_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "williro04_BOS_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mournal01_MIA_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-2",
+          "wins": 62,
+          "expectedWins": 60.085522518739936,
+          "scheduleExpectedWins": 59.91698113979073,
+          "coach": "rick_adelman",
+          "lineup": [
+            "suggsja01_ORL_2020s",
+            "moorejo01_SAS_1980s",
+            "arizatr01_HOU_2010s",
+            "birdla01_BOS_1990s",
+            "wilcoch01_OKC_2000s",
+            "webbech01_SAC_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "birdla01_BOS_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "suggsja01_ORL_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "moorejo01_SAS_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "arizatr01_HOU_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wilcoch01_OKC_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "webbech01_SAC_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-3",
+          "wins": 52,
+          "expectedWins": 47.71786846139422,
+          "scheduleExpectedWins": 47.39355486818938,
+          "coach": "gregg_popovich",
+          "lineup": [
+            "hardati01_GSW_1990s",
+            "hagancl01_ATL_1960s",
+            "edwarbl01_MEM_1990s",
+            "johnsge02_LAC_1970s",
+            "nancela01_CLE_1990s",
+            "mullich01_GSW_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "gregg_popovich"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge02_LAC_1970s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hardati01_GSW_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hagancl01_ATL_1960s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "edwarbl01_MEM_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "nancela01_CLE_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mullich01_GSW_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-4",
+          "wins": 61,
+          "expectedWins": 61.72907611074102,
+          "scheduleExpectedWins": 62.25299116383595,
+          "coach": "red_auerbach",
+          "lineup": [
+            "vanvlfr01_HOU_2020s",
+            "roberal01_DET_1990s",
+            "tylerte01_DET_1980s",
+            "matthwe02_DAL_2010s",
+            "onealje01_IND_2000s",
+            "tatumja01_BOS_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "matthwe02_DAL_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "onealje01_IND_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "vanvlfr01_HOU_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_DET_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "tylerte01_DET_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "tatumja01_BOS_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-5",
+          "wins": 59,
+          "expectedWins": 59.117454278430465,
+          "scheduleExpectedWins": 59.068072524329956,
+          "coach": "rick_adelman",
+          "lineup": [
+            "smithjr01_CLE_2010s",
+            "wallage01_CHA_2000s",
+            "webbech01_SAC_1990s",
+            "georgpa01_IND_2010s",
+            "eatonma01_UTA_1990s",
+            "cunnica01_DET_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "georgpa01_IND_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "smithjr01_CLE_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "webbech01_SAC_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wallage01_CHA_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "eatonma01_UTA_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "cunnica01_DET_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-6",
+          "wins": 59,
+          "expectedWins": 59.50212581677405,
+          "scheduleExpectedWins": 59.47435542248488,
+          "coach": "jerry_sloan",
+          "lineup": [
+            "irvinky01_BKN_2020s",
+            "wattssl01_OKC_1970s",
+            "mcmilna01_OKC_1990s",
+            "macksa01_MEM_1990s",
+            "smithel01_MIL_1970s",
+            "davisan02_NOP_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "jerry_sloan"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "macksa01_MEM_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "irvinky01_BKN_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "smithel01_MIL_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wattssl01_OKC_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mcmilna01_OKC_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "davisan02_NOP_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-7",
+          "wins": 63,
+          "expectedWins": 63.43671610090084,
+          "scheduleExpectedWins": 63.42215847813985,
+          "coach": "larry_brown",
+          "lineup": [
+            "irvinky01_BKN_2020s",
+            "stockjo01_UTA_1990s",
+            "jonesed02_MIA_2000s",
+            "fryech01_PHX_2010s",
+            "johnsge02_LAC_1970s",
+            "holmgch01_OKC_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "larry_brown"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "fryech01_PHX_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "irvinky01_BKN_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge02_LAC_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesed02_MIA_2000s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "holmgch01_OKC_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-8",
+          "wins": 65,
+          "expectedWins": 62.47425151844333,
+          "scheduleExpectedWins": 62.55119889896451,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "wrighde01_WAS_2020s",
+            "galemi01_SAS_1970s",
+            "grangda01_IND_2000s",
+            "couside01_NOP_2010s",
+            "mccraro01_DAL_1990s",
+            "cunnica01_DET_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "couside01_NOP_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "wrighde01_WAS_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "galemi01_SAS_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "grangda01_IND_2000s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mccraro01_DAL_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "cunnica01_DET_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-9",
+          "wins": 55,
+          "expectedWins": 53.304260294530586,
+          "scheduleExpectedWins": 53.1667772530479,
+          "coach": "don_nelson",
+          "lineup": [
+            "rodgegu01_GSW_1960s",
+            "salmojo01_CHI_2000s",
+            "greerha01_PHI_1960s",
+            "sikmaja01_OKC_1980s",
+            "wallabe01_CHI_2000s",
+            "vandeki01_DEN_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "sikmaja01_OKC_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "salmojo01_CHI_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wallabe01_CHI_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "rodgegu01_GSW_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greerha01_PHI_1960s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "vandeki01_DEN_1980s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-10",
+          "wins": 65,
+          "expectedWins": 62.6444459965338,
+          "scheduleExpectedWins": 62.2742945338736,
+          "coach": "gregg_popovich",
+          "lineup": [
+            "russeda01_BKN_2010s",
+            "riverdo01_ATL_1980s",
+            "williwa02_MIA_1990s",
+            "waltobi01_LAC_1980s",
+            "greendr01_GSW_2010s",
+            "harpero01_CLE_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "gregg_popovich"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "russeda01_BKN_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "waltobi01_LAC_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "riverdo01_ATL_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "williwa02_MIA_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greendr01_GSW_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "harpero01_CLE_1980s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-11",
+          "wins": 57,
+          "expectedWins": 59.73454054507158,
+          "scheduleExpectedWins": 59.87785080066098,
+          "coach": "rick_adelman",
+          "lineup": [
+            "drexlcl01_POR_1990s",
+            "kerrst01_CHI_1990s",
+            "roberal01_SAS_1980s",
+            "sikmaja01_OKC_1980s",
+            "bolma01_WAS_1980s",
+            "doncilu01_LAL_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sikmaja01_OKC_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "drexlcl01_POR_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "bolma01_WAS_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kerrst01_CHI_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_SAS_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "doncilu01_LAL_2020s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-12",
+          "wins": 59,
+          "expectedWins": 63.16607362909507,
+          "scheduleExpectedWins": 63.10647543425314,
+          "coach": "gregg_popovich",
+          "lineup": [
+            "fraziwa01_NYK_1960s",
+            "paytoga01_MIL_2000s",
+            "powelno01_LAC_2020s",
+            "fryech01_PHX_2010s",
+            "olajuha01_HOU_1990s",
+            "outlabo01_LAC_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "gregg_popovich"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "fryech01_PHX_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "olajuha01_HOU_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "fraziwa01_NYK_1960s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "paytoga01_MIL_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "powelno01_LAC_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "outlabo01_LAC_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-13",
+          "wins": 56,
+          "expectedWins": 55.47625565368381,
+          "scheduleExpectedWins": 54.97934553530208,
+          "coach": "phil_jackson",
+          "lineup": [
+            "sloanje01_CHI_1970s",
+            "richaja01_CHA_2000s",
+            "hardati02_DEN_2020s",
+            "ervinju01_PHI_1980s",
+            "battito01_BOS_1990s",
+            "johnsjo02_BKN_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ervinju01_PHI_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "sloanje01_CHI_1970s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "richaja01_CHA_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "battito01_BOS_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hardati02_DEN_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsjo02_BKN_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-14",
+          "wins": 53,
+          "expectedWins": 53.02779193017556,
+          "scheduleExpectedWins": 53.09932357695478,
+          "coach": "don_nelson",
+          "lineup": [
+            "lucasjo01_HOU_1970s",
+            "georgpa01_IND_2010s",
+            "lucasje01_SAC_1960s",
+            "unselwe01_WAS_1960s",
+            "adamsst01_OKC_2010s",
+            "olajuha01_HOU_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "unselwe01_WAS_1960s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "georgpa01_IND_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "lucasjo01_HOU_1970s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "lucasje01_SAC_1960s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "adamsst01_OKC_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "olajuha01_HOU_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-15",
+          "wins": 68,
+          "expectedWins": 62.38959325247586,
+          "scheduleExpectedWins": 62.56455008412462,
+          "coach": "jerry_sloan",
+          "lineup": [
+            "davisba01_GSW_2000s",
+            "paulch01_OKC_2020s",
+            "hornaje01_UTA_1990s",
+            "marshdo01_TOR_2000s",
+            "harteis01_OKC_2020s",
+            "wilkido01_LAC_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "jerry_sloan"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "marshdo01_TOR_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "davisba01_GSW_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "paulch01_OKC_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "harteis01_OKC_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hornaje01_UTA_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wilkido01_LAC_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-16",
+          "wins": 57,
+          "expectedWins": 57.380425130160994,
+          "scheduleExpectedWins": 57.30662247328621,
+          "coach": "larry_brown",
+          "lineup": [
+            "arenagi01_WAS_2000s",
+            "murdoer01_MIA_1990s",
+            "greenda02_SAS_2010s",
+            "johnsge03_MIL_1970s",
+            "garneke01_MIN_1990s",
+            "pippesc01_POR_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "larry_brown"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "arenagi01_WAS_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge03_MIL_1970s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "murdoer01_MIA_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greenda02_SAS_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "garneke01_MIN_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "pippesc01_POR_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-17",
+          "wins": 67,
+          "expectedWins": 65.21417711335255,
+          "scheduleExpectedWins": 65.55322359685053,
+          "coach": "phil_jackson",
+          "lineup": [
+            "brandte01_MIN_2000s",
+            "boguemu01_CHA_1990s",
+            "porzikr01_WAS_2020s",
+            "kirilan01_UTA_2000s",
+            "barneha02_SAS_2020s",
+            "walljo01_WAS_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "phil_jackson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "kirilan01_UTA_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "porzikr01_WAS_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "brandte01_MIN_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "boguemu01_CHA_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "barneha02_SAS_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "walljo01_WAS_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-18",
+          "wins": 62,
+          "expectedWins": 64.31058502717651,
+          "scheduleExpectedWins": 64.46456171256736,
+          "coach": "steve_kerr",
+          "lineup": [
+            "vanvlfr01_HOU_2020s",
+            "blaylmo01_ATL_1990s",
+            "pippesc01_HOU_1990s",
+            "ervinju01_PHI_1980s",
+            "noahjo01_MEM_2010s",
+            "willide01_UTA_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "steve_kerr"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "ervinju01_PHI_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "vanvlfr01_HOU_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "blaylmo01_ATL_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "pippesc01_HOU_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "noahjo01_MEM_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "willide01_UTA_2000s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-19",
+          "wins": 60,
+          "expectedWins": 57.33941483460832,
+          "scheduleExpectedWins": 57.45220720583064,
+          "coach": "pat_riley",
+          "lineup": [
+            "floydsl01_GSW_1980s",
+            "pippesc01_CHI_1980s",
+            "anunoog01_TOR_2020s",
+            "reedwi01_NYK_1970s",
+            "mutomdi01_DEN_1990s",
+            "duranke01_OKC_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "pat_riley"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "reedwi01_NYK_1970s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "pippesc01_CHI_1980s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "floydsl01_GSW_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "anunoog01_TOR_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mutomdi01_DEN_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "duranke01_OKC_2010s",
+              "slot": "SIXTH"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "mean": 114.488,
+        "min": 108.2,
+        "p10": 110.502,
+        "median": 114.09,
+        "p90": 118.444,
+        "p99": 120.8974,
+        "max": 121
+      },
+      "spacing": {
+        "mean": 5.1564,
+        "min": 2.0322,
+        "p10": 2.3256,
+        "median": 5.666,
+        "p90": 6.8849,
+        "p99": 7.5987,
+        "max": 7.6117
+      },
+      "defense": {
+        "mean": 98.6744,
+        "min": 94.30971033333333,
+        "p10": 95.9715,
+        "median": 98.3996,
+        "p90": 101.3219,
+        "p99": 101.9513,
+        "max": 102.0196778
+      },
+      "benchFRF": {
+        "mean": 0.7639,
+        "min": 0.37160624999999997,
+        "p10": 0.5193,
+        "median": 0.7824,
+        "p90": 0.9663,
+        "p99": 1,
+        "max": 1
+      },
+      "byCoach": {
+        "red_auerbach": {
+          "count": 2,
+          "wins": {
+            "mean": 65.5,
+            "min": 61,
+            "p10": 61.9,
+            "median": 65.5,
+            "p90": 69.1,
+            "p99": 69.91,
+            "max": 70
+          },
+          "medianApprox95": [
+            61,
+            70
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.3424,
+            1
+          ]
+        },
+        "mike_dantoni": {
+          "count": 2,
+          "wins": {
+            "mean": 67,
+            "min": 65,
+            "p10": 65.4,
+            "median": 67,
+            "p90": 68.6,
+            "p99": 68.96,
+            "max": 69
+          },
+          "medianApprox95": [
+            65,
+            69
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.3424,
+            1
+          ]
+        },
+        "rick_adelman": {
+          "count": 3,
+          "wins": {
+            "mean": 59.3333,
+            "min": 57,
+            "p10": 57.4,
+            "median": 59,
+            "p90": 61.4,
+            "p99": 61.94,
+            "max": 62
+          },
+          "medianApprox95": [
+            57,
+            62
+          ],
+          "qualified": 0.3333333333333333,
+          "qualifiedWilson95": [
+            0.0615,
+            0.7923
+          ]
+        },
+        "gregg_popovich": {
+          "count": 3,
+          "wins": {
+            "mean": 58.6667,
+            "min": 52,
+            "p10": 53.4,
+            "median": 59,
+            "p90": 63.8,
+            "p99": 64.88,
+            "max": 65
+          },
+          "medianApprox95": [
+            52,
+            65
+          ],
+          "qualified": 0.3333333333333333,
+          "qualifiedWilson95": [
+            0.0615,
+            0.7923
+          ]
+        },
+        "jerry_sloan": {
+          "count": 2,
+          "wins": {
+            "mean": 63.5,
+            "min": 59,
+            "p10": 59.9,
+            "median": 63.5,
+            "p90": 67.1,
+            "p99": 67.91,
+            "max": 68
+          },
+          "medianApprox95": [
+            59,
+            68
+          ],
+          "qualified": 0.5,
+          "qualifiedWilson95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "larry_brown": {
+          "count": 2,
+          "wins": {
+            "mean": 60,
+            "min": 57,
+            "p10": 57.6,
+            "median": 60,
+            "p90": 62.4,
+            "p99": 62.94,
+            "max": 63
+          },
+          "medianApprox95": [
+            57,
+            63
+          ],
+          "qualified": 0.5,
+          "qualifiedWilson95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "don_nelson": {
+          "count": 2,
+          "wins": {
+            "mean": 54,
+            "min": 53,
+            "p10": 53.2,
+            "median": 54,
+            "p90": 54.8,
+            "p99": 54.98,
+            "max": 55
+          },
+          "medianApprox95": [
+            53,
+            55
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.6576
+          ]
+        },
+        "phil_jackson": {
+          "count": 2,
+          "wins": {
+            "mean": 61.5,
+            "min": 56,
+            "p10": 57.1,
+            "median": 61.5,
+            "p90": 65.9,
+            "p99": 66.89,
+            "max": 67
+          },
+          "medianApprox95": [
+            56,
+            67
+          ],
+          "qualified": 0.5,
+          "qualifiedWilson95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "steve_kerr": {
+          "count": 1,
+          "wins": {
+            "mean": 62,
+            "min": 62,
+            "p10": 62,
+            "median": 62,
+            "p90": 62,
+            "p99": 62,
+            "max": 62
+          },
+          "medianApprox95": [
+            62,
+            62
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.2065,
+            1
+          ]
+        },
+        "pat_riley": {
+          "count": 1,
+          "wins": {
+            "mean": 60,
+            "min": 60,
+            "p10": 60,
+            "median": 60,
+            "p90": 60,
+            "p99": 60,
+            "max": 60
+          },
+          "medianApprox95": [
+            60,
+            60
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.2065,
+            1
+          ]
+        }
+      },
+      "byEraExposure": {
+        "2000s": {
+          "count": 13,
+          "wins": {
+            "mean": 61.8462,
+            "min": 55,
+            "p10": 56.2,
+            "median": 62,
+            "p90": 67.8,
+            "p99": 69.76,
+            "max": 70
+          },
+          "medianApprox95": [
+            57,
+            68
+          ],
+          "qualified": 0.6153846153846154,
+          "qualifiedWilson95": [
+            0.3552,
+            0.8229
+          ]
+        },
+        "1990s": {
+          "count": 19,
+          "wins": {
+            "mean": 61.2632,
+            "min": 52,
+            "p10": 55.4,
+            "median": 61,
+            "p90": 68.2,
+            "p99": 69.82,
+            "max": 70
+          },
+          "medianApprox95": [
+            59,
+            65
+          ],
+          "qualified": 0.5789473684210527,
+          "qualifiedWilson95": [
+            0.3628,
+            0.7686
+          ]
+        },
+        "1970s": {
+          "count": 9,
+          "wins": {
+            "mean": 59.4444,
+            "min": 52,
+            "p10": 52.8,
+            "median": 59,
+            "p90": 66,
+            "p99": 69.6,
+            "max": 70
+          },
+          "medianApprox95": [
+            53,
+            70
+          ],
+          "qualified": 0.4444444444444444,
+          "qualifiedWilson95": [
+            0.1888,
+            0.7334
+          ]
+        },
+        "1980s": {
+          "count": 10,
+          "wins": {
+            "mean": 61.7,
+            "min": 55,
+            "p10": 55.9,
+            "median": 61.5,
+            "p90": 69.1,
+            "p99": 69.91,
+            "max": 70
+          },
+          "medianApprox95": [
+            56,
+            70
+          ],
+          "qualified": 0.7,
+          "qualifiedWilson95": [
+            0.3968,
+            0.8922
+          ]
+        },
+        "2010s": {
+          "count": 15,
+          "wins": {
+            "mean": 61.1333,
+            "min": 53,
+            "p10": 56.4,
+            "median": 61,
+            "p90": 66.2,
+            "p99": 68.72,
+            "max": 69
+          },
+          "medianApprox95": [
+            59,
+            65
+          ],
+          "qualified": 0.6,
+          "qualifiedWilson95": [
+            0.3575,
+            0.8018
+          ]
+        },
+        "1960s": {
+          "count": 5,
+          "wins": {
+            "mean": 57.6,
+            "min": 52,
+            "p10": 52.4,
+            "median": 55,
+            "p90": 65,
+            "p99": 68.6,
+            "max": 69
+          },
+          "medianApprox95": [
+            52,
+            69
+          ],
+          "qualified": 0.2,
+          "qualifiedWilson95": [
+            0.0362,
+            0.6245
+          ]
+        },
+        "2020s": {
+          "count": 14,
+          "wins": {
+            "mean": 61.9286,
+            "min": 56,
+            "p10": 57.6,
+            "median": 61.5,
+            "p90": 67.7,
+            "p99": 68.87,
+            "max": 69
+          },
+          "medianApprox95": [
+            59,
+            67
+          ],
+          "qualified": 0.6428571428571429,
+          "qualifiedWilson95": [
+            0.3876,
+            0.8366
+          ]
+        }
+      }
+    },
+    "lookahead": {
+      "policyVersion": "legal-rollout-1",
+      "count": 20,
+      "wins": {
+        "mean": 66.65,
+        "min": 57,
+        "p10": 59.8,
+        "median": 68,
+        "p90": 71.3,
+        "p99": 78.05,
+        "max": 79
+      },
+      "medianApprox95": [
+        62,
+        70
+      ],
+      "qualified": 0.9,
+      "qualifiedWilson95": [
+        0.699,
+        0.9721
+      ],
+      "expectedWins": {
+        "mean": 66.1728,
+        "min": 55.77911061914797,
+        "p10": 61.4686,
+        "median": 65.9336,
+        "p90": 72.1246,
+        "p99": 74.8428,
+        "max": 74.90343218994228
+      },
+      "meanExpectedWins": {
+        "mean": 66.1728,
+        "approximate95": [
+          64.129,
+          68.2166
+        ]
+      },
+      "winResidual": {
+        "mean": 0.4846,
+        "approximate95": [
+          -0.5443,
+          1.5135
+        ]
+      },
+      "observations": [
+        {
+          "seed": "p3-pilot-0",
+          "wins": 74,
+          "expectedWins": 74.90343218994228,
+          "scheduleExpectedWins": 74.97765578889593,
+          "coach": "red_auerbach",
+          "lineup": [
+            "thomais01_DET_1980s",
+            "stockjo01_UTA_1980s",
+            "hawkihe01_OKC_1990s",
+            "richaja01_CHA_2000s",
+            "chambwi01_LAL_1970s",
+            "murphca01_HOU_1970s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "thomais01_DET_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "hawkihe01_OKC_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "chambwi01_LAL_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "richaja01_CHA_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "murphca01_HOU_1970s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1980s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-1",
+          "wins": 69,
+          "expectedWins": 69.5413310953798,
+          "scheduleExpectedWins": 69.44464523760175,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "busedo01_PHX_1980s",
+            "blaylmo01_ATL_1990s",
+            "aingeda01_BOS_1980s",
+            "chambwi01_GSW_1960s",
+            "horfoal01_BOS_2020s",
+            "johnsde01_BOS_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "chambwi01_GSW_1960s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "blaylmo01_ATL_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "busedo01_PHX_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsde01_BOS_1990s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "aingeda01_BOS_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "horfoal01_BOS_2020s",
+              "slot": "C"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-2",
+          "wins": 64,
+          "expectedWins": 66.07193687019948,
+          "scheduleExpectedWins": 65.94135146574548,
+          "coach": "don_nelson",
+          "lineup": [
+            "battish01_HOU_2010s",
+            "suggsja01_ORL_2020s",
+            "roberal01_SAS_1980s",
+            "jonesed02_CHA_1990s",
+            "diawbo01_CHA_2000s",
+            "conlemi01_MEM_2010s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesed02_CHA_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "conlemi01_MEM_2010s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "suggsja01_ORL_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberal01_SAS_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "battish01_HOU_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "diawbo01_CHA_2000s",
+              "slot": "C"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-3",
+          "wins": 57,
+          "expectedWins": 55.77911061914797,
+          "scheduleExpectedWins": 55.564582836847556,
+          "coach": "pat_riley",
+          "lineup": [
+            "anthogr01_MEM_1990s",
+            "hardati01_GSW_1990s",
+            "ehlocr01_CLE_1990s",
+            "mullich01_GSW_1990s",
+            "outlabo01_LAC_1990s",
+            "pettibo01_ATL_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "pat_riley"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "outlabo01_LAC_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "hardati01_GSW_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "pettibo01_ATL_1960s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "anthogr01_MEM_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ehlocr01_CLE_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mullich01_GSW_1990s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-4",
+          "wins": 79,
+          "expectedWins": 74.58414867010828,
+          "scheduleExpectedWins": 74.86446608892574,
+          "coach": "red_auerbach",
+          "lineup": [
+            "curryst01_GSW_2010s",
+            "kennalu01_DET_2020s",
+            "whitede01_BOS_2020s",
+            "presspa01_MIL_1980s",
+            "wallabe01_DET_2000s",
+            "hillgr01_DET_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "presspa01_MIL_1980s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "whitede01_BOS_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "curryst01_GSW_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "wallabe01_DET_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hillgr01_DET_1990s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "kennalu01_DET_2020s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-5",
+          "wins": 62,
+          "expectedWins": 62.59145075408958,
+          "scheduleExpectedWins": 62.55748609514888,
+          "coach": "red_auerbach",
+          "lineup": [
+            "aingeda01_SAC_1990s",
+            "jonesed02_CHA_2000s",
+            "holidju01_CHI_2010s",
+            "drumman01_DET_2020s",
+            "eatonma01_UTA_1990s",
+            "jordami01_CHI_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jordami01_CHI_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "holidju01_CHI_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "aingeda01_SAC_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesed02_CHA_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "eatonma01_UTA_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "drumman01_DET_2020s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-6",
+          "wins": 61,
+          "expectedWins": 61.49031958773757,
+          "scheduleExpectedWins": 61.47573664716985,
+          "coach": "jerry_sloan",
+          "lineup": [
+            "paytoga01_OKC_1990s",
+            "holidjr01_NOP_2010s",
+            "mcglojo01_MIL_1960s",
+            "stojape01_SAC_2000s",
+            "wallabe01_CHI_2000s",
+            "duranke01_BKN_2020s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "jerry_sloan"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stojape01_SAC_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "wallabe01_CHI_2000s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "duranke01_BKN_2020s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "mcglojo01_MIL_1960s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "paytoga01_OKC_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "holidjr01_NOP_2010s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-7",
+          "wins": 68,
+          "expectedWins": 65.79527375398968,
+          "scheduleExpectedWins": 65.74614686570663,
+          "coach": "red_auerbach",
+          "lineup": [
+            "jonesda01_MIA_2000s",
+            "hardeja01_BKN_2020s",
+            "vanbrja01_BKN_1970s",
+            "willija06_OKC_2020s",
+            "stiemgr01_BOS_2010s",
+            "jordami01_CHI_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "red_auerbach"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jordami01_CHI_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "stiemgr01_BOS_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hardeja01_BKN_2020s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "vanbrja01_BKN_1970s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jonesda01_MIA_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "willija06_OKC_2020s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-8",
+          "wins": 70,
+          "expectedWins": 66.74233091061002,
+          "scheduleExpectedWins": 66.8131104416455,
+          "coach": "don_nelson",
+          "lineup": [
+            "fraziwa01_NYK_1970s",
+            "arenagi01_WAS_2000s",
+            "divindo01_MIN_2020s",
+            "perkisa01_DAL_1990s",
+            "stiemgr01_BOS_2010s",
+            "wilkele01_OKC_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stiemgr01_BOS_2010s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "wilkele01_OKC_1960s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "arenagi01_WAS_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "divindo01_MIN_2020s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "fraziwa01_NYK_1970s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "perkisa01_DAL_1990s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-9",
+          "wins": 69,
+          "expectedWins": 65.66541941800438,
+          "scheduleExpectedWins": 65.54570007595129,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "barrybr01_OKC_2000s",
+            "ginobma01_SAS_2000s",
+            "haskicl01_CHI_1970s",
+            "chambwi01_PHI_1960s",
+            "johnsge02_SAS_1980s",
+            "dantlad01_UTA_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge02_SAS_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "dantlad01_UTA_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "haskicl01_CHI_1970s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ginobma01_SAS_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "barrybr01_OKC_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "chambwi01_PHI_1960s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-10",
+          "wins": 69,
+          "expectedWins": 66.34093830438124,
+          "scheduleExpectedWins": 66.02876214672735,
+          "coach": "gregg_popovich",
+          "lineup": [
+            "taylobr01_LAC_1980s",
+            "hardati01_MIA_1990s",
+            "jamesle01_LAL_2010s",
+            "greendr01_GSW_2010s",
+            "rollitr01_ATL_1980s",
+            "marbust01_BKN_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "gregg_popovich"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "marbust01_BKN_1990s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jamesle01_LAL_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "taylobr01_LAC_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "rollitr01_ATL_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "hardati01_MIA_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "greendr01_GSW_2010s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-11",
+          "wins": 58,
+          "expectedWins": 62.23209857219068,
+          "scheduleExpectedWins": 62.33745571477363,
+          "coach": "rick_adelman",
+          "lineup": [
+            "hardati01_GSW_1990s",
+            "kukocto01_CHI_1990s",
+            "drexlcl01_POR_1990s",
+            "poseyja01_MIA_2000s",
+            "johnsge02_SAS_1980s",
+            "willigu01_OKC_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "rick_adelman"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "willigu01_OKC_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "drexlcl01_POR_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "poseyja01_MIA_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "hardati01_GSW_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "kukocto01_CHI_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnsge02_SAS_1980s",
+              "slot": "C"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-12",
+          "wins": 68,
+          "expectedWins": 69.41157224825336,
+          "scheduleExpectedWins": 69.3167936157578,
+          "coach": "chuck_daly",
+          "lineup": [
+            "balllo01_LAL_2010s",
+            "battish01_HOU_2000s",
+            "griffbl01_DET_2010s",
+            "olajuha01_HOU_1990s",
+            "benjabe01_LAC_1990s",
+            "golato01_NYK_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "chuck_daly"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "balllo01_LAL_2010s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "griffbl01_DET_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "olajuha01_HOU_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "golato01_NYK_1960s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "battish01_HOU_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "benjabe01_LAC_1990s",
+              "slot": "C"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-13",
+          "wins": 62,
+          "expectedWins": 64.1268914762158,
+          "scheduleExpectedWins": 63.713816422375054,
+          "coach": "steve_kerr",
+          "lineup": [
+            "cheekma01_PHI_1970s",
+            "crabbal01_BKN_2010s",
+            "drexlcl01_POR_1980s",
+            "birdla01_BOS_1990s",
+            "jokicni01_DEN_2020s",
+            "sparrro01_MIA_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "steve_kerr"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "cheekma01_PHI_1970s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sparrro01_MIA_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "drexlcl01_POR_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "birdla01_BOS_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "jokicni01_DEN_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "crabbal01_BKN_2010s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-14",
+          "wins": 71,
+          "expectedWins": 69.4542440101139,
+          "scheduleExpectedWins": 69.53184351459255,
+          "coach": "don_nelson",
+          "lineup": [
+            "vanvlfr01_HOU_2020s",
+            "sefolth01_OKC_2010s",
+            "arizatr01_WAS_2010s",
+            "olajuha01_HOU_1990s",
+            "ewingpa01_NYK_1980s",
+            "roberos01_SAC_1960s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "don_nelson"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "arizatr01_WAS_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "vanvlfr01_HOU_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "ewingpa01_NYK_1980s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "roberos01_SAC_1960s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "sefolth01_OKC_2010s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "olajuha01_HOU_1990s",
+              "slot": "PF"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-15",
+          "wins": 69,
+          "expectedWins": 64.9778728835288,
+          "scheduleExpectedWins": 65.14168593639496,
+          "coach": "chuck_daly",
+          "lineup": [
+            "harpede01_DAL_1990s",
+            "davisba01_GSW_2000s",
+            "bradldu01_IND_1980s",
+            "willija07_OKC_2020s",
+            "holmgch01_OKC_2020s",
+            "stockjo01_UTA_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "chuck_daly"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "harpede01_DAL_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "bradldu01_IND_1980s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "davisba01_GSW_2000s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "holmgch01_OKC_2020s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "willija07_OKC_2020s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "stockjo01_UTA_1990s",
+              "slot": "SIXTH"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-16",
+          "wins": 60,
+          "expectedWins": 61.27338371325602,
+          "scheduleExpectedWins": 61.24960654265941,
+          "coach": "mike_dantoni",
+          "lineup": [
+            "kiddja01_BKN_2000s",
+            "peelean01_MIN_1990s",
+            "richaqu01_PHX_2000s",
+            "leonaka01_SAS_2010s",
+            "davisda01_POR_2000s",
+            "marbust01_BKN_1990s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "mike_dantoni"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "richaqu01_PHX_2000s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "marbust01_BKN_1990s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "kiddja01_BKN_2000s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "leonaka01_SAS_2010s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "peelean01_MIN_1990s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "davisda01_POR_2000s",
+              "slot": "C"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-17",
+          "wins": 65,
+          "expectedWins": 62.94639272572702,
+          "scheduleExpectedWins": 63.30760125633843,
+          "coach": "gregg_popovich",
+          "lineup": [
+            "aingeda01_SAC_1980s",
+            "daniedy01_ATL_2020s",
+            "porteot01_WAS_2010s",
+            "nowitdi01_DAL_2000s",
+            "divacvl01_CHA_1990s",
+            "duncati01_SAS_2000s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "gregg_popovich"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "nowitdi01_DAL_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "aingeda01_SAC_1980s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "porteot01_WAS_2010s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "duncati01_SAS_2000s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "divacvl01_CHA_1990s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "daniedy01_ATL_2020s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-18",
+          "wins": 70,
+          "expectedWins": 71.85131581501614,
+          "scheduleExpectedWins": 71.95029549846089,
+          "coach": "chuck_daly",
+          "lineup": [
+            "blaylmo01_ATL_1990s",
+            "templga01_MEM_2010s",
+            "horryro01_HOU_1990s",
+            "moonja01_TOR_2000s",
+            "chambwi01_GSW_1960s",
+            "johnske02_PHX_1980s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "chuck_daly"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "johnske02_PHX_1980s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "moonja01_TOR_2000s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "chambwi01_GSW_1960s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "blaylmo01_ATL_1990s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "horryro01_HOU_1990s",
+              "slot": "SF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "templga01_MEM_2010s",
+              "slot": "SG"
+            }
+          ]
+        },
+        {
+          "seed": "p3-pilot-19",
+          "wins": 68,
+          "expectedWins": 67.67727229757301,
+          "scheduleExpectedWins": 67.79930585054484,
+          "coach": "pat_riley",
+          "lineup": [
+            "vanvlfr01_TOR_2020s",
+            "roberos01_MIL_1970s",
+            "duranke01_OKC_2010s",
+            "mutomdi01_DEN_1990s",
+            "raycl01_CHI_1970s",
+            "fraziwa01_NYK_1970s"
+          ],
+          "actions": [
+            {
+              "type": "COACH",
+              "id": "pat_riley"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "fraziwa01_NYK_1970s",
+              "slot": "SIXTH"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "team"
+            },
+            {
+              "type": "PICK",
+              "id": "raycl01_CHI_1970s",
+              "slot": "C"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "REROLL",
+              "kind": "era"
+            },
+            {
+              "type": "PICK",
+              "id": "roberos01_MIL_1970s",
+              "slot": "SG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "vanvlfr01_TOR_2020s",
+              "slot": "PG"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "mutomdi01_DEN_1990s",
+              "slot": "PF"
+            },
+            {
+              "type": "SPIN"
+            },
+            {
+              "type": "PICK",
+              "id": "duranke01_OKC_2010s",
+              "slot": "SF"
+            }
+          ]
+        }
+      ],
+      "usage": {
+        "mean": 112.467,
+        "min": 105,
+        "p10": 108.912,
+        "median": 112.34,
+        "p90": 116.216,
+        "p99": 120.7934,
+        "max": 120.82000000000001
+      },
+      "spacing": {
+        "mean": 5.9518,
+        "min": 3.9802,
+        "p10": 5.0195,
+        "median": 5.7594,
+        "p90": 7.1438,
+        "p99": 9.8388,
+        "max": 10.1985
+      },
+      "defense": {
+        "mean": 96.6966,
+        "min": 89.72517256666667,
+        "p10": 92.0681,
+        "median": 97.5626,
+        "p90": 99.7575,
+        "p99": 100.62,
+        "max": 100.70636126666668
+      },
+      "benchFRF": {
+        "mean": 0.7457,
+        "min": 0.27752509999999997,
+        "p10": 0.406,
+        "median": 0.7911,
+        "p90": 0.9943,
+        "p99": 1,
+        "max": 1
+      },
+      "byCoach": {
+        "red_auerbach": {
+          "count": 4,
+          "wins": {
+            "mean": 70.75,
+            "min": 62,
+            "p10": 63.8,
+            "median": 71,
+            "p90": 77.5,
+            "p99": 78.85,
+            "max": 79
+          },
+          "medianApprox95": [
+            62,
+            79
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.5101,
+            1
+          ]
+        },
+        "mike_dantoni": {
+          "count": 3,
+          "wins": {
+            "mean": 66,
+            "min": 60,
+            "p10": 61.8,
+            "median": 69,
+            "p90": 69,
+            "p99": 69,
+            "max": 69
+          },
+          "medianApprox95": [
+            60,
+            69
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.4385,
+            1
+          ]
+        },
+        "don_nelson": {
+          "count": 3,
+          "wins": {
+            "mean": 68.3333,
+            "min": 64,
+            "p10": 65.2,
+            "median": 70,
+            "p90": 70.8,
+            "p99": 70.98,
+            "max": 71
+          },
+          "medianApprox95": [
+            64,
+            71
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.4385,
+            1
+          ]
+        },
+        "pat_riley": {
+          "count": 2,
+          "wins": {
+            "mean": 62.5,
+            "min": 57,
+            "p10": 58.1,
+            "median": 62.5,
+            "p90": 66.9,
+            "p99": 67.89,
+            "max": 68
+          },
+          "medianApprox95": [
+            57,
+            68
+          ],
+          "qualified": 0.5,
+          "qualifiedWilson95": [
+            0.0945,
+            0.9055
+          ]
+        },
+        "jerry_sloan": {
+          "count": 1,
+          "wins": {
+            "mean": 61,
+            "min": 61,
+            "p10": 61,
+            "median": 61,
+            "p90": 61,
+            "p99": 61,
+            "max": 61
+          },
+          "medianApprox95": [
+            61,
+            61
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.2065,
+            1
+          ]
+        },
+        "gregg_popovich": {
+          "count": 2,
+          "wins": {
+            "mean": 67,
+            "min": 65,
+            "p10": 65.4,
+            "median": 67,
+            "p90": 68.6,
+            "p99": 68.96,
+            "max": 69
+          },
+          "medianApprox95": [
+            65,
+            69
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.3424,
+            1
+          ]
+        },
+        "rick_adelman": {
+          "count": 1,
+          "wins": {
+            "mean": 58,
+            "min": 58,
+            "p10": 58,
+            "median": 58,
+            "p90": 58,
+            "p99": 58,
+            "max": 58
+          },
+          "medianApprox95": [
+            58,
+            58
+          ],
+          "qualified": 0,
+          "qualifiedWilson95": [
+            0,
+            0.7935
+          ]
+        },
+        "chuck_daly": {
+          "count": 3,
+          "wins": {
+            "mean": 69,
+            "min": 68,
+            "p10": 68.2,
+            "median": 69,
+            "p90": 69.8,
+            "p99": 69.98,
+            "max": 70
+          },
+          "medianApprox95": [
+            68,
+            70
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.4385,
+            1
+          ]
+        },
+        "steve_kerr": {
+          "count": 1,
+          "wins": {
+            "mean": 62,
+            "min": 62,
+            "p10": 62,
+            "median": 62,
+            "p90": 62,
+            "p99": 62,
+            "max": 62
+          },
+          "medianApprox95": [
+            62,
+            62
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.2065,
+            1
+          ]
+        }
+      },
+      "byEraExposure": {
+        "1980s": {
+          "count": 14,
+          "wins": {
+            "mean": 67.7857,
+            "min": 58,
+            "p10": 62,
+            "median": 69,
+            "p90": 73.1,
+            "p99": 78.35,
+            "max": 79
+          },
+          "medianApprox95": [
+            64,
+            71
+          ],
+          "qualified": 0.9285714285714286,
+          "qualifiedWilson95": [
+            0.6853,
+            0.9873
+          ]
+        },
+        "1990s": {
+          "count": 18,
+          "wins": {
+            "mean": 66.4444,
+            "min": 57,
+            "p10": 59.4,
+            "median": 68,
+            "p90": 71.9,
+            "p99": 78.15,
+            "max": 79
+          },
+          "medianApprox95": [
+            62,
+            70
+          ],
+          "qualified": 0.8888888888888888,
+          "qualifiedWilson95": [
+            0.672,
+            0.969
+          ]
+        },
+        "2000s": {
+          "count": 14,
+          "wins": {
+            "mean": 66.9286,
+            "min": 58,
+            "p10": 60.3,
+            "median": 68,
+            "p90": 72.8,
+            "p99": 78.35,
+            "max": 79
+          },
+          "medianApprox95": [
+            62,
+            70
+          ],
+          "qualified": 0.9285714285714286,
+          "qualifiedWilson95": [
+            0.6853,
+            0.9873
+          ]
+        },
+        "1970s": {
+          "count": 6,
+          "wins": {
+            "mean": 68.5,
+            "min": 62,
+            "p10": 65,
+            "median": 68.5,
+            "p90": 72,
+            "p99": 73.8,
+            "max": 74
+          },
+          "medianApprox95": [
+            62,
+            74
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.6097,
+            1
+          ]
+        },
+        "1960s": {
+          "count": 8,
+          "wins": {
+            "mean": 66.875,
+            "min": 57,
+            "p10": 59.8,
+            "median": 69,
+            "p90": 70.3,
+            "p99": 70.93,
+            "max": 71
+          },
+          "medianApprox95": [
+            61,
+            71
+          ],
+          "qualified": 0.875,
+          "qualifiedWilson95": [
+            0.5291,
+            0.9776
+          ]
+        },
+        "2020s": {
+          "count": 12,
+          "wins": {
+            "mean": 67.3333,
+            "min": 61,
+            "p10": 62,
+            "median": 68,
+            "p90": 70.9,
+            "p99": 78.12,
+            "max": 79
+          },
+          "medianApprox95": [
+            62,
+            71
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.7575,
+            1
+          ]
+        },
+        "2010s": {
+          "count": 14,
+          "wins": {
+            "mean": 66.9286,
+            "min": 60,
+            "p10": 61.3,
+            "median": 68,
+            "p90": 70.7,
+            "p99": 77.96,
+            "max": 79
+          },
+          "medianApprox95": [
+            62,
+            70
+          ],
+          "qualified": 1,
+          "qualifiedWilson95": [
+            0.7847,
+            1
+          ]
+        }
+      }
+    }
+  },
+  "pairedComparisons": {
+    "chemistry": {
+      "count": 20,
+      "expectedWinDifference": {
+        "mean": 9.6187,
+        "approximate95": [
+          7.4828,
+          11.7547
+        ]
+      },
+      "realizedWinDifference": {
+        "mean": 10.3,
+        "approximate95": [
+          7.5351,
+          13.0649
+        ]
+      },
+      "expectedWinImprovementShare": 0.95
+    },
+    "reroll-aware": {
+      "count": 20,
+      "expectedWinDifference": {
+        "mean": 5.9061,
+        "approximate95": [
+          3.9358,
+          7.8764
+        ]
+      },
+      "realizedWinDifference": {
+        "mean": 5.7,
+        "approximate95": [
+          3.2823,
+          8.1177
+        ]
+      },
+      "expectedWinImprovementShare": 0.95
+    }
+  },
+  "scoreResults": [
+    {
+      "inputProbability": 0.05,
+      "count": 100000,
+      "winRate": 0.04989,
+      "winWilson95": [
+        0.0486,
+        0.0513
+      ],
+      "overtimeRate": 0.0116,
+      "overtimeWilson95": [
+        0.011,
+        0.0123
+      ],
+      "periodCounts": [
+        1025,
+        117,
+        18
+      ],
+      "finalScore": {
+        "mean": 112.4108,
+        "min": 58,
+        "p10": 86,
+        "median": 113,
+        "p90": 138,
+        "p99": 152,
+        "max": 166
+      },
+      "regulationMargin": {
+        "mean": 31.791,
+        "min": 1,
+        "p10": 10,
+        "median": 31,
+        "p90": 54,
+        "p99": 70,
+        "max": 70
+      },
+      "overtimeMargin": {
+        "mean": 5.2198,
+        "min": 1,
+        "p10": 1,
+        "median": 5,
+        "p90": 11,
+        "p99": 12,
+        "max": 12
+      },
+      "cappedRegulationMargins": 2436,
+      "regulationCount": 98840,
+      "regulationWinMargin": {
+        "mean": 10.8634,
+        "min": 1,
+        "p10": 1,
+        "median": 8,
+        "p90": 25,
+        "p99": 48.73,
+        "max": 70
+      },
+      "regulationLossMargin": {
+        "mean": 32.8892,
+        "min": 1,
+        "p10": 12,
+        "median": 32,
+        "p90": 55,
+        "p99": 70,
+        "max": 70
+      },
+      "overtimeCount": 1160,
+      "cappedOvertimeMargins": 95,
+      "onePointRate": 0.01514,
+      "thirtyPointRate": 0.53128,
+      "fiftyPointRate": 0.14553
+    },
+    {
+      "inputProbability": 0.2,
+      "count": 100000,
+      "winRate": 0.20063,
+      "winWilson95": [
+        0.1982,
+        0.2031
+      ],
+      "overtimeRate": 0.03912,
+      "overtimeWilson95": [
+        0.0379,
+        0.0403
+      ],
+      "periodCounts": [
+        3437,
+        419,
+        56
+      ],
+      "finalScore": {
+        "mean": 112.6619,
+        "min": 57,
+        "p10": 94,
+        "median": 113,
+        "p90": 131,
+        "p99": 145,
+        "max": 166
+      },
+      "regulationMargin": {
+        "mean": 19.2022,
+        "min": 1,
+        "p10": 3,
+        "median": 17,
+        "p90": 38,
+        "p99": 63,
+        "max": 70
+      },
+      "overtimeMargin": {
+        "mean": 4.3773,
+        "min": 1,
+        "p10": 1,
+        "median": 4,
+        "p90": 9,
+        "p99": 12,
+        "max": 12
+      },
+      "cappedRegulationMargins": 556,
+      "regulationCount": 96088,
+      "regulationWinMargin": {
+        "mean": 11.6052,
+        "min": 1,
+        "p10": 1,
+        "median": 9,
+        "p90": 26,
+        "p99": 50,
+        "max": 70
+      },
+      "regulationLossMargin": {
+        "mean": 21.1076,
+        "min": 1,
+        "p10": 5,
+        "median": 19,
+        "p90": 40,
+        "p99": 65,
+        "max": 70
+      },
+      "overtimeCount": 3912,
+      "cappedOvertimeMargins": 183,
+      "onePointRate": 0.05106,
+      "thirtyPointRate": 0.20101,
+      "fiftyPointRate": 0.03551
+    },
+    {
+      "inputProbability": 0.5,
+      "count": 100000,
+      "winRate": 0.49945,
+      "winWilson95": [
+        0.4964,
+        0.5025
+      ],
+      "overtimeRate": 0.06082,
+      "overtimeWilson95": [
+        0.0594,
+        0.0623
+      ],
+      "periodCounts": [
+        5327,
+        664,
+        91
+      ],
+      "finalScore": {
+        "mean": 112.9228,
+        "min": 57,
+        "p10": 97,
+        "median": 113,
+        "p90": 129,
+        "p99": 142,
+        "max": 166
+      },
+      "regulationMargin": {
+        "mean": 14.5629,
+        "min": 1,
+        "p10": 2,
+        "median": 12,
+        "p90": 31,
+        "p99": 55,
+        "max": 70
+      },
+      "overtimeMargin": {
+        "mean": 4.1383,
+        "min": 1,
+        "p10": 1,
+        "median": 3,
+        "p90": 9,
+        "p99": 12,
+        "max": 12
+      },
+      "cappedRegulationMargins": 244,
+      "regulationCount": 93918,
+      "regulationWinMargin": {
+        "mean": 14.6016,
+        "min": 1,
+        "p10": 2,
+        "median": 12,
+        "p90": 31,
+        "p99": 56,
+        "max": 70
+      },
+      "regulationLossMargin": {
+        "mean": 14.5242,
+        "min": 1,
+        "p10": 2,
+        "median": 12,
+        "p90": 31,
+        "p99": 55,
+        "max": 70
+      },
+      "overtimeCount": 6082,
+      "cappedOvertimeMargins": 242,
+      "onePointRate": 0.08154,
+      "thirtyPointRate": 0.10735,
+      "fiftyPointRate": 0.01632
+    },
+    {
+      "inputProbability": 0.8,
+      "count": 100000,
+      "winRate": 0.80096,
+      "winWilson95": [
+        0.7985,
+        0.8034
+      ],
+      "overtimeRate": 0.03822,
+      "overtimeWilson95": [
+        0.037,
+        0.0394
+      ],
+      "periodCounts": [
+        3345,
+        432,
+        45
+      ],
+      "finalScore": {
+        "mean": 112.6978,
+        "min": 58,
+        "p10": 94,
+        "median": 113,
+        "p90": 131,
+        "p99": 145,
+        "max": 172
+      },
+      "regulationMargin": {
+        "mean": 19.2065,
+        "min": 1,
+        "p10": 3,
+        "median": 17,
+        "p90": 38,
+        "p99": 63,
+        "max": 70
+      },
+      "overtimeMargin": {
+        "mean": 4.4621,
+        "min": 1,
+        "p10": 1,
+        "median": 4,
+        "p90": 9,
+        "p99": 12,
+        "max": 12
+      },
+      "cappedRegulationMargins": 568,
+      "regulationCount": 96178,
+      "regulationWinMargin": {
+        "mean": 21.0686,
+        "min": 1,
+        "p10": 5,
+        "median": 19,
+        "p90": 40,
+        "p99": 65,
+        "max": 70
+      },
+      "regulationLossMargin": {
+        "mean": 11.7143,
+        "min": 1,
+        "p10": 1,
+        "median": 9,
+        "p90": 26,
+        "p99": 50,
+        "max": 70
+      },
+      "overtimeCount": 3822,
+      "cappedOvertimeMargins": 192,
+      "onePointRate": 0.05226,
+      "thirtyPointRate": 0.20098,
+      "fiftyPointRate": 0.0354
+    },
+    {
+      "inputProbability": 0.95,
+      "count": 100000,
+      "winRate": 0.94994,
+      "winWilson95": [
+        0.9486,
+        0.9513
+      ],
+      "overtimeRate": 0.01151,
+      "overtimeWilson95": [
+        0.0109,
+        0.0122
+      ],
+      "periodCounts": [
+        1013,
+        117,
+        21
+      ],
+      "finalScore": {
+        "mean": 112.3902,
+        "min": 57,
+        "p10": 87,
+        "median": 113,
+        "p90": 138,
+        "p99": 152,
+        "max": 166
+      },
+      "regulationMargin": {
+        "mean": 31.765,
+        "min": 1,
+        "p10": 10,
+        "median": 31,
+        "p90": 54,
+        "p99": 70,
+        "max": 70
+      },
+      "overtimeMargin": {
+        "mean": 5.4075,
+        "min": 1,
+        "p10": 1,
+        "median": 5,
+        "p90": 11,
+        "p99": 12,
+        "max": 12
+      },
+      "cappedRegulationMargins": 2429,
+      "regulationCount": 98849,
+      "regulationWinMargin": {
+        "mean": 32.8564,
+        "min": 1,
+        "p10": 12,
+        "median": 32,
+        "p90": 55,
+        "p99": 70,
+        "max": 70
+      },
+      "regulationLossMargin": {
+        "mean": 11.0829,
+        "min": 1,
+        "p10": 1,
+        "median": 8,
+        "p90": 26,
+        "p99": 49,
+        "max": 70
+      },
+      "overtimeCount": 1151,
+      "cappedOvertimeMargins": 99,
+      "onePointRate": 0.01489,
+      "thirtyPointRate": 0.5314,
+      "fiftyPointRate": 0.14485
+    }
+  ]
+}

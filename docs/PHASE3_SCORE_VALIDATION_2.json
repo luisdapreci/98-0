@@ -1,0 +1,228 @@
+{
+  "version": "historical-score-validation-2",
+  "referenceSha256": "6f05ddbed8a112cb86752cf8db55ae2165acbc174bc84d23bf1d3fa03d577791",
+  "fitSha256": "7d7566359d50c9d505e5f67bc946a0ef19a4fcc08db6f765a72d244608db2aa5",
+  "rules": {
+    "version": "conditional-score-3-candidate",
+    "baseline": 113.445132,
+    "baselineSpread": 24.044916,
+    "regulationScale": 8,
+    "regulationOffset": 1,
+    "maxMargin": 100,
+    "overtimeProbability": 0.052149,
+    "overtimeScale": 3,
+    "overtimeMaxMargin": 30,
+    "overtimeBaseline": 9.477421,
+    "overtimeSpread": 6,
+    "overtimeContinuation": 0.119403,
+    "maxOvertimePeriods": 6
+  },
+  "count": 1230,
+  "observed": {
+    "meanTotal": 227.65040650406505,
+    "totalSD": 19.781235972070167,
+    "totalP10": 202.9,
+    "totalP90": 253,
+    "meanMargin": 12.747967479674797,
+    "medianMargin": 10,
+    "marginP90": 26,
+    "thirtyPointRate": 0.06504065040650407,
+    "fiftyPointRate": 0.0040650406504065045,
+    "onePointRate": 0.044715447154471545,
+    "overtimeRate": 0.04878048780487805,
+    "overtimeMeanMargin": 4.483333333333333,
+    "overtimeMarginP90": 8,
+    "overtimeMeanTotal": 247.51666666666668,
+    "multipleOvertimeShare": 0.06666666666666667
+  },
+  "original": {
+    "count": 246000,
+    "summary": {
+      "meanTotal": 225.74438211382113,
+      "totalSD": 17.3132864337933,
+      "totalP10": 203,
+      "totalP90": 249,
+      "meanMargin": 15.222186991869918,
+      "medianMargin": 12,
+      "marginP90": 33,
+      "thirtyPointRate": 0.13121138211382113,
+      "fiftyPointRate": 0.021459349593495936,
+      "onePointRate": 0.07236178861788618,
+      "overtimeRate": 0.054353658536585366,
+      "overtimeMeanMargin": 4.253758133273502,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 247.4364669807793,
+      "multipleOvertimeShare": 0.12429885573255553
+    },
+    "capCounts": {
+      "regulationCap": 790,
+      "overtimeCap": 623,
+      "periodCap": 204
+    }
+  },
+  "candidate": {
+    "count": 246000,
+    "summary": {
+      "meanTotal": 228.3803130081301,
+      "totalSD": 20.309134479750632,
+      "totalP10": 201,
+      "totalP90": 255,
+      "meanMargin": 12.67489837398374,
+      "medianMargin": 10,
+      "marginP90": 26,
+      "thirtyPointRate": 0.066130081300813,
+      "fiftyPointRate": 0.00566260162601626,
+      "onePointRate": 0.03746747967479675,
+      "overtimeRate": 0.04708130081300813,
+      "overtimeMeanMargin": 4.378086686237265,
+      "overtimeMarginP90": 9,
+      "overtimeMeanTotal": 249.24184078742877,
+      "multipleOvertimeShare": 0.12597133482990847
+    },
+    "capCounts": {
+      "regulationCap": 3,
+      "overtimeCap": 0,
+      "periodCap": 0
+    }
+  },
+  "gates": [
+    {
+      "metric": "meanTotal",
+      "observed": 227.65040650406505,
+      "candidate": 228.3803130081301,
+      "tolerance": 4,
+      "difference": 0.7299065040650419,
+      "passed": true
+    },
+    {
+      "metric": "totalSD",
+      "observed": 19.781235972070167,
+      "candidate": 20.309134479750632,
+      "tolerance": 3,
+      "difference": 0.5278985076804652,
+      "passed": true
+    },
+    {
+      "metric": "totalP10",
+      "observed": 202.9,
+      "candidate": 201,
+      "tolerance": 5,
+      "difference": -1.9000000000000057,
+      "passed": true
+    },
+    {
+      "metric": "totalP90",
+      "observed": 253,
+      "candidate": 255,
+      "tolerance": 5,
+      "difference": 2,
+      "passed": true
+    },
+    {
+      "metric": "meanMargin",
+      "observed": 12.747967479674797,
+      "candidate": 12.67489837398374,
+      "tolerance": 1.5,
+      "difference": -0.07306910569105618,
+      "passed": true
+    },
+    {
+      "metric": "medianMargin",
+      "observed": 10,
+      "candidate": 10,
+      "tolerance": 2,
+      "difference": 0,
+      "passed": true
+    },
+    {
+      "metric": "marginP90",
+      "observed": 26,
+      "candidate": 26,
+      "tolerance": 3,
+      "difference": 0,
+      "passed": true
+    },
+    {
+      "metric": "thirtyPointRate",
+      "observed": 0.06504065040650407,
+      "candidate": 0.066130081300813,
+      "tolerance": 0.025,
+      "difference": 0.0010894308943089348,
+      "passed": true
+    },
+    {
+      "metric": "fiftyPointRate",
+      "observed": 0.0040650406504065045,
+      "candidate": 0.00566260162601626,
+      "tolerance": 0.008,
+      "difference": 0.0015975609756097558,
+      "passed": true
+    },
+    {
+      "metric": "onePointRate",
+      "observed": 0.044715447154471545,
+      "candidate": 0.03746747967479675,
+      "tolerance": 0.025,
+      "difference": -0.007247967479674794,
+      "passed": true
+    },
+    {
+      "metric": "overtimeRate",
+      "observed": 0.04878048780487805,
+      "candidate": 0.04708130081300813,
+      "tolerance": 0.02,
+      "difference": -0.001699186991869918,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMeanMargin",
+      "observed": 4.483333333333333,
+      "candidate": 4.378086686237265,
+      "tolerance": 1.5,
+      "difference": -0.10524664709606846,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMarginP90",
+      "observed": 8,
+      "candidate": 9,
+      "tolerance": 4,
+      "difference": 1,
+      "passed": true
+    },
+    {
+      "metric": "overtimeMeanTotal",
+      "observed": 247.51666666666668,
+      "candidate": 249.24184078742877,
+      "tolerance": 12,
+      "difference": 1.725174120762091,
+      "passed": true
+    },
+    {
+      "metric": "multipleOvertimeShare",
+      "observed": 0.06666666666666667,
+      "candidate": 0.12597133482990847,
+      "tolerance": 0.12,
+      "difference": 0.0593046681632418,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "sources": [
+    {
+      "season": 2025,
+      "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_nba_schedules/nba_schedule_2025.csv",
+      "sha256": "a7a5b6607a256c84a324f819e4461248bdff90a78b1ddb675a5a117a9a94e74f",
+      "completedGames": 1230,
+      "releaseAssetId": 493698993,
+      "assetUpdatedUtc": "2026-07-29T06:36:31Z"
+    }
+  ],
+  "trainingReferenceSha256": "d316c97bbbd5890fb32d2dd5efdc98ca5f2bd7220e1ec3b95af0bfa8752d7c9c",
+  "implementationSha256": {
+    "calibrate-scores.ts": "50a798b47eafd31347978300b5b5cbb282a693930ebadfb01ad61b111da3bfcf",
+    "season.ts": "18e8104f950dd063c8e950e07003937f5ee94aefede68d8900d250d43650a143",
+    "math.ts": "c3efb6ba058315a346a244180ddea32bb1da188f9e52096f1a376e49bd685c73",
+    "random.ts": "0de9081c0b04c9af183e6832525315c992c5781522aea2b61cf114c9f5aadf78"
+  }
+}
