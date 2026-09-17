@@ -232,6 +232,73 @@ function SynergyMeters({ synergy, draft, engineVersion, run }: { synergy: Synerg
         <h2 id="synergy-title">TEAM CHEMISTRY</h2>
         <span className="live-label">LIVE</span>
       </div>
+      <div className="meter-block">
+        <div className="meter-heading">
+          <span>
+            <Gauge size={15} />
+            USAGE
+          </span>
+          <strong>
+            {synergy.usgTeam.toFixed(1)}
+            <small>%</small>
+          </strong>
+        </div>
+        <div
+          className={`meter ${synergy.usgTeam > cap ? 'danger' : ''}`}
+          role="meter"
+          aria-label="Team usage"
+          aria-valuenow={synergy.usgTeam}
+          aria-valuemin={0}
+          aria-valuemax={Math.max(200, synergy.usgTeam)}
+          aria-valuetext={`${synergy.usgTeam.toFixed(1)} percent, cap ${cap}`}
+        >
+          <span style={{ width: `${Math.min((synergy.usgTeam / 200) * 100, 100)}%` }} />
+          <i style={{ left: `${(cap / 200) * 100}%` }} />
+        </div>
+        <div className="meter-caption">
+          <span className={synergy.usgTeam > cap ? 'negative' : ''}>
+            {picked ? usageState : 'AWAITING PICKS'}
+          </span>
+          <span>CAP {cap}%</span>
+        </div>
+      </div>
+      <div className="chemistry-grid">
+        <div>
+          <span>
+            <Target size={15} />
+            SPACING
+          </span>
+          <strong className={synergy.spacingTier === 'POOR' && picked ? 'negative' : ''}>
+            {picked ? synergy.spacingTier : '--'}
+          </strong>
+          <small>{synergy.spacingRating.toFixed(1)} EXPECTED 3PM</small>
+        </div>
+        <div>
+          <span>
+            <Shield size={15} />
+            DEFENSE
+          </span>
+          <strong>{picked ? synergy.drtgTeam.toFixed(1) : '--'}</strong>
+          <small>DEFENSIVE RATING</small>
+        </div>
+      </div>
+      <div className="rating-strip">
+        <div>
+          <span>OFFENSE</span>
+          <strong>{picked ? synergy.effectiveOrtg.toFixed(1) : '--'}</strong>
+        </div>
+        <div>
+          <span>NET RATING</span>
+          <strong className={picked && synergy.netRating < 0 ? 'negative' : 'positive'}>
+            {picked ? `${synergy.netRating > 0 ? '+' : ''}${synergy.netRating.toFixed(1)}` : '--'}
+          </strong>
+        </div>
+        <div>
+          <span>DEPTH</span>
+          <strong>+{synergy.depthBonus.toFixed(1)}</strong>
+        </div>
+      </div>
+      <DefenseBreakdown lineup={draft.lineup} />
       <details className="chemistry-guide">
         <summary>
           <CircleHelp size={15} aria-hidden="true" />
@@ -286,73 +353,6 @@ function SynergyMeters({ synergy, draft, engineVersion, run }: { synergy: Synerg
           players are picked. Net rating here excludes depth and game-day adjustments.
         </p>
       </details>
-      <div className="meter-block">
-        <div className="meter-heading">
-          <span>
-            <Gauge size={15} />
-            USAGE
-          </span>
-          <strong>
-            {synergy.usgTeam.toFixed(1)}
-            <small>%</small>
-          </strong>
-        </div>
-        <div
-          className={`meter ${synergy.usgTeam > cap ? 'danger' : ''}`}
-          role="meter"
-          aria-label="Team usage"
-          aria-valuenow={synergy.usgTeam}
-          aria-valuemin={0}
-          aria-valuemax={Math.max(200, synergy.usgTeam)}
-          aria-valuetext={`${synergy.usgTeam.toFixed(1)} percent, cap ${cap}`}
-        >
-          <span style={{ width: `${Math.min((synergy.usgTeam / 200) * 100, 100)}%` }} />
-          <i style={{ left: `${(cap / 200) * 100}%` }} />
-        </div>
-        <div className="meter-caption">
-          <span className={synergy.usgTeam > cap ? 'negative' : ''}>
-            {picked ? usageState : 'AWAITING PICKS'}
-          </span>
-          <span>CAP {cap}%</span>
-        </div>
-      </div>
-      <div className="chemistry-grid">
-        <div>
-          <span>
-            <Target size={15} />
-            SPACING
-          </span>
-          <strong className={synergy.spacingTier === 'POOR' && picked ? 'negative' : ''}>
-            {picked ? synergy.spacingTier : '--'}
-          </strong>
-          <small>{synergy.spacingRating.toFixed(1)} EXPECTED 3PM</small>
-        </div>
-        <div>
-          <span>
-            <Shield size={15} />
-            DEFENSE
-          </span>
-          <strong>{picked ? synergy.drtgTeam.toFixed(1) : '--'}</strong>
-          <small>DEFENSIVE RATING</small>
-        </div>
-      </div>
-      <DefenseBreakdown lineup={draft.lineup} />
-      <div className="rating-strip">
-        <div>
-          <span>OFFENSE</span>
-          <strong>{picked ? synergy.effectiveOrtg.toFixed(1) : '--'}</strong>
-        </div>
-        <div>
-          <span>NET RATING</span>
-          <strong className={picked && synergy.netRating < 0 ? 'negative' : 'positive'}>
-            {picked ? `${synergy.netRating > 0 ? '+' : ''}${synergy.netRating.toFixed(1)}` : '--'}
-          </strong>
-        </div>
-        <div>
-          <span>DEPTH</span>
-          <strong>+{synergy.depthBonus.toFixed(1)}</strong>
-        </div>
-      </div>
     </section>
   );
 }
@@ -504,6 +504,7 @@ function PlayerPool({
         ) : (
           filtered.map((player) => {
             const legal = availableSlots(draft.lineup, player).length > 0;
+            const statCell = (key: PlayerSortKey) => `stat-cell${sort.key === key ? ' stat-active' : ''}`;
             return (
               <button
                 key={player.id}
@@ -523,16 +524,16 @@ function PlayerPool({
                   </small>
                 </span>
                 <span className="position-tag">{player.primaryPosition}</span>
-                {!hidden && <><span>{player.stats.pts.toFixed(1)}</span>
-                <span>{player.stats.reb.toFixed(1)}</span>
-                <span>{player.stats.ast.toFixed(1)}</span>
-                <span>{player.stats.stl.toFixed(1)}</span>
-                <span>{player.stats.blk.toFixed(1)}</span>
-                <span>{(player.stats.fgPct * 100).toFixed(1)}</span>
-                <span>{(player.stats.threePtPct * 100).toFixed(1)}</span>
-                <span>{player.stats.threePtAttempts.toFixed(1)}</span>
-                <span>{player.stats.usgPct.toFixed(1)}</span>
-                <span>
+                {!hidden && <><span className={statCell('pts')} data-label="PTS">{player.stats.pts.toFixed(1)}</span>
+                <span className={statCell('reb')} data-label="REB">{player.stats.reb.toFixed(1)}</span>
+                <span className={statCell('ast')} data-label="AST">{player.stats.ast.toFixed(1)}</span>
+                <span className={statCell('stl')} data-label="STL">{player.stats.stl.toFixed(1)}</span>
+                <span className={statCell('blk')} data-label="BLK">{player.stats.blk.toFixed(1)}</span>
+                <span className={statCell('fgPct')} data-label="FG%">{(player.stats.fgPct * 100).toFixed(1)}</span>
+                <span className={statCell('threePtPct')} data-label="3P%">{(player.stats.threePtPct * 100).toFixed(1)}</span>
+                <span className={statCell('threePtAttempts')} data-label="3PA">{player.stats.threePtAttempts.toFixed(1)}</span>
+                <span className={statCell('usgPct')} data-label="USG%">{player.stats.usgPct.toFixed(1)}</span>
+                <span className={statCell('dbpm')} data-label="DBPM">
                   {player.stats.dbpm > 0 ? '+' : ''}
                   {player.stats.dbpm.toFixed(1)}
                 </span>
@@ -597,6 +598,22 @@ export function DraftRoom() {
       window.clearTimeout(timeout);
     };
   }, [busy]);
+  const spinSettled = useRef(false);
+  useEffect(() => {
+    if (busy) {
+      spinSettled.current = true;
+      return;
+    }
+    if (!spinSettled.current || !draft?.roll) return;
+    spinSettled.current = false;
+    // Pause so the rolled team and era can be read before moving to the pool
+    const timeout = window.setTimeout(() => {
+      document.querySelector('.player-pool')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 800);
+    return () => window.clearTimeout(timeout);
+  }, [busy, draft?.roll]);
+  const sidebarRef = useRef<HTMLElement | null>(null);
+  const [sidebarInView, setSidebarInView] = useState(false);
   function act(action: () => void, cue?: SoundCue) {
     try {
       setError('');
@@ -619,8 +636,24 @@ export function DraftRoom() {
   const eraSpinning = busy === 'both' || busy === 'era';
   const showPostseason = !!run?.postseason && resultView === 'postseason';
   const screen = showPostseason ? 'postseason' : run?.season ? 'season' : `${draft?.phase}:${filled}`;
+  const lastScreen = useRef(screen);
   useEffect(() => {
-    if (ready) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (!ready) return;
+    const betweenPicks = screen !== lastScreen.current
+      && screen.startsWith('DRAFT:') && lastScreen.current.startsWith('DRAFT:');
+    lastScreen.current = screen;
+    if (betweenPicks) document.querySelector('.reel-section')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    else window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [ready, screen]);
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+    const observer = new IntersectionObserver(
+      (entries) => setSidebarInView(entries.some((entry) => entry.isIntersecting)),
+      { threshold: 0.15 },
+    );
+    observer.observe(sidebar);
+    return () => observer.disconnect();
   }, [ready, screen]);
   const hidden = !!run && statsHiddenForRun(run);
   const noChemistry = run?.iqMode === 'no';
@@ -668,7 +701,7 @@ export function DraftRoom() {
         </div>
       </header>
       <main>
-        <div className="masthead">
+        <div className={`masthead${ready && draft && draft.phase !== 'COACH' ? ' masthead-compact' : ''}`}>
           <div>
             <p className="eyebrow">BASKETBALL. ACROSS GENERATIONS.</p>
             <h1>
@@ -876,12 +909,26 @@ export function DraftRoom() {
                       </>
                     )}
                   </div>
-                  <aside className="draft-sidebar">
+                  <aside className="draft-sidebar" ref={sidebarRef}>
                     <Roster draft={draft} onInspect={run?.season ? setSelected : undefined} />
                     {hidden ? <div className="iq-locked"><LockKeyhole size={24} aria-hidden="true" /><strong>HI IQ / STATS LOCKED</strong></div>
                       : <SynergyMeters draft={draft} synergy={synergy} engineVersion={run!.engineVersion} run={run!} />}
                   </aside>
                 </div>
+                {!run?.season && !sidebarInView && (
+                  <button
+                    className="lineup-jump"
+                    aria-label="View lineup and team chemistry"
+                    onClick={() => sidebarRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  >
+                    <Users size={15} aria-hidden="true" />
+                    LINEUP {filled}/6
+                    {!hidden && !noChemistry && filled > 0 && (
+                      <b>{synergy.netRating > 0 ? '+' : ''}{synergy.netRating.toFixed(1)} NET</b>
+                    )}
+                    <ArrowDown size={14} aria-hidden="true" />
+                  </button>
+                )}
               </>
             )}
           </>

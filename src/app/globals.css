@@ -948,9 +948,9 @@ main {
   margin-top: 32px;
 }
 .chemistry-guide {
-  margin-bottom: 18px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
   font-size: 12px;
   line-height: 1.6;
 }
@@ -1778,7 +1778,7 @@ main {
     margin-top: 6px;
   }
   .court {
-    height: 340px;
+    height: 305px;
   }
   .court-position strong {
     font-size: 11px;
@@ -1861,7 +1861,15 @@ main {
     display: none;
   }
   .court-c {
-    top: 21%;
+    top: 17%;
+  }
+  .court-pf,
+  .court-sf {
+    top: 42%;
+  }
+  .court-pg,
+  .court-sg {
+    top: 73%;
   }
   .completion {
     padding-top: 12px;
@@ -2156,5 +2164,156 @@ main {
 @media (max-width: 360px) {
   .era-reel .reel-value > strong {
     font-size: 36px;
+  }
+}
+.lineup-jump {
+  display: none;
+}
+@media (max-width: 760px) {
+  main {
+    /* Clearance for the fixed lineup-jump pill */
+    padding-bottom: 84px;
+  }
+  .lineup-jump {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px;
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text);
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 6px 18px #000c;
+  }
+  .lineup-jump b {
+    color: var(--accent);
+  }
+  .lineup-jump svg {
+    color: var(--muted);
+  }
+  /* Compact chemistry panel to shorten the mobile page */
+  .synergy-section .section-heading {
+    margin-bottom: 10px;
+  }
+  .meter-heading strong {
+    font-size: 20px;
+  }
+  .meter-heading small {
+    font-size: 12px;
+  }
+  .meter {
+    margin: 6px 0;
+  }
+  .chemistry-grid {
+    margin-top: 12px;
+  }
+  .chemistry-grid > div {
+    gap: 5px;
+  }
+  .chemistry-grid strong {
+    font-size: 20px;
+  }
+  .defense-breakdown {
+    margin-block: 10px;
+  }
+  .rating-strip {
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  .rating-strip span {
+    margin-bottom: 3px;
+  }
+  .rating-strip strong {
+    font-size: 18px;
+  }
+  .chemistry-guide {
+    margin-top: 10px;
+  }
+}
+@media (max-width: 760px) {
+  .masthead-compact {
+    margin-bottom: 12px;
+  }
+  .masthead-compact .eyebrow {
+    display: none;
+  }
+  .masthead-compact h1 {
+    font-size: 22px;
+  }
+  /* Card rows replace the horizontally scrolling stat grid on small screens */
+  .player-list:not(.hidden-stats) .player-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-width: 0;
+    text-align: left;
+  }
+  .player-list:not(.hidden-stats) .table-header {
+    position: static;
+    gap: 6px;
+    padding: 10px 4px;
+    font-size: 9px;
+  }
+  .player-list:not(.hidden-stats) .column-sort {
+    min-height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    justify-content: center;
+  }
+  .player-list:not(.hidden-stats) .column-sort[aria-pressed='true'] {
+    border-color: var(--accent);
+  }
+  .player-list:not(.hidden-stats) .player-row {
+    gap: 8px 12px;
+    padding: 12px 4px;
+  }
+  .player-list:not(.hidden-stats) .player-name {
+    order: 1;
+    flex: 1 1 140px;
+    min-width: 0;
+  }
+  .player-list:not(.hidden-stats) .position-tag {
+    order: 2;
+  }
+  .player-list:not(.hidden-stats) .overall {
+    order: 3;
+    font-size: 17px;
+  }
+  .player-list:not(.hidden-stats) .overall::before {
+    content: 'OVR ';
+    color: var(--muted);
+    font-size: 8px;
+    font-weight: 700;
+  }
+  .player-list:not(.hidden-stats) .player-row > svg {
+    display: none;
+  }
+  .player-list:not(.hidden-stats) .stat-cell {
+    display: block;
+    order: 5;
+    font-size: 11px;
+  }
+  .player-list:not(.hidden-stats) .stat-cell::before {
+    content: attr(data-label) ' ';
+    color: var(--muted);
+    font-size: 8px;
+    font-weight: 700;
+  }
+  .player-list:not(.hidden-stats) .stat-cell.stat-active {
+    order: 4;
+    color: var(--accent);
+  }
+  .player-list:not(.hidden-stats) .stat-cell.stat-active::before {
+    color: var(--accent);
   }
 }
