@@ -184,9 +184,6 @@ function Roster({ draft, onInspect }: { draft: DraftState; onInspect?: (player: 
             </div>
           );
         })}
-        <span className="court-wordmark" aria-hidden="true">
-          98-0
-        </span>
       </div>
       <div className={`bench-slot ${draft.lineup.SIXTH ? 'filled' : ''}`} data-slot="SIXTH">
         <span className="bench-badge">6TH</span>

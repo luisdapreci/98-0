@@ -1,11 +1,12 @@
 # Documentation
 
-Start with the [game design](design/GAME_DESIGN.md), [latest functional validation](progress/PHASE7_PROGRESS.md), and [release gates](release/RELEASE_SCORECARD.md). Dated experiment and playtest records are historical evidence, not current-build acceptance.
+Start with the [game overview](../README.md), [project status and updates](STATUS.md), [game design](design/GAME_DESIGN.md), and [release gates](release/RELEASE_SCORECARD.md). Dated experiment and playtest records are historical evidence, not current-build acceptance.
 
 ## Layout
 
 ```text
 docs/
+  STATUS.md           Current status, dated updates and deployment evidence
   design/             Game rules and roadmap
   progress/           Implementation and verification by phase
   release/            Acceptance gates and release decisions
@@ -20,8 +21,9 @@ docs/
 
 | Area | Document | Purpose |
 | --- | --- | --- |
+| Status | [Project updates](STATUS.md) | Current status, deployment history, validation and remaining work |
 | Design | [Game design](design/GAME_DESIGN.md) | Current rules, compatibility and roadmap |
-| Progress | [Phase 7](progress/PHASE7_PROGRESS.md) | Almanac, history, sharing and latest full functional validation |
+| Progress | [Phase 7](progress/PHASE7_PROGRESS.md) | Almanac, history, sharing and phase-specific validation |
 | Progress | [Phase 6](progress/PHASE6_PROGRESS.md) | Daily rotation, limits and focused validation |
 | Progress | [Phase 4/5](progress/PHASE4_PROGRESS.md) | Earlier playback and postseason implementation record |
 | Release | [Release scorecard](release/RELEASE_SCORECARD.md) | Binding gates, approved budgets and outstanding measurements |
@@ -48,6 +50,6 @@ Replay comparisons account for this metadata translation; frozen-file checks sti
 
 ## Adding Documents
 
-Put current rules in `design`, implementation records in `progress`, acceptance decisions in `release`, and human-study material in `playtests`. Put new research beside its related reports in `research/mid-iq` or `research/phase3`, using a new filename rather than overwriting frozen evidence. Run commands from the repository root and use the new paths shown in the guides; legacy paths embedded in JSON are resolved by the research readers, not filesystem aliases.
+Add dated status and deployment updates to [STATUS.md](STATUS.md), including validation scope and remaining limitations. Keep the root README focused on the game and getting started. Put current rules in `design`, implementation records in `progress`, acceptance decisions in `release`, and human-study material in `playtests`. Put new research beside its related reports in `research/mid-iq` or `research/phase3`, using a new filename rather than overwriting frozen evidence. Run commands from the repository root and use the new paths shown in the guides; legacy paths embedded in JSON are resolved by the research readers, not filesystem aliases.
 
 Keep this index for navigation rather than duplicating detailed status reports. Build output, test results, caches and local environments do not belong in this folder.

@@ -14,7 +14,7 @@ export function BrandMark() {
         }} />
       </span>
       <span style={{ display: 'flex', position: 'relative', height: '100%' }}>
-        <span>0</span><span style={{ color: '#d5ef64' }}>.</span>
+        <span>0</span><span style={{ color: '#f2a35c' }}>.</span>
         <span style={{
           position: 'absolute', bottom: '0.06em', left: 0,
           width: '100%', height: '0.07em', background: '#f3f2eb',

@@ -24,6 +24,22 @@ async function offerInstall(page: Page, outcome: 'accepted' | 'dismissed' | 'err
 
 test('install manifest and PNG icons are usable and the game remains playable', async ({ page, request }, testInfo) => {
   await openGame(page);
+  await expect(page.locator('link[rel="icon"][href^="/favicon.ico"]')).toHaveCount(1);
+  const favicon = await request.get('/favicon.ico');
+  expect(favicon.ok()).toBe(true);
+  const faviconBytes = await favicon.body();
+  expect(faviconBytes.readUInt16LE(0)).toBe(0);
+  expect(faviconBytes.readUInt16LE(2)).toBe(1);
+  expect(faviconBytes.readUInt16LE(4)).toBe(3);
+  for (const [index, size] of [16, 32, 48].entries()) {
+    const entry = 6 + index * 16;
+    expect(faviconBytes[entry]).toBe(size);
+    expect(faviconBytes[entry + 1]).toBe(size);
+    const offset = faviconBytes.readUInt32LE(entry + 12);
+    expect(faviconBytes.subarray(offset, offset + 8).toString('hex')).toBe('89504e470d0a1a0a');
+    expect(faviconBytes.readUInt32BE(offset + 16)).toBe(size);
+    expect(faviconBytes.readUInt32BE(offset + 20)).toBe(size);
+  }
   const manifestLink = page.locator('link[rel="manifest"]');
   await expect(manifestLink).toHaveAttribute('href', '/manifest.webmanifest');
   const response = await request.get((await manifestLink.getAttribute('href'))!);

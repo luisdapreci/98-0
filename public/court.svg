@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 450" fill="none">
-  <defs><pattern id="floor" width="52" height="90" patternUnits="userSpaceOnUse"><path d="M0 0H52V90H0Z" fill="#1c2926"/><path d="M0 0V90M26 0V45M0 45H52M52 0V90" stroke="#24312d" stroke-width="1"/></pattern></defs>
-  <path fill="url(#floor)" d="M0 0h520v450H0z"/>
-  <g stroke="#637d6f" stroke-width="1.5" opacity=".6">
+  <path fill="#261d16" d="M0 0h520v450H0z"/>
+  <g stroke="#c07f4b" stroke-width="1.5" opacity=".6">
     <path d="M20 20H500V430H20zM20 430H500M180 20V180H340V20M205 20V180H315V20"/>
     <circle cx="260" cy="180" r="55"/>
     <path d="M45 20V85C45 365 475 365 475 85V20M200 430a60 60 0 0 1 120 0"/>

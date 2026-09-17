@@ -1,90 +1,58 @@
 # 98-0
 
-A sports roguelike where you draft history's greatest NBA starting five, survive an 82-game gauntlet, and chase an undefeated season.
-
-Draft six players (five starters plus a 6th man) by spinning a Team × Era slot reel, then watch an animated season ticker resolve all 82 games. Roster chemistry — usage overload, floor spacing, defensive roles, coach synergies — decides whether your superteam actually works.
-
-Inspired by `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, and *Immaculate Grid*.
+A basketball drafting roguelike. Build a team from NBA history, play through an 82-game season, and chase a perfect playoff run: **82 regular-season wins + 16 playoff wins = 98-0**.
 
 ## Public playtest
 
-Play at **<https://98-0.vercel.app>**. Anyone with the link can play without an account. This is a playtest build, not balance or full release acceptance.
+**Play now: <https://98-0.vercel.app>**
 
-Saves, Daily attempts and history stay in the current browser on this domain; they do not sync between devices or transfer from localhost. Clearing site data removes them. Ask testers to use this stable URL and send their device/browser, a screenshot or shared result, and what happened versus what they expected. Physical-device sharing and Safari/Firefox remain unverified.
+Free to access in your browser, with no account required. The game is in public playtesting; balance and device compatibility are still being evaluated. See [project status](docs/STATUS.md) for updates and known limitations.
 
-Published to Vercel project `preciadox/98-0` on 2026-09-17. Vercel connected the GitHub repository for automatic deployments; pushes to its configured production branch can update the playtest. No gameplay secrets, database or environment variables are required. For a manual update from this folder after validation:
+## How to play
 
-```powershell
-npx --yes vercel@latest deploy --prod
-```
+1. **Choose your IQ mode and sign a coach.** Decide how much chemistry and scouting information you want to manage.
+2. **Draft six players.** Spin the Team x Era reels to find historical players, then build five starters and a sixth man. Use team and era rerolls to shape your options.
+3. **Start the season.** Watch an animated ticker reveal all 82 games, including rivalries, overtime, defensive breakdowns and explanations for losses.
+4. **Chase a championship.** New runs qualify for the postseason at 45 wins. After the regular season is fully revealed, start the postseason and navigate the play-in where applicable, then four playoff series. A ring takes 16 main-bracket wins; a perfect 98-0 also requires an 82-0 regular season and no play-in.
 
-Keep the production alias stable so browser saves remain available. Record the deployment URL when collecting observations; the earlier season-3 playtest protocol is not evidence for this build.
+## What makes a team work
 
-Verification on 2026-09-17: 114 engine tests, typecheck, production build and 94 local desktop/320px Edge browser checks passed. The public URL returned HTTP 200 without authentication. Eight deployed desktop/mobile checks passed for six-pick drafting and playback, Daily completion/reload/practice, postseason history and PNG exports, and share fallbacks. The checked runtime dependencies had no known CVEs; this was not a comprehensive security audit or human playtest.
+The biggest names do not automatically make the best lineup. In chemistry-enabled modes, your roster must balance:
 
-Audio simplification deployed on 2026-09-17: removed volume settings and the test-sound popover; enabled audio now uses fixed 100% master gain with the existing compressor. Mute still persists, legacy volume values are ignored, and run saves are unchanged. Immutable deployment: <https://98-0-ayk9d5flv-preciadox.vercel.app>; public alias remains <https://98-0.vercel.app>.
+- **Usage:** too many ball-dominant scorers can overload the offense.
+- **Spacing:** shooting gives the lineup room to operate.
+- **Defensive roles:** individual defense and complementary roles both matter.
+- **Coach fit:** each system rewards a different kind of roster.
+- **Bench quality:** your sixth man contributes to the team's strength.
 
-Validation: `npm test` passed 114 tests; `npm run typecheck`, `npm run build`, and `git diff --check` passed. `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- tests/browser/audio.spec.ts` passed 12 local desktop/320px checks, with screenshots reviewed. Verified project settings with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published using `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Public access returned HTTP 200 without credentials. With `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, the audio, postseason, Daily and collection browser files filtered by `sound|audio|legacy volume|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share` passed all 22 checks (exit code 0). An earlier live run was interrupted; this complete run supersedes it. The remote URL override was cleared afterward. Full browser-suite rerun, subjective listening, physical devices, Safari/Firefox and actual messaging-app delivery remain unverified for this narrow update.
+The simulation is seeded and repeatable. The same draft actions, seed and rule versions reproduce the same run. Playback reveals an already-saved result; reloading does not reroll games. Supported older saves keep their original rules and results.
 
-To repeat those deployed checks (the optional URL disables the local test server):
+## IQ modes
 
-```powershell
-$env:PLAYWRIGHT_CHANNEL = 'msedge'
-$env:PLAYWRIGHT_BASE_URL = 'https://98-0.vercel.app'
-npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share'
-Remove-Item Env:PLAYWRIGHT_BASE_URL
-```
+Choose a mode before signing your coach:
 
-## Status
+| Mode | Experience |
+| --- | --- |
+| **No IQ** | Focus on individual offense, defense and bench quality. Chemistry and coach effects are disabled. |
+| **Mid IQ** | The default: build around chemistry, roles and coach synergies with scouting information available. |
+| **HI IQ** | The same simulation as Mid IQ, but scouting information stays hidden until you start the season. |
 
-As of 2026-09-17, the local game is playable through drafting, the seeded 82-game season, play-in, four playoff series and championship/perfect-run results. Playback includes rivalries, overtime, loss explanations, defense breakdowns and audio enabled by default at 100%, with a persistent mute toggle.
+## Daily, collection and sharing
 
-- **IQ modes:** choose before signing a coach. No IQ disables chemistry and coach effects while retaining individual offense, defense and bench quality. Mid IQ is the default. HI IQ uses the same simulation as Mid IQ but hides scouting information until Start Season.
-- **Postseason:** new runs qualify at 45 wins after all 82 games are revealed. Start Postseason explicitly; a ring requires 16 main-bracket wins. A perfect 98-0 requires 82-0 plus 16-0, without a play-in.
-- **Local Daily:** Mid IQ challenges rotate indefinitely through 56 themes, reshuffled each cycle from September 17, 2026 UTC. Attempts and results are local/unverified; retries are practice. Requires browser storage, Web Locks and HTTPS or localhost. See [Daily rules and limits](docs/progress/PHASE6_PROGRESS.md).
-- **Collection and sharing:** completing an 82-game simulation unlocks all 12 Coach Almanac systems. History retains 50 recent seasons and per-mode personal bests. Revealed results support PNG/text export and browser sharing. See [storage, spoiler rules and fallbacks](docs/progress/PHASE7_PROGRESS.md).
+- **Daily challenges:** a Mid IQ challenge each UTC day, rotating through 56 themes reshuffled each cycle. Your first attempt counts locally; retries are practice. Results are not server-verified, and there are no online rankings.
+- **Coach Almanac:** complete an 82-game simulation to unlock all 12 coach systems for reference.
+- **Season history:** keep your 50 most recent seasons and personal bests for each IQ mode.
+- **Shareable results:** export revealed results as text or a square PNG, or share through a supported browser.
 
-Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; installation is supported, but there is no offline cold-launch cache.
+## Browser experience
 
-### Haptic feedback
+Play on desktop or mobile, with sound effects and a persistent mute toggle. Supported devices also offer independently controlled vibration for drafting, playback and results. Vibration availability depends on the browser, hardware and OS; it is not supported in Safari on iPhone/iPad.
 
-Short vibration patterns accompany draft actions, playback and result reveals on devices with a supported Vibration API. The vibration icon beside sound toggles haptics independently of mute. Its preference is stored under `98-0-haptics-v1`, separate from run saves. Haptics default on unless reduced motion is requested; an explicit saved choice takes precedence. Feedback requires interaction, stops when the page is hidden, and never replays just because a save loads.
+Supporting browsers can install **98-0** to the home screen or app launcher. Chrome/Edge can offer native installation; iPhone/iPad Safari uses Share > Add to Home Screen. **Internet access is required to open the game:** installation does not add offline support.
 
-The control is hidden when the API is missing, including Safari on iPhone/iPad. Browsers, device hardware and OS settings may suppress vibration even when the API exists; installing the web app does not add native haptic support. Unavailable or rejected vibration never blocks gameplay.
+Saves, Daily attempts, preferences and history stay in the current browser and site. They do not sync across devices or transfer from localhost or preview URLs. Clearing site data removes them, and an installed app may use separate storage on some platforms. Daily requires browser storage and Web Locks over HTTPS or localhost.
 
-Local verification on 2026-09-17: `npm run typecheck` and `npm run build` passed (exit code 0). `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- tests/browser/audio.spec.ts` passed all 20 desktop/320px checks (exit code 0), including eight new haptic checks for patterns, independent mute, persistence, reduced-motion defaults, storage failures, background cancellation, saved results and unsupported APIs. Desktop/mobile screenshots were reviewed. Vibration API calls are mocked; physical-device feel and delivery remain unverified.
-
-Published on 2026-09-17 from clean commit `78a0f1bf4228691597d9fcfe6dfd7f72dda53464`, including haptics, larger share-card text, and the updated brand mark/icons. Verified the existing project with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then deployed with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Immutable deployment: <https://98-0-64zni1mis-preciadox.vercel.app>; public alias: <https://98-0.vercel.app>.
-
-Release checks passed: 115 engine tests (`npm test -- --test-reporter=dot`), `npm run typecheck`, `npm run build`, `git diff --check`, and all 118 local desktop/320px Edge browser checks (`npm run test:browser -- --reporter=dot`). The successful fresh-build run supersedes an earlier local run affected by static-asset HTTP 500 errors during concurrent workspace changes. Anonymous production HTTP access returned 200 with the manifest; a raw-HTML coach-text probe did not match, so rendered gameplay was verified by the live browser suite instead.
-
-With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, `npm run test:browser -- tests/browser/audio.spec.ts tests/browser/install.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'haptics|vibration|sound|audio|legacy volume|install|standalone|Safari|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share' --reporter=dot` passed all 44 deployed checks (3.0 minutes). These cover interactive gameplay, haptics/audio, Daily and saved-result persistence, install assets, share fallbacks and PNG output. Deployed desktop/mobile header and exported-result screenshots were reviewed. The remote URL override was cleared and confirmed absent. Physical haptics, native installation, Safari/Firefox, actual messaging-app delivery and human balance acceptance remain unverified. No player storage or save formats were changed.
-
-Haptic diagnostic follow-up published on 2026-09-17: enabling vibration now requests two 180 ms pulses separated by 100 ms; normal gameplay patterns are unchanged. Rejected requests and API exceptions display a status message instead of failing silently. This diagnoses a reported Android PWA issue; it is not a confirmed physical-device fix. Even an accepted Vibration API request can be suppressed by hardware or OS settings.
-
-Validated the two-file haptic/test working-tree update with `npm test` (115 passed), `npm run typecheck`, `npm run build`, `git diff --check`, and `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- tests/browser/audio.spec.ts --reporter=dot` (20 local desktop/mobile checks passed). After verifying `preciadox/98-0` with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, published using `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Immutable deployment: <https://98-0-lbkbko9q6-preciadox.vercel.app>; public alias remains <https://98-0.vercel.app>.
-
-Anonymous access returned HTTP 200 with title `98-0 | The Draft Room`. With `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, `npm run test:browser -- tests/browser/audio.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'haptics|vibration|sound|audio|legacy volume|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share' --reporter=dot` passed all 30 deployed checks (1.6 minutes). All validation commands completed successfully. Deployed desktop/mobile screenshots were reviewed and the remote override was cleared. Phone vibration delivery remains unverified; reload the app and toggle vibration off then on to try the longer confirmation pulse. No saves were cleared or migrated.
-
-Reel-feedback follow-up (2026-09-17, deployed below): the Android PWA user reports feeling the longer enable pulse and player-lock feedback, but not enough reel feedback. Spins and team/era rerolls now request one continuous 750 ms vibration, using the same `REEL_SPIN_DURATION_MS` constant as the reel animation. Player-lock and other patterns are unchanged. Typecheck, production build and all 20 local desktop/mobile audio checks passed; controlled-clock checks verify each spin/reroll remains busy at 749 ms and settles at 750 ms with one full-duration vibration request. Full-spin physical-device feedback remains to be verified after publication.
-
-Latest update published on 2026-09-17 from clean commit `0ce9800`: continuous reel feedback, compact mobile collection controls, updated brand mark and square 1800-by-1800 result-image exports. Confirmed the existing project with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published using `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Immutable deployment: <https://98-0-6js7hbj8p-preciadox.vercel.app>; public alias remains <https://98-0.vercel.app>.
-
-Pre-publish validation passed: `npm test` (115 tests), `npm run typecheck`, `npm run build`, `git diff --check`, and `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- --reporter=dot` (120 desktop/mobile checks, 5.9 minutes). Anonymous production access returned HTTP 200 with the game title and manifest. With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, `npm run test:browser -- tests/browser/audio.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'haptics|vibration|sound|audio|legacy volume|collection toolbar|Almanac unlocks|history caps|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share' --reporter=dot` passed all 36 deployed checks (exit code 0, 1.8 minutes). These cover drafting, Daily/reload persistence, postseason history, collection layouts, long-name square exports, share fallbacks and audio/haptic API behavior. Local desktop/mobile and deployed result-image/mobile-toolbar screenshots were reviewed; the remote override was cleared afterward. No player data was cleared or migrated. Physical-device vibration, native installation, Safari/Firefox, real messaging-app delivery and human balance acceptance remain unverified.
-
-### Installable app
-
-The game remains playable in a browser. Supporting browsers can also install it as **98-0**, opening in a standalone window from the home screen or app launcher. The header shows an Install control when Chrome/Edge supplies a native install offer; browser eligibility, engagement, prior dismissal, private browsing and device policy determine availability. Safari on iPhone/iPad shows an Install control with Share > Add to Home Screen guidance. Controls are hidden in standalone mode.
-
-Installation adds no account, backend, service worker or offline cache. Opening the app requires internet access. The root URL and save formats are unchanged; existing storage is not migrated or cleared. Storage remains browser/origin-specific, and home-screen storage sharing varies by platform. Do not promise cross-device sync or that an iOS installation inherits Safari saves.
-
-Local verification on 2026-09-17: `npm run typecheck` and `npm run build` passed. `npm run test:browser -- tests/browser/install.spec.ts` with Edge passed 14 desktop/320px checks (exit code 0), covering manifest and PNG dimensions, prompt acceptance/dismissal/error, installed state, Safari guidance, continued drafting and saved-run reload. Chromium reported no installability errors in disposable regular profiles; default Playwright incognito contexts correctly rejected installation. Desktop/mobile screenshots were reviewed. Native prompt lifecycle and Safari detection use mocks; actual OS installation, launch from a home-screen icon, Android/iOS devices and Safari remain unverified.
-
-Published on 2026-09-17 from clean commit `8811e8c8f9e33fa081b1de16285a29ad2ecb6fcc` using `npx --yes vercel@latest deploy --prod --yes --scope preciadox`, after confirming the existing project with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`. Immutable deployment: <https://98-0-rlv7kyqh8-preciadox.vercel.app>; stable alias: <https://98-0.vercel.app>. No accounts, storage migration or offline cache were added.
-
-Pre-publish checks passed: `npm test` (115 tests), `npm run typecheck`, `npm run build`, `git diff --check`, and 24 local Edge desktop/320px browser checks. The public alias returned HTTP 200 without credentials, with the game title and manifest present. The same 24 browser checks passed against the public alias (exit code 0), using `npm run test:browser -- tests/browser/install.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'install|standalone|Safari|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share'`. `PLAYWRIGHT_CHANNEL=msedge` was used throughout; `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app` was set only for deployed checks and cleared afterward. Deployed desktop/mobile screenshots were reviewed. Full browser-suite rerun, physical-device installation, Safari/Firefox, actual messaging-app delivery and human balance acceptance remain separate work.
-
-The latest recorded full validation is in [Phase 7](docs/progress/PHASE7_PROGRESS.md#validation): 112 engine tests, 92 desktop/mobile Edge checks, typecheck and production build passed. These are dated functional results, not human-playtest or balance sign-off. See [the release scorecard](docs/release/RELEASE_SCORECARD.md) for acceptance gates.
+Inspired by `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, and *Immaculate Grid*.
 
 ## Stack
 
@@ -102,12 +70,12 @@ npm install
 npm run dev
 ```
 
-The app serves at http://localhost:3000. Processed game data is committed under `data/processed/`, so no pipeline run is needed to play.
+The app serves at <http://localhost:3000>. Processed game data is committed under `data/processed/`, so no pipeline run is needed to play.
 
 ## Scripts
 
 | Command | Purpose |
-|---|---|
+| --- | --- |
 | `npm run dev` | Next.js dev server |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
@@ -126,7 +94,7 @@ npm run calibrate -- 500 docs/research/mid-iq/OUT.json chemistry,balanced,overlo
 
 ## Project layout
 
-```
+```text
 src/app/          Next.js routes and global styles
 src/components/   Draft room, season ticker, defense breakdown
 src/engine/       Draft rules, synergy math, season, postseason, rivalries, RNG, calibration
@@ -150,32 +118,14 @@ python scripts/data_pipeline/run_pipeline.py
 
 The pipeline fetches raw data (cached), builds peak-season player lines, generates historical opponent teams and coaches, then validates schema and basketball consistency. Downloads are skipped if the raw files already exist.
 
-## Design and balance docs
+## Documentation
 
-See the [documentation index](docs/README.md) for the folder guide and complete reading list.
+See the [documentation index](docs/README.md) for the complete reading list, research archive and data compatibility notes.
 
 | Document | Role |
-|---|---|
+| --- | --- |
+| [docs/STATUS.md](docs/STATUS.md) | Current project status, dated updates, deployment evidence and remaining work |
 | [docs/design/GAME_DESIGN.md](docs/design/GAME_DESIGN.md) | Current rules and roadmap; dated decisions remain historical |
-| [docs/progress/PHASE7_PROGRESS.md](docs/progress/PHASE7_PROGRESS.md) | Latest full functional validation; collection and sharing contract |
+| [docs/progress/PHASE7_PROGRESS.md](docs/progress/PHASE7_PROGRESS.md) | Collection and sharing contract; phase-specific validation |
 | [docs/progress/PHASE6_PROGRESS.md](docs/progress/PHASE6_PROGRESS.md) | Current Daily rotation, compatibility and focused validation |
 | [docs/release/RELEASE_SCORECARD.md](docs/release/RELEASE_SCORECARD.md) | Binding acceptance gates and outstanding measurements |
-| [docs/release/MID_IQ_CORE_RELEASE.md](docs/release/MID_IQ_CORE_RELEASE.md) | Historical season-3 balance release, not current-build sign-off |
-| [docs/research/mid-iq/MID_IQ_ROSTER_CALIBRATION.md](docs/research/mid-iq/MID_IQ_ROSTER_CALIBRATION.md) | Research history and stopped experiments |
-| [docs/playtests/BASELINE_PLAYTEST.md](docs/playtests/BASELINE_PLAYTEST.md) | Historical season-3 protocol; no human sessions recorded; needs a new build registration before use |
-
-`MID_IQ_*.json`, `PHASE3_*` reports and earlier phase reviews preserve calibration evidence, not current gameplay status. They now live under `docs/research`, with frozen JSON contents unchanged. Tests and offline tools resolve their historical metadata through the [documented migration](docs/README.md#research-compatibility). Preserve this evidence, including superseded or failed results; raw/reference data and research scripts support its reproducibility.
-
-Generated build/test output, Python bytecode and the local `.venv` are ignored. Do not commit them or delete active server output as part of documentation cleanup.
-
-## Simulation notes
-
-The engine is seeded and deterministic: identical draft actions and pinned seed, engine, data and random/score versions reproduce the same run. Different lineups can produce different results from shared game draws. Season playback replays a result that was already simulated and saved; it never draws new randomness.
-
-New runs use **`season-7` / `mid-iq-3` / `conditional-score-3`**: a 135% base usage cap plus coach adjustments, 1.5% offensive efficiency lost per usage point above the cap (0.45 floor), and qualification at 45 wins after all 82 games. Higher entry tiers remain 65/70/75 wins. Postseason starts explicitly after regular-season playback completes and preserves the regular-season record.
-
-Rivalry evidence and postseason rules are versioned separately. Old saves without rivalry metadata stay unannotated, but qualifying saved seasons can enter the postseason. Playback cursors are separate for regular season and postseason. Recovery permits at most two machine epsilons of cross-runtime rounding in win probabilities while preserving saved values; ratings, scores, winners and other state remain exact.
-
-New saves also pin `iqMode` and `iqVersion: iq-1`. Saves without those fields retain Mid IQ behavior and their original results. The mode-aware wrapper preserves the frozen baseline math source; No IQ uses its separate `no-iq-1` policy for previews, games and recovery. Local hidden information is a play mode, not protection against inspecting downloaded datasets or browser storage.
-
-Supported saves retain their pinned rules and results: `season-1` through `season-4` require 60 wins; `season-5` and `season-6` require 40; `season-7` requires 45. The 135% cap began in `season-4`, and the stricter overload penalty began in `season-6`. Older saves are not resampled or relabeled. Frozen calibration reports retain their original versions and qualification thresholds.
