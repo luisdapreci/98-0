@@ -8,7 +8,17 @@ Inspired by `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, and *Immaculate Gri
 
 ## Status
 
-Phase 4 (season playback) is largely implemented. Playoffs are not playable yet. See [docs/PHASE4_PROGRESS.md](docs/PHASE4_PROGRESS.md) for the current state and known gaps.
+As of 2026-09-16, the core loop is playable in **No IQ**, **Mid IQ** (default), and **HI IQ**: drafting, the reproducible 82-game season, rivalry annotations, play-in, four playoff series and championship/perfect-run results. Playback includes overtime reveals, loss explanations, defense breakdowns and opt-in audio. Postseason adds matchup previews, elimination/clincher pauses, series-by-series skipping, championship progress, highlights and personalized endings.
+
+Select the IQ mode before signing a coach; it stays locked for the run. **No IQ** disables usage, spacing, coach effects and defensive-role fit while retaining individual offense, defense and bench quality. **Mid IQ** preserves the former Classic rules. **HI IQ** uses identical Mid IQ simulation but hides scouting stats, coaching effects, chemistry and stat-based sorting until **Start Season**, including after the sixth pick. Low IQ has been removed. Daily, Coach Almanac, run history, sharing and online rankings remain unimplemented.
+
+New runs require **45 wins** to qualify; after revealing all 82 games, choose **Start Postseason**. A ring requires 16 main-bracket wins; 98-0 requires exactly 82-0 plus 16-0, without a play-in.
+
+Changing IQ mode before coach signing starts a fresh seeded draft with reshuffled coach offers, excluding the immediately previous coaches when enough alternatives exist. Clicking the active mode or reloading preserves the offers.
+
+Sound is opt-in from the header speaker control, with volume and a preview in Sound settings. Original synthesized basketball-inspired effects cover reel spins/stops, coach signing, pick locks, playback starts/stops, wins/losses, overtime, series advancement and championship/perfect-run endings. Mute and volume persist separately from the run. Reload never replays old cues; a browser gesture unlocks audio. Hidden tabs cancel sounds, and fast playback replaces earlier cues instead of building a queue. Audio never changes simulation results.
+
+See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) for current rules and planned work, [docs/PHASE4_PROGRESS.md](docs/PHASE4_PROGRESS.md) for validation, and [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) for outstanding release gates. Current checks: 98 engine tests, 38 desktop/320px browser tests using Edge (including 10 audio checks), and production build pass. Audio checks exercise real waveform rendering/cancellation, settings persistence, zero volume, background muting, draft/playback events, unsupported browsers and unchanged saves. These are functional checks, not listening, mode-specific balance or human-playtest acceptance; no completed human playtest is recorded.
 
 ## Stack
 
@@ -36,8 +46,11 @@ The app serves at http://localhost:3000. Processed game data is committed under 
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
 | `npm test` | Engine regression suite (`src/engine/*.test.ts`) |
+| `npm run test:browser` | Playwright desktop/mobile journeys against a production build |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run calibrate` | Balance harness — simulates batches of drafted runs across draft strategies |
+
+Browser tests require `npm run build` first and a Playwright browser (`npx playwright install chromium`), or an installed Edge browser with `$env:PLAYWRIGHT_CHANNEL = 'msedge'`. The suite starts and stops its own server on port 4180; set `PLAYWRIGHT_PORT` to another unused port if necessary.
 
 `npm run calibrate` takes optional positional args: sample size, output path, comma-separated strategies, seed prefix, and engine version. Example:
 
@@ -50,7 +63,7 @@ npm run calibrate -- 500 docs/OUT.json chemistry,balanced,overloaded p3-baseline
 ```
 src/app/          Next.js routes and global styles
 src/components/   Draft room, season ticker, defense breakdown
-src/engine/       Simulation: draft rules, synergy math, season/postseason, RNG, calibration
+src/engine/       Draft rules, synergy math, season, postseason, rivalries, RNG, calibration
 src/lib/          Zustand draft store
 data/raw/         Basketball-Reference CSVs (downloaded)
 data/processed/   players.json, coaches.json, opponents.json, franchises.json
@@ -75,10 +88,18 @@ The pipeline fetches raw data (cached), builds peak-season player lines, generat
 - [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) — the core spec: game loop, synergy formulas, IQ modes, draft rules
 - [docs/MID_IQ_CORE_RELEASE.md](docs/MID_IQ_CORE_RELEASE.md) — Mid IQ release notes
 - [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) — acceptance scorecard
-- [docs/BASELINE_PLAYTEST.md](docs/BASELINE_PLAYTEST.md) — baseline playtest findings
+- [docs/BASELINE_PLAYTEST.md](docs/BASELINE_PLAYTEST.md) — baseline playtest protocol; participant results pending
 
 The many `MID_IQ_*.json` and `PHASE3_*.md` files are calibration experiment records produced by `npm run calibrate` and the Python audit scripts. They are evidence for balance decisions, not runtime inputs.
 
 ## Simulation notes
 
-The engine is seeded and deterministic: a given seed, engine version, and data version always reproduce the same 82-game result. Each save pins its engine/data/score version, so existing runs keep their original balance rules when constants change — `season-1` through `season-4` rule sets all still resolve, with `season-3` current. Season playback replays a result that was already simulated and saved; it never draws new randomness.
+The engine is seeded and deterministic: identical draft actions and pinned seed, engine, data and random/score versions reproduce the same run. Different lineups can produce different results from shared game draws. Season playback replays a result that was already simulated and saved; it never draws new randomness.
+
+New runs use **`season-7` / `mid-iq-3` / `conditional-score-3`**: a 135% base usage cap plus coach adjustments, 1.5% offensive efficiency lost per usage point above the cap (0.45 floor), and qualification at 45 wins after all 82 games. Higher entry tiers remain 65/70/75 wins. Postseason starts explicitly after regular-season playback completes and preserves the regular-season record.
+
+Rivalry evidence and postseason rules are versioned separately. Old saves without rivalry metadata stay unannotated, but qualifying saved seasons can enter the postseason. Playback cursors are separate for regular season and postseason. Recovery permits at most two machine epsilons of cross-runtime rounding in win probabilities while preserving saved values; ratings, scores, winners and other state remain exact.
+
+New saves also pin `iqMode` and `iqVersion: iq-1`. Saves without those fields retain Mid IQ behavior and their original results. The mode-aware wrapper preserves the frozen baseline math source; No IQ uses its separate `no-iq-1` policy for previews, games and recovery. Local hidden information is a play mode, not protection against inspecting downloaded datasets or browser storage.
+
+Supported saves retain their pinned rules and results: `season-1` through `season-4` require 60 wins; `season-5` and `season-6` require 40; `season-7` requires 45. The 135% cap began in `season-4`, and the stricter overload penalty began in `season-6`. Older saves are not resampled or relabeled. Frozen calibration reports retain their original versions and qualification thresholds.

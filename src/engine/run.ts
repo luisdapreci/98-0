@@ -3,12 +3,15 @@ import {
   rerollDraft, rollOptions, selectCoach, spinDraft,
 } from './draft.ts';
 import type { DraftSlot, DraftState, RerollKind } from './draft.ts';
-import { BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3, evaluateGame } from './math.ts';
-import type { BalanceRules } from './math.ts';
+import { BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3 } from './math.ts';
+import { evaluateGame } from './iq-math.ts';
+import type { BalanceRules } from './iq-math.ts';
 import { createRandom, DATA_VERSION, ENGINE_VERSION, randomStream, RANDOM_VERSION } from './random.ts';
 import { aggregateSeason, generateSchedule, requireCompleteLineup, SCORE_RULES, SCORE_RULES_V1, SCORE_RULES_V3, simulateSeason } from './season.ts';
 import type { ScoreRules } from './season.ts';
-import type { Coach, OpponentPool, Player, SeasonResult, TeamLineup } from './types.ts';
+import type { Coach, IQMode, OpponentPool, Player, PlayoffPool, PostseasonResult, SeasonResult, TeamLineup } from './types.ts';
+import { annotateRivalries, RIVALRY_VERSION, rivalryEvidence } from './rivalry.ts';
+import { simulatePostseason } from './postseason.ts';
 import { lineupForUsagePolicy } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
 import {
@@ -23,25 +26,30 @@ export type DraftAction =
 
 export interface RunSave {
   schemaVersion: 1;
+  iqMode?: IQMode;
+  iqVersion?: 'iq-1';
   id: string;
   seed: string;
   engineVersion: string;
   dataVersion: string;
   randomVersion: string;
   scoreVersion: string;
-  phase: 'DRAFTING' | 'DRAFT_READY' | 'SEASON_RUNNING' | 'SEASON_COMPLETE';
+  phase: 'DRAFTING' | 'DRAFT_READY' | 'SEASON_RUNNING' | 'SEASON_COMPLETE' | 'POSTSEASON_COMPLETE';
   draft: DraftState;
   draftRandomState: number;
   legacyDraft: DraftState | null;
   actions: DraftAction[];
   frozenLineup: TeamLineup | null;
   season: SeasonResult | null;
+  rivalryVersion?: typeof RIVALRY_VERSION;
+  postseason?: PostseasonResult;
 }
 
 export interface RunData {
   players: readonly Player[];
   coaches: readonly Coach[];
   opponents: OpponentPool;
+  playoffs?: PlayoffPool;
 }
 
 function rulesForRun(run: RunSave): ScoreRules {
@@ -52,12 +60,15 @@ function rulesForRun(run: RunSave): ScoreRules {
 
 export function balanceForRun(run: RunSave): BalanceRules {
   rulesForRun(run);
+  if (run.iqMode === 'no') return { ...BALANCE_RULES_V3, version: 'no-iq-1', chemistry: 'none' };
   if ([STRICT_USAGE_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION].includes(run.engineVersion)) return BALANCE_RULES_V3;
   return ['season-3', STAR_USAGE_ENGINE_VERSION, HISTORICAL_ENTRY_ENGINE_VERSION].includes(run.engineVersion) ? BALANCE_RULES_V2 : BALANCE_RULES_V1;
 }
 
-export function createRun(seed: string, coaches: readonly Coach[], legacyDraft: DraftState | null = null): RunSave {
+export function createRun(seed: string, coaches: readonly Coach[], legacyDraft: DraftState | null = null, rivalryVersion?: typeof RIVALRY_VERSION, iqMode?: IQMode): RunSave {
   if (!seed || seed.length > 200) throw new Error('A run seed is required.');
+  if (iqMode !== undefined && !['no', 'mid', 'hi'].includes(iqMode)) throw new Error('Unsupported IQ mode.');
+  if (legacyDraft && iqMode !== undefined) throw new Error('Legacy drafts retain Mid IQ rules.');
   const random = randomStream(seed, 'draft');
   const draft = legacyDraft ? structuredClone(legacyDraft) : createDraft(coaches, random.next);
   return {
@@ -67,7 +78,28 @@ export function createRun(seed: string, coaches: readonly Coach[], legacyDraft: 
     phase: draft.phase === 'COMPLETE' ? 'DRAFT_READY' : 'DRAFTING',
     draft, draftRandomState: random.state(), legacyDraft: legacyDraft ? structuredClone(legacyDraft) : null,
     actions: [], frozenLineup: null, season: null,
+    ...(rivalryVersion ? { rivalryVersion } : {}),
+    ...(iqMode ? { iqMode, iqVersion: 'iq-1' as const } : {}),
   };
+}
+
+export function selectIQMode(run: RunSave, mode: IQMode, coaches: readonly Coach[], seed: string): RunSave {
+  if (!['no', 'mid', 'hi'].includes(mode)) throw new Error('Unsupported IQ mode.');
+  if (run.phase !== 'DRAFTING' || run.draft.phase !== 'COACH' || run.actions.length || run.legacyDraft
+    || run.engineVersion !== QUALIFICATION_45_ENGINE_VERSION) return run;
+  if ((run.iqMode ?? 'mid') === mode) return run;
+  const previous = new Set(run.draft.offers.map((coach) => coach.id));
+  const avoidOverlap = coaches.filter((coach) => !previous.has(coach.id)).length >= 3;
+  for (let attempt = 0; attempt < 256; attempt++) {
+    const candidate = createRun(`${seed}:${attempt}`, coaches, null, run.rivalryVersion, mode);
+    const overlap = candidate.draft.offers.filter((coach) => previous.has(coach.id)).length;
+    if (candidate.seed !== run.seed && (avoidOverlap ? overlap === 0 : overlap < 3)) return candidate;
+  }
+  throw new Error('Could not draw fresh coach offers. Try changing mode again.');
+}
+
+export function statsHiddenForRun(run: RunSave): boolean {
+  return run.iqMode === 'hi' && (run.phase === 'DRAFTING' || run.phase === 'DRAFT_READY');
 }
 
 export function applyDraftAction(run: RunSave, action: DraftAction, players: readonly Player[]): RunSave {
@@ -99,7 +131,15 @@ export function startSeason(run: RunSave): RunSave {
 export function finishSeason(run: RunSave, pool: OpponentPool): RunSave {
   if (run.phase !== 'SEASON_RUNNING' || !run.frozenLineup) return run;
   const season = simulateSeason(lineupForUsagePolicy(run.frozenLineup, run.engineVersion), pool, run.seed, rulesForRun(run), balanceForRun(run));
-  return { ...run, phase: 'SEASON_COMPLETE', season: seasonForQualification(season, run.engineVersion) };
+  const annotated = run.rivalryVersion ? { ...season, gameLog: annotateRivalries(season.gameLog, run.frozenLineup) } : season;
+  return { ...run, phase: 'SEASON_COMPLETE', season: seasonForQualification(annotated, run.engineVersion) };
+}
+
+export function startPostseason(run: RunSave, pool: PlayoffPool): RunSave {
+  if (run.phase !== 'SEASON_COMPLETE' || !run.season?.qualified || !run.frozenLineup || run.postseason) return run;
+  const postseason = simulatePostseason(lineupForUsagePolicy(run.frozenLineup, run.engineVersion), pool, run.seed,
+    run.season, rulesForRun(run), balanceForRun(run), run.rivalryVersion === RIVALRY_VERSION);
+  return { ...run, phase: 'POSTSEASON_COMPLETE', postseason };
 }
 
 function equal(first: unknown, second: unknown): boolean {
@@ -109,8 +149,16 @@ function equal(first: unknown, second: unknown): boolean {
   const firstRecord = first as Record<string, unknown>;
   const secondRecord = second as Record<string, unknown>;
   const keys = Object.keys(firstRecord);
-  return keys.length === Object.keys(secondRecord).length && keys.every((key) =>
-    Object.hasOwn(secondRecord, key) && equal(firstRecord[key], secondRecord[key]));
+  return keys.length === Object.keys(secondRecord).length && keys.every((key) => {
+    if (!Object.hasOwn(secondRecord, key)) return false;
+    const firstValue = firstRecord[key];
+    const secondValue = secondRecord[key];
+    if (key === 'winProbability' && typeof firstValue === 'number' && typeof secondValue === 'number') {
+      return firstValue >= 0 && firstValue <= 1 && secondValue >= 0 && secondValue <= 1
+        && Math.abs(firstValue - secondValue) <= 2 * Number.EPSILON;
+    }
+    return equal(firstValue, secondValue);
+  });
 }
 
 function validateLegacyDraft(value: DraftState, data: RunData): DraftState {
@@ -141,7 +189,7 @@ function validateLegacyDraft(value: DraftState, data: RunData): DraftState {
   return draft;
 }
 
-function validateSeason(season: SeasonResult, lineup: TeamLineup, pool: OpponentPool, seed: string, rules: ScoreRules, balance: BalanceRules, engineVersion: string): void {
+function validateSeason(season: SeasonResult, lineup: TeamLineup, pool: OpponentPool, seed: string, rules: ScoreRules, balance: BalanceRules, engineVersion: string, rivalryVersion?: typeof RIVALRY_VERSION): void {
   const schedule = generateSchedule(seed, pool);
   if (season.gameLog.length !== 82) throw new Error('Incomplete season.');
   for (const [index, game] of season.gameLog.entries()) {
@@ -167,6 +215,8 @@ function validateSeason(season: SeasonResult, lineup: TeamLineup, pool: Opponent
     if (Math.abs(game.margin) > limit) throw new Error('Invalid margin.');
     const events = [...(game.overtime.length ? ['OVERTIME'] : []), ...(Math.abs(game.margin) === 1 ? ['ONE_POINT_FINISH'] : [])];
     if (!equal(game.events, events)) throw new Error('Invalid events.');
+    if (!equal(game.rivalry, rivalryVersion ? rivalryEvidence(lineup, game.opponent.franchise) : undefined))
+      throw new Error('Invalid rivalry evidence.');
   }
   if (!equal(season, seasonForQualification(aggregateSeason(season.gameLog), engineVersion))) throw new Error('Invalid season totals.');
 }
@@ -186,19 +236,29 @@ export function recoverRun(value: unknown, data: RunData, legacySeed: string): {
     if (!run || run.schemaVersion !== 1
       || run.dataVersion !== DATA_VERSION || run.randomVersion !== RANDOM_VERSION) throw new Error('Unsupported save version.');
     const rules = rulesForRun(run);
+    if (run.iqMode !== undefined || run.iqVersion !== undefined) {
+      if (!['no', 'mid', 'hi'].includes(run.iqMode!) || run.iqVersion !== 'iq-1'
+        || run.engineVersion !== QUALIFICATION_45_ENGINE_VERSION || run.legacyDraft !== null)
+        throw new Error('Unsupported IQ rules.');
+    }
+    if (run.rivalryVersion !== undefined && run.rivalryVersion !== RIVALRY_VERSION) throw new Error('Unsupported rivalry version.');
     const legacy = run.legacyDraft === null ? null : validateLegacyDraft(run.legacyDraft, data);
-    let replay = { ...createRun(run.seed, data.coaches, legacy), engineVersion: run.engineVersion, scoreVersion: run.scoreVersion };
+    let replay = { ...createRun(run.seed, data.coaches, legacy, run.rivalryVersion, run.iqMode), engineVersion: run.engineVersion, scoreVersion: run.scoreVersion };
     if (!Array.isArray(run.actions) || run.actions.length > 15) throw new Error('Invalid action history.');
     for (const action of run.actions) {
       const next = applyDraftAction(replay, action, data.players);
       if (next === replay) throw new Error('Invalid action history.');
       replay = next;
     }
-    if (run.phase === 'SEASON_RUNNING' || run.phase === 'SEASON_COMPLETE') replay = startSeason(replay);
-    if (run.phase === 'SEASON_COMPLETE') {
+    if (['SEASON_RUNNING', 'SEASON_COMPLETE', 'POSTSEASON_COMPLETE'].includes(run.phase)) replay = startSeason(replay);
+    if (run.phase === 'SEASON_COMPLETE' || run.phase === 'POSTSEASON_COMPLETE') {
       if (!run.season || !replay.frozenLineup) throw new Error('Missing season result.');
-      validateSeason(run.season, lineupForUsagePolicy(replay.frozenLineup, run.engineVersion), data.opponents, run.seed, rules, balanceForRun(run), run.engineVersion);
+      validateSeason(run.season, lineupForUsagePolicy(replay.frozenLineup, run.engineVersion), data.opponents, run.seed, rules, balanceForRun(run), run.engineVersion, run.rivalryVersion);
       replay = { ...replay, phase: 'SEASON_COMPLETE', season: run.season };
+    }
+    if (run.phase === 'POSTSEASON_COMPLETE') {
+      if (!data.playoffs) throw new Error('Missing postseason pool.');
+      replay = startPostseason(replay, data.playoffs);
     }
     if (!equal(run, replay)) throw new Error('Invalid run state.');
     return { run: structuredClone(run), notice: null };

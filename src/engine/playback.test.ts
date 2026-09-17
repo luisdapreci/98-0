@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { advancePlayback, isPerfectSeasonChase, lossExplanations, restorePlayback, visibleStandings } from './playback.ts';
-import type { SeasonGame } from './types.ts';
+import { advancePlayback, finishSeriesPlayback, isPerfectSeasonChase, lossExplanations, postseasonStory, restorePlayback, visibleStandings } from './playback.ts';
+import type { PostseasonGame, SeasonGame } from './types.ts';
 
 const games = [
   { gameNumber: 1, won: true, userScore: 101, oppScore: 100, overtime: [] },
@@ -81,4 +81,42 @@ test('loss explanations use recorded disadvantages, never fill slots or explain 
   assert.match(explanations[1]!, /15.0%/);
   assert.match(explanations[2]!, /-5.00/);
   assert.doesNotMatch(explanations.join(' '), /turnovers|buzzer|shot poorly/i);
+});
+
+test('postseason stakes and moments depend only on revealed outcomes', () => {
+  const playoffs = Array.from({ length: 8 }, (_, index) => ({ ...games[0]!, gameNumber: index + 1,
+    seriesGame: index < 7 ? index + 1 : 1, round: index < 7 ? 'round1' : 'round2',
+    won: [true, false, false, false, true, true, true, false][index]!, margin: 1, isHome: false,
+    opponentMultiplier: 1, seedHomeBonus: 0,
+  })) as PostseasonGame[];
+  const before = JSON.stringify(playoffs);
+  const story = postseasonStory(playoffs, 4, true);
+  assert.equal(story.stakes, 'Down 1-3. Elimination game on the road.');
+  assert.equal(story.perfectAlive, false);
+  assert.deepEqual(story, postseasonStory(playoffs.map((game, index) => index < 4 ? game : {
+    ...game, won: !game.won, userScore: 200, oppScore: 1, overtime: [{ userScore: 100, oppScore: 0 }],
+  }), 4, true));
+  assert.equal(postseasonStory(playoffs, 6, false).stakes, 'Game 7. Win or go home.');
+  const advanced = postseasonStory(playoffs, 7, false);
+  assert.equal(advanced.seriesStart, true);
+  assert.equal(advanced.bracketWins, 4);
+  assert.match(advanced.moments.map((moment) => moment.text).join(' '), /From 1-3.*Survived Game 7/);
+  const cursor = { runId: 'postseason', revealed: 2, overtimePeriod: 0 };
+  assert.deepEqual(finishSeriesPlayback(cursor, playoffs), { ...cursor, revealed: 7, overtimePeriod: null });
+  assert.equal(JSON.stringify(playoffs), before);
+});
+
+test('postseason labels distinguish championship, play-in, sweep and perfect pursuit', () => {
+  const finals = Array.from({ length: 4 }, (_, index) => ({ ...games[0]!, margin: 1,
+    gameNumber: index + 1, seriesGame: index + 1, round: 'finals', isHome: true,
+    opponentMultiplier: 1.15, seedHomeBonus: 1,
+  })) as PostseasonGame[];
+  assert.equal(postseasonStory(finals, 0, true).seriesStart, true);
+  assert.equal(postseasonStory(finals, 3, true).stakes, 'Win to become champions.');
+  assert.equal(postseasonStory(finals, 3, true).perfectAlive, true);
+  assert.match(postseasonStory(finals, 4, true).moments[0]!.text, /clean sweep/);
+  assert.equal(postseasonStory(finals, 4, true).stakes, null);
+  const playIn = [{ ...finals[0]!, round: 'playIn' as const }];
+  assert.equal(postseasonStory(playIn, 0, false).elimination, true);
+  assert.equal(postseasonStory(playIn, 1, false).bracketWins, 0);
 });

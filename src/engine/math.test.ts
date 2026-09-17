@@ -4,10 +4,11 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import {
   BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3, calculateTeamOffense,
-  calculateDefenseBreakdown, calculateDefensiveComposite, calculateOffensiveContribution, calculateSixthManFRF,
-  calculateSpacing, calculateSynergy, calculateUsageModifier, calculateWinProbability,
-  evaluateGame, normalizeStats, STARTER_POSITIONS,
+  calculateDefensiveComposite, calculateOffensiveContribution, calculateSixthManFRF,
+  calculateSpacing, calculateUsageModifier, calculateWinProbability,
+  normalizeStats, STARTER_POSITIONS,
 } from './math.ts';
+import { calculateDefenseBreakdown, calculateSynergy, evaluateGame } from './iq-math.ts';
 import type { Coach, OpponentPool, Player, PlayerStats, TeamLineup } from './types.ts';
 import { SCHEDULE_COUNTS } from './season.ts';
 import { evaluateRosterCandidate, INITIAL_ROSTER_BALANCE } from './roster-balance.ts';
@@ -19,6 +20,31 @@ const baseStats: PlayerStats = {
   pts: 20, reb: 5, ast: 5, stl: 1, blk: 1, fgPct: 0.5,
   threePtPct: 0.4, threePtAttempts: 3, usgPct: 20, dbpm: 1, eraPaceFactor: 1,
 };
+
+test('No IQ removes chemistry and coach effects while retaining individual and bench ability', () => {
+  const rules = { ...BALANCE_RULES_V3, version: 'no-iq-1', chemistry: 'none' as const };
+  const player = { id: 'test', stats: baseStats } as Player;
+  const lineup: TeamLineup = { PG: player, SG: player, SF: player, PF: player, C: player, SIXTH: player,
+    coach: { id: 'coach', modifiers: [{ stat: 'fgPct', delta: 0.1 }, { stat: 'threePtPct', delta: 0.1 },
+      { stat: 'dbpm', delta: 3 }, { stat: 'pace', delta: 10 }, { stat: 'usgCap', delta: 50 }] } as Coach };
+  const context = { opponentNetRating: 5, isHome: true, isBackToBack: true };
+  const evaluation = evaluateGame(lineup, context, rules);
+  assert.deepEqual(evaluation, evaluateGame({ ...lineup, coach: null }, context, rules));
+  const changed = { ...player, stats: { ...baseStats, usgPct: 50, threePtAttempts: 30, threePtPct: 0.9 } };
+  const noFit = evaluateGame({ ...lineup, PG: changed, SIXTH: changed }, context, rules);
+  assert.equal(noFit.deltaRating, evaluation.deltaRating);
+  assert.equal(noFit.synergy.phiUsg, 1);
+  assert.equal(noFit.synergy.spacingModifier, 0);
+  const defender = { ...player, stats: { ...baseStats, dbpm: 5 } };
+  assert.equal(evaluateGame({ ...lineup, PG: defender }, context, rules).deltaRating,
+    evaluateGame({ ...lineup, C: defender }, context, rules).deltaRating);
+  assert.ok(evaluateGame({ ...lineup, PG: defender }, context, rules).deltaRating > evaluation.deltaRating);
+  assert.ok(evaluateGame({ ...lineup, PG: { ...player, stats: { ...baseStats, pts: 30 } } }, context, rules).deltaRating > evaluation.deltaRating);
+  assert.ok(evaluateGame({ ...lineup, SIXTH: null }, context, rules).deltaRating < evaluation.deltaRating);
+  assert.equal(evaluation.homeCourtBonus, 3);
+  assert.equal(evaluation.coachPaceModifier, 0);
+  assert.equal(evaluation.synergy.drtgTeam, calculateDefenseBreakdown(lineup, rules).total);
+});
 
 test('core offense preserves legacy averages, rewards supporting talent and is position independent', () => {
   const contributions = Object.freeze([20, 4, 7, 18, 16]);

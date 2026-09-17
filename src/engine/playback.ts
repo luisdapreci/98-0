@@ -1,4 +1,4 @@
-import type { SeasonGame } from './types.ts';
+import type { PostseasonGame, SeasonGame } from './types.ts';
 
 export interface SeasonPlayback {
   runId: string;
@@ -6,7 +6,7 @@ export interface SeasonPlayback {
   overtimePeriod: number | null;
 }
 
-export function restorePlayback(saved: unknown, runId: string, games: readonly SeasonGame[]): SeasonPlayback {
+export function restorePlayback(saved: unknown, runId: string, games: readonly Pick<SeasonGame, 'overtime'>[]): SeasonPlayback {
   const total = games.length;
   const fallback = { runId, revealed: 0, overtimePeriod: null };
   if (saved === undefined || saved === null) return { ...fallback, revealed: total };
@@ -19,7 +19,7 @@ export function restorePlayback(saved: unknown, runId: string, games: readonly S
   return { runId, revealed: value.revealed!, overtimePeriod };
 }
 
-export function advancePlayback(playback: SeasonPlayback, games: readonly SeasonGame[]): SeasonPlayback {
+export function advancePlayback(playback: SeasonPlayback, games: readonly Pick<SeasonGame, 'overtime'>[]): SeasonPlayback {
   const game = games[playback.revealed];
   if (!game) return playback;
   if (game.overtime.length > 0) {
@@ -29,13 +29,13 @@ export function advancePlayback(playback: SeasonPlayback, games: readonly Season
   return { ...playback, revealed: playback.revealed + 1, overtimePeriod: null };
 }
 
-export function visibleStandings(games: readonly SeasonGame[], revealed: number) {
+export function visibleStandings<Game extends Pick<SeasonGame, 'won' | 'userScore' | 'oppScore' | 'gameNumber'>>(games: readonly Game[], revealed: number) {
   const gameLog = games.slice(0, revealed);
   let wins = 0;
   let currentStreak = 0;
   let longestStreak = 0;
   let pointDifferential = 0;
-  let firstLoss: SeasonGame | null = null;
+  let firstLoss: Game | null = null;
   for (const game of gameLog) {
     if (game.won) { wins++; currentStreak++; }
     else { currentStreak = 0; firstLoss ??= game; }
@@ -49,7 +49,50 @@ export function isPerfectSeasonChase(revealed: number, losses: number, total: nu
   return revealed >= 50 && revealed < total && losses === 0;
 }
 
-export function lossExplanations(game: SeasonGame): string[] {
+export function finishSeriesPlayback(playback: SeasonPlayback, games: readonly PostseasonGame[]): SeasonPlayback {
+  const round = games[playback.revealed]?.round;
+  if (!round) return playback;
+  let revealed = playback.revealed;
+  while (games[revealed]?.round === round) revealed++;
+  return { ...playback, revealed, overtimePeriod: null };
+}
+
+export function postseasonStory(games: readonly PostseasonGame[], revealed: number, undefeated: boolean) {
+  const visible = games.slice(0, revealed);
+  const next = games[revealed];
+  const round = next?.round ?? visible.at(-1)?.round;
+  const series = visible.filter((game) => game.round === round);
+  const wins = series.filter((game) => game.won).length;
+  const losses = series.length - wins;
+  const elimination = !!next && (round === 'playIn' || losses === 3);
+  const clincher = !!next && (round === 'playIn' || wins === 3);
+  const stakes = !next ? null : round === 'playIn' ? 'One game. Win to enter the bracket.'
+    : wins === 3 && losses === 3 ? round === 'finals' ? 'Game 7. One game for the championship.' : 'Game 7. Win or go home.'
+      : elimination ? `Down ${wins}-${losses}. Elimination game ${next.isHome ? 'at home' : 'on the road'}.`
+        : clincher ? round === 'finals' ? 'Win to become champions.' : round === 'conferenceFinals' ? 'Win to reach the Finals.' : 'Win to advance.'
+          : `Game ${next.seriesGame}. ${wins === losses ? `Series tied ${wins}-${losses}.` : wins > losses ? `You lead ${wins}-${losses}.` : `You trail ${wins}-${losses}.`}`;
+  const moments: { round: PostseasonGame['round']; text: string }[] = [];
+  for (const completedRound of new Set(visible.map((game) => game.round))) {
+    const played = visible.filter((game) => game.round === completedRound);
+    const victories = played.filter((game) => game.won).length;
+    if (completedRound !== 'playIn' && victories === 4) {
+      if (played.length === 4) moments.push({ round: completedRound, text: 'A clean sweep. Four wins, no losses.' });
+      if (played.slice(0, 4).filter((game) => game.won).length === 1)
+        moments.push({ round: completedRound, text: 'From 1-3 down to a series victory.' });
+      if (played.length === 7) moments.push({ round: completedRound, text: 'Survived Game 7.' });
+    }
+    for (const game of played.filter((game) => game.won && game.overtime.length))
+      moments.push({ round: completedRound, text: `Game ${game.seriesGame}: overtime escape, ${game.userScore}-${game.oppScore}.` });
+  }
+  const closest = visible.reduce<PostseasonGame | null>((best, game) =>
+    !best || Math.abs(game.margin) < Math.abs(best.margin) ? game : best, null);
+  return { round, wins, losses, stakes, elimination, clincher, moments, closest,
+    seriesStart: !!next && series.length === 0,
+    perfectAlive: undefeated && visible.every((game) => game.won),
+    bracketWins: visible.filter((game) => game.round !== 'playIn' && game.won).length };
+}
+
+export function lossExplanations(game: Pick<SeasonGame, 'won' | 'evaluation' | 'context'>): string[] {
   if (game.won) return [];
   const { synergy, fatigueModifier, winProbability } = game.evaluation;
   const candidates = [

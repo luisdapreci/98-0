@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { availablePlayers, availableSlots, createDraft } from './draft.ts';
-import { applyDraftAction, balanceForRun, createRun, finishSeason, recoverRun, startSeason } from './run.ts';
+import { applyDraftAction, balanceForRun, createRun, finishSeason, recoverRun, selectIQMode, startPostseason, startSeason, statsHiddenForRun } from './run.ts';
+import { RIVALRY_VERSION } from './rivalry.ts';
 import { BALANCE_RULES_V1, BALANCE_RULES_V2, BALANCE_RULES_V3, calculateSynergy } from './math.ts';
 import { advancePlayback, restorePlayback, visibleStandings } from './playback.ts';
 import { aggregateSeason, sampleOutcome, SCORE_RULES_V1, SCORE_RULES_V3, simulateSeason } from './season.ts';
@@ -15,10 +16,11 @@ const data: RunData = {
   players: JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8')),
   coaches: JSON.parse(readFileSync(new URL('../../data/processed/coaches.json', import.meta.url), 'utf8')),
   opponents: JSON.parse(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).regularSeasonPool,
+  playoffs: JSON.parse(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).playoffPool,
 };
 
-function readyRun(engineVersion = 'season-3') {
-  let run = createRun('run-fixture', data.coaches);
+function readyRun(engineVersion = 'season-3', seed = 'run-fixture') {
+  let run = createRun(seed, data.coaches);
   run = { ...run, engineVersion, scoreVersion: engineVersion === 'season-1' ? SCORE_RULES_V1.version : SCORE_RULES_V3.version };
   run = applyDraftAction(run, { type: 'COACH', id: run.draft.offers[0]!.id }, data.players);
   for (let round = 0; round < 6; round++) {
@@ -59,6 +61,23 @@ test('start is idempotent, freezes inputs, and interrupted/completed seasons sur
   assert.equal(applyDraftAction(complete, { type: 'SPIN' }, data.players), complete);
   assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: complete })), data, 'unused').run, complete);
   assert.deepEqual(finishSeason(startSeason(ready), data.opponents), complete);
+});
+
+test('save recovery tolerates probability roundoff without changing stored results or accepting rating changes', () => {
+  const complete = finishSeason(startSeason(readyRun('season-7')), data.opponents);
+  for (const offset of [-Number.EPSILON, Number.EPSILON, 2 * Number.EPSILON]) {
+    const run = structuredClone(complete);
+    run.season!.gameLog[0]!.evaluation.winProbability += offset;
+    assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run })), data, 'unused').run, run);
+  }
+  for (const probability of [NaN, Infinity, -0.1, 1.1, complete.season!.gameLog[0]!.evaluation.winProbability + 1e-10]) {
+    const run = structuredClone(complete);
+    run.season!.gameLog[0]!.evaluation.winProbability = probability;
+    assert.equal(recoverRun({ run }, data, 'unused').run, null);
+  }
+  const altered = structuredClone(complete);
+  altered.season!.gameLog[0]!.evaluation.deltaRating += 1e-10;
+  assert.equal(recoverRun({ run: altered }, data, 'unused').run, null);
 });
 
 test('legacy drafts retain offers, picks and rerolls without claiming prior seeded replay', () => {
@@ -350,4 +369,94 @@ test('the reference scoring-core roster usually contends for qualification witho
     for (const key of ['drtgTeam', 'spacingModifier', 'phiUsg', 'sixthManFRF'] as const)
       assert.equal(game.evaluation.synergy[key], prior.evaluation.synergy[key]);
   }
+});
+
+test('rivalry metadata and evidence survive saves without changing old results', () => {
+  const ready = readyRun('season-7');
+  const legacy = finishSeason(startSeason(ready), data.opponents);
+  const annotated = finishSeason(startSeason({ ...ready, rivalryVersion: RIVALRY_VERSION }), data.opponents);
+  assert.deepEqual(annotated.season!.gameLog.map(({ rivalry, ...game }) => game), legacy.season!.gameLog);
+  assert.deepEqual(recoverRun({ run: annotated }, data, 'unused').run, annotated);
+  assert.deepEqual(recoverRun({ run: legacy }, data, 'unused').run, legacy);
+  const tampered = structuredClone(annotated);
+  tampered.season!.gameLog[0]!.rivalry!.matches.push({ franchises: ['ATL', 'BOS'], playerIds: ['invented'] });
+  assert.equal(recoverRun({ run: tampered }, data, 'unused').run, null);
+  assert.equal(recoverRun({ run: { ...annotated, rivalryVersion: 'future' } }, data, 'unused').run, null);
+});
+
+test('qualifying saved seasons advance once, retain regular results and reject tampered postseason saves', () => {
+  for (const version of ['season-1', 'season-6', 'season-7']) {
+    let complete = finishSeason(startSeason(readyRun(version)), data.opponents);
+    for (let index = 0; !complete.season!.qualified && index < 100; index++)
+      complete = finishSeason(startSeason(readyRun(version, `postseason-save-${index}`)), data.opponents);
+    assert.ok(complete.season!.qualified);
+    const before = JSON.stringify(complete.season);
+    const finished = startPostseason(complete, data.playoffs!);
+    assert.equal(finished.phase, 'POSTSEASON_COMPLETE');
+    assert.equal(startPostseason(finished, data.playoffs!), finished);
+    assert.equal(JSON.stringify(finished.season), before);
+    assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: finished })), data, 'unused').run, finished);
+    for (const mutate of [
+      (run: typeof finished) => { run.postseason!.gameLog[0]!.userScore++; },
+      (run: typeof finished) => { run.postseason!.champion = !run.postseason!.champion; },
+      (run: typeof finished) => { run.postseason!.path[0]!.opponent.id = 'invented'; },
+      (run: typeof finished) => { run.postseason!.playoffs.wins++; },
+      (run: typeof finished) => { run.postseason!.version = 'future' as 'postseason-1'; },
+    ]) {
+      const invalid = structuredClone(finished);
+      mutate(invalid);
+      assert.equal(recoverRun({ run: invalid }, data, 'unused').run, null);
+    }
+  }
+  assert.equal(startPostseason(createRun('not-ready', data.coaches), data.playoffs!).postseason, undefined);
+});
+
+test('IQ modes persist, lock at coach selection, and HI IQ only hides until simulation starts', () => {
+  const initial = createRun('mode-lock', data.coaches);
+  assert.equal(initial.iqMode, undefined);
+  assert.equal(balanceForRun(initial), BALANCE_RULES_V3);
+  const oldDraft = { ...initial, engineVersion: 'season-3' };
+  assert.equal(selectIQMode(oldDraft, 'no', data.coaches, 'old'), oldDraft);
+  assert.equal(selectIQMode(initial, 'mid', data.coaches, 'same'), initial);
+  const hidden = selectIQMode(initial, 'hi', data.coaches, 'fresh-mode');
+  assert.equal(statsHiddenForRun(hidden), true);
+  assert.notEqual(hidden.seed, initial.seed);
+  assert.ok(hidden.draft.offers.every((coach) => !initial.draft.offers.some((previous) => previous.id === coach.id)));
+  assert.deepEqual(hidden, selectIQMode(initial, 'hi', data.coaches, 'fresh-mode'));
+  const switchedBack = selectIQMode(hidden, 'mid', data.coaches, 'back-mode');
+  assert.ok(switchedBack.draft.offers.every((coach) => !hidden.draft.offers.some((previous) => previous.id === coach.id)));
+  assert.deepEqual(recoverRun({ run: switchedBack }, data, 'unused').run, switchedBack);
+  assert.deepEqual(recoverRun({ run: hidden }, data, 'unused').run, hidden);
+  const signed = applyDraftAction(hidden, { type: 'COACH', id: hidden.draft.offers[0]!.id }, data.players);
+  assert.equal(selectIQMode(signed, 'no', data.coaches, 'locked'), signed);
+  const ready = { ...readyRun('season-7'), iqMode: 'hi' as const, iqVersion: 'iq-1' as const };
+  assert.equal(statsHiddenForRun(ready), true);
+  assert.equal(statsHiddenForRun(startSeason(ready)), false);
+  for (const invalid of [{ ...hidden, iqMode: 'low' }, { ...hidden, iqVersion: 'iq-2' }, { ...hidden, iqMode: undefined }])
+    assert.equal(recoverRun({ run: invalid }, data, 'unused').run, null);
+});
+
+test('Mid and HI IQ share exact season/postseason outcomes; No IQ uses its policy across recovery', () => {
+  const ready = readyRun('season-7', 'mode-results');
+  const legacy = finishSeason(startSeason(ready), data.opponents);
+  const results = (['mid', 'hi', 'no'] as const).map((iqMode) => {
+    const run = finishSeason(startSeason({ ...ready, iqMode, iqVersion: 'iq-1' }), data.opponents);
+    assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run })), data, 'unused').run, run);
+    const games = run.season!.gameLog.map((game) => ({ ...game, ...sampleOutcome(game.evaluation, () => 0, () => 0.5, SCORE_RULES_V3) }));
+    const qualified = { ...run, season: seasonForQualification(aggregateSeason(games), run.engineVersion) };
+    const finished = startPostseason(qualified, data.playoffs!);
+    assert.ok(finished.postseason);
+    assert.deepEqual(recoverRun(JSON.parse(JSON.stringify({ run: finished })), data, 'unused').run, finished);
+    return { run, finished };
+  });
+  assert.deepEqual(results[0]!.run.season, legacy.season);
+  assert.deepEqual(results[0]!.run.season, results[1]!.run.season);
+  assert.deepEqual(results[0]!.finished.postseason, results[1]!.finished.postseason);
+  for (const game of [...results[2]!.run.season!.gameLog, ...results[2]!.finished.postseason!.gameLog]) {
+    assert.equal(game.evaluation.synergy.phiUsg, 1);
+    assert.equal(game.evaluation.synergy.spacingModifier, 0);
+    assert.equal(game.evaluation.coachPaceModifier, 0);
+  }
+  assert.notDeepEqual(results[2]!.run.season, legacy.season);
+  assert.equal(recoverRun({ run: { ...results[2]!.run, iqMode: 'mid' } }, data, 'unused').run, null);
 });

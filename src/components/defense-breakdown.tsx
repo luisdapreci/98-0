@@ -1,9 +1,11 @@
-import { calculateDefenseBreakdown } from '../engine/math';
+import { calculateDefenseBreakdown } from '../engine/iq-math';
+import type { BalanceRules } from '../engine/iq-math';
 import type { TeamLineup } from '../engine/types';
 
-export function DefenseBreakdown({ lineup }: { lineup: TeamLineup }) {
-  const defense = calculateDefenseBreakdown(lineup);
-  const terms = [
+export function DefenseBreakdown({ lineup, rules }: { lineup: TeamLineup; rules?: BalanceRules }) {
+  const defense = calculateDefenseBreakdown(lineup, rules);
+  const noChemistry = rules?.chemistry === 'none';
+  const terms = noChemistry ? [['Individual defensive ability', defense.teamSupport] as const] : [
     ['Rim protection', defense.rimProtection],
     ['Perimeter defense', defense.perimeterDefense],
     ['Team support', defense.teamSupport],
@@ -14,7 +16,7 @@ export function DefenseBreakdown({ lineup }: { lineup: TeamLineup }) {
   return (
     <details className="defense-breakdown">
       <summary>DRTG {defense.total.toFixed(2)} / Defense breakdown</summary>
-      <p>Lower is better. Negative contributions improve defense. Team support comes from the five starters, not the sixth-man depth bonus.</p>
+      <p>{noChemistry ? 'Individual defense only. Position-fit bonuses and liability penalties are disabled. Lower is better.' : 'Lower is better. Negative contributions improve defense. Team support comes from the five starters, not the sixth-man depth bonus.'}</p>
       <dl className="game-context">
         <div><dt>Baseline</dt><dd>110.00</dd></div>
         {terms.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value > 0 ? '+' : ''}{value.toFixed(2)}</dd></div>)}

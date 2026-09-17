@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { Pause, Play, SkipForward, StepForward, Volume2, VolumeX } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Pause, Play, SkipForward, StepForward } from 'lucide-react';
 import { isPerfectSeasonChase, lossExplanations, visibleStandings } from '../engine/playback';
-import { qualificationWinsForEngine } from '../engine/postseason-policy';
 import type { RunSave } from '../engine/run';
-import type { SeasonGame } from '../engine/types';
-import { useDraftStore } from '../lib/draft-store';
+import { balanceForRun } from '../engine/run';
+import type { PostseasonGame, SeasonGame, TeamLineup } from '../engine/types';
+import { DRAFT_SLOTS } from '../engine/draft';
+import { franchises, useDraftStore } from '../lib/draft-store';
 import { DefenseBreakdown } from './defense-breakdown';
+import { gameAudio, usePlaybackAudio } from '../lib/game-audio';
 
 const signed = (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(2)}`;
 const entryLabels = {
@@ -15,27 +17,63 @@ const entryLabels = {
   SECOND_SEED: '2ND SEED QUALIFIED', FIRST_SEED: '1ST SEED QUALIFIED',
 };
 
-function GameDetails({ game }: { game: SeasonGame }) {
+export function RivalryAlert({ game, lineup }: { game: SeasonGame | PostseasonGame; lineup: TeamLineup | null }) {
+  if (!game.rivalry?.matches.length) return null;
+  return <div className="rivalry-alert">
+    <strong>HISTORIC FRANCHISE RIVALRY</strong>
+    <ul>{game.rivalry.matches.map((match) => <li key={match.franchises.join(':')}>
+      <span>{match.franchises.map((id) => franchises.find((franchise) => franchise.id === id)?.name ?? id).join(' vs. ')}</span>
+      <small>Roster representatives: {match.playerIds.map((id) => {
+        const player = lineup && DRAFT_SLOTS.map((slot) => lineup[slot]).find((candidate) => candidate?.id === id);
+        return player ? `${player.name} (${player.franchise})` : id;
+      }).join(', ')}</small>
+    </li>)}</ul>
+  </div>;
+}
+
+export function PlaybackControls({ complete, playing, speed, onPlay, onSpeed, onNext, onSkip, nextLabel = 'Next reveal' }: {
+  complete: boolean; playing: boolean; speed: 1 | 5; onPlay: () => void;
+  onSpeed: (speed: 1 | 5) => void; onNext: () => void; onSkip: () => void; nextLabel?: string;
+}) {
+  return <>
+    <button className="icon-button" disabled={complete} onClick={onPlay} aria-label={playing ? 'Pause playback' : 'Play playback'} title={playing ? 'Pause playback' : 'Play playback'}>{playing && !complete ? <Pause size={20} /> : <Play size={20} />}</button>
+    <div className="playback-speed" role="group" aria-label="Playback speed">
+      {([1, 5] as const).map((value) => <button key={value} aria-pressed={speed === value} onClick={() => onSpeed(value)} aria-label={`${value}x speed`}>{value}x</button>)}
+    </div>
+    <button className="icon-button" disabled={complete} onClick={onNext} aria-label={nextLabel} title={nextLabel}><StepForward size={20} /></button>
+    <button className="icon-button" disabled={complete} onClick={onSkip} aria-label="Skip to final result" title="Skip to final result"><SkipForward size={20} /></button>
+  </>;
+}
+
+export function GameDetails({ game, lineup, chemistryDisabled = false }: { game: SeasonGame | PostseasonGame; lineup: TeamLineup | null; chemistryDisabled?: boolean }) {
   const { evaluation } = game;
   const { synergy } = evaluation;
   return (
     <div className="game-details">
       <h3>GAME {game.gameNumber} / {game.opponent.name}</h3>
+      {chemistryDisabled && <p className="eyebrow">NO IQ / CHEMISTRY OFF / INDIVIDUAL QUALITY ON</p>}
       <p>{game.won ? 'WIN' : 'LOSS'} / {game.userScore} - {game.oppScore} / {game.isHome ? 'HOME' : 'AWAY'}</p>
-      <p className="muted">{game.opponent.tier} / Day {game.day}{game.pairId !== null ? ` / B2B pair ${game.pairId}, leg ${game.leg}` : ' / Rested'}{game.isBackToBack ? ' / Fatigued second leg' : ''}</p>
+      <p className="muted">{'tier' in game.opponent ? `${game.opponent.tier} / ` : ''}Day {game.day}{game.pairId !== null ? ` / B2B pair ${game.pairId}, leg ${game.leg}` : ' / Rested'}{game.isBackToBack ? ' / Fatigued second leg' : ''}</p>
+      <RivalryAlert game={game} lineup={lineup} />
       {game.events.includes('ONE_POINT_FINISH') && <p>ONE-POINT FINISH</p>}
       {game.overtime.length > 0 && <p>Regulation: {game.regulation.userScore} - {game.regulation.oppScore}{game.overtime.map((period, index) => <span key={index}> / OT{index + 1}: +{period.userScore} - +{period.oppScore}</span>)}</p>}
       <dl className="game-context">
         <div><dt>Pre-game win probability</dt><dd>{(evaluation.winProbability * 100).toFixed(1)}%</dd></div>
         <div><dt>Team net rating</dt><dd>{signed(synergy.netRating)}</dd></div>
         <div><dt>Opponent net rating</dt><dd>{signed(game.context.opponentNetRating)}</dd></div>
+        {'round' in game && <>
+          <div><dt>Opponent benchmark / round multiplier</dt><dd>{signed(game.opponent.netRating)} / {game.opponentMultiplier.toFixed(2)}x</dd></div>
+          <div><dt>Seed home bonus</dt><dd>{signed(game.seedHomeBonus)}</dd></div>
+        </>}
         <div><dt>Home court</dt><dd>{signed(evaluation.homeCourtBonus)}</dd></div>
         <div><dt>B2B fatigue</dt><dd>{signed(evaluation.fatigueModifier)}</dd></div>
         <div><dt>Sixth-man depth bonus</dt><dd>{signed(synergy.depthBonus)}</dd></div>
-        <div><dt>Coach pace</dt><dd>{signed(evaluation.coachPaceModifier)}</dd></div>
+        {!chemistryDisabled && <div><dt>Coach pace</dt><dd>{signed(evaluation.coachPaceModifier)}</dd></div>}
         <div><dt>Final rating advantage</dt><dd>{signed(evaluation.deltaRating)}</dd></div>
-        <div><dt>Usage multiplier</dt><dd>{synergy.phiUsg.toFixed(3)}</dd></div>
-        <div><dt>Spacing modifier</dt><dd>{signed(synergy.spacingModifier * 100)}%</dd></div>
+        {!chemistryDisabled && <>
+          <div><dt>Usage multiplier</dt><dd>{synergy.phiUsg.toFixed(3)}</dd></div>
+          <div><dt>Spacing modifier</dt><dd>{signed(synergy.spacingModifier * 100)}%</dd></div>
+        </>}
         <div><dt>Effective offense / defense</dt><dd>{synergy.effectiveOrtg.toFixed(2)} / {synergy.drtgTeam.toFixed(2)}</dd></div>
       </dl>
     </div>
@@ -43,7 +81,7 @@ function GameDetails({ game }: { game: SeasonGame }) {
 }
 
 export function SeasonTicker({ run }: { run: RunSave }) {
-  const { playback, revealNext, skipSeason } = useDraftStore();
+  const { playback, revealNext, skipSeason, startPlayoffs } = useDraftStore();
   const season = run.season!;
   const revealed = playback?.revealed ?? season.gameLog.length;
   const overtimePeriod = playback?.overtimePeriod ?? null;
@@ -52,9 +90,7 @@ export function SeasonTicker({ run }: { run: RunSave }) {
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState<1 | 5>(1);
   const [selected, setSelected] = useState<number | null>(null);
-  const [audioEnabled, setAudioEnabled] = useState(false);
-  const [audioError, setAudioError] = useState('');
-  const audio = useRef<AudioContext | null>(null);
+  const [postseasonError, setPostseasonError] = useState('');
   const current = overtimePeriod !== null ? season.gameLog[revealed] : standings.gameLog.at(-1);
   const inspected = selected === null ? standings.gameLog.at(-1) : standings.gameLog[selected];
   const tension = isPerfectSeasonChase(revealed, standings.losses, season.gameLog.length);
@@ -77,32 +113,8 @@ export function SeasonTicker({ run }: { run: RunSave }) {
     return () => window.clearInterval(timer);
   }, [playing, complete, speed, revealNext]);
 
-  useEffect(() => () => { void audio.current?.close(); }, []);
-
-  useEffect(() => {
-    const context = audio.current;
-    if (!audioEnabled || !playing || !tension || document.hidden || !context || context.state !== 'running') return;
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
-    oscillator.frequency.value = 80;
-    gain.gain.setValueAtTime(0.025, context.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.15);
-    oscillator.connect(gain).connect(context.destination);
-    oscillator.start();
-    oscillator.stop(context.currentTime + 0.16);
-    oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
-    return () => { gain.gain.cancelScheduledValues(context.currentTime); gain.gain.value = 0; };
-  }, [audioEnabled, playing, tension, revealed]);
-
-  async function toggleAudio() {
-    if (audioEnabled) { setAudioEnabled(false); return; }
-    try {
-      audio.current ??= new AudioContext();
-      await audio.current.resume();
-      setAudioEnabled(true);
-      setAudioError('');
-    } catch { setAudioError('Audio is unavailable in this browser.'); }
-  }
+  usePlaybackAudio({ revealed, overtimePeriod, playing: playing && !complete, won: standings.gameLog.at(-1)?.won,
+    tension, ending: complete ? season.qualified ? 'advance' : 'eliminated' : undefined });
 
   return (
     <section className={`completion season-summary ${tension ? 'streak-tension' : ''}`} aria-labelledby="season-title">
@@ -110,23 +122,25 @@ export function SeasonTicker({ run }: { run: RunSave }) {
         <span className="eyebrow">REGULAR SEASON / {revealed} OF 82</span>
         <span className="eyebrow">{complete ? 'FINAL' : playing ? 'LIVE' : 'PAUSED'}</span>
       </div>
-      <h2 id="season-title">{standings.wins} W <span>/ {standings.losses} L</span></h2>
-      <p className="ticker-status">{complete ? season.isUndefeated ? '82-0 / UNDEFEATED' : entryLabels[season.postseasonEntry] : tension ? `${standings.wins}-0 / THE PERFECT SEASON IS STILL ALIVE` : `${standings.currentStreak} GAME WIN STREAK`}</p>
-      <div className="playback-controls" role="group" aria-label="Season playback">
-        <button className="icon-button" disabled={complete} onClick={() => setPlaying(!playing)} aria-label={playing ? 'Pause season' : 'Play season'} title={playing ? 'Pause season' : 'Play season'}>{playing && !complete ? <Pause size={20} /> : <Play size={20} />}</button>
-        <div className="playback-speed" role="group" aria-label="Playback speed">
-          {([1, 5] as const).map((value) => <button key={value} aria-pressed={speed === value} onClick={() => setSpeed(value)} aria-label={`${value}x speed`}>{value}x</button>)}
-        </div>
-        <button className="icon-button" disabled={complete} onClick={() => { setPlaying(false); revealNext(); }} aria-label="Next reveal" title="Next reveal"><StepForward size={20} /></button>
-        <button className="icon-button" disabled={complete} onClick={() => { setPlaying(false); skipSeason(); }} aria-label="Skip to final result" title="Skip to final result"><SkipForward size={20} /></button>
-        <button className="icon-button" onClick={() => void toggleAudio()} aria-pressed={audioEnabled} aria-label={audioEnabled ? 'Mute streak audio' : 'Enable streak audio'} title={audioEnabled ? 'Mute streak audio' : 'Enable streak audio'}>{audioEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}</button>
+      <div className="season-record-row">
+        <h2 id="season-title">{standings.wins} W <span>/ {standings.losses} L</span></h2>
+        {complete && season.qualified && !run.postseason && <button className="primary-button" onClick={() => {
+          try { setPostseasonError(''); startPlayoffs(); gameAudio.play('start'); }
+          catch (error) { setPostseasonError(error instanceof Error ? error.message : 'Postseason could not be started.'); }
+        }}><Play size={18} /> START POSTSEASON</button>}
       </div>
-      {audioError && <p role="status">{audioError}</p>}
+      <p className="ticker-status">{complete ? season.isUndefeated ? '82-0 / UNDEFEATED' : entryLabels[season.postseasonEntry] : tension ? `${standings.wins}-0 / THE PERFECT SEASON IS STILL ALIVE` : `${standings.currentStreak} GAME WIN STREAK`}</p>
+      {postseasonError && <p role="alert">{postseasonError}</p>}
+      <div className="playback-controls" role="group" aria-label="Season playback">
+        <PlaybackControls complete={complete} playing={playing} speed={speed} onPlay={() => setPlaying(!playing)} onSpeed={setSpeed}
+          onNext={() => { setPlaying(false); revealNext(); }} onSkip={() => { setPlaying(false); skipSeason(); }} />
+      </div>
       <div className="ticker-match" role="status" aria-live="polite" aria-atomic="true">
         <span className="eyebrow">{current ? `GAME ${current.gameNumber} / ${overtimePeriod !== null ? overtimePeriod === 0 ? 'END OF REGULATION / OVERTIME' : `END OF OT${overtimePeriod} / STILL TIED` : `FINAL${current.overtime.length ? ` / ${current.overtime.length}OT` : ''}`}` : 'SEASON READY'}</span>
         <div className="ticker-score"><span>YOUR TEAM<strong>{current ? userScore : '--'}</strong></span><span>{current?.opponent.name ?? '82-GAME GAUNTLET'}<strong>{current ? oppScore : '--'}</strong></span></div>
         <span className="eyebrow">{current ? `${current.isHome ? 'HOME' : 'AWAY'} / ${current.isBackToBack ? 'B2B SECOND LEG' : 'RESTED'}${overtimePeriod === null ? ` / ${current.won ? 'WIN' : 'LOSS'}` : ''}` : '0 W / 0 L'}</span>
       </div>
+      {current && <RivalryAlert game={current} lineup={run.frozenLineup} />}
       <ol className="season-timeline" aria-label="82-game timeline">
         {season.gameLog.map((game, index) => {
           const visible = index < revealed;
@@ -145,15 +159,14 @@ export function SeasonTicker({ run }: { run: RunSave }) {
         <div><span>POINT DIFFERENTIAL</span><strong>{standings.pointDifferential > 0 ? '+' : ''}{standings.pointDifferential}</strong></div>
         <div><span>LONGEST WIN STREAK</span><strong>{standings.longestStreak}</strong></div>
       </div>
-      {complete && <p className="completion-note">{season.qualified ? 'Qualified. Postseason is not available yet.' : `Regular season complete. Below the ${qualificationWinsForEngine(run.engineVersion)}-win qualification threshold.`}</p>}
       {standings.firstLoss && <details className="season-log loss-autopsy" open>
         <summary>FIRST LOSS / GAME {standings.firstLoss.gameNumber}</summary>
         <p className="autopsy-caveat">Model disadvantages, not proven causes of this loss.</p>
         <ul>{lossExplanations(standings.firstLoss).map((explanation) => <li key={explanation}>{explanation}</li>)}</ul>
-        <GameDetails game={standings.firstLoss} />
-        {run.frozenLineup && <DefenseBreakdown lineup={run.frozenLineup} />}
+        <GameDetails game={standings.firstLoss} lineup={run.frozenLineup} chemistryDisabled={run.iqMode === 'no'} />
+        {run.frozenLineup && <DefenseBreakdown lineup={run.frozenLineup} rules={balanceForRun(run)} />}
       </details>}
-      {inspected && <details className="season-log" open><summary>GAME DETAILS / {inspected.gameNumber}</summary><GameDetails game={inspected} /></details>}
+      {inspected && <details className="season-log" open><summary>GAME DETAILS / {inspected.gameNumber}</summary><GameDetails game={inspected} lineup={run.frozenLineup} chemistryDisabled={run.iqMode === 'no'} /></details>}
       <details className="season-log">
         <summary>GAME LOG / {revealed} FINISHED</summary>
         <div className="season-table-scroll" tabIndex={0} role="region" aria-label="Revealed regular-season results">

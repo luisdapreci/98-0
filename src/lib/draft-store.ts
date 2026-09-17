@@ -8,17 +8,19 @@ import coachData from '../../data/processed/coaches.json';
 import franchiseData from '../../data/processed/franchises.json';
 import opponentData from '../../data/processed/opponents.json';
 import type { DraftSlot, RerollKind } from '../engine/draft';
-import { applyDraftAction, createRun, finishSeason, recoverRun, startSeason } from '../engine/run';
+import { applyDraftAction, createRun, finishSeason, recoverRun, selectIQMode, startPostseason, startSeason } from '../engine/run';
+import { RIVALRY_VERSION } from '../engine/rivalry';
 import type { RunSave } from '../engine/run';
-import { advancePlayback, restorePlayback } from '../engine/playback';
+import { advancePlayback, finishSeriesPlayback, restorePlayback } from '../engine/playback';
 import type { SeasonPlayback } from '../engine/playback';
-import type { Coach, OpponentPool, Player } from '../engine/types';
+import type { Coach, IQMode, OpponentPool, Player, PlayoffPool } from '../engine/types';
 
 export const players = playerData as Player[];
 export const coaches = coachData as Coach[];
 export const franchises = franchiseData;
 const opponents = opponentData.regularSeasonPool as OpponentPool;
-const data = { players, coaches, opponents };
+const playoffs = opponentData.playoffPool as PlayoffPool;
+const data = { players, coaches, opponents, playoffs };
 const saveKey = '98-0-draft-v1';
 
 function storageWarning() {
@@ -60,9 +62,11 @@ const storage: StateStorage = {
 interface DraftStore {
   run: RunSave | null;
   playback: SeasonPlayback | null;
+  postseasonPlayback: SeasonPlayback | null;
   notice: string | null;
   clearNotice: () => void;
   newRun: () => void;
+  chooseMode: (mode: IQMode) => void;
   chooseCoach: (id: string) => void;
   spin: () => void;
   reroll: (kind: RerollKind) => void;
@@ -70,6 +74,10 @@ interface DraftStore {
   start: () => void;
   revealNext: () => void;
   skipSeason: () => void;
+  startPlayoffs: () => void;
+  revealPostseason: () => void;
+  finishPostseasonSeries: () => void;
+  skipPostseason: () => void;
 }
 
 export const useDraftStore = create<DraftStore>()(
@@ -77,9 +85,15 @@ export const useDraftStore = create<DraftStore>()(
     (set) => ({
       run: null,
       playback: null,
+      postseasonPlayback: null,
       notice: null,
       clearNotice: () => set({ notice: null }),
-      newRun: () => set({ run: createRun(crypto.randomUUID(), coaches), playback: null }),
+      newRun: () => set({ run: createRun(crypto.randomUUID(), coaches, null, RIVALRY_VERSION, 'mid'), playback: null, postseasonPlayback: null }),
+      chooseMode: (mode) => set((state) => {
+        if (!state.run) return state;
+        const run = selectIQMode(state.run, mode, coaches, crypto.randomUUID());
+        return run === state.run ? state : { run, playback: null, postseasonPlayback: null };
+      }),
       chooseCoach: (id) => set((state) => ({ run: applyDraftAction(state.run!, { type: 'COACH', id }, players) })),
       spin: () => set((state) => ({ run: applyDraftAction(state.run!, { type: 'SPIN' }, players) })),
       reroll: (kind) => set((state) => ({ run: applyDraftAction(state.run!, { type: 'REROLL', kind }, players) })),
@@ -97,12 +111,26 @@ export const useDraftStore = create<DraftStore>()(
       skipSeason: () => set((state) => state.run?.season ? {
         playback: { runId: state.run.id, revealed: state.run.season.gameLog.length, overtimePeriod: null },
       } : state),
+      startPlayoffs: () => set((state) => {
+        if (!state.run?.season?.qualified || state.run.postseason || state.playback?.revealed !== 82) return state;
+        const run = startPostseason(state.run, playoffs);
+        return run.postseason ? { run, postseasonPlayback: { runId: `${run.id}:postseason`, revealed: 0, overtimePeriod: null } } : state;
+      }),
+      revealPostseason: () => set((state) => state.run?.postseason && state.postseasonPlayback ? {
+        postseasonPlayback: advancePlayback(state.postseasonPlayback, state.run.postseason.gameLog),
+      } : state),
+      finishPostseasonSeries: () => set((state) => state.run?.postseason && state.postseasonPlayback ? {
+        postseasonPlayback: finishSeriesPlayback(state.postseasonPlayback, state.run.postseason.gameLog),
+      } : state),
+      skipPostseason: () => set((state) => state.run?.postseason ? {
+        postseasonPlayback: { runId: `${state.run.id}:postseason`, revealed: state.run.postseason.gameLog.length, overtimePeriod: null },
+      } : state),
     }),
     {
       name: saveKey,
       version: 1,
       storage: createJSONStorage(() => storage),
-      partialize: (state) => ({ run: state.run, playback: state.playback }),
+      partialize: (state) => ({ run: state.run, playback: state.playback, postseasonPlayback: state.postseasonPlayback }),
       migrate: (saved) => saved as { run: RunSave | null },
       merge: (saved, current) => {
         const recovered = recoverRun(saved, data, crypto.randomUUID());
@@ -113,7 +141,10 @@ export const useDraftStore = create<DraftStore>()(
         const playback = recovered.run?.season
           ? restorePlayback((saved as { playback?: unknown })?.playback, recovered.run.id, recovered.run.season.gameLog)
           : null;
-        return { ...current, ...recovered, playback };
+        const postseasonPlayback = recovered.run?.postseason
+          ? restorePlayback((saved as { postseasonPlayback?: unknown })?.postseasonPlayback ?? {}, `${recovered.run.id}:postseason`, recovered.run.postseason.gameLog)
+          : null;
+        return { ...current, ...recovered, playback, postseasonPlayback };
       },
       skipHydration: true,
     },

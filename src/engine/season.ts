@@ -1,6 +1,7 @@
 import { DRAFT_SLOTS, playerIdentity } from './draft.ts';
-import { BALANCE_RULES_V1, evaluateGame, SIGMOID_WIDTH } from './math.ts';
-import type { BalanceRules } from './math.ts';
+import { BALANCE_RULES_V1, SIGMOID_WIDTH } from './math.ts';
+import { evaluateGame } from './iq-math.ts';
+import type { BalanceRules } from './iq-math.ts';
 import { randomStream, shuffle } from './random.ts';
 import type {
   GameEvaluation, GameOutcome, GameScore, OpponentPool, OpponentTier,

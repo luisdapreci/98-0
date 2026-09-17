@@ -1,4 +1,5 @@
 export type Position = 'PG' | 'SG' | 'SF' | 'PF' | 'C' | '6TH';
+export type IQMode = 'no' | 'mid' | 'hi';
 export type EraDecade = '1960s' | '1970s' | '1980s' | '1990s' | '2000s' | '2010s' | '2020s';
 
 export interface PlayerStats {
@@ -117,6 +118,12 @@ export interface GameOutcome extends GameScore {
 export interface SeasonGame extends ScheduleEntry, GameOutcome {
   context: GameContext;
   evaluation: GameEvaluation;
+  rivalry?: RivalryEvidence;
+}
+
+export interface RivalryEvidence {
+  version: 'rivalry-1';
+  matches: { franchises: [string, string]; playerIds: string[] }[];
 }
 
 export type PostseasonEntry = 'MISSED' | 'PLAY_IN' | 'FOURTH_SEED' | 'SECOND_SEED' | 'FIRST_SEED';
@@ -132,4 +139,38 @@ export interface SeasonResult {
   qualified: boolean;
   postseasonEntry: PostseasonEntry;
   gameLog: SeasonGame[];
+}
+
+export type PlayoffRound = 'playIn' | 'round1' | 'round2' | 'conferenceFinals' | 'finals';
+export type PlayoffOpponent = Omit<Opponent, 'tier'>;
+export type PlayoffPool = Record<PlayoffRound, readonly PlayoffOpponent[]>;
+
+export interface PostseasonGame extends Omit<SeasonGame, 'opponent'> {
+  opponent: PlayoffOpponent;
+  round: PlayoffRound;
+  seriesGame: number;
+  opponentMultiplier: number;
+  seedHomeBonus: number;
+}
+
+export interface PlayoffSeries {
+  round: PlayoffRound;
+  opponent: PlayoffOpponent;
+  wins: number;
+  losses: number;
+  advanced: boolean;
+  gameLog: PostseasonGame[];
+}
+
+export interface PostseasonResult {
+  version: 'postseason-1';
+  entry: Exclude<PostseasonEntry, 'MISSED'>;
+  path: { round: PlayoffRound; opponent: PlayoffOpponent }[];
+  series: PlayoffSeries[];
+  playIn: { wins: number; losses: number };
+  playoffs: { wins: number; losses: number };
+  champion: boolean;
+  isPerfectRun: boolean;
+  eliminatedRound: PlayoffRound | null;
+  gameLog: PostseasonGame[];
 }

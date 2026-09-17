@@ -24,13 +24,18 @@ import {
 } from 'lucide-react';
 import { availablePlayers, availableSlots, DRAFT_SLOTS, rollOptions } from '../engine/draft';
 import type { DraftSlot, DraftState, RerollKind } from '../engine/draft';
-import { calculateSynergy } from '../engine/math';
-import { balanceForRun } from '../engine/run';
+import { calculateSynergy } from '../engine/iq-math';
+import { balanceForRun, statsHiddenForRun } from '../engine/run';
+import type { RunSave } from '../engine/run';
 import { lineupForUsagePolicy, usageCapForLineup } from '../engine/usage-policy';
 import type { Coach, Player, SynergySnapshot } from '../engine/types';
 import { franchises, players, useDraftStore } from '../lib/draft-store';
 import { SeasonTicker } from './season-ticker';
+import { PostseasonTicker } from './postseason-ticker';
 import { DefenseBreakdown } from './defense-breakdown';
+import { SoundControls } from './sound-controls';
+import { gameAudio } from '../lib/game-audio';
+import type { SoundCue } from '../lib/sound-effects';
 
 const eras = ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
 const slotLabel = (slot: DraftSlot) => (slot === 'SIXTH' ? '6TH' : slot);
@@ -88,7 +93,7 @@ function Modal({
   );
 }
 
-function CoachChoices({ draft, onChoose }: { draft: DraftState; onChoose: (id: string) => void }) {
+function CoachChoices({ draft, onChoose, hideEffects }: { draft: DraftState; onChoose: (id: string) => void; hideEffects: boolean }) {
   return (
     <section className="coach-selection" aria-labelledby="coach-title">
       <div className="section-heading">
@@ -107,16 +112,16 @@ function CoachChoices({ draft, onChoose }: { draft: DraftState; onChoose: (id: s
             </div>
             <div className="coach-identity">
               <h3>{coach.name}</h3>
-              <p>{coach.systemName}</p>
+              {!hideEffects && <p>{coach.systemName}</p>}
             </div>
-            <p className="coach-description">{coach.description}</p>
+            {!hideEffects && <><p className="coach-description">{coach.description}</p>
             <div className="modifier-list">
               {coach.modifiers.map((modifier) => (
                 <span className={modifier.delta > 0 ? 'positive' : 'negative'} key={modifier.stat}>
                   {modifierLabel(modifier)}
                 </span>
               ))}
-            </div>
+            </div></>}
             <button
               className="coach-select"
               onClick={() => onChoose(coach.id)}
@@ -141,7 +146,7 @@ function CoachChoices({ draft, onChoose }: { draft: DraftState; onChoose: (id: s
   );
 }
 
-function Roster({ draft }: { draft: DraftState }) {
+function Roster({ draft, onInspect }: { draft: DraftState; onInspect?: (player: Player) => void }) {
   const filled = DRAFT_SLOTS.filter((slot) => draft.lineup[slot]).length;
   return (
     <section className="roster-section" aria-labelledby="roster-title">
@@ -190,11 +195,25 @@ function Roster({ draft }: { draft: DraftState }) {
         </span>
         <span>{6 - filled} REMAINING</span>
       </div>
+      {onInspect && <details className="roster-profiles"><summary>PLAYER PROFILES</summary>
+        {DRAFT_SLOTS.map((slot) => draft.lineup[slot] && <button key={slot} onClick={() => onInspect(draft.lineup[slot]!)}>
+          <span>{slotLabel(slot)} / {draft.lineup[slot]!.name}</span><ChevronRight size={16} aria-hidden="true" />
+        </button>)}
+      </details>}
     </section>
   );
 }
 
-function SynergyMeters({ synergy, draft, engineVersion }: { synergy: SynergySnapshot; draft: DraftState; engineVersion: string }) {
+function SynergyMeters({ synergy, draft, engineVersion, run }: { synergy: SynergySnapshot; draft: DraftState; engineVersion: string; run: RunSave }) {
+  if (run.iqMode === 'no') return <section className="synergy-section" aria-labelledby="quality-title">
+    <div className="section-heading compact"><h2 id="quality-title">TEAM QUALITY</h2><span className="eyebrow">CHEMISTRY OFF</span></div>
+    <div className="rating-strip">
+      <div><span>OFFENSE</span><strong>{synergy.effectiveOrtg.toFixed(1)}</strong></div>
+      <div><span>NET RATING</span><strong>{synergy.netRating.toFixed(1)}</strong></div>
+      <div><span>BENCH</span><strong>+{synergy.depthBonus.toFixed(1)}</strong></div>
+    </div>
+    <DefenseBreakdown lineup={draft.lineup} rules={balanceForRun(run)} />
+  </section>;
   const cap = usageCapForLineup(draft.lineup, engineVersion);
   const picked = DRAFT_SLOTS.some((slot) => draft.lineup[slot]);
   const usageState = synergy.usgTeam > cap ? 'OVER CAP' : 'WITHIN CAP';
@@ -351,16 +370,18 @@ function PlayerPool({
   draft,
   busy,
   onSelect,
+  hidden,
 }: {
   draft: DraftState;
   busy: boolean;
   onSelect: (player: Player) => void;
+  hidden: boolean;
 }) {
   const [filter, setFilter] = useState<DraftSlot | 'ALL'>('ALL');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<{ key: PlayerSortKey; ascending: boolean }>({
-    key: 'overallRating',
-    ascending: false,
+    key: hidden ? 'name' : 'overallRating',
+    ascending: hidden,
   });
   const query = useDeferredValue(search);
   const candidates = availablePlayers(draft, players);
@@ -370,7 +391,7 @@ function PlayerPool({
       player.name.toLowerCase().includes(query.toLowerCase().trim()),
   );
   filtered.sort((first, second) => {
-    const key = sort.key;
+    const key = hidden && sort.key !== 'name' && sort.key !== 'primaryPosition' ? 'name' : sort.key;
     const comparison = key === 'name' || key === 'primaryPosition'
       ? first[key].localeCompare(second[key])
       : key === 'overallRating'
@@ -416,14 +437,14 @@ function PlayerPool({
         </label>
       </div>
       <div
-        className="player-list"
+        className={`player-list ${hidden ? 'hidden-stats' : ''}`}
         aria-busy={busy}
         tabIndex={0}
         role="region"
-        aria-label="Player stats, horizontally scrollable"
+        aria-label={hidden ? 'Available players' : 'Player stats, horizontally scrollable'}
       >
         <div className="table-header player-grid">
-          {playerColumns.map((column) => {
+          {playerColumns.filter((column) => !hidden || column.key === 'name' || column.key === 'primaryPosition').map((column) => {
             const active = sort.key === column.key;
             const ascending = active ? !sort.ascending : column.key === 'name' || column.key === 'primaryPosition';
             const Icon = active ? SortIcon : ArrowUpDown;
@@ -484,14 +505,14 @@ function PlayerPool({
               >
                 <span className="player-name">
                   <strong>{player.name}</strong>
-                  <small id={`peak-${player.id}`}>{player.peakYears.length}-season peak</small>
+                  <small id={`peak-${player.id}`}>{hidden ? player.decade : `${player.peakYears.length}-season peak`}</small>
                   <small>
                     {[...player.peakYears].sort().join(' / ')}
                     {!legal ? ' / NO OPEN SLOT' : ''}
                   </small>
                 </span>
                 <span className="position-tag">{player.primaryPosition}</span>
-                <span>{player.stats.pts.toFixed(1)}</span>
+                {!hidden && <><span>{player.stats.pts.toFixed(1)}</span>
                 <span>{player.stats.reb.toFixed(1)}</span>
                 <span>{player.stats.ast.toFixed(1)}</span>
                 <span>{player.stats.stl.toFixed(1)}</span>
@@ -504,7 +525,7 @@ function PlayerPool({
                   {player.stats.dbpm > 0 ? '+' : ''}
                   {player.stats.dbpm.toFixed(1)}
                 </span>
-                <strong className="overall">{player.overallRating.toFixed(1)}</strong>
+                <strong className="overall">{player.overallRating.toFixed(1)}</strong></>}
                 <ChevronRight size={17} />
               </button>
             );
@@ -513,20 +534,21 @@ function PlayerPool({
       </div>
       <div className="pool-footer">
         <span>{busy ? 'SCOUTING' : `${filtered.length} PLAYER RECORDS`}</span>
-        <span>FRANCHISE PEAKS / RAW STATS</span>
+        <span>{hidden ? 'FRANCHISE PEAKS' : 'FRANCHISE PEAKS / RAW STATS'}</span>
       </div>
     </section>
   );
 }
 
 export function DraftRoom() {
-  const { run, notice, clearNotice, newRun, chooseCoach, spin, reroll, pick, start } = useDraftStore();
+  const { run, notice, clearNotice, newRun, chooseMode, chooseCoach, spin, reroll, pick, start } = useDraftStore();
   const draft = run?.draft;
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState<'both' | RerollKind | null>(null);
   const [tick, setTick] = useState(0);
   const [selected, setSelected] = useState<Player | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [resultView, setResultView] = useState<'season' | 'postseason'>('postseason');
   const [error, setError] = useState('');
   useEffect(() => {
     const onStorageError = () => setError('Browser storage is unavailable or full. This run may not survive a reload.');
@@ -550,10 +572,11 @@ export function DraftRoom() {
       window.clearTimeout(timeout);
     };
   }, [busy]);
-  function act(action: () => void) {
+  function act(action: () => void, cue?: SoundCue) {
     try {
       setError('');
       action();
+      if (cue) gameAudio.play(cue);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'The draft could not be updated.');
     }
@@ -563,12 +586,20 @@ export function DraftRoom() {
       if (kind) reroll(kind);
       else spin();
       setBusy(kind ?? 'both');
-    });
+    }, 'reels');
   }
   const filled = draft ? DRAFT_SLOTS.filter((slot) => draft.lineup[slot]).length : 0;
   const synergy = draft && run ? calculateSynergy(lineupForUsagePolicy(draft.lineup, run.engineVersion), balanceForRun(run)) : null;
   const teamSpinning = busy === 'both' || busy === 'team';
   const eraSpinning = busy === 'both' || busy === 'era';
+  const showPostseason = !!run?.postseason && resultView === 'postseason';
+  const screen = showPostseason ? 'postseason' : run?.season ? 'season' : `${draft?.phase}:${filled}`;
+  useEffect(() => {
+    if (ready) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [ready, screen]);
+  const hidden = !!run && statsHiddenForRun(run);
+  const noChemistry = run?.iqMode === 'no';
+  const modeLabel = run?.iqMode === 'no' ? 'NO IQ' : run?.iqMode === 'hi' ? 'HI IQ' : 'MID IQ';
 
   return (
     <div className="app-shell">
@@ -580,15 +611,16 @@ export function DraftRoom() {
           <span className={run?.season ? '' : 'current-stage'}>
             <span>01</span> DRAFT
           </span>
-          <span className={run?.season ? 'current-stage' : ''}>
+          <span className={run?.season && !showPostseason ? 'current-stage' : ''}>
             <span>02</span> SEASON
           </span>
-          <span>
-            <LockKeyhole size={12} /> PLAYOFFS
+          <span className={showPostseason ? 'current-stage' : ''}>
+            {run?.postseason ? <Trophy size={12} /> : <LockKeyhole size={12} />} PLAYOFFS
           </span>
         </nav>
         <div className="topbar-right">
-          <span className="mode-label">CLASSIC</span>
+          <span className="mode-label">{modeLabel}</span>
+          <SoundControls />
           <button
             className="icon-button"
             title="New run"
@@ -636,19 +668,27 @@ export function DraftRoom() {
               </div>
             )}
             {draft.phase === 'COACH' ? (
-              <CoachChoices draft={draft} onChoose={(id) => act(() => chooseCoach(id))} />
+              <>
+                {!run?.legacyDraft && run?.engineVersion === 'season-7' && <div className="iq-mode-selector" role="group" aria-label="IQ mode">
+                  {(['no', 'mid', 'hi'] as const).map((mode) => <button key={mode} aria-pressed={(run?.iqMode ?? 'mid') === mode}
+                    onClick={() => act(() => chooseMode(mode), 'switch')}>{mode.toUpperCase()} IQ</button>)}
+                </div>}
+                <p className="iq-mode-status">{hidden ? 'STATS LOCKED UNTIL START SEASON' : noChemistry ? 'CHEMISTRY OFF / INDIVIDUAL QUALITY ON' : 'FULL CHEMISTRY / STATS VISIBLE'}</p>
+                <CoachChoices draft={draft} hideEffects={hidden || noChemistry} onChoose={(id) => act(() => chooseCoach(id), 'coach')} />
+              </>
             ) : (
               <>
                 <div className="draft-status">
+                  <span className="iq-run-mode">{modeLabel} / LOCKED</span>
                   <div className="coach-status">
                     <Users size={19} />
                     <div>
                       <span className="eyebrow">HEAD COACH</span>
                       <strong>{draft.lineup.coach!.name}</strong>
                     </div>
-                    <span className="coach-system">{draft.lineup.coach!.systemName}</span>
+                    {!hidden && !noChemistry && <span className="coach-system">{draft.lineup.coach!.systemName}</span>}
                   </div>
-                  <div className="status-modifiers">
+                  {!hidden && !noChemistry && <div className="status-modifiers">
                     {draft.lineup.coach!.modifiers.map((modifier) => (
                       <span
                         key={modifier.stat}
@@ -657,11 +697,15 @@ export function DraftRoom() {
                         {modifierLabel(modifier)}
                       </span>
                     ))}
-                  </div>
+                  </div>}
                 </div>
                 <div className="draft-grid">
                   <div className="draft-main">
-                    {run?.season ? <SeasonTicker key={run.id} run={run} /> : draft.phase === 'COMPLETE' ? (
+                    {run?.postseason && <div className="result-tabs" role="group" aria-label="Run results">
+                      <button aria-pressed={!showPostseason} onClick={() => { gameAudio.stopAll(); setResultView('season'); }}>REGULAR SEASON</button>
+                      <button aria-pressed={showPostseason} onClick={() => { gameAudio.stopAll(); setResultView('postseason'); }}>PLAYOFFS</button>
+                    </div>}
+                    {showPostseason && run ? <PostseasonTicker key={run.id} run={run} /> : run?.season ? <SeasonTicker key={run.id} run={run} /> : draft.phase === 'COMPLETE' ? (
                       <section className="completion" aria-labelledby="complete-title">
                         <div className="completion-mark">
                           <Check size={30} />
@@ -674,7 +718,7 @@ export function DraftRoom() {
                           <br />
                           <span>YOUR SHOT.</span>
                         </h2>
-                        <div className="completion-ratings">
+                        {!hidden && <div className="completion-ratings">
                           <div>
                             <span>TEAM NET RATING</span>
                             <strong>
@@ -682,12 +726,13 @@ export function DraftRoom() {
                               {synergy.netRating.toFixed(1)}
                             </strong>
                           </div>
-                          <div>
+                          {!noChemistry && <div>
                             <span>USAGE EFFICIENCY</span>
                             <strong>{(synergy.phiUsg * 100).toFixed(1)}%</strong>
-                          </div>
-                        </div>
-                        <button className="primary-button" disabled={run?.phase === 'SEASON_RUNNING'} onClick={() => act(start)}>
+                          </div>}
+                        </div>}
+                        {hidden && <p className="iq-mode-status">STATS LOCKED UNTIL START SEASON</p>}
+                        <button className="primary-button" disabled={run?.phase === 'SEASON_RUNNING'} onClick={() => act(start, 'start')}>
                           <ArrowRight size={18} /> {run?.phase === 'SEASON_RUNNING' ? 'SIMULATING SEASON' : 'START SEASON'}
                         </button>
                       </section>
@@ -774,14 +819,16 @@ export function DraftRoom() {
                           key={`${draft.roll?.franchise}-${draft.roll?.decade}-${filled}`}
                           draft={draft}
                           busy={!!busy}
+                          hidden={hidden}
                           onSelect={setSelected}
                         />
                       </>
                     )}
                   </div>
                   <aside className="draft-sidebar">
-                    <Roster draft={draft} />
-                    <SynergyMeters draft={draft} synergy={synergy} engineVersion={run!.engineVersion} />
+                    <Roster draft={draft} onInspect={run?.season ? setSelected : undefined} />
+                    {hidden ? <div className="iq-locked"><LockKeyhole size={24} aria-hidden="true" /><strong>HI IQ / STATS LOCKED</strong></div>
+                      : <SynergyMeters draft={draft} synergy={synergy} engineVersion={run!.engineVersion} run={run!} />}
                   </aside>
                 </div>
               </>
@@ -796,22 +843,22 @@ export function DraftRoom() {
         <span>INDEPENDENT PROJECT. NOT AFFILIATED WITH THE NBA.</span>
       </footer>
       {selected && draft && (
-        <Modal title="LOCK YOUR PICK" onClose={() => setSelected(null)}>
+        <Modal title={run?.season ? 'PLAYER PROFILE' : 'LOCK YOUR PICK'} onClose={() => setSelected(null)}>
           <div className="pick-identity">
             <span className="eyebrow">
               {franchiseName(selected.franchise)} / {selected.decade}
             </span>
             <h3>{selected.name}</h3>
             <p>
-              {selected.eligiblePositions.join(' / ')} <span className="muted">·</span>{' '}
-              {selected.overallRating.toFixed(1)} OVR
+              {selected.eligiblePositions.join(' / ')}
+              {!hidden && <> <span className="muted">·</span> {selected.overallRating.toFixed(1)} OVR</>}
             </p>
             <p>
-              {selected.peakYears.length}-season peak /{' '}
+              {!hidden && `${selected.peakYears.length}-season peak / `}
               {[...selected.peakYears].sort().join(' / ')}
             </p>
           </div>
-          <div className="pick-stat-line">
+          {!hidden && <div className="pick-stat-line">
             <div>
               <span>PTS</span>
               <strong>{selected.stats.pts}</strong>
@@ -828,7 +875,15 @@ export function DraftRoom() {
               <span>USG%</span>
               <strong>{selected.stats.usgPct}</strong>
             </div>
-          </div>
+            {run?.season && <>
+              <div><span>STL</span><strong>{selected.stats.stl}</strong></div>
+              <div><span>BLK</span><strong>{selected.stats.blk}</strong></div>
+              <div><span>FG%</span><strong>{(selected.stats.fgPct * 100).toFixed(1)}</strong></div>
+              <div><span>3P%</span><strong>{(selected.stats.threePtPct * 100).toFixed(1)}</strong></div>
+              <div><span>3PA</span><strong>{selected.stats.threePtAttempts}</strong></div>
+              <div><span>DBPM</span><strong>{selected.stats.dbpm}</strong></div>
+            </>}
+          </div>}
           <div className="slot-options">
             {availableSlots(draft.lineup, selected).map((slot) => (
               <button
@@ -838,7 +893,7 @@ export function DraftRoom() {
                   act(() => {
                     pick(selected.id, slot);
                     setSelected(null);
-                  })
+                  }, 'lock')
                 }
               >
                 <LockKeyhole size={15} /> LOCK {slotLabel(slot)}
@@ -849,7 +904,7 @@ export function DraftRoom() {
       )}
       {confirmReset && (
         <Modal title="START A NEW RUN?" onClose={() => setConfirmReset(false)}>
-          <p className="reset-message">Your current coach, picks, and rerolls will be cleared.</p>
+          <p className="reset-message">Your current draft, season and postseason results will be cleared. Run history is not available yet.</p>
           <div className="dialog-actions">
             <button className="secondary-button" onClick={() => setConfirmReset(false)}>
               Keep this run
@@ -858,6 +913,8 @@ export function DraftRoom() {
               className="primary-button"
               onClick={() => {
                 newRun();
+                gameAudio.stopAll();
+                setResultView('postseason');
                 setSelected(null);
                 setError('');
                 setConfirmReset(false);

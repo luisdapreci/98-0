@@ -6,16 +6,20 @@
 * **Tagline:** Assemble history's greatest NBA starting five, survive an 82-game gauntlet, and claim the championship ring.
 * **Genre:** Sports Roguelike / Drafting Slot Machine / Season Simulator
 * **Inspiration:** `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, *Immaculate Grid*.
-* **Core Value Proposition:** Draft history's biggest stars with a choice of how much team fit matters: chemistry-free **No IQ**, forgiving **Low IQ**, the chemistry-aware default **Mid IQ**, or hidden-stats **HI IQ**. The core simulation introduces **Usage Caps**, **Floor Spacing**, **Defensive Roles**, **Coaching Synergies**, and an **Animated Season Ticker with Playoff Run**, with chemistry effects governed by the selected mode (§4).
+* **Core Value Proposition:** Draft history's biggest stars in chemistry-free **No IQ**, the chemistry-aware default **Mid IQ**, or hidden-stats **HI IQ**. The core simulation introduces **Usage Caps**, **Floor Spacing**, **Defensive Roles**, **Coaching Synergies**, and an **Animated Season Ticker with Playoff Run**, with chemistry effects governed by the selected mode (§4).
 
 ---
 
 ## 2. Core Game Loop
 
+**Current build (2026-09-16):** No IQ, Mid IQ (default), and HI IQ are implemented across drafting, the 82-game season, saved playback and the postseason. The former Classic label is now Mid IQ. Rivalries, matchup previews, overtime reveals, loss explanations and championship/perfect-run results are playable. Daily, Almanac/history, sharing and online rankings remain planned. The diagram below includes those future features as well as the playable core loop. [Current validation](PHASE4_PROGRESS.md#current-verification) records 98 engine tests, 26 desktop/mobile browser checks and a passing production build; mode-specific balance and human-playtest acceptance remain separate.
+
+New runs use **`season-7` / `mid-iq-3` / `conditional-score-3`**: 135% base usage plus coach adjustments, a 1.5% overload slope with a 0.45 floor, and 45-win qualification after 82 games. Existing saves retain their pinned rules and results. Historical release measurements below are not new-build balance or player-test acceptance; see [the release scorecard](RELEASE_SCORECARD.md).
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │ 1. PRE-RUN: Select Coach (Pick 1 of 3 Offered)              │
-│    Select Mode (No IQ / Low IQ / Mid IQ / HI IQ)             │
+│    Select Mode (No IQ / Mid IQ / HI IQ)                      │
 │    Optional Daily Seed challenge                            │
 └──────────────────────────────┬───────────────────────────────┘
                                ▼
@@ -39,7 +43,7 @@
                                ▼
 ┌──────────────────────────────────────────────────────────────┐
 │ 4. POST-SEASON / PLAYOFF RUN (Sliding Scale Entry)           │
-│    • 40 wins = Play-In | 65 = 4 Seed | 70 = 2 | 75+ = 1    │
+│    • 45 wins = Play-In | 65 = 4 Seed | 70 = 2 | 75+ = 1    │
 │    • Best-of-7 series against legendary historical squads    │
 │    • Win 16 games to earn the Ring                           │
 └──────────────────────────────┬───────────────────────────────┘
@@ -79,7 +83,7 @@
 
 ### 3.2. Team Synergy Formulas (The "Anti-Ball-Hog" Fix)
 
-**Mode scope:** The formulas below define **Mid IQ**, the default, and **HI IQ**, which uses the same simulation rules with draft information hidden. **No IQ** disables all chemistry effects; **Low IQ** softens chemistry penalties as specified in §4. Formula examples and §3.5's initial balance targets describe Mid IQ, not universal targets for every mode.
+**Mode scope:** The formulas below define **Mid IQ**, the default, and **HI IQ**, which uses the same simulation rules with draft information hidden. **No IQ** disables chemistry while retaining individual scoring, defense and bench quality under §4's approved mapping. Formula examples and §3.5's initial balance targets describe Mid IQ, not universal targets for every mode.
 
 #### A. Total Team Usage Rate ($USG_{team}$)
 
@@ -87,17 +91,17 @@ In real basketball, 100% of possessions must be shared by 5 players. The 6th Man
 
 $$USG_{team} = \sum_{i=1}^{5} USG_i + (USG_{6th} \times 0.4)$$
 
-For new `season-4` runs, the base cap is **135%**, raised from 115% at the user's request on 2026-09-15 to make star-studded rosters more viable. The coach's `usgCap` modifier adds to that threshold. Existing `season-1` through `season-3` saves retain their 115% base cap and original results; start a new run to use the higher cap.
+Starting with `season-4`, including current `season-7` runs, the base cap is **135%**, raised from 115% at the user's request on 2026-09-15 to make star-studded rosters more viable. The coach's `usgCap` modifier adds to that threshold. Existing `season-1` through `season-3` saves retain their 115% base cap and original results; start a new run to use the higher cap.
 
 $$\text{effective\_threshold} = 135 + \text{coach.usgCapDelta}$$
 
-**Overload severity (2026-09-16):** at the user's request — 135% is already generous — new `season-6` runs (`mid-iq-3` balance rules) charge **1.5% per usage point above the threshold with a 0.45 floor**, replacing 0.8% and 0.50. `season-1` through `season-5` saves keep the original slope and floor, and neither the base cap nor the ball-movement bonus changed.
+**Overload severity (2026-09-16):** at the user's request — 135% is already generous — `season-6` and `season-7` runs (`mid-iq-3` balance rules) charge **1.5% per usage point above the threshold with a 0.45 floor**, replacing 0.8% and 0.50. `season-1` through `season-5` saves keep the original slope and floor, and neither the base cap nor the ball-movement bonus changed.
 
 **Piecewise Efficiency Modifier ($\phi_{usg}$):**
 
 $$\phi_{usg} = \begin{cases} \min(1.03,\; 1.0 + 0.003 \times (95 - USG_{team})) & \text{if } USG_{team} \le 95 \quad \text{(ball movement bonus, max +3\%)} \\ 1.0 & \text{if } 95 < USG_{team} \le \text{effective\_threshold} \quad \text{(optimal range)} \\ \max\left(floor,\; 1.0 - slope \times (USG_{team} - \text{effective\_threshold})\right) & \text{if } USG_{team} > \text{effective\_threshold} \quad \text{(overload penalty)} \end{cases}$$
 
-where $slope = 0.015$ and $floor = 0.45$ for `mid-iq-3` (`season-6`), and $slope = 0.008$ and $floor = 0.50$ for `mid-iq-1` and `mid-iq-2` (`season-1` through `season-5`).
+where $slope = 0.015$ and $floor = 0.45$ for `mid-iq-3` (`season-6` and `season-7`), and $slope = 0.008$ and $floor = 0.50$ for `mid-iq-1` and `mid-iq-2` (`season-1` through `season-5`).
 
 **Example Scenarios** (135% threshold, no coach modifier):
 
@@ -204,7 +208,7 @@ All volume stats ($pts$, $ast$) are pace-normalized (multiplied by $eraPaceFacto
 
 **Team ORTG (higher = better):**
 
-For new `season-3` runs, let $\overline{OC}_{all}$ be the mean of all five starters and $\overline{OC}_{core}$ the mean of the three largest contributions:
+For `season-3` through current `season-7` runs, let $\overline{OC}_{all}$ be the mean of all five starters and $\overline{OC}_{core}$ the mean of the three largest contributions:
 
 $$ORTG_{team} = 95 + 0.20 \times \overline{OC}_{all} + 0.80 \times \overline{OC}_{core}$$
 
@@ -241,7 +245,7 @@ $$P(Win) = \frac{1}{1 + e^{-\frac{\Delta Rating}{\sigma}}}$$
 
 #### Chosen Score and Event Model (Phase 3)
 
-**Decision:** Use an **outcome-first, conditional-score model**: choose the winner once, generate a matchup-conditioned margin and shared scoring baseline, and retain explicit overtime records. This is a game-level simulation, not a possession or box-score simulation. New runs use `season-3` / `conditional-score-3`: the [scoring-core balance release](MID_IQ_CORE_RELEASE.md) changes win ratings, while retaining the score parameters accepted after [15/15 held-out calibration checks](PHASE3_SCORE_RETRY.md). Existing `season-1` and `season-2` saves retain their original balance, scores and results; original v1 measurements remain in [the Phase 3 baseline](PHASE3_BASELINE.md).
+**Decision:** Use an **outcome-first, conditional-score model**: choose the winner once, generate a matchup-conditioned margin and shared scoring baseline, and retain explicit overtime records. This is a game-level simulation, not a possession or box-score simulation. New runs use `season-7` / `conditional-score-3`, retaining the score parameters accepted after [15/15 held-out calibration checks](PHASE3_SCORE_RETRY.md). The [season-3 scoring-core release](MID_IQ_CORE_RELEASE.md) and later usage revisions change win ratings, not those score parameters. Existing `season-1` through `season-6` saves retain their pinned balance, entry rules, scores and results; original v1 measurements remain in [the Phase 3 baseline](PHASE3_BASELINE.md).
 
 1. **Winner:** Let $p$ be `evaluateGame`'s win probability, including all game-day adjustments. Draw a seeded uniform value $U$ in $[0, 1)$ and set `won = U < p`. This is the final winner, including overtime. Score generation, rounding, events, and playback must never change it or apply home court, coach, depth, or fatigue adjustments again.
 2. **Margin:** For regulation finishes, use a logistic signed-margin distribution conditioned on a positive margin for a user win or a negative margin for a loss. Released score scale is $s = 8$, with center $\Delta Rating \times s / 10.5$; the win-probability sigmoid remains unchanged at $\sigma = 10.5$. Sample within the selected side, not by drawing an unconditional margin and flipping its sign. Round the sampled magnitude, add one, and cap at 100 points while preserving the selected winner. Legacy v1 retains scale 10.5, zero rounding offset, a minimum of one, and a 70-point cap.
@@ -299,11 +303,11 @@ This is added to $\Delta Rating$ for every game in the season.
 
 **Next balance-release contract:** [The release scorecard](RELEASE_SCORECARD.md), approved on 2026-09-15, adopts the strategy targets below, player-test gates and a bounded validation process for the next replacement release. It supersedes their earlier provisional status for that scope without changing the released rules or approving a replacement model.
 
-**Current balance release (2026-09-14):** The user adopted "a roster like this usually contend for qualification." New runs use `season-3` / `mid-iq-2` balance with unchanged `conditional-score-3` score rules. The [release report](MID_IQ_CORE_RELEASE.md) records the single offense change, 1,240 fresh legal redrafts and compatibility policy. The reference roster improves from 53.94 expected wins / 8.66% qualification to 60.05 / 56.32%; its same-seed result is 57-25, not a guaranteed qualification. The original targets and unresolved exceptions below remain visible; this is not comprehensive balance or playoff acceptance.
+**Historical scoring-core release (2026-09-14):** The user adopted "a roster like this usually contend for qualification." That release introduced `season-3` / `mid-iq-2` balance with unchanged `conditional-score-3` score rules. The [release report](MID_IQ_CORE_RELEASE.md) records the single offense change, 1,240 fresh legal redrafts and compatibility policy. At the then-current 60-win cutoff, the reference roster improves from 53.94 expected wins / 8.66% qualification to 60.05 / 56.32%; its same-seed result is 57-25, not a guaranteed qualification. These are historical measurements, not current `season-7` outcomes. The original targets and unresolved exceptions below remain visible; this is not comprehensive balance or playoff acceptance.
 
 These are **adopted targets for the next replacement release, not measured results**, following the scorecard approval above. Evaluate reproducible draft strategies across many saved seeds, respecting actual coach offers, rolls, rerolls, eligibility, and duplicate protection. Do not substitute unrestricted all-star rosters for achievable drafts.
 
-**Mid IQ v1 acceptance (2026-09-14):** Current balance is approved with documented exceptions for random play and bounded optimization, as measured in the [P3.7 review](PHASE3_REVIEW.md). The original targets below remain visible for Phase 9 review; approval does not mean all targets passed or authorize changes to win probabilities. Historical score calibration was separately accepted after the [second attempt](PHASE3_SCORE_RETRY.md); its score-only release leaves these win probabilities unchanged.
+**Mid IQ v1 acceptance (2026-09-14):** V1 balance was approved with documented exceptions for random play and bounded optimization, as measured in the [P3.7 review](PHASE3_REVIEW.md). The original targets below remain visible for Phase 9 review; approval does not mean all targets passed or authorize changes to win probabilities. Historical score calibration was separately accepted after the [second attempt](PHASE3_SCORE_RETRY.md); its score-only release leaves these win probabilities unchanged.
 
 | Draft Strategy | Median Regular-Season Wins | Share Reaching 60 Wins |
 | --- | --- | --- |
@@ -311,28 +315,32 @@ These are **adopted targets for the next replacement release, not measured resul
 | Competent, chemistry-aware picks | 60–66 | 55–75% |
 | Strong optimization within actual rolls | 68–74 | Measure; 75+ wins should be a standout result |
 
+**Current qualification scope:** The table's percentages concern **60+ wins**, not current 45-win entry. `season-5`/`season-6` reports at 40 wins and earlier reports at 60 wins retain their original meaning. No replacement qualification-rate targets for 45-win entry have been adopted. The current usage and entry revisions do not establish a new balance or human-playtest sign-off; replacement-release gates remain outstanding in [the scorecard](RELEASE_SCORECARD.md).
+
 Define and version each strategy before measuring it; report sample sizes and uncertainty alongside win distributions and qualification rates. Keep sigma 10.5, qualification thresholds, and the whole-offense spacing tiers unchanged for the first measurement pass, after applying §3.4's bench-defense correction. Compare balanced, overloaded, non-shooting, defensive, and bench-heavy builds, all coaches, and eras. Tune only against evidence and version changes affecting replay. Measure title and perfect-run frequency once playoffs exist; do not force a specific 98-0 frequency before observing the baseline. Score and overtime distributions remain separate calibration work under §3.3.
 
 ---
 
 ## 4. Game Modes
 
-There are **four game modes**. **Mid IQ is the default** and replaces the previous design name "Classic". **HI IQ** is the hidden-stats mode inspired by **HoopIQ from 82-0**; HoopIQ is not a separate fifth mode. These are adopted design rules, not a claim that mode selection is already implemented.
+There are **three implemented IQ modes**. **Mid IQ is the default** and replaces the previous name "Classic". **HI IQ** is the hidden-stats mode inspired by **HoopIQ from 82-0**; HoopIQ is not an additional mode. Select the mode before signing a coach; it then stays locked for that run.
+
+Each actual mode change starts a fresh seeded draft and reshuffles coach offers. With at least three alternative coaches, none of the immediately previous offers are reused; smaller pools require a different offer set. Clicking the active mode or reloading does not reshuffle. This prevents direct mode-toggle inspection of the same offers, not remembering coach attributes from earlier runs or inspecting local data.
 
 | Mode | Chemistry in Simulation | Information Before Simulation | Player Goal |
 | --- | --- | --- | --- |
 | **No IQ** | Arcade mode. No chemistry stats, bonuses, or penalties affect the simulation. Individual player quality still matters. | Player stats and ratings are visible; chemistry feedback is disabled, not presented as an active modifier. | Build the best team possible with the biggest stars, without worrying about team chemistry. |
-| **Low IQ** | More lenient team chemistry penalties than Mid IQ. Team fit still matters, but star stacking is more forgiving. | Player stats, ratings, and mode-adjusted chemistry feedback are visible. | Build a star-studded team without Mid IQ's full chemistry penalties. |
 | **Mid IQ** | Full team chemistry using the rules developed in §3. This is the default mode. | Player stats, ratings, and live chemistry feedback are visible. | Balance star power with usage, spacing, defense, and coaching fit. |
 | **HI IQ** | Same chemistry and simulation rules as Mid IQ; difficulty comes from hidden information, not harsher penalties. | Stats, ratings, chemistry meters, and coaching numbers stay hidden until simulation starts, including on the completed-draft preview. | Draft using basketball knowledge, following the HoopIQ-style experience from 82-0. |
 
 ### Chemistry and Visibility Contract
 
-* **No IQ:** Disabling chemistry must change engine calculations, not merely hide meters. Neutralize chemistry multipliers and additive fit bonuses/penalties, including usage overload/ball-movement effects and offensive spacing effects. Retain individual scoring and defensive ability; "no chemistry" does not mean every player has equal skills. The exact separation of individual ability from defensive-role, bench, and coach fit effects must be documented before implementation so no chemistry effect survives through another calculation path.
-* **Low IQ:** Reduce chemistry penalties relative to Mid IQ while retaining the same underlying player-quality model. Chemistry bonuses remain at Mid IQ values; this mode relaxes penalties rather than increasing rewards. The exact penalty reduction and affected-term mapping remain an explicit balance decision, not an invented percentage. Feedback must show the values actually used by this mode.
+* **No IQ (approved mapping, 2026-09-16):** Keep the existing era-normalized individual offensive contributions and core-offense aggregation. Set usage/ball-movement multiplier to 1 and spacing modifier to 0. Ignore all coach stat, usage-cap and pace modifiers. Replace position-dependent rim/perimeter weighting and nonlinear liability penalties with `DRTG = 110 - 1.2 * mean(individual defensive composite of five starters)`; 1.2 preserves the combined baseline defensive weights (0.5 + 0.4 + 0.3) for equal defenders without position-fit effects. Retain uncoached sixth-man quality, permanent depth strength and B2B fatigue relief as individual bench ability, not chemistry. Home court, schedule fatigue, opponent difficulty and postseason seed bonuses remain unchanged. Feedback must identify chemistry as disabled and must not blame disabled effects.
+* **Scope decision:** Low IQ was removed on 2026-09-16. Only No IQ, Mid IQ and HI IQ are offered.
 * **Mid IQ:** Preserve the current chemistry design as the baseline. Earlier references to the implemented "Classic" draft describe this baseline, not an additional mode.
 * **HI IQ:** Use Mid IQ's engine rules and random draws. For identical lineup, coach, seed, and game context, Mid IQ and HI IQ must produce identical results. Reveal protected stats only when the player starts simulation, never simply because the sixth pick is complete. Before that transition, hide numeric and qualitative proxies in tables, tooltips, accessible labels, coach descriptions, sorting, and previews. Names and eras remain visible; legal position eligibility can remain visible to support drafting, but must not expose ratings or chemistry.
-* **Shared rules:** All four modes retain the coach offers, six-player roster, legal positions, duplicate protection, and reroll rules. Ordinary runs allow unlimited retries. Persist and lock the selected mode for the whole run, including playoffs, resumes, history, and share cards. Loss autopsies must use the selected mode's actual effects and must never blame disabled chemistry in No IQ.
+* **Shared rules:** All three modes retain coach offers, the six-player roster, legal positions, duplicate protection, and rerolls. Ordinary runs allow unlimited retries. Mode selection locks at coach signing and persists through season/playoffs and resumes; future history/share features must retain it too. New runs default to Mid IQ. Loss autopsies use actual effects and never blame disabled chemistry in No IQ.
+* **Compatibility:** New runs pin `iqMode` (`no`, `mid`, `hi`) and `iqVersion: iq-1`. No IQ uses `no-iq-1` through the mode-aware math wrapper; Mid IQ/HI IQ delegate to the unchanged baseline. Saves without mode metadata remain Mid IQ under their existing engine versions without rewriting results. Unknown modes/versions and completed results inconsistent with the selected mode are rejected. Older engine drafts cannot switch modes. This is local validation, not tamper-proof ranking infrastructure.
 
 ### Challenges and Postseason
 
@@ -341,7 +349,7 @@ Daily Seed and Playoff Gauntlet are not additional IQ modes:
 | Format | Rules & Constraints | Purpose |
 | --- | --- | --- |
 | **Daily Seeded Run** | Shared UTC challenge and offer priorities, with deterministic legal fallbacks. The challenge must pin its IQ mode alongside its seed and rules; do not compare different IQ modes in one ranking. The launch mode remains to be chosen. | Competitive / social challenge format. |
-| **Playoff Gauntlet** | Sliding scale entry (see below). Best-of-7 series versus legendary squads, retaining the run's selected IQ mode. | End-game progression in all four modes. |
+| **Playoff Gauntlet** | Sliding scale entry (see below). Best-of-7 series versus legendary squads, retaining the run's selected IQ mode. | End-game progression in all three modes. |
 
 ### Daily Fairness and Ranked Attempts
 
@@ -349,7 +357,7 @@ Daily Seed and Playoff Gauntlet are not additional IQ modes:
 * Address priority lists by round and action, and keep draft, schedule, game-resolution, and cosmetic random streams separate. Different draft actions must not shift schedule or game-resolution draws. Identical versions, dates, and action sequences reproduce identical runs; differing lineups can produce different outcomes from shared random draws.
 * Allow **one ranked attempt per authenticated account per UTC challenge date**, committed server-side before coach offers are revealed. Abandoning does not grant another ranked attempt. Refresh resumes that same attempt; changing the UTC date never replaces an active run.
 * A ranked attempt must start during its challenge day. Allow a **24-hour completion/submission grace period after that UTC day ends**, with server receipt before the grace deadline required for ranking. Late or offline results received after that deadline remain playable locally but unranked. Keep the original pinned versions for resumes.
-* Practice replays are unranked. Guests may play all four IQ modes and local Daily without sign-in. Phase 6's local Daily can mirror these rules but cannot enforce trusted attempts or deadlines; public ranked competition requires Phase 8's server validation. One account per attempt is not proof of one human per attempt.
+* Practice replays are unranked. Guests may play all three IQ modes without sign-in; planned local Daily will also support guests. Phase 6's local Daily can mirror these rules but cannot enforce trusted attempts or deadlines; public ranked competition requires Phase 8's server validation. One account per attempt is not proof of one human per attempt.
 
 ### Rankings and Local Progression
 
@@ -361,14 +369,18 @@ Unlock the entire Coach Almanac after the first completed 82-game season, regard
 
 ### Playoff Sliding Scale
 
-**Entry revision (2026-09-15):** at the user's request, new `season-5` runs qualify for the play-in at **40 wins**, replacing 60. The local [team standings](../data/raw/Team%20Summaries.csv) contain 41 usable NBA seasons from 1984 through 2024 with exactly 16 teams marked `playoffs=TRUE`. For each team, normalize wins to `82 * w / (w + l)`; average the two lowest playoff-team totals within each season, then average seasons. The result is **40.1533 wins**; all playoff teams average **49.8354**. The former is an entry-level proxy, not an exact conference cutoff or a historical play-in estimate. Seasons 2025 and 2026 lack a complete set of playoff flags and are excluded. Conference differences, tiebreakers and historical format changes mean real qualification is not determined by a fixed win total.
+**Current entry revision (2026-09-16):** at the user's request, new `season-7` runs require **45 wins**, replacing 40. After all 82 games, fewer than 45 wins misses qualification and 45–64 wins is classified as play-in entry. Higher seed thresholds are unchanged. This revision preserves `season-6` ratings, usage, scores and seeded game results; it changes only qualification classification. Phase 5 now provides a Start Postseason action after regular-season playback completes.
 
-The 40-win cutoff rounds that entry proxy to a whole game. Higher-seed tiers below remain game challenge rewards, not historically calibrated seed cutoffs. This change does not alter any scores, winners, roster ratings, usage (still 135% plus coach bonuses), or postseason availability. Saved `season-1` through `season-4` runs retain their original 60-win cutoff and classification; start a new run for the revised entry rule. Frozen research and earlier qualification percentages remain 60-win evidence, not validation of this revision.
+**Historical entry revision (2026-09-15):** `season-5` introduced **40-win** entry, retained by `season-6`, replacing 60. The local [team standings](../data/raw/Team%20Summaries.csv) contain 41 usable NBA seasons from 1984 through 2024 with exactly 16 teams marked `playoffs=TRUE`. For each team, normalize wins to `82 * w / (w + l)`; average the two lowest playoff-team totals within each season, then average seasons. The result is **40.1533 wins**; all playoff teams average **49.8354**. The former is an entry-level proxy, not an exact conference cutoff or a historical play-in estimate. Seasons 2025 and 2026 lack a complete set of playoff flags and are excluded. Conference differences, tiebreakers and historical format changes mean real qualification is not determined by a fixed win total.
+
+The historical 40-win cutoff rounded that entry proxy; the current 45-win cutoff is a subsequent user-requested product decision, not a new historical estimate. Higher-seed tiers below remain game challenge rewards, not historically calibrated seed cutoffs. Saved `season-1` through `season-4` runs retain 60-win entry; `season-5` and `season-6` retain 40-win entry. Start a new run for 45-win entry. Frozen reports retain their original thresholds and are not validation of this revision.
+
+The table uses current `season-7` entry thresholds. Classification, home sequences, extra postseason NR and game progression are implemented. Qualifying older saves retain their original entry thresholds and can start the postseason without rewriting their regular-season results.
 
 | Regular Season Wins | Entry | Best-of-Seven Home Sequence | Extra NR |
 | --- | --- | --- | --- |
-| Below 40 | Eliminated | None | None |
-| 40–64 | One away play-in game | After winning: A–A–H–H–A–H–A | 0 |
+| Below 45 | Eliminated | None | None |
+| 45–64 | One away play-in game | After winning: A–A–H–H–A–H–A | 0 |
 | 65–69 | 4th Seed | A–A–H–H–A–H–A | 0 |
 | 70–74 | 2nd Seed | H–H–A–A–H–A–H | 0 |
 | 75–81 | 1st Seed | H–H–A–A–H–A–H | +1 on home games |
@@ -424,7 +436,7 @@ Each 82-game schedule randomly samples from this pool:
 
 * For example, a Lakers version of Magic Johnson facing a Celtics benchmark may produce "Historic rivalry: Lakers vs. Celtics," identifying Magic as the Lakers representative. This describes a franchise rivalry, not a claim that the selected player personally faced that historical squad.
 * Rivalries are **narrative-only**: no rating bonus, fatigue change, altered win probability, score adjustment, or extra random draw. Never alter the schedule to force rivalry games.
-* Do not infer personal grudges, former-team history, or era-specific feuds from names alone. Only reviewed franchise pairs may trigger a label; the initial curated list remains a separate review item before alerts ship.
+* Do not infer personal grudges, former-team history, or era-specific feuds from names alone. Only reviewed franchise pairs may trigger a label. The implemented `rivalry-1` list contains BOS/LAL, CHI/DET, IND/NYK, MIA/NYK, BOS/PHI and LAL/SAS. New runs pin this version; older saves without rivalry metadata are not retroactively annotated.
 * Store the matching franchise pairs and supporting drafted player IDs with the game record. Deduplicate pairs and player IDs, use stable ordering, and combine multiple matches into one game alert. Preserve the supporting evidence in game details.
 * Rivalry annotation must be deterministic from the frozen lineup, opponent, and versioned rivalry list. Adding, removing, or hiding an alert must not consume simulation randomness or change any game outcome.
 
@@ -436,7 +448,7 @@ Each 82-game schedule randomly samples from this pool:
 
 ### Coach Selection
 
-At the start of each run, the player is offered **3 randomly selected coaches** from a pool of 12. Choose 1. The full "Coach Almanac" unlocks after the first completed 82-game season, regardless of wins, and remains unlocked across new runs (§4).
+At the start of each run, the player is offered **3 randomly selected coaches** from a pool of 12. Choose 1. The planned "Coach Almanac" will unlock after the first completed 82-game season, regardless of wins, and remain unlocked across new runs (§4). Coach offers are implemented; the Almanac and persistent unlock are not.
 
 ### Coach Modifier Interface
 
@@ -448,9 +460,9 @@ Each coach has **buffs and debuffs** (every coach has at least one tradeoff):
 | `fgPct` | Added to each player's FG% → affects ORTG calc | +0.03 = each player gains 3 percentage points |
 | `dbpm` | Added to each player's DBPM → flows into DCS → DRTG | +0.5 = each player's DCS improves by 1.25 |
 | `pace` | Direct addition to team Net Rating every game | +2.0 = +2 points to Net Rating |
-| `usgCap` | Raises the usage threshold before penalties apply | +5 = threshold moves from 135% to 140% in new runs; older saves retain 115% to 120% |
+| `usgCap` | Raises the usage threshold before penalties apply | +5 = threshold moves from 135% to 140% in `season-4` through `season-7`; `season-1` through `season-3` retain 115% to 120% |
 
-In `season-6` runs every point past that threshold costs 1.5% offensive efficiency, so a `usgCap` coach is worth more than in earlier versions.
+In `season-6` and `season-7` runs every point past that threshold costs 1.5% offensive efficiency, so a `usgCap` coach is worth more than in earlier versions.
 
 ### Coach Roster (12 Coaches)
 
@@ -500,6 +512,8 @@ $$eraPaceFactor = \frac{\text{modernBasePace}}{\text{eraAveragePace}} \quad \tex
 ---
 
 ## 8. Technical Data Models & TypeScript Interfaces
+
+**Implementation boundary:** The interfaces below describe the design contract, not a complete current save schema. Runtime [types](../src/engine/types.ts) provide season and postseason results, individual series/games, rivalry evidence and stored rating context; [RunSave](../src/engine/run.ts) adds versioned draft actions, frozen inputs, optional legacy-compatible `iqMode`/`iqVersion`, and postseason/rivalry metadata. The store persists separate regular-season and postseason [playback state](../src/engine/playback.ts). The proposed `SimulationResult` interface is not the runtime shape; Daily and history fields do not exist yet.
 
 ```typescript
 export type Position = 'PG' | 'SG' | 'SF' | 'PF' | 'C' | '6TH';
@@ -618,7 +632,7 @@ export interface SimulationResult {
 │  PF: [Empty]             C:  [Empty]        6TH: [Empty]    │
 ├─────────────────────────────────────────────────────────────┤
 │  SYNERGY METERS:                                            │
-│  Usage: [||||||||||        ] 62% (Target: ≤ 115%)          │
+│  Usage: [||||||||||        ] 62% (Target: ≤ 135%)          │
 │  DRTG: 102.0 | Base: 110 | Rim: -4.0 | Perimeter: -3.0     │
 │  Team Support: -2.0 | Liability: +1.0 | Spacing: Elite     │
 └─────────────────────────────────────────────────────────────┘
@@ -630,11 +644,20 @@ export interface SimulationResult {
 * **Visual Presentation:** A continuous rapid timeline showing 82 nodes.
 * **Color states:** Green (Win), Red (Loss), Gold (OT Win). True buzzer-beaters are deferred under §3.3 until supported by stored final-shot evidence.
 * **Speed Controls:** Pause, 1x, 5x, Instant Skip.
-* **Tension Spike:** Whenever the team hits Game 50+ undefeated, audio/visual cues intensify (heartbeat sound, flaming record tracker).
+* **Tension Spike:** From Game 50 onward while undefeated, highlight the perfect-season chase; when sound is enabled, a double-bounce pulse replaces the usual result cue every eight completed games.
 
 ### Screen 3: The Loss Autopsy & Ring Ceremony
 
 Show the first-loss card without ending the regular season; finish all 82 games. At season completion, advance all qualifying runs under §4, not only 82-0 teams. Award the ring after 16 main-bracket wins and recognize 98-0 separately.
+
+**Postseason presentation (implemented 2026-09-16):**
+
+* Each series opens with a court-backed historical opponent preview, its actual net-rating benchmark and round multiplier, the roster's strongest positive modifier and largest significant disadvantage, opening win probability, home schedule and seed bonus. Rivalry evidence appears when present. The opponent dataset does not support invented shooting profiles, player box scores or tactical tendencies.
+* Start Series (or Start Play-In) reveals the opening game. Next Game advances one saved reveal, changing to Next overtime period during overtime. Play runs at 1x/5x, pauses before every elimination or clinching game (including Game 7), and stops at each series boundary, including entry to the Finals. Continuing requires a deliberate action. Finish Series reveals only the current series; full-run skip remains available.
+* Regular reveals take 1,400 ms at 1x; tied-overtime reveals take 2,200 ms. Hidden tabs do not advance. Reload restores the cursor and starts paused; audio preferences persist, but audio requires a browser gesture and never replays old reveals. Stakes, 16-win progress, perfect-run pursuit, sweeps, 1-3 comebacks and overtime escapes use revealed results only; playback never resamples or changes saved results.
+* The active series leads the bracket. Other rounds and game details are collapsible. Finals use gold accents; the ring presentation includes the drafted roster, coach and defeated squads. Elimination summaries distinguish play-in, earlier rounds and Finals, retain the closest game, and show evidence-based final-matchup disadvantages rather than claiming a causal explanation.
+* Audio is optional and initially off, controlled globally in the header with mute, volume and a test sound. Fourteen original synthesized cues combine basketball-like bounces, sneaker squeaks, net swishes, whistles, buzzers and arena-style celebrations with reel ticks and lock impacts. Cues cover mode changes, coach signing, reels and rerolls, pick locks, season/series starts, playback starts/stops (including checkpoint pauses), revealed wins/losses, overtime, advancement, elimination, championships and perfect runs. Sounds are presentation accents, not claims of simulated shots or plays.
+* A shared Web Audio context uses a master volume and compressor, replacing cues within three channels (action, playback, result) so 5x/skip never queues an entire game log. Mute, zero volume, leaving a results view, starting a new run and hidden tabs cancel scheduled cues. Preference storage (`98-0-audio-v1`) is independent of run saves; no gameplay random stream is used. Audio failures leave the game playable with a status message. Reduced-motion preferences disable animation independently of sound. Existing saves need no schema or simulation-version change. Interactive coaching adjustments remain outside this presentation upgrade; meaningful choices would require staged simulation and a separately versioned rules/save design.
 
 **Defense feedback:** Show total DRTG first, with expandable numeric contributions labeled rim protection, perimeter defense, team support, and defensive-liability penalty. Show each actual signed effect on DRTG relative to the 110 baseline so the breakdown adds up. Lower total DRTG is better. Use plain-language descriptions rather than letter grades or new grade thresholds. Rename the displayed `team_depth` defensive term to team support to distinguish it from the sixth-man depth bonus; do not change its formula.
 
@@ -659,9 +682,9 @@ Show the first-loss card without ending the regular season; finish all 82 games.
 
 ### Pre-Phase-3 Audit (2026-09-14)
 
-At the start of Phase 3, the game was a **playable Classic draft plus a per-game probability engine**, not yet a playable season. The table below preserves that pre-implementation audit. The regular-season runtime is now implemented as described under Phase 3 and in [the baseline report](PHASE3_BASELINE.md). The earlier day estimates are retired; re-estimate remaining work once its open rules are settled.
+At the start of Phase 3, the game was a **playable Classic draft plus a per-game probability engine**, not yet a playable season. The table below preserves that pre-implementation audit; its implementation and gap columns are historical, not the current backlog. The regular-season runtime is now implemented as described under Phase 3 and in [the baseline report](PHASE3_BASELINE.md). The earlier day estimates are retired; re-estimate remaining work once its open rules are settled.
 
-| Spec Area | Current Implementation | Remaining Gap |
+| Spec Area | Implementation at Pre-Phase-3 Audit | Gap at That Audit |
 | ----------- | ------------------------ | --------------- |
 | Player and coach data (§3.1, §6–7) | 4,411 player records, 180 franchise/decade combinations, 12 coaches; curated-defense fields and pace factors are present; all 2,397 shorter peaks are retained with explicit season-count labels in the draft table and pick details | Nonconsecutive peaks and Mid IQ v1 balance approved with documented target exceptions; player/coach data unchanged |
 | Opponents (§4–5) | 32 regular-season benchmarks in the specified 6/10/10/6 tiers; playoff data already grouped by round | Data is not wired into a game loop; implement §4's no-repeat opponent paths and adopted home/rest rules |
@@ -698,18 +721,16 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 **Resolved score/event decision:** §3.3's outcome-first sampling, conditional logistic margins, shared baseline, and explicit overtime records are implemented in P3.4. Buzzer-beaters remain deferred. The [first historical calibration attempt](PHASE3_SCORE_CALIBRATION.md) failed 5 of 15 held-out checks and remains retained. The [second attempt](PHASE3_SCORE_RETRY.md), fitted on complete 2023-24 data and frozen before evaluating complete 2024-25 data, passes all 15 unchanged checks. The user accepted it on 2026-09-14 as `season-2` / `conditional-score-3`. The later `season-3` balance release retains these score parameters; older saves keep their pinned rules. Neither the original failed candidate nor its validation was promoted.
 
-**Resolved B2B/rivalry decision:** §3.4's 14 randomized non-overlapping pairs, second-leg fatigue, and inter-block rest are implemented in P3.3. §5's narrative-only rivalry annotations remain Phase 4 work; the initial rivalry list still requires review.
+**Resolved B2B/rivalry decision:** §3.4's 14 randomized non-overlapping pairs, second-leg fatigue, and inter-block rest are implemented in P3.3. The six reviewed §5 franchise pairs and narrative-only evidence are now implemented as `rivalry-1`, without altering gameplay or retroactively annotating old saves.
 
 **Resolved peak-continuity decision:** §3.1 permits nonconsecutive peak seasons within the drafted franchise and rolled decade. Keep existing selections, short peaks, and actual-year labels; no data or engine version change is needed.
 
-**Resolved Mid IQ balance decision:** V1 was accepted with measured random-play and bounded-optimization target exceptions. The subsequent [season-3 scoring-core release](MID_IQ_CORE_RELEASE.md) implements the user's qualification-contention goal for complementary star-led rosters. Preserve original formulas for older saves, original provisional targets and unresolved exceptions; no other chemistry rules changed. Historical score acceptance remains separately recorded.
+**Resolved Mid IQ balance decision:** V1 was accepted with measured random-play and bounded-optimization target exceptions. The subsequent [season-3 scoring-core release](MID_IQ_CORE_RELEASE.md) implements the user's qualification-contention goal for complementary star-led rosters. Later user-requested revisions raised usage tolerance (`season-4`), lowered entry to 40 (`season-5`), strengthened overload penalties (`season-6`) and raised entry to 45 (`season-7`). Preserve older saves, historical targets and unresolved exceptions. These revisions are not a replacement-release balance sign-off; historical score acceptance remains separately recorded.
 
-**Resolved calibration, feedback, postseason, Daily, and progression package:** §3.5 sets provisional strategy-based balance targets; §3.2 retains whole-offense spacing, and §3.4 replaces absolute bench DBPM with positive-only contribution. §9 adopts numeric defense breakdowns and evidence-based autopsies. §4 settles play-in/series/home/rest rules, shared Daily priorities and attempt deadlines, regular-season-only ranking with shared ties, account identity, Almanac unlock, and 50-run local history. Engine/UI/service implementation and empirical tuning remain pending.
+**Resolved calibration, feedback, postseason, Daily, and progression package:** §3.5's strategy targets were adopted for the next replacement release through the scorecard; their percentages still refer to 60+ wins. §3.2 retains whole-offense spacing, and §3.4's positive-only bench DBPM correction is implemented. §9's numeric defense breakdowns and evidence-based autopsies are implemented. §4 settles play-in/series/home/rest rules, shared Daily priorities and attempt deadlines, regular-season-only ranking with shared ties, account identity, Almanac unlock, and 50-run local history. Entry classification and postseason gameplay are implemented; Daily, progression and online services remain pending.
 
 | Decision | Why It Matters | Resolve By |
 | ---------- | ---------------- | ------------ |
-| Initial rivalry list | Review the curated canonical franchise pairs used by §5's narrative-only alerts. The matching and no-gameplay-effect rules are settled; do not invent unreviewed rivalries | Phase 4, before rivalry alerts ship |
-| IQ chemistry mapping and Low IQ strength | Enumerate every chemistry term, separating individual skill from defensive-role, bench, and coach fit effects; define No IQ's neutral values and Low IQ's reduced penalties without changing Mid IQ | Phase 6, before P6.1 |
 | Daily IQ mode | Pin a launch mode for the shared challenge; different IQ modes cannot share a ranking | Phase 6, before P6.3 |
 | Online service and data policy | Ranked identity and attempt/ranking rules are settled; choose the backend/auth provider and define privacy, retention, and operational limits before public competition | Phase 8 |
 
@@ -721,7 +742,7 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 - [x] P3.2 Add typed opponents, schedule entries, game outcomes, and season results alongside the existing runtime types. Define whole-run transitions from draft-ready to season-running and season-complete; keep draft completion distinct from game completion.
 - [x] P3.3 Generate exactly 82 games from the existing pool: 15 Contender, 25 Playoff, 30 Average, 12 Lottery; randomize order and enforce 41 home/41 away. Independently shuffle §3.4's 14 two-game blocks and 54 single-game blocks, with rest between blocks, stored pair/leg and rest-spacing evidence, and fatigue only on the 14 second legs. Game 1 must never be fatigued.
 - [x] P3.4 Implement §3.3's outcome-first conditional-score model using `evaluateGame`, applying home court, coach pace, depth, and fatigue exactly once. Store opponent IDs, context, probability, rating breakdown, final/regulation scores, and overtime periods for later presentation and analysis. Preserve the sampled winner throughout score/event generation; defer true buzzer-beaters.
-- [x] P3.5 Aggregate wins/losses, point differential, current/longest winning streak, first loss, and undefeated status. Finish all 82 games even after the first loss. Record the 60+ qualification threshold without pretending a playoff series has run.
+- [x] P3.5 Aggregate wins/losses, point differential, current/longest winning streak, first loss, and undefeated status. Finish all 82 games even after the first loss. Record version-specific qualification without pretending a playoff series has run: 60 wins for `season-1` through `season-4`, 40 for `season-5`/`season-6`, and 45 for current `season-7`.
 - [x] P3.6 Extend the persisted draft store into a versioned run save, with frozen lineup/coach inputs, saved results, and recovery for old or malformed saves. Refreshing, double-clicking Start, or changing playback speed must never resample results.
 - [x] P3.7 Apply §3.4's `max(0, dbpm)` bench correction with regression tests for negative, zero, positive, and coach-adjusted DBPM and bounded FRF. Wire a minimal Start Season action and regular-season summary. Define reproducible legal draft strategies and measure §3.5's provisional targets, including representative balanced, overloaded, non-shooting, defensive, and bench-heavy builds. Finalize and version score/overtime parameters; keep sigma, qualification gates, and spacing values unchanged for the first measurement pass and document subsequent tuning separately.
 
@@ -733,40 +754,40 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 ### Phase 4: Season Ticker, Events & Evidence-Based Loss Autopsy
 
-**Status:** Implemented except reviewed rivalry annotations in P4.3. Playback and feedback validation are recorded in [Phase 4 progress](PHASE4_PROGRESS.md). P3.7 historical scores are now accepted and released with v1 save compatibility. **Depends on:** Phase 3's stable game log. **Spec:** §2, §8–9.
+**Status:** Implemented, including reviewed rivalry annotations in P4.3. Playback, feedback and postseason validation are recorded in [Phase 4 progress](PHASE4_PROGRESS.md). P3.7 historical scores remain accepted with legacy save compatibility. **Depends on:** Phase 3's stable game log. **Spec:** §2, §8–9.
 
 - [x] P4.1 Build an 82-node timeline and running scoreboard with win/loss labels as well as color; distinguish gold overtime wins from ordinary wins using stored period data. Close finishes may be labeled from the final margin; do not label them buzzer-beaters without a future stored final-shot model.
 - [x] P4.2 Add pause/resume, 1x, 5x, and instant skip. Persist the reveal position independently of the simulated outcome; render the same season at every speed and on reload without revealing future scores early.
-- [ ] P4.3 Surface opponent details, home/away, B2B pair/leg and fatigue, and suspenseful overtime reveals. Derive and persist §5's narrative-only rivalry evidence from the reviewed franchise list, combine matches into one alert per game, and expose supporting players in details without changing results or random state. Add the 50+ undefeated tension state, opt-in audio with mute controls, and reduced-motion behavior without changing simulation randomness.
+- [x] P4.3 Surface opponent details, home/away, B2B pair/leg and fatigue, and suspenseful overtime reveals. Derive and persist §5's narrative-only rivalry evidence from the reviewed franchise list, combine matches into one alert per game, and expose supporting players in details without changing results or random state. Add the 50+ undefeated tension state, opt-in audio with mute controls, and reduced-motion behavior without changing simulation randomness.
 - [x] P4.4 Show the first-loss card and end-of-season report with pre-game probability, final score, and recorded context. Follow §9: at most three relevant explanations of model disadvantages, with an upset explanation when appropriate and no invented weaknesses, shooting percentages, or turnovers.
 - [x] P4.5 Preserve roster/chemistry access and expose §9's expandable numeric signed rim, perimeter, team-support, and liability contributions that reconcile with total DRTG; no letter-grade thresholds. Clearly distinguish missed qualification, playoff qualification, and 82-0; until Phase 5 exists, qualified runs must not imply an implemented postseason.
 
-**P4.3 progress:** Opponent/context details, regulation and tied-overtime stages, 50+ undefeated visual tension, opt-in muted-by-default audio, and reduced-motion styling are implemented. No rivalry pairs have been invented or shipped. Review the initial canonical pair list before implementing annotations and persistence.
+**P4.3 progress:** Opponent/context details, regulation and tied-overtime stages, 50+ undefeated visual tension, opt-in muted-by-default audio, reduced-motion styling and versioned rivalry evidence are implemented. Tests cover both pair directions, sixth-man matches, multiple matches, franchise versions, reload persistence and unchanged game results.
 
 **Completion gate:** Playback controls change only presentation, every alert agrees with the log, the first loss is inspectable without stopping the season, and autopsy explanations use recorded evidence. Keyboard, touch, reduced-motion, and small-screen use remain functional.
 
 ### Phase 5: Play-In, Playoff Series & Championship Outcome
 
-**Status:** Pending. **Depends on:** Phases 3–4. **Rules adopted in:** §4. **Spec:** §2, §4, §8–9.
+**Status:** P5.1–P5.5 implemented. The core championship loop has engine and desktop/mobile browser validation; title-frequency, balance and human-playtest acceptance remain Phase 9 work. See [current verification](PHASE4_PROGRESS.md#current-verification). **Depends on:** Phases 3–4. **Rules adopted in:** §4. **Spec:** §2, §4, §8–9.
 
-- [ ] P5.1 Implement §4's explicit entry states: below 40 misses; 40–64 play-in; 65–69 fourth seed; 70–74 second seed; 75–81 first seed; 82-0 first seed. Preserve older saved entry rules. Apply extra +1/+2 NR only at home for the last two tiers, with +2 replacing +1. Every qualifying run advances, not just 82-0 runs.
-- [ ] P5.2 Draw and persist a complete no-repeat exact-squad path from the existing round groups, including play-in when required. Apply round NR multipliers 0.90/1.00/1.05/1.10/1.15 once, §4's home/away sequences and bonuses, and no postseason fatigue; retain permanent bench support and reuse the season's game-resolution model.
-- [ ] P5.3 Implement one sudden-death away play-in, then four best-of-seven series ending at four wins or four losses. Freeze draws/results across reloads and keep regular-season, play-in, and main-bracket records distinct; play-in wins do not count toward the ring.
-- [ ] P5.4 Expand the §8 result model to retain each series and game, not only a single round summary. Persist bracket progress, elimination, and championship state, and reuse ticker controls for postseason games.
-- [ ] P5.5 Add bracket/series views, elimination summaries, and the ring ceremony. Award the championship after 16 main-bracket wins excluding play-in; separately recognize exactly 82-0 plus 16-0 as 98-0.
+- [x] P5.1 Implement version-specific entry and advancement: current `season-7` runs below 45 miss; 45–64 play-in; 65–69 fourth seed; 70–74 second seed; 75–81 first seed; 82-0 first seed. Preserve older saves and apply +1/+2 seed bonuses only at home, with +2 replacing +1. Every qualified run can start postseason after revealing all 82 games.
+- [x] P5.2 Draw and persist a complete no-repeat exact-squad path from the existing round groups, including play-in when required. Apply round NR multipliers 0.90/1.00/1.05/1.10/1.15 once, §4's home/away sequences and bonuses, and no postseason fatigue; retain permanent bench support and reuse the season's game-resolution model.
+- [x] P5.3 Implement one sudden-death away play-in, then four best-of-seven series ending at four wins or four losses. Freeze draws/results across reloads and keep regular-season, play-in, and main-bracket records distinct; play-in wins do not count toward the ring.
+- [x] P5.4 Expand the §8 result model to retain each series and game, not only a single round summary. Persist bracket progress, elimination, and championship state, and reuse ticker controls for postseason games.
+- [x] P5.5 Add bracket/series views, elimination summaries, and the ring ceremony. Award the championship after 16 main-bracket wins excluding play-in; separately recognize exactly 82-0 plus 16-0 as 98-0.
 
 **Completion gate:** Each seed boundary and home-court rule behaves as documented; series terminate correctly; qualifying teams enter the postseason despite regular-season losses; both elimination and championship have complete, resumable result flows.
 
-### Phase 6: Four IQ Modes & Local Daily Challenge
+### Phase 6: Three IQ Modes & Local Daily Challenge
 
-**Status:** Pending. **Depends on:** Phases 3–5. **Rules adopted in:** §4. **Spec:** §2, §4.
+**Status:** IQ modes implemented (P6.1-P6.2); local Daily remains pending (P6.3-P6.4). **Depends on:** Phases 3–5. **Rules adopted in:** §4. **Spec:** §2, §4.
 
-- [ ] P6.1 Add No IQ, Low IQ, Mid IQ (default), and HI IQ selection. Persist and lock the mode throughout the run; map legacy Classic saves to Mid IQ. Implement §4's agreed chemistry-term mapping: no chemistry effects in No IQ, reduced penalties in Low IQ, and unchanged baseline formulas in Mid IQ/HI IQ. Preserve unlimited ordinary retries and the existing coach/draft rules; make previews, season/playoff calculations, and autopsies mode-aware.
-- [ ] P6.2 Implement HI IQ's HoopIQ-style visibility: hide stats, ratings, synergy, and coaching numbers until simulation starts, not draft completion. Audit tables, position dialogs, tooltips, accessible labels, sorting, coach descriptions, and completion previews for numeric or qualitative information leaks; retain names, eras, and legal position eligibility as specified in §4.
+- [x] P6.1 Add No IQ, Mid IQ (default), and HI IQ selection. Persist and lock the mode at coach signing; interpret legacy Classic saves as Mid IQ. Apply §4's approved No IQ mapping and unchanged baseline formulas in Mid IQ/HI IQ. Preserve ordinary retries and coach/draft rules; make previews, season/playoff calculations, and autopsies mode-aware. Low IQ is removed.
+- [x] P6.2 Implement HI IQ's HoopIQ-style visibility: hide stats, ratings, synergy, coaching numbers/descriptions and stat-based sorting until Start Season, not draft completion. Tables, pick dialogs, tooltips, accessible labels and completion previews are guarded; names, eras, peak years and legal positions remain visible. After Start Season, team/coach feedback and inspectable player profiles reveal the protected information. Desktop/mobile tests include all six interactive picks and reloads before/after the reveal.
 - [ ] P6.3 Implement §4's UTC/version/mode-pinned Daily seed, shared coach offers, round/action-specific priority lists and first-legal fallbacks, independent schedule/game-resolution streams, and unchanged-axis rerolls. Mirror the single-attempt and 24-hour post-day grace rules locally, preserving active runs across midnight; label practice/late runs unranked and reserve authoritative account/deadline enforcement for Phase 8.
 - [ ] P6.4 Persist Daily completion and local personal results with IQ mode metadata; never mix modes in a ranking. Present local records as local only; public ranking and tamper resistance belong to Phase 8.
 
-**Completion gate:** Tests prove all mapped chemistry effects are neutral in No IQ, Low IQ penalties are milder than Mid IQ, Mid IQ retains baseline behavior, and identical inputs/draws yield identical Mid IQ/HI IQ results. HI IQ reveals protected information only when simulation starts. Mode selection survives reload and cannot change mid-run. Identical Daily versions, modes, dates, and action sequences reproduce identical runs, and different time zones resolve the same UTC challenge. Local storage is not described as cheat-proof.
+**Completion gate:** Mode tests pass: all mapped chemistry effects are neutral in No IQ, individual/bench quality remains meaningful, Mid IQ retains baseline behavior, and identical inputs/draws yield identical Mid IQ/HI IQ results. HI IQ reveals protected information only at Start Season. Modes survive reload and cannot change after coach signing. The remaining Daily gate requires identical versions, modes, dates, and actions to reproduce runs, with time zones resolving the same UTC challenge. Local storage is not cheat-proof; Daily is not implemented yet.
 
 ### Phase 7: Coach Almanac, Run History & Share Cards
 
@@ -794,7 +815,9 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 **Status:** Pending. **Depends on:** Phases 3–7; include Phase 8 for a competitive online release. **Spec:** §1–10.
 
-- [ ] P9.1 Revisit the Phase 3 balance baselines with full seasons and playoffs: usage/spacing tradeoffs, era viability, all coaches, bench quality, qualification frequency, title frequency, and perfect-run rarity. Measure each IQ mode separately: No IQ and Low IQ should support star-studded teams, while Mid IQ and HI IQ share chemistry balance. Agree on mode-specific targets before tuning and version any changes that affect Daily replay.
+**Existing evidence is partial:** Current validation passes 98 engine tests, production build/typechecking and 26 checked-in desktop/320px Playwright checks covering mode selection/locking, a full six-pick HI IQ draft, exact Mid IQ/HI IQ browser parity, No IQ season/playoffs, postseason presentation, rivalries and recovery. Wider drafting variants, accessibility/performance checks and human playtests remain open. The [release scorecard](RELEASE_SCORECARD.md) retains failed or unmeasured replacement-release gates; passing functional checks are not mode-balance or full-product acceptance. Commands are documented in [the README](../README.md).
+
+- [ ] P9.1 Revisit the Phase 3 balance baselines with full seasons and playoffs: usage/spacing tradeoffs, era viability, all coaches, bench quality, qualification frequency, title frequency, and perfect-run rarity. Measure each IQ mode separately: No IQ should support star-studded teams, while Mid IQ and HI IQ share chemistry balance. Agree on mode-specific targets before tuning and version any changes that affect Daily replay.
 - [ ] P9.2 Check data provenance and labeling, short-peak policy, missing/curated historical stats, and benchmark pool consistency. Resolve remaining conflicts in earlier spec sections rather than leaving implementation notes as the only authority.
 - [ ] P9.3 Add repeatable browser coverage to complement the current engine unit suites and manual checks. Establish release gates for the full draft-to-result journey, save upgrades/recovery, modes, playback, sharing, and online submission where enabled.
 - [ ] P9.4 Verify touch/keyboard access, screen-reader labels, non-color result cues, responsive tables/brackets, reduced motion, audio controls, and error recovery. Measure bundle size and simulation responsiveness; introduce a worker only if measurements justify it.
@@ -804,7 +827,7 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 ### Dependency Order & Coverage
 
-**Next work:** Finish P4.3 by reviewing the initial rivalry list, then implement and validate narrative-only annotations. P3.7 is complete: the [accepted calibrated scores](PHASE3_SCORE_RETRY.md) are released for new runs with v1 save compatibility. Both historical attempts and their exposed holdouts remain retained. Ticker playback and explanations are implemented. Mid IQ v1 balance is approved with exceptions for Phase 9 review. Phase 5 completes the Mid IQ championship loop (formerly Classic). Daily will reuse the seeded foundation but its fairness and ranking contracts are not implemented yet.
+**Next work:** Choose the Daily launch mode before P6.3-P6.4, or proceed with Phase 7 retention features using the implemented mode metadata. No IQ, Mid IQ and HI IQ now span the core championship loop. Measure No IQ balance separately and playtest HI IQ's hidden-information experience. P3.7's accepted scores, historical holdouts and Mid IQ balance exceptions remain preserved. Human playtesting, title-frequency measurement and remaining Phase 9 checks are still needed.
 
 | Spec Requirement Group | Milestones |
 | ------------------------ | ------------ |
@@ -812,7 +835,7 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 | 82-game schedule, fatigue, scores, result types (§2–3, §5, §8) | P3.1–P3.7 |
 | Ticker, suspense, events, streaks, loss autopsy (§2, §9) | P4.1–P4.5 |
 | Qualification, play-in, bracket, ring, 98-0 (§2, §4, §8–9) | P5.1–P5.5 |
-| No IQ, Low IQ, Mid IQ, HI IQ, and Daily seed fairness (§4) | P6.1–P6.4, using P3.1 |
+| No IQ, Mid IQ, HI IQ, and Daily seed fairness (§4) | P6.1–P6.4, using P3.1 |
 | Coach Almanac and exportable social results (§2, §6, §9–10) | P7.1–P7.4 |
 | Global Daily rankings (§4) | P8.1–P8.4 |
 | Balance, data fidelity, platform and release quality (§1–10) | P9.1–P9.5 |
@@ -842,7 +865,8 @@ function previewMatchup(lineup: TeamLineup, opponentNetRating: number) {
 * `calculateSynergy` supports incomplete draft previews: empty slots contribute zero, and positional averages retain their fixed denominators. `evaluateGame` requires five starters; the sixth man and coach may be absent. Draft eligibility and duplicate protection belong to the drafting layer.
 * Coach FG% and 3P% adjustments are clamped to [0, 1]. Coach DBPM applies to starters and the bench. Bench quality now uses `max(0, coached DBPM)` with negative, zero, positive, coach-adjusted, and bounded-FRF regression coverage.
 * Snapshot `netRating` excludes depth, fatigue, home court, and coach pace. `evaluateGame` adds each once, with +3 at home and zero away, and returns both the rating breakdown and win probability.
-* The per-game math API stops at probability. [The season module](../src/engine/season.ts) adds schedules, sampled outcomes/scores, overtime, logs, and aggregation. [Playback](../src/engine/playback.ts) derives visible standings and evidence-based loss explanations without modifying those results; playoffs remain separate work.
+* The example above uses the low-level API's legacy defaults: `mid-iq-1` and a 115% usage base. To match an actual saved run, pass `lineupForUsagePolicy(lineup, run.engineVersion)` and `balanceForRun(run)` to the synergy/game APIs, as the draft preview and season runtime do. Qualification is applied separately by `seasonForQualification`; do not treat low-level legacy defaults as current `season-7` rules.
+* The per-game math API stops at probability. [The season module](../src/engine/season.ts) adds schedules, sampled outcomes/scores, overtime, logs, and aggregation. [The postseason module](../src/engine/postseason.ts) reuses scoring with separate seeded paths/results, home bonuses and series records. [Playback](../src/engine/playback.ts) derives revealed results without modifying saved outcomes. Save recovery tolerates at most `2 * Number.EPSILON` in probability comparisons for cross-runtime rounding, not in scores, ratings or other state.
 
 Requires Node.js 22.6+ for native TypeScript execution. From the repository root, run `npm install`, then `npm test` and `npm run typecheck`. Tests cover formula boundaries, immutable normalization, defensive roles, coaching, bench effects, and compatibility with the processed datasets.
 
@@ -852,9 +876,9 @@ Run `npm run dev` and open the local URL printed by Next.js (normally `http://lo
 
 * [src/engine/draft.ts](../src/engine/draft.ts) owns immutable coach selection, rolls, rerolls, candidate sorting, and position locks. Randomness is injectable for deterministic tests.
 * [src/components/draft-room.tsx](../src/components/draft-room.tsx) provides searchable, position-filtered picks, an accessible position-selection dialog, the court lineup, and live synergy readings. All undrafted players in a roll remain visible; players without an eligible open slot cannot be selected.
-* [src/lib/draft-store.ts](../src/lib/draft-store.ts) persists the active Classic run in browser local storage. Reloading preserves offers, roll, picks, tokens, seeded action history, frozen season inputs, and completed results. Valid legacy drafts migrate; malformed/unsupported saves have recovery notices and a best-effort raw backup. New runs require confirmation.
+* [src/lib/draft-store.ts](../src/lib/draft-store.ts) persists the active run and pinned IQ mode in browser local storage. Reloading preserves offers, roll, picks, tokens, seeded action history, frozen season inputs, and completed results. Valid legacy drafts remain Mid IQ; malformed/unsupported saves have recovery notices and a best-effort raw backup. New runs require confirmation and default to Mid IQ.
 * Rolls sample uniformly from franchise/decade combinations with at least one legal undrafted player. A team reroll preserves the decade; an era reroll preserves the franchise. Rerolls must change the selected reel and are disabled without a valid alternative, leaving the token unspent. The same combination may recur on a later pick.
 * Duplicate protection uses the Basketball-Reference identity prefix in the processed player ID, not the full franchise/decade ID. The sixth man can be selected in any round.
-* The sixth pick completes the draft and displays the roster, ratings, and Start Season action. Phase 3 resolves all 82 games once; Phase 4 reveals the saved season through a paused-by-default ticker with 1x/5x, next-reveal, and skip controls. Reveal position and tied-overtime stage survive refresh independently of results. No IQ/Low IQ/HI IQ variants, Daily, and playoffs are not enabled yet; the existing Classic label corresponds to the Mid IQ baseline.
+* The sixth pick completes the draft and displays the roster and Start Season action. Ratings remain hidden in HI IQ until that action. No IQ shows individual team quality with chemistry disabled; Mid IQ retains full chemistry feedback. Phase 3 resolves all 82 games once; Phase 4 reveals saved results through a paused-by-default ticker. Qualifying runs can start Phase 5 under the same pinned mode, with saved postseason results and a separate cursor. Regular-season/playoff tabs preserve both records. Daily remains unavailable.
 
 Validation: `npm test` covers draft rules plus the existing math suite, including 100 deterministic six-pick runs with the bench selected first. `npm run typecheck` checks both engine and UI types. Browser checks cover coach selection, both rerolls, search/filters, Escape dismissal, reload persistence, six-pick completion, reset confirmation, and desktop/mobile layouts down to 320px.
