@@ -261,15 +261,26 @@ test('haptics follow muted draft actions, persist independently and fit mobile',
   expect(await pulses(page)).toEqual([]);
   await page.getByRole('button', { name: 'Disable game vibration', exact: true }).click();
   await page.getByRole('button', { name: 'Enable game vibration', exact: true }).click();
-  expect(await pulses(page)).toEqual([[20, 40, 30]]);
+  expect(await pulses(page)).toEqual([[180, 100, 180]]);
   expect((await savedState(page)).run).toEqual(original);
   await expectFits(page);
   await page.screenshot({ path: testInfo.outputPath('haptic-controls.png'), fullPage: true, animations: 'disabled' });
   await page.getByRole('button', { name: /^Select / }).first().click();
   expect((await pulses(page)).at(-1)).toEqual([15, 40, 25]);
-  await page.getByRole('button', { name: 'SPIN THE REELS', exact: true }).click();
-  await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'false');
-  expect((await pulses(page)).at(-1)).toEqual([12, 45, 12, 65, 20]);
+  await page.clock.install();
+  await page.clock.pauseAt(new Date(Date.now() + 1000));
+  for (const name of ['SPIN THE REELS', 'Reroll team', 'Reroll era']) {
+    const before = (await pulses(page)).length;
+    await page.getByRole('button', { name, exact: true }).click();
+    await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'true');
+    expect((await pulses(page)).slice(before)).toEqual([750]);
+    await page.clock.runFor(749);
+    await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'true');
+    await page.clock.runFor(1);
+    await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'false');
+    expect((await pulses(page)).slice(before)).toEqual([750]);
+  }
+  await page.clock.resume();
   const run = (await savedState(page)).run;
   const eligible = availablePlayers(run.draft, data.players).find((player) => availableSlots(run.draft.lineup, player).length)!;
   const slot = availableSlots(run.draft.lineup, eligible)[0]!;
@@ -296,7 +307,7 @@ test('haptics respect reduced motion and handle malformed or unwritable preferen
   await loadRun(page, createRun('browser-haptics-preferences', data.coaches), 0);
   await expect(page.getByRole('button', { name: 'Enable game vibration', exact: true })).toHaveAttribute('aria-pressed', 'false');
   await page.getByRole('button', { name: 'Enable game vibration', exact: true }).click();
-  expect(await pulses(page)).toEqual([[20, 40, 30]]);
+  expect(await pulses(page)).toEqual([[180, 100, 180]]);
   await page.reload();
   await expect(page.getByRole('button', { name: 'Disable game vibration', exact: true })).toHaveAttribute('aria-pressed', 'true');
   expect(await pulses(page)).toEqual([]);
@@ -314,7 +325,7 @@ test('haptics respect reduced motion and handle malformed or unwritable preferen
   });
   await page.getByRole('button', { name: 'Enable game vibration', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: 'could not save your vibration preference' })).toBeVisible();
-  expect(await pulses(page)).toEqual([[20, 40, 30]]);
+  expect(await pulses(page)).toEqual([[180, 100, 180]]);
   await page.getByRole('button', { name: /^Select / }).first().click();
   await expect(page.getByRole('button', { name: 'SPIN THE REELS', exact: true })).toBeEnabled();
 });
@@ -366,6 +377,15 @@ test('missing, blocked or throwing vibration APIs never block the draft', async 
     await expect(page.getByRole('group', { name: 'Game haptics', exact: true })).toHaveCount(behavior === 'missing' ? 0 : 1);
     await page.getByRole('button', { name: /^Select / }).first().click();
     await expect(page.getByRole('button', { name: 'SPIN THE REELS', exact: true })).toBeEnabled();
+    if (behavior !== 'missing') {
+      const message = behavior === 'blocked' ? 'The browser blocked vibration.' : 'Vibration is unavailable in this browser.';
+      await expect(page.getByRole('group', { name: 'Game haptics' }).getByRole('status')).toContainText(message);
+      await expectFits(page);
+      await page.getByRole('button', { name: 'Disable game vibration', exact: true }).click();
+      await expect(page.getByRole('group', { name: 'Game haptics' }).getByRole('status')).toHaveCount(0);
+      await page.getByRole('button', { name: 'Enable game vibration', exact: true }).click();
+      await expect(page.getByRole('group', { name: 'Game haptics' }).getByRole('status')).toContainText(message);
+    }
   }
   expect(errors).toEqual([]);
 });

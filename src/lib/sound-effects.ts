@@ -1,3 +1,5 @@
+export const REEL_SPIN_DURATION_MS = 750;
+
 export type SoundCue = 'reels' | 'lock' | 'coach' | 'switch' | 'start' | 'stop' | 'win' | 'loss'
   | 'overtime' | 'advance' | 'champion' | 'eliminated' | 'perfect' | 'tension';
 

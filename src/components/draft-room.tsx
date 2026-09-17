@@ -43,6 +43,7 @@ import { SoundControls } from './sound-controls';
 import { InstallApp } from './install-app';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
+import { REEL_SPIN_DURATION_MS } from '../lib/sound-effects';
 import { challengeForAttempt, dailyCommitmentKey, DAILY_VERSION, utcDate } from '../engine/daily';
 import { rotatingChallengeForDate, rotationSchedule } from '../engine/daily-calendar';
 
@@ -594,7 +595,7 @@ export function DraftRoom() {
   useEffect(() => {
     if (!busy) return;
     const interval = window.setInterval(() => setTick((value) => value + 1), 75);
-    const timeout = window.setTimeout(() => setBusy(null), 750);
+    const timeout = window.setTimeout(() => setBusy(null), REEL_SPIN_DURATION_MS);
     return () => {
       window.clearInterval(interval);
       window.clearTimeout(timeout);

@@ -1,11 +1,12 @@
 'use client';
 
 import { create } from 'zustand';
+import { REEL_SPIN_DURATION_MS } from './sound-effects';
 import type { SoundCue } from './sound-effects';
 
 const preferenceKey = '98-0-haptics-v1';
 const patterns: Record<SoundCue, number | number[]> = {
-  reels: [12, 45, 12, 65, 20],
+  reels: REEL_SPIN_DURATION_MS,
   lock: [20, 40, 30],
   coach: [15, 40, 25],
   switch: 10,
@@ -30,10 +31,16 @@ function stop() {
   try { navigator.vibrate(0); } catch {}
 }
 
-function play(cue: SoundCue) {
+function play(cue: SoundCue, pattern: number | number[] = patterns[cue]) {
   const { supported, enabled } = useHapticSettings.getState();
   if (!supported || !enabled || !activated || document.hidden) return;
-  try { navigator.vibrate(patterns[cue]); } catch {}
+  try {
+    if (!navigator.vibrate(pattern)) {
+      useHapticSettings.setState({ error: 'The browser blocked vibration. Gameplay is unaffected.' });
+    }
+  } catch {
+    useHapticSettings.setState({ error: 'Vibration is unavailable in this browser. Gameplay is unaffected.' });
+  }
 }
 
 export const gameHaptics = {
@@ -45,7 +52,7 @@ export const gameHaptics = {
     useHapticSettings.setState({ enabled, error: '' });
     try { localStorage.setItem(preferenceKey, JSON.stringify({ enabled })); }
     catch { useHapticSettings.setState({ error: 'This browser could not save your vibration preference.' }); }
-    if (enabled) play('lock');
+    if (enabled) play('lock', [180, 100, 180]);
     else stop();
   },
   initialize() {
