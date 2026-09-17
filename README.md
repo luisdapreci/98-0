@@ -46,6 +46,14 @@ As of 2026-09-17, the local game is playable through drafting, the seeded 82-gam
 
 Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; installation is supported, but there is no offline cold-launch cache.
 
+### Haptic feedback
+
+Short vibration patterns accompany draft actions, playback and result reveals on devices with a supported Vibration API. The vibration icon beside sound toggles haptics independently of mute. Its preference is stored under `98-0-haptics-v1`, separate from run saves. Haptics default on unless reduced motion is requested; an explicit saved choice takes precedence. Feedback requires interaction, stops when the page is hidden, and never replays just because a save loads.
+
+The control is hidden when the API is missing, including Safari on iPhone/iPad. Browsers, device hardware and OS settings may suppress vibration even when the API exists; installing the web app does not add native haptic support. Unavailable or rejected vibration never blocks gameplay.
+
+Local verification on 2026-09-17: `npm run typecheck` and `npm run build` passed (exit code 0). `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- tests/browser/audio.spec.ts` passed all 20 desktop/320px checks (exit code 0), including eight new haptic checks for patterns, independent mute, persistence, reduced-motion defaults, storage failures, background cancellation, saved results and unsupported APIs. Desktop/mobile screenshots were reviewed. Vibration API calls are mocked; physical-device feel and delivery remain unverified. This change has not been deployed.
+
 ### Installable app
 
 The game remains playable in a browser. Supporting browsers can also install it as **98-0**, opening in a standalone window from the home screen or app launcher. The header shows an Install control when Chrome/Edge supplies a native install offer; browser eligibility, engagement, prior dismissal, private browsing and device policy determine availability. Safari on iPhone/iPad shows an Install control with Share > Add to Home Screen guidance. Controls are hidden in standalone mode.

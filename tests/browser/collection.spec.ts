@@ -46,6 +46,21 @@ test('history updates pending postseason in place and exported records match the
   await expect.poll(() => page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).runs[0].postseasonStatus, progressKey)).toBe('complete');
   await page.reload();
   expect((await savedState(page)).run).toEqual(finished);
+  await page.evaluate(() => {
+    const observer = new MutationObserver(() => {
+      const exported = document.querySelector('.share-card-export');
+      if (!exported) return;
+      document.body.dataset.exportTypography = JSON.stringify({
+        name: getComputedStyle(exported.querySelector('.share-lineup strong')!).fontSize,
+        metadata: getComputedStyle(exported.querySelector('.share-lineup small')!).fontSize,
+        label: getComputedStyle(exported.querySelector('.share-records span')!).fontSize,
+        disclaimer: getComputedStyle(exported.querySelector('.share-disclaimer')!).fontSize,
+        overflow: [exported, ...exported.querySelectorAll('*')].filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className),
+      });
+      observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true });
+  });
   await page.getByRole('button', { name: 'SHARE RESULT', exact: true }).click();
   const expected = recordProgress(emptyProgress(), finished, true, true).runs[0]!;
   await expect(page.getByLabel('RESULT TEXT', { exact: true })).toHaveValue(resultText(expected));
@@ -55,6 +70,10 @@ test('history updates pending postseason in place and exported records match the
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('98-0. PERFECT.');
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('16-0');
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
+  expect(await page.evaluate(() => JSON.parse(document.body.dataset.exportTypography!))).toEqual({
+    name: '30px', metadata: '24px', label: '24px', disclaimer: '22px', overflow: [],
+  });
+  await expect(page.getByRole('dialog').locator('.share-lineup strong').first()).toHaveCSS('font-size', '18px');
   await expectFits(page);
   expect(await page.locator('.share-card, .share-card *, .share-actions').evaluateAll((elements) => elements.filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className))).toEqual([]);
   const downloading = page.waitForEvent('download');

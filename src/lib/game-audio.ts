@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 import { renderSound } from './sound-effects';
 import type { SoundCue } from './sound-effects';
+import { gameHaptics } from './game-haptics';
 
 const preferenceKey = '98-0-audio-v1';
 export const useAudioSettings = create<{ enabled: boolean; error: string }>(() =>
@@ -51,7 +52,8 @@ function channelFor(cue: SoundCue): string {
   return cue === 'start' || cue === 'stop' ? 'playback' : 'action';
 }
 
-function play(cue: SoundCue) {
+function play(cue: SoundCue, withHaptics = true) {
+  if (withHaptics) gameHaptics.play(cue);
   const settings = useAudioSettings.getState();
   if (!settings.enabled || document.hidden) return;
   const requestGeneration = generation;
@@ -75,13 +77,13 @@ function play(cue: SoundCue) {
 
 export const gameAudio = {
   play,
-  stopAll,
+  stopAll() { stopAll(); gameHaptics.stop(); },
   toggle() {
     const enabled = !useAudioSettings.getState().enabled;
     useAudioSettings.setState({ enabled, error: '' });
     stopAll();
     savePreferences();
-    if (enabled) play('win');
+    if (enabled) play('win', false);
     else if (context?.state === 'running') void context.suspend().catch(() => {});
   },
   initialize() {

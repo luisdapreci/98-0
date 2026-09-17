@@ -64,22 +64,36 @@
 .share-brand > strong span { color: #d5ef64; }
 .share-brand > span { margin-left: auto; color: #86ccbb; font-size: 12px; font-weight: 700; }
 .share-brand svg { color: #d5ef64; }
-.share-daily { font-size: 11px; color: #86ccbb; line-height: 1.6; margin-bottom: 12px; }
+.share-daily { font-size: 14px; color: #86ccbb; line-height: 1.4; margin-bottom: 12px; }
 .share-card h3 { font-size: 30px; line-height: 1.05; margin-bottom: 24px; }
 .share-records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 18px 0; border-block: 1px solid #343c34; }
-.share-records span, .share-coach > span { display: block; font-size: 10px; color: #a1aa9e; margin-bottom: 6px; }
+.share-records span, .share-coach > span { display: block; font-size: 14px; color: #bdc5b9; margin-bottom: 6px; }
 .share-records strong { display: block; font: 600 34px/1.1 var(--display); color: #d5ef64; }
 .share-records strong.share-pending { font-size: 20px; }
-.share-detail { margin: 12px 0; font-size: 10px; line-height: 1.5; color: #a1aa9e; }
+.share-detail { margin: 12px 0; font-size: 14px; line-height: 1.5; color: #bdc5b9; }
 .share-coach { margin: 24px 0 16px; }
 .share-coach > strong { display: block; font: 600 26px/1.2 var(--display); }
-.share-coach > p { font-size: 12px; color: #86ccbb; margin-top: 4px; }
+.share-coach > p { font-size: 16px; color: #86ccbb; margin-top: 4px; }
 .share-lineup { list-style: none; padding: 0; margin: 0; }
-.share-lineup li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px 12px; padding: 12px 0; border-top: 1px solid #343c34; }
-.share-lineup li > span { grid-row: span 2; color: #86ccbb; font-size: 11px; }
-.share-lineup strong { font-size: 14px; line-height: 1.4; }
-.share-lineup small { font-size: 10px; color: #a1aa9e; }
-.share-disclaimer { padding-top: 20px; margin-top: 8px; border-top: 1px solid #343c34; color: #a1aa9e; font-size: 9px; line-height: 1.6; }
+.share-lineup li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 4px 12px; padding: 12px 0; border-top: 1px solid #343c34; }
+.share-lineup li > span { grid-row: span 2; color: #86ccbb; font-size: 14px; }
+.share-lineup strong { font-size: 18px; line-height: 1.2; }
+.share-lineup small { font-size: 14px; line-height: 1.3; color: #bdc5b9; }
+.share-disclaimer { padding-top: 20px; margin-top: 8px; border-top: 1px solid #343c34; color: #bdc5b9; font-size: 12px; line-height: 1.4; }
+.share-card-export .share-brand > span { font-size: 24px; }
+.share-card-export .share-daily { font-size: 24px; }
+.share-card-export h3 { font-size: 40px; }
+.share-card-export .share-records span, .share-card-export .share-coach > span { font-size: 24px; }
+.share-card-export .share-records strong { font-size: 48px; }
+.share-card-export .share-records strong.share-pending { font-size: 32px; }
+.share-card-export .share-detail { font-size: 24px; }
+.share-card-export .share-coach > strong { font-size: 38px; }
+.share-card-export .share-coach > p { font-size: 26px; }
+.share-card-export .share-lineup li { grid-template-columns: 48px minmax(0, 1fr); }
+.share-card-export .share-lineup li > span { font-size: 24px; }
+.share-card-export .share-lineup strong { font-size: 30px; }
+.share-card-export .share-lineup small { font-size: 24px; }
+.share-card-export .share-disclaimer { font-size: 22px; }
 .share-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .share-actions button { padding: 12px; font-size: 11px; }
 .share-actions .primary-button { flex: 1 0 100%; min-height: 52px; font-size: 16px; }

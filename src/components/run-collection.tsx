@@ -60,6 +60,7 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
         const { toBlob } = await import('html-to-image');
         if (cancelled || !card.current) return;
         const exportCard = card.current.cloneNode(true) as HTMLDivElement;
+        exportCard.classList.add('share-card-export');
         Object.assign(exportCard.style, { position: 'fixed', left: '-10000px', top: '0', width: '720px', maxWidth: 'none', padding: '32px', pointerEvents: 'none' });
         exportCard.setAttribute('aria-hidden', 'true');
         document.body.append(exportCard);
