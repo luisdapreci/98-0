@@ -1,4 +1,5 @@
 import { expect, expectFits, loadRun, readyFixture, savedState, saveKey, scenario, test } from './fixtures';
+import { resultText, summarizeRun } from '../../src/engine/progress';
 
 for (const kind of ['playInLoss', 'champion', 'perfect', 'seriesLoss'] as const) {
   test(`${kind}: qualification to saved postseason result`, async ({ page }, testInfo) => {
@@ -50,6 +51,10 @@ for (const kind of ['playInLoss', 'champion', 'perfect', 'seriesLoss'] as const)
     await page.reload();
     expect((await savedState(page)).run).toEqual(finished);
     await expect(page.getByRole('button', { name: 'Skip to final result', exact: true })).toBeDisabled();
+    await page.getByRole('button', { name: 'SHARE RESULT', exact: true }).click();
+    await expect(page.getByLabel('RESULT TEXT', { exact: true })).toHaveValue(resultText(summarizeRun(finished, 1, true)!));
+    await expect(page.getByRole('dialog').locator('.share-card')).toContainText(`${finished.postseason!.playoffs.wins}-${finished.postseason!.playoffs.losses}`);
+    await page.keyboard.press('Escape');
   });
 }
 

@@ -72,6 +72,10 @@ export function scenario(kind: 'playInLoss' | 'champion' | 'perfect' | 'overtime
 
 export async function loadRun(page: Page, run: RunSave, revealed = 82) {
   await page.goto('/');
+  await expect(page.getByRole('button', { name: 'New run', exact: true })).toBeEnabled();
+  await page.evaluate(async () => {
+    if (navigator.locks) await navigator.locks.request('98-0-daily-start', () => undefined);
+  });
   await page.evaluate(({ run, revealed, saveKey }) => localStorage.setItem(saveKey, JSON.stringify({ version: 1, state: {
     run, playback: { runId: run.id, revealed, overtimePeriod: null },
     postseasonPlayback: run.postseason ? { runId: `${run.id}:postseason`, revealed: 0, overtimePeriod: null } : null,

@@ -1,5 +1,38 @@
 import { controlledSeason, expect, expectFits, loadRun, savedState, saveKey, scenario, test } from './fixtures';
 
+test('malformed progression and storage write failures are reported without clearing history', async ({ page }) => {
+  await loadRun(page, controlledSeason(44, 'progress-storage-failure'));
+  const key = '98-0-progress-v1';
+  await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), key)).not.toBeNull();
+  const saved = await page.evaluate((key) => localStorage.getItem(key)!, key);
+  await page.evaluate((key) => localStorage.setItem(key, '{broken'), key);
+  await page.reload();
+  await expect(page.getByRole('alert').filter({ hasText: 'Almanac and history could not be saved or opened' })).toBeVisible();
+  expect(await page.evaluate((key) => localStorage.getItem(key), key)).toBe('{broken');
+  await page.evaluate(({ key, saved }) => localStorage.setItem(key, saved), { key, saved });
+  await page.reload();
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      if (key === '98-0-progress-v1') throw new DOMException('Full', 'QuotaExceededError');
+      original.call(this, key, value);
+    };
+  });
+  const run = controlledSeason(43, 'progress-storage-second');
+  await page.evaluate(({ run, saveKey }) => localStorage.setItem(saveKey, JSON.stringify({ version: 1, state: { run, playback: { runId: run.id, revealed: 82, overtimePeriod: null } } })), { run, saveKey });
+  await page.addInitScript(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      if (key === '98-0-progress-v1') throw new DOMException('Full', 'QuotaExceededError');
+      original.call(this, key, value);
+    };
+  });
+  await page.reload();
+  await expect(page.getByRole('alert').filter({ hasText: 'Almanac and history could not be saved or opened' })).toBeVisible();
+  expect(await page.evaluate((key) => localStorage.getItem(key), key)).toBe(saved);
+  expect((await savedState(page)).run.id).toBe(run.id);
+});
+
 test('tied postseason overtime resumes without spoilers and a missing cursor restarts presentation', async ({ page }) => {
   const { finished } = scenario('overtime');
   await loadRun(page, finished);

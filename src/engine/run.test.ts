@@ -11,6 +11,7 @@ import type { RunData } from './run.ts';
 import type { TeamLineup } from './types.ts';
 import { lineupForUsagePolicy, usageBaseCap, usageCapForLineup } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
+import { emptyProgress, recordProgress, resultText } from './progress.ts';
 
 const data: RunData = {
   players: JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8')),
@@ -35,6 +36,46 @@ function readyRun(engineVersion = 'season-3', seed = 'run-fixture') {
   }
   return run;
 }
+
+test('progress unlocks on 82 games, archives revealed seasons once and keeps postseason separate', () => {
+  const run = finishSeason(startSeason(readyRun('season-7')), data.opponents);
+  assert.equal(recordProgress(emptyProgress(), readyRun(), true, true).almanacUnlocked, false);
+  const unlocked = recordProgress(emptyProgress(), run, false, false, 1);
+  assert.equal(unlocked.almanacUnlocked, true);
+  assert.equal(unlocked.runs.length, 0);
+  const archived = recordProgress(unlocked, run, true, false, 2);
+  assert.equal(archived.runs.length, 1);
+  assert.equal(archived.runs[0]!.mode, 'mid');
+  assert.equal(archived.runs[0]!.season.wins, run.season!.wins);
+  assert.equal(recordProgress(archived, run, true, false, 3), archived);
+  if (run.season!.qualified) {
+    const finished = startPostseason(run, data.playoffs!);
+    assert.equal(recordProgress(archived, finished, true, false), archived);
+    const revealed = recordProgress(archived, finished, true, true);
+    assert.deepEqual(revealed.runs[0]!.postseason?.playoffs, finished.postseason!.playoffs);
+    assert.deepEqual(revealed.runs[0]!.postseason?.playIn, finished.postseason!.playIn);
+    assert.equal(revealed.runs[0]!.completedAt, 2);
+    assert.match(resultText(revealed.runs[0]!), /LOCAL RESULT \/ NOT VERIFIED/);
+    assert.equal(recordProgress(revealed, run, true, false), revealed);
+  }
+});
+
+test('progress retains the latest 50 seasons and independent per-mode best summaries', () => {
+  const run = finishSeason(startSeason(readyRun('season-7')), data.opponents);
+  let progress = recordProgress(emptyProgress(), { ...run, id: 'old-best', iqMode: 'hi', season: { ...run.season!, wins: 82, losses: 0, pointDifferential: 10000, longestStreak: 82 } }, true, false, 0);
+  for (let index = 1; index <= 55; index++) {
+    progress = recordProgress(progress, { ...run, id: `history-${index}`, iqMode: index % 2 ? 'mid' : 'no' }, true, false, index);
+  }
+  assert.equal(progress.runs.length, 50);
+  assert.equal(progress.runs[0]!.id, 'history-55');
+  assert.equal(progress.runs.at(-1)!.id, 'history-6');
+  assert.equal(progress.bests.hi!.record.id, 'old-best');
+  assert.equal(progress.bests.hi!.differential.season.differential, 10000);
+  assert.equal(progress.bests.hi!.streak.season.streak, 82);
+  assert.ok(progress.bests.mid);
+  assert.ok(progress.bests.no);
+  assert.deepEqual(recordProgress(progress, readyRun(), false, false), progress);
+});
 
 test('draft actions and saved random state resume identically after each pick', () => {
   const run = readyRun();

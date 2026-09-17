@@ -12,7 +12,7 @@
 
 ## 2. Core Game Loop
 
-**Current build (2026-09-16):** No IQ, Mid IQ (default), and HI IQ are implemented across drafting, the 82-game season, saved playback and the postseason. The former Classic label is now Mid IQ. Rivalries, matchup previews, overtime reveals, loss explanations and championship/perfect-run results are playable. Local Daily is implemented with Mid IQ fixed at launch; Almanac/general history, sharing and online rankings remain planned. The diagram below includes those future features as well as the playable core loop. [Current validation](PHASE6_PROGRESS.md) records 103 engine tests, 46 desktop/mobile browser checks and a passing production build; mode-specific balance and human-playtest acceptance remain separate.
+**Current build (2026-09-17):** No IQ, Mid IQ (default), and HI IQ are implemented across drafting, the 82-game season, saved playback and the postseason. The former Classic label is now Mid IQ. Rivalries, matchup previews, overtime reveals, loss explanations and championship/perfect-run results are playable. Local Daily is implemented with Mid IQ fixed at launch. Coach Almanac, 50-run history, per-mode personal bests and image/text sharing with friends are implemented; online rankings remain deferred. The diagram below includes future features as well as the playable core loop. [Current validation](PHASE7_PROGRESS.md) records 112 engine tests, 92 desktop/mobile browser checks and a passing production build; mode-specific balance and human-playtest acceptance remain separate.
 
 New runs use **`season-7` / `mid-iq-3` / `conditional-score-3`**: 135% base usage plus coach adjustments, a 1.5% overload slope with a 0.45 floor, and 45-win qualification after 82 games. Existing saves retain their pinned rules and results. Historical release measurements below are not new-build balance or player-test acceptance; see [the release scorecard](RELEASE_SCORECARD.md).
 
@@ -353,6 +353,8 @@ Daily Seed and Playoff Gauntlet are not additional IQ modes:
 
 ### Daily Fairness and Ranked Attempts
 
+**Social scope (2026-09-17):** Sharing results with friends is the current social direction, using Phase 7 image cards, plain text, downloads and browser share/copy actions. Accounts, server-verified attempts and public leaderboards are deferred to Phase 8 as an optional future improvement, not current release requirements. The ranked-attempt rules below are retained for that future scope; existing local Daily rules and saves remain unchanged.
+
 * **Indefinite rotation (restarted 2026-09-17):** New `daily-3` runs use the 56 distinct themes in [the versioned calendar](../src/engine/daily-calendar.ts), all in Mid IQ. `rotation-1` starts **September 17, 2026 UTC**, reshuffling all 56 themes once per cycle, including cycle zero. A deterministic boundary swap prevents the previous cycle's last theme from appearing first. Themes recur with fresh date-specific seeds; there is no expiry or player-specific cycle counter. The dialog shows the current cycle. Identical app/data/rotation versions and UTC dates agree offline once loaded, independent of timezone or skipped days; device clocks are not trusted. This does not implement offline installation/caching. The old published schedule is retired for new starts but preserved for `daily-2` save replay, alongside unrestricted `daily-1` saves. Legacy same-day commitments do not consume the fresh rotation's first attempt. See [implementation and verification](PHASE6_PROGRESS.md).
 * Fixed-coach days provide only that coach to sign; other days retain three offers. Era/franchise restrictions apply throughout rolls, rerolls and picks. Fixed-player days begin with one or two exact records locked in their assigned slots, leaving five or four picks; duplicate-person protection applies across all franchise/era versions. Locked players are explicit exceptions to restrictions on remaining picks, such as Lakers Kobe with a Charlotte pool. Invalid duplicate identities or slots are rejected. The next roll retains the existing occupied-slot round number.
 * Stat-filter days use **raw, uncoached, non-normalized player-record averages**, not career totals or coach-adjusted values: PPG < 20, USG% <= 20, 3PA < 1, or USG% >= 25. No Refunds begins with zero team and era rerolls. The centers-only challenge locks Raptors 2020s Scottie Barnes at PG and restricts remaining picks to C eligibility while keeping normal slot eligibility; C eligibility includes versatile guards/wings, not only traditional centers. Without the locked PG, the pool can run out of PG-eligible identities. Every published pool passes a conservative distinct-player position-coverage guarantee after any legal choices. Single-era days keep an unavailable era reroll unspent rather than converting it into a different token. Simulation rules are unchanged; historic themes are not exact historical roster reconstructions.
@@ -363,6 +365,8 @@ Daily Seed and Playoff Gauntlet are not additional IQ modes:
 * Practice replays are unranked. Guests may play all three IQ modes and local Daily without sign-in. Phase 6's local Daily mirrors these rules using browser storage and the device clock but cannot enforce trusted attempts or deadlines; public ranked competition requires Phase 8's server validation. One account per attempt is not proof of one human per attempt.
 
 ### Rankings and Local Progression
+
+**Future rankings only:** The next two paragraphs define the deferred Phase 8 contract. Sharing and informal comparison with friends do not require ranked accounts or server validation. Local progression remains in the current Phase 7 scope.
 
 Rank each Daily challenge by **regular-season wins**, then **regular-season point differential**, then **longest regular-season winning streak**, all descending. All entries compare the same 82-game workload. Exact ties share rank; submission speed is not a tiebreaker. Play-in and playoff records and championships appear as separate badges, never additional ranking wins.
 
@@ -451,7 +455,7 @@ Each 82-game schedule randomly samples from this pool:
 
 ### Coach Selection
 
-At the start of each run, the player is offered **3 randomly selected coaches** from a pool of 12. Choose 1. The planned "Coach Almanac" will unlock after the first completed 82-game season, regardless of wins, and remain unlocked across new runs (§4). Coach offers are implemented; the Almanac and persistent unlock are not.
+At the start of each run, the player is offered **3 randomly selected coaches** from a pool of 12. Choose 1. The "Coach Almanac" unlocks all 12 systems after the first completed 82-game season, regardless of wins, and remains unlocked across new runs (§4). Almanac and history access are temporarily blocked during HI IQ drafting until Start Season. [Implementation and validation](PHASE7_PROGRESS.md).
 
 ### Coach Modifier Interface
 
@@ -735,7 +739,7 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 | Decision | Why It Matters | Resolve By |
 | ---------- | ---------------- | ------------ |
 | Daily IQ mode (resolved) | Mid IQ selected by the user on 2026-09-16; `daily-1` pins this mode | Phase 6 complete |
-| Online service and data policy | Ranked identity and attempt/ranking rules are settled; choose the backend/auth provider and define privacy, retention, and operational limits before public competition | Phase 8 |
+| Online service and data policy (deferred) | Revisit backend/auth, privacy, retention and operational limits only if trusted public competition is brought back into scope; not needed for sharing with friends | Phase 8 future improvement; not a current release blocker |
 
 ### Phase 3: Reproducible Regular-Season Engine & Run State
 
@@ -794,18 +798,20 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 ### Phase 7: Coach Almanac, Run History & Share Cards
 
-**Status:** Pending. **Depends on:** Phase 5 result contracts and Phase 6 mode metadata. **Spec:** §2, §4, §6, §9–10.
+**Status:** Complete for local scope, 2026-09-17. [Implementation and validation](PHASE7_PROGRESS.md). **Depends on:** Phase 5 result contracts and Phase 6 mode metadata. **Spec:** §2, §4, §6, §9–10.
 
-- [ ] P7.1 Unlock all 12 Coach Almanac systems after the first completed 82-game season regardless of wins. Persist the unlock separately from active saves, including when that season is complete but postseason is still pending.
-- [ ] P7.2 Retain the 50 most recent completed runs plus personal-best summaries, with coach, lineup, mode, regular-season record/differential/streak, and separate play-in/postseason outcomes. Avoid resetting earned progress when starting a new draft.
-- [ ] P7.3 Generate a shareable image and plain-text fallback from completed results. Include regular-season/playoff records, championship/perfect-run status, mode, and Daily date where applicable; do not imply local results are verified rankings.
-- [ ] P7.4 Provide image download, copy/share actions with browser capability fallbacks, and clear success/failure feedback. Use an appropriate export library when this phase is implemented; protect readability for long player names and mobile exports.
+**Social focus:** Let players share completed runs with friends through result images and text using their existing messaging/social apps. No in-game friend system, accounts or public leaderboard is required for this scope.
 
-**Completion gate:** Unlocks and history survive new runs, exported records match saved outcomes, and sharing still works through a text/download fallback when clipboard or native sharing is unavailable.
+- [x] P7.1 Unlock all 12 Coach Almanac systems after the first completed 82-game season regardless of wins. Persist the unlock separately from active saves, including when that season is complete but postseason is still pending.
+- [x] P7.2 Retain the 50 most recent completed runs plus personal-best summaries, with coach, lineup, mode, regular-season record/differential/streak, and separate play-in/postseason outcomes. Avoid resetting earned progress when starting a new draft.
+- [x] P7.3 Generate a shareable image and plain-text fallback from completed results. Include regular-season/playoff records, championship/perfect-run status, mode, and Daily date where applicable; do not imply local results are verified rankings.
+- [x] P7.4 Provide image download, copy/share actions with browser capability fallbacks, and clear success/failure feedback. Use `html-to-image` for fixed-width PNG exports; protect readability for long player names and mobile exports.
 
-### Phase 8: Trusted Daily Leaderboards
+**Completion gate:** Passed desktop/mobile functional checks: unlocks and history survive new runs, exported records match saved outcomes, and sharing still works through a text/download fallback when clipboard or native sharing is unavailable. Actual delivery to messaging apps and physical-device validation remain unverified.
 
-**Status:** Pending; separate online-service scope. **Depends on:** Phase 6 deterministic replay and an agreed ranking contract. **Spec:** §4.
+### Phase 8: Trusted Daily Leaderboards (Future Improvement)
+
+**Status:** Deferred as an optional future improvement by user decision on 2026-09-17; outside the current release scope. Social interaction remains focused on sharing with friends through Phase 7. The tasks below are retained for future consideration, not scheduled implementation or release blockers. **Depends on (if resumed):** Phase 6 deterministic replay and an agreed ranking contract. **Spec:** §4.
 
 - [ ] P8.1 Choose the smallest necessary backend/storage and authentication provider. Use stable account IDs and changeable display names; preserve guest IQ modes/local Daily. Implement §4's adopted ranked identity, mode, attempt, and ranking contract, and define privacy/retention and operational limits before launch.
 - [ ] P8.2 Validate submissions server-side by replaying the seed and legal action history with pinned datasets/rules. Enforce allowed coach choices, rerolls, positions, and unique players; do not accept a client-supplied win count as proof.
@@ -816,7 +822,7 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 
 ### Phase 9: Balance, Accessibility & Release Readiness
 
-**Status:** Pending. **Depends on:** Phases 3–7; include Phase 8 for a competitive online release. **Spec:** §1–10.
+**Status:** Pending. **Depends on:** Phases 3–7 for the current local-game and friend-sharing release; Phase 8 is not a dependency. Revisit online release gates only if that future improvement is resumed. **Spec:** §1–10.
 
 **Existing evidence is partial:** Current validation passes 103 engine tests, production build/typechecking and 46 checked-in desktop/320px Playwright checks covering mode selection/locking, full six-pick HI IQ and Daily drafts, exact Mid IQ/HI IQ browser parity, No IQ season/playoffs, postseason presentation, rivalries, audio, Daily deadlines/practice/persistence and recovery. Wider drafting variants, accessibility/performance checks and human playtests remain open. The [release scorecard](RELEASE_SCORECARD.md) retains failed or unmeasured replacement-release gates; passing functional checks are not mode-balance or full-product acceptance. Commands are documented in [the README](../README.md).
 
@@ -824,13 +830,13 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 - [ ] P9.2 Check data provenance and labeling, short-peak policy, missing/curated historical stats, and benchmark pool consistency. Resolve remaining conflicts in earlier spec sections rather than leaving implementation notes as the only authority.
 - [ ] P9.3 Add repeatable browser coverage to complement the current engine unit suites and manual checks. Establish release gates for the full draft-to-result journey, save upgrades/recovery, modes, playback, sharing, and online submission where enabled.
 - [ ] P9.4 Verify touch/keyboard access, screen-reader labels, non-color result cues, responsive tables/brackets, reduced motion, audio controls, and error recovery. Measure bundle size and simulation responsiveness; introduce a worker only if measurements justify it.
-- [ ] P9.5 Document local and production commands, choose static/client deployment for the local game or server-backed deployment for leaderboards, configure required secrets outside client bundles, and complete build/dependency/security checks and deployed smoke checks.
+- [ ] P9.5 Document local and production commands, choose static/client deployment for the local game and friend-sharing release, and complete build/dependency/security checks and deployed smoke checks. Server-backed leaderboards and their secret configuration are deferred with Phase 8.
 
 **Completion gate:** The enabled scope completes end to end on desktop and mobile, balance targets are documented, saves survive supported upgrades, required quality checks pass, and unavailable features are not advertised as playable.
 
 ### Dependency Order & Coverage
 
-**Next work:** Phase 7 retention features: Coach Almanac, general run history and sharing. Local Daily is complete in Mid IQ; trusted account-based competition remains Phase 8. No IQ, Mid IQ and HI IQ span the core championship loop. Measure No IQ balance separately and playtest HI IQ's hidden-information experience. P3.7's accepted scores, historical holdouts and Mid IQ balance exceptions remain preserved. Human playtesting, title-frequency measurement and remaining Phase 9 checks are still needed.
+**Next work:** Phase 9 release readiness. Phase 7 Coach Almanac, general run history and sharing with friends are complete for local scope. Local Daily is complete in Mid IQ; Phase 8 trusted account-based competition is an optional future improvement outside this release. No IQ, Mid IQ and HI IQ span the core championship loop. Measure No IQ balance separately and playtest HI IQ's hidden-information experience. P3.7's accepted scores, historical holdouts and Mid IQ balance exceptions remain preserved. Human playtesting, title-frequency measurement and remaining Phase 9 checks are still needed.
 
 | Spec Requirement Group | Milestones |
 | ------------------------ | ------------ |
@@ -840,10 +846,10 @@ The remaining open decisions are listed below. Resolved rules are recorded in th
 | Qualification, play-in, bracket, ring, 98-0 (§2, §4, §8–9) | P5.1–P5.5 |
 | No IQ, Mid IQ, HI IQ, and Daily seed fairness (§4) | P6.1–P6.4, using P3.1 |
 | Coach Almanac and exportable social results (§2, §6, §9–10) | P7.1–P7.4 |
-| Global Daily rankings (§4) | P8.1–P8.4 |
+| Global Daily rankings (§4; optional future improvement) | P8.1–P8.4 deferred; outside current release |
 | Balance, data fidelity, platform and release quality (§1–10) | P9.1–P9.5 |
 
-**Release boundaries:** Phase 5 is the complete Mid IQ game (formerly Classic); Phases 6–7 add the other IQ modes, Daily, and retention/sharing; Phase 8 adds trusted public competition. Apply the relevant Phase 9 checks to each release rather than postponing basic accessibility or correctness until the end.
+**Release boundaries:** Phase 5 is the complete Mid IQ game (formerly Classic); Phases 6–7 add the other IQ modes, local Daily, retention and sharing with friends. This is the current release scope, subject to the relevant Phase 9 checks. Phase 8 trusted public competition is a deferred future improvement and does not block that release. Apply basic accessibility and correctness checks throughout development.
 
 ### Math Engine API
 

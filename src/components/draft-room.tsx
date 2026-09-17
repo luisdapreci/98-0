@@ -7,6 +7,7 @@ import {
   ArrowUp,
   ArrowUpDown,
   ArrowRight,
+  BookOpen,
   CalendarDays,
   Check,
   ChevronRight,
@@ -14,10 +15,12 @@ import {
   CircleHelp,
   Dices,
   Gauge,
+  History,
   LockKeyhole,
   RotateCcw,
   Search,
   Shield,
+  Share2,
   Target,
   Trophy,
   Users,
@@ -30,7 +33,8 @@ import { balanceForRun, playersForRun, statsHiddenForRun } from '../engine/run';
 import type { RunSave } from '../engine/run';
 import { lineupForUsagePolicy, usageCapForLineup } from '../engine/usage-policy';
 import type { Coach, Player, SynergySnapshot } from '../engine/types';
-import { franchises, players, useDraftStore } from '../lib/draft-store';
+import { coaches, franchises, players, useDraftStore, useProgressStore } from '../lib/draft-store';
+import { CoachAlmanac, RunHistory } from './run-collection';
 import { SeasonTicker } from './season-ticker';
 import { PostseasonTicker } from './postseason-ticker';
 import { DefenseBreakdown } from './defense-breakdown';
@@ -549,7 +553,8 @@ function PlayerPool({
 
 export function DraftRoom() {
   const { run, notice, clearNotice, newRun, chooseMode, chooseCoach, spin, reroll, pick, start,
-    dailyEntries, refreshDaily, startDaily, playback } = useDraftStore();
+    dailyEntries, refreshDaily, startDaily, playback, refreshProgress } = useDraftStore();
+  const { progress } = useProgressStore();
   const draft = run?.draft;
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState<'both' | RerollKind | null>(null);
@@ -557,6 +562,8 @@ export function DraftRoom() {
   const [selected, setSelected] = useState<Player | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
   const [dailyOpen, setDailyOpen] = useState(false);
+  const [collection, setCollection] = useState<'almanac' | 'history' | null>(null);
+  const [shareId, setShareId] = useState<string | null>(null);
   const [dailyBusy, setDailyBusy] = useState(false);
   const [today, setToday] = useState('');
   const [resultView, setResultView] = useState<'season' | 'postseason'>('postseason');
@@ -573,6 +580,7 @@ export function DraftRoom() {
       if (!useDraftStore.getState().run) useDraftStore.getState().newRun();
       if (useDraftStore.getState().run?.phase === 'SEASON_RUNNING') useDraftStore.getState().start();
       useDraftStore.getState().refreshDaily();
+      void useDraftStore.getState().refreshProgress();
       setReady(true);
     }).catch(() => {
       setError('The saved run could not be opened. Start a new run to continue.');
@@ -624,6 +632,7 @@ export function DraftRoom() {
   const resumingDaily = !!run?.daily && !run.season;
   const previewChallenge = resumingDaily ? challenge : today ? rotatingChallengeForDate(today) : null;
   const cycleSchedule = today ? rotationSchedule(today) : [];
+  const shareable = progress.runs.find((entry) => entry.id === run?.id);
 
   return (
     <div className="app-shell">
@@ -674,6 +683,14 @@ export function DraftRoom() {
               <strong>98 WINS. ZERO LOSSES.</strong>
             </span>
           </div>
+        </div>
+        <div className="collection-toolbar">
+          <button className="secondary-button" disabled={!ready || hidden || !progress.almanacUnlocked}
+            title={hidden ? 'Scouting locked until Start Season' : progress.almanacUnlocked ? 'Coach Almanac' : 'Unlocks after one completed 82-game season'}
+            onClick={() => setCollection('almanac')}><BookOpen size={17} /> COACH ALMANAC {progress.almanacUnlocked ? <span>12/12</span> : <LockKeyhole size={14} />}</button>
+          <button className="secondary-button" disabled={!ready || hidden} title={hidden ? 'Scouting locked until Start Season' : 'Run history'}
+            onClick={() => { void refreshProgress(); setShareId(null); setCollection('history'); }}><History size={17} /> RUN HISTORY <span>{progress.runs.length}</span></button>
+          {shareable && playback?.revealed === 82 && <button className="secondary-button" onClick={() => { setShareId(shareable.id); setCollection('history'); }}><Share2 size={17} /> SHARE RESULT</button>}
         </div>
         {!ready || !draft || !synergy ? (
           <div className="loading-state" role="status">
@@ -936,6 +953,9 @@ export function DraftRoom() {
           </div>
         </Modal>
       )}
+      {collection && !hidden && <Modal title={collection === 'almanac' ? 'COACH ALMANAC' : 'RUN HISTORY'} onClose={() => setCollection(null)}>
+        {collection === 'almanac' ? <CoachAlmanac coaches={coaches} noChemistry={!!noChemistry} /> : <RunHistory progress={progress} initialId={shareId} />}
+      </Modal>}
       {dailyOpen && <Modal title="DAILY CHALLENGE" onClose={() => { if (!dailyBusy) setDailyOpen(false); }}>
         <p className="daily-date">{run?.daily && !run.season ? run.daily.date : today} UTC / MID IQ</p>
         {previewChallenge ? <div className="daily-preview"><h3>{previewChallenge.name}</h3><p>{previewChallenge.restriction}</p></div>

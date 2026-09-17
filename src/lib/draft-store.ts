@@ -18,6 +18,11 @@ import type { RunSave } from '../engine/run';
 import { advancePlayback, finishSeriesPlayback, restorePlayback } from '../engine/playback';
 import type { SeasonPlayback } from '../engine/playback';
 import type { Coach, IQMode, OpponentPool, Player, PlayoffPool } from '../engine/types';
+import { emptyProgress } from '../engine/progress';
+import type { Progress } from '../engine/progress';
+import { saveProgress } from './progress-storage';
+
+export const useProgressStore = create<{ progress: Progress }>(() => ({ progress: emptyProgress() }));
 
 export const players = playerData as Player[];
 export const coaches = coachData as Coach[];
@@ -65,6 +70,7 @@ const storage: StateStorage = {
 
 interface DraftStore {
   run: RunSave | null;
+  refreshProgress: (complete?: boolean) => Promise<void>;
   dailyEntries: DailyEntry[];
   refreshDaily: () => Promise<void>;
   startDaily: (expectedDate?: string) => Promise<void>;
@@ -91,6 +97,16 @@ export const useDraftStore = create<DraftStore>()(
   persist(
     (set, get) => ({
       run: null,
+      refreshProgress: async (complete = false) => {
+        const { run, playback, postseasonPlayback } = get();
+        try {
+          const progress = await saveProgress(run, complete || playback?.revealed === 82,
+            complete || (!!run?.postseason && postseasonPlayback?.revealed === run.postseason.gameLog.length));
+          useProgressStore.setState({ progress });
+        } catch {
+          set({ notice: 'Almanac and history could not be saved or opened. Check browser storage; existing progress has not been cleared.' });
+        }
+      },
       dailyEntries: [],
       refreshDaily: async () => {
         try {
@@ -121,6 +137,7 @@ export const useDraftStore = create<DraftStore>()(
             attemptId: crypto.randomUUID() };
           const run = createDailyRun(attempt, coaches, players);
           writeDailyEntries([...entries, { attempt }]);
+          void get().refreshProgress(true);
           set({ run, dailyEntries: [...entries, { attempt }],
             playback: null, postseasonPlayback: null, notice: null });
         });
@@ -129,7 +146,10 @@ export const useDraftStore = create<DraftStore>()(
       postseasonPlayback: null,
       notice: null,
       clearNotice: () => set({ notice: null }),
-      newRun: () => set({ run: createRun(crypto.randomUUID(), coaches, null, RIVALRY_VERSION, 'mid'), playback: null, postseasonPlayback: null }),
+      newRun: () => {
+        void get().refreshProgress(true);
+        set({ run: createRun(crypto.randomUUID(), coaches, null, RIVALRY_VERSION, 'mid'), playback: null, postseasonPlayback: null });
+      },
       chooseMode: (mode) => set((state) => {
         if (!state.run) return state;
         const run = selectIQMode(state.run, mode, coaches, crypto.randomUUID());
@@ -192,3 +212,9 @@ export const useDraftStore = create<DraftStore>()(
     },
   ),
 );
+
+useDraftStore.subscribe((state, previous) => {
+  if (state.run !== previous.run || state.playback !== previous.playback || state.postseasonPlayback !== previous.postseasonPlayback) {
+    void state.refreshProgress();
+  }
+});

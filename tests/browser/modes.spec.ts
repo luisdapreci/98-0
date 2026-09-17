@@ -3,6 +3,21 @@ import { createRun } from '../../src/engine/run.ts';
 import { RIVALRY_VERSION } from '../../src/engine/rivalry.ts';
 import { controlledSeason, data, expect, expectFits, loadRun, readyFixture, savedState, test } from './fixtures';
 
+test('earned collections cannot expose scouting during a HI IQ draft', async ({ page }) => {
+  await loadRun(page, controlledSeason(0, 'hi-collection-unlock'));
+  await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeEnabled();
+  await loadRun(page, readyFixture('hi-collection-ready', 'hi'), 0);
+  await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeDisabled();
+  await expect(page.getByRole('button', { name: /RUN HISTORY/ })).toBeDisabled();
+  await page.reload();
+  await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeDisabled();
+  await page.getByRole('button', { name: 'START SEASON', exact: true }).click();
+  await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeEnabled();
+  await expect(page.getByRole('button', { name: /RUN HISTORY/ })).toBeEnabled();
+  await page.getByRole('button', { name: /COACH ALMANAC/ }).click();
+  await expect(page.locator('.almanac-entry')).toHaveCount(12);
+});
+
 test('screen transitions reset scrolling to the top', async ({ page }) => {
   await page.setViewportSize({ width: page.viewportSize()!.width, height: 400 });
   const expectTransitionAtTop = async (name: string | RegExp) => {
