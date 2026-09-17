@@ -14,6 +14,9 @@ import { annotateRivalries, RIVALRY_VERSION, rivalryEvidence } from './rivalry.t
 import { simulatePostseason } from './postseason.ts';
 import { lineupForUsagePolicy } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
+import { challengeForAttempt, DAILY_MODE, dailyRoll, dailySeed, validateDailyAttempt } from './daily.ts';
+import type { DailyAttempt } from './daily.ts';
+import { challengePlayers, validateChallenge } from './daily-calendar.ts';
 import {
   HISTORICAL_ENTRY_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION, STAR_USAGE_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION,
 } from './engine-versions.ts';
@@ -26,6 +29,7 @@ export type DraftAction =
 
 export interface RunSave {
   schemaVersion: 1;
+  daily?: DailyAttempt;
   iqMode?: IQMode;
   iqVersion?: 'iq-1';
   id: string;
@@ -85,6 +89,7 @@ export function createRun(seed: string, coaches: readonly Coach[], legacyDraft: 
 
 export function selectIQMode(run: RunSave, mode: IQMode, coaches: readonly Coach[], seed: string): RunSave {
   if (!['no', 'mid', 'hi'].includes(mode)) throw new Error('Unsupported IQ mode.');
+  if (run.daily) return run;
   if (run.phase !== 'DRAFTING' || run.draft.phase !== 'COACH' || run.actions.length || run.legacyDraft
     || run.engineVersion !== QUALIFICATION_45_ENGINE_VERSION) return run;
   if ((run.iqMode ?? 'mid') === mode) return run;
@@ -102,18 +107,36 @@ export function statsHiddenForRun(run: RunSave): boolean {
   return run.iqMode === 'hi' && (run.phase === 'DRAFTING' || run.phase === 'DRAFT_READY');
 }
 
+export function playersForRun(run: RunSave, players: readonly Player[]): readonly Player[] {
+  return challengePlayers(run.daily ? challengeForAttempt(run.daily) : null, players);
+}
+
+export function createDailyRun(attempt: DailyAttempt, coaches: readonly Coach[], players: readonly Player[] = []): RunSave {
+  validateDailyAttempt(attempt);
+  const challenge = challengeForAttempt(attempt);
+  if (challenge) validateChallenge(challenge, players, coaches);
+  const run = createRun(dailySeed(attempt.date, attempt.version), coaches, null, RIVALRY_VERSION, DAILY_MODE);
+  if (challenge?.coachId) run.draft.offers = [coaches.find((coach) => coach.id === challenge.coachId)!];
+  if (challenge?.fixedPlayer) {
+    const fixed = challenge.fixedPlayer;
+    run.draft.lineup[fixed.slot] = players.find((player) => player.id === fixed.id)!;
+  }
+  return { ...run, id: attempt.attemptId, daily: { ...attempt } };
+}
+
 export function applyDraftAction(run: RunSave, action: DraftAction, players: readonly Player[]): RunSave {
   if (run.phase !== 'DRAFTING') return run;
+  const pool = playersForRun(run, players);
   const random = createRandom(run.draftRandomState);
   let draft: DraftState;
   switch (action.type) {
     case 'COACH': draft = selectCoach(run.draft, action.id); break;
-    case 'SPIN': draft = spinDraft(run.draft, players, random.next); break;
+    case 'SPIN': draft = run.daily ? dailyRoll(run.draft, pool, run.seed) : spinDraft(run.draft, pool, random.next); break;
     case 'REROLL':
       if (!['team', 'era'].includes(action.kind)) throw new Error('Invalid reroll.');
-      if (!rollOptions(run.draft, players, action.kind).length) return run;
-      draft = rerollDraft(run.draft, players, action.kind, random.next); break;
-    case 'PICK': draft = draftPlayer(run.draft, players, action.id, action.slot); break;
+      if (!rollOptions(run.draft, pool, action.kind).length) return run;
+      draft = run.daily ? dailyRoll(run.draft, pool, run.seed, action.kind) : rerollDraft(run.draft, pool, action.kind, random.next); break;
+    case 'PICK': draft = draftPlayer(run.draft, pool, action.id, action.slot); break;
     default: throw new Error('Invalid draft action.');
   }
   return {
@@ -243,7 +266,8 @@ export function recoverRun(value: unknown, data: RunData, legacySeed: string): {
     }
     if (run.rivalryVersion !== undefined && run.rivalryVersion !== RIVALRY_VERSION) throw new Error('Unsupported rivalry version.');
     const legacy = run.legacyDraft === null ? null : validateLegacyDraft(run.legacyDraft, data);
-    let replay = { ...createRun(run.seed, data.coaches, legacy, run.rivalryVersion, run.iqMode), engineVersion: run.engineVersion, scoreVersion: run.scoreVersion };
+    let replay = run.daily ? createDailyRun(run.daily, data.coaches, data.players)
+      : { ...createRun(run.seed, data.coaches, legacy, run.rivalryVersion, run.iqMode), engineVersion: run.engineVersion, scoreVersion: run.scoreVersion };
     if (!Array.isArray(run.actions) || run.actions.length > 15) throw new Error('Invalid action history.');
     for (const action of run.actions) {
       const next = applyDraftAction(replay, action, data.players);

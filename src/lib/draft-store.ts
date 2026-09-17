@@ -8,7 +8,11 @@ import coachData from '../../data/processed/coaches.json';
 import franchiseData from '../../data/processed/franchises.json';
 import opponentData from '../../data/processed/opponents.json';
 import type { DraftSlot, RerollKind } from '../engine/draft';
-import { applyDraftAction, createRun, finishSeason, recoverRun, selectIQMode, startPostseason, startSeason } from '../engine/run';
+import { applyDraftAction, createDailyRun, createRun, finishSeason, recoverRun, selectIQMode, startPostseason, startSeason } from '../engine/run';
+import { DAILY_VERSION, utcDate } from '../engine/daily';
+import { challengeForDate, DAILY_CALENDAR_VERSION } from '../engine/daily-calendar';
+import type { DailyAttempt, DailyEntry } from '../engine/daily';
+import { readDailyEntries, recordDailyResult, writeDailyEntries } from './daily-storage';
 import { RIVALRY_VERSION } from '../engine/rivalry';
 import type { RunSave } from '../engine/run';
 import { advancePlayback, finishSeriesPlayback, restorePlayback } from '../engine/playback';
@@ -61,6 +65,9 @@ const storage: StateStorage = {
 
 interface DraftStore {
   run: RunSave | null;
+  dailyEntries: DailyEntry[];
+  refreshDaily: () => Promise<void>;
+  startDaily: (expectedDate?: string) => Promise<void>;
   playback: SeasonPlayback | null;
   postseasonPlayback: SeasonPlayback | null;
   notice: string | null;
@@ -82,8 +89,42 @@ interface DraftStore {
 
 export const useDraftStore = create<DraftStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       run: null,
+      dailyEntries: [],
+      refreshDaily: async () => {
+        try {
+          const refresh = () => {
+            const run = get().run;
+            set({ dailyEntries: run?.daily && run.season ? recordDailyResult(run) : readDailyEntries() });
+          };
+          if (navigator.locks) await navigator.locks.request('98-0-daily-start', refresh);
+          else refresh();
+        } catch {
+          set({ notice: 'Daily records could not be saved or opened. Check browser storage; existing records have not been cleared.' });
+        }
+      },
+      startDaily: async (expectedDate) => {
+        if (!navigator.locks) throw new Error('Daily requires a browser with local lock support. Ordinary runs remain available.');
+        await navigator.locks.request('98-0-daily-start', () => {
+          const current = get().run;
+          if (current?.daily && !current.season) return;
+          if (current?.daily && current.season) recordDailyResult(current);
+          const entries = readDailyEntries();
+          const now = Date.now();
+          const date = utcDate(now);
+          if (expectedDate && expectedDate !== date) throw new Error('The Daily date changed. Reopen Daily to view the new challenge.');
+          const challenge = challengeForDate(date);
+          if (!challenge) throw new Error('No Daily challenge is published for this date. Ordinary runs remain available.');
+          const attempt: DailyAttempt = { version: DAILY_VERSION, calendarVersion: DAILY_CALENDAR_VERSION, challengeId: challenge.id, date, startedAt: now,
+            kind: entries.some((entry) => entry.attempt.date === date && entry.attempt.kind === 'local') ? 'practice' : 'local',
+            attemptId: crypto.randomUUID() };
+          const run = createDailyRun(attempt, coaches, players);
+          writeDailyEntries([...entries, { attempt }]);
+          set({ run, dailyEntries: [...entries, { attempt }],
+            playback: null, postseasonPlayback: null, notice: null });
+        });
+      },
       playback: null,
       postseasonPlayback: null,
       notice: null,
@@ -104,6 +145,7 @@ export const useDraftStore = create<DraftStore>()(
           playback: { runId: state.run.id, revealed: 0, overtimePeriod: null },
         } : state);
         set((state) => state.run ? { run: finishSeason(state.run, opponents) } : state);
+        if (get().run?.daily) get().refreshDaily();
       },
       revealNext: () => set((state) => state.run?.season && state.playback ? {
         playback: advancePlayback(state.playback, state.run.season.gameLog),

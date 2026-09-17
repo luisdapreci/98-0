@@ -2053,6 +2053,27 @@ main {
 }
 .iq-mode-selector button { min-height: 48px; padding: 12px; background: transparent; font-weight: 700; }
 .iq-mode-selector button[aria-pressed='true'] { background: var(--accent); color: var(--bg); }
+
+.daily-banner { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.daily-banner span { color: var(--muted); }
+.daily-date { font-weight: 700; }
+.daily-records { margin-top: 24px; border-top: 1px solid var(--line); padding-top: 16px; }
+.daily-records h3 { font-size: 18px; }
+.daily-records ol { list-style: none; padding: 0; max-height: 320px; overflow-y: auto; }
+.daily-records li { display: grid; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.daily-records span, .daily-records small { font-size: 12px; }
+.coach-grid.fixed-coach { grid-template-columns: minmax(0, 440px); }
+.daily-theme { display: grid; gap: 4px; flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.daily-theme strong { font-size: 16px; }
+.daily-preview { padding: 12px 0; border-block: 1px solid var(--line); overflow-wrap: anywhere; }
+.daily-preview h3 { font-size: 24px; margin: 0 0 6px; }
+.daily-preview p { margin: 0; color: var(--muted); }
+.daily-calendar { margin-top: 24px; }
+.daily-calendar summary { cursor: pointer; font-weight: 700; font-size: 13px; }
+.daily-calendar ol { list-style: none; padding: 0; max-height: 320px; overflow-y: auto; }
+.daily-calendar li { display: grid; gap: 5px; padding: 12px 8px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.daily-calendar li[aria-current="date"] { border-left: 3px solid var(--accent); }
+.daily-calendar time, .daily-calendar li span { font-size: 12px; color: var(--muted); }
 .iq-mode-status { margin: 14px 0 24px; font-size: 11px; color: var(--teal); line-height: 1.6; }
 .iq-run-mode { font-size: 10px; color: var(--teal); white-space: nowrap; }
 .iq-locked { display: flex; align-items: center; gap: 12px; padding: 24px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }

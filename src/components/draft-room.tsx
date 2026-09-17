@@ -7,6 +7,7 @@ import {
   ArrowUp,
   ArrowUpDown,
   ArrowRight,
+  CalendarDays,
   Check,
   ChevronRight,
   CircleDot,
@@ -25,7 +26,7 @@ import {
 import { availablePlayers, availableSlots, DRAFT_SLOTS, rollOptions } from '../engine/draft';
 import type { DraftSlot, DraftState, RerollKind } from '../engine/draft';
 import { calculateSynergy } from '../engine/iq-math';
-import { balanceForRun, statsHiddenForRun } from '../engine/run';
+import { balanceForRun, playersForRun, statsHiddenForRun } from '../engine/run';
 import type { RunSave } from '../engine/run';
 import { lineupForUsagePolicy, usageCapForLineup } from '../engine/usage-policy';
 import type { Coach, Player, SynergySnapshot } from '../engine/types';
@@ -36,6 +37,8 @@ import { DefenseBreakdown } from './defense-breakdown';
 import { SoundControls } from './sound-controls';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
+import { challengeForAttempt, utcDate } from '../engine/daily';
+import { DAILY_CALENDAR, challengeForDate, dailyChallengeDate } from '../engine/daily-calendar';
 
 const eras = ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
 const slotLabel = (slot: DraftSlot) => (slot === 'SIXTH' ? '6TH' : slot);
@@ -93,17 +96,19 @@ function Modal({
   );
 }
 
-function CoachChoices({ draft, onChoose, hideEffects }: { draft: DraftState; onChoose: (id: string) => void; hideEffects: boolean }) {
+function CoachChoices({ draft, onChoose, hideEffects, pool }: { draft: DraftState; onChoose: (id: string) => void; hideEffects: boolean; pool: readonly Player[] }) {
+  const fixedCoach = draft.offers.length === 1;
+  const poolEras = [...new Set(pool.map((player) => player.decade))].sort();
   return (
     <section className="coach-selection" aria-labelledby="coach-title">
       <div className="section-heading">
         <div>
           <span className="eyebrow">PRE-DRAFT / 01</span>
-          <h2 id="coach-title">CHOOSE YOUR COACH</h2>
+          <h2 id="coach-title">{fixedCoach ? 'YOUR DAILY COACH' : 'CHOOSE YOUR COACH'}</h2>
         </div>
-        <span className="muted">3 offers. One system.</span>
+        <span className="muted">{fixedCoach ? 'FIXED COACH' : '3 offers. One system.'}</span>
       </div>
-      <div className="coach-grid">
+      <div className={`coach-grid ${fixedCoach ? 'fixed-coach' : ''}`}>
         {draft.offers.map((coach, index) => (
           <article className="coach-card" key={coach.id}>
             <div className="coach-card-top">
@@ -135,11 +140,11 @@ function CoachChoices({ draft, onChoose, hideEffects }: { draft: DraftState; onC
       <div className="pre-draft-footer">
         <CircleDot size={20} />
         <span>
-          1960s <span className="muted">/</span> 2020s
+          {poolEras[0]} {poolEras.length > 1 && <><span className="muted">/</span> {poolEras.at(-1)}</>}
         </span>
-        <span className="muted">THE ALL-TIME PLAYER POOL</span>
+        <span className="muted">{pool.length === players.length ? 'THE ALL-TIME PLAYER POOL' : 'CHALLENGE PLAYER POOL'}</span>
         <strong>
-          {players.length.toLocaleString('en-US')} <span>PLAYER RECORDS</span>
+          {pool.length.toLocaleString('en-US')} <span>PLAYER RECORDS</span>
         </strong>
       </div>
     </section>
@@ -371,11 +376,13 @@ function PlayerPool({
   busy,
   onSelect,
   hidden,
+  pool,
 }: {
   draft: DraftState;
   busy: boolean;
   onSelect: (player: Player) => void;
   hidden: boolean;
+  pool: readonly Player[];
 }) {
   const [filter, setFilter] = useState<DraftSlot | 'ALL'>('ALL');
   const [search, setSearch] = useState('');
@@ -384,7 +391,7 @@ function PlayerPool({
     ascending: hidden,
   });
   const query = useDeferredValue(search);
-  const candidates = availablePlayers(draft, players);
+  const candidates = availablePlayers(draft, pool);
   const filtered = candidates.filter(
     (player) =>
       (filter === 'ALL' || filter === 'SIXTH' || player.eligiblePositions.includes(filter)) &&
@@ -541,21 +548,31 @@ function PlayerPool({
 }
 
 export function DraftRoom() {
-  const { run, notice, clearNotice, newRun, chooseMode, chooseCoach, spin, reroll, pick, start } = useDraftStore();
+  const { run, notice, clearNotice, newRun, chooseMode, chooseCoach, spin, reroll, pick, start,
+    dailyEntries, refreshDaily, startDaily, playback } = useDraftStore();
   const draft = run?.draft;
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState<'both' | RerollKind | null>(null);
   const [tick, setTick] = useState(0);
   const [selected, setSelected] = useState<Player | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [dailyOpen, setDailyOpen] = useState(false);
+  const [dailyBusy, setDailyBusy] = useState(false);
+  const [today, setToday] = useState('');
   const [resultView, setResultView] = useState<'season' | 'postseason'>('postseason');
   const [error, setError] = useState('');
+  useEffect(() => {
+    if (!dailyOpen) return;
+    const interval = window.setInterval(() => setToday(utcDate(Date.now())), 1000);
+    return () => window.clearInterval(interval);
+  }, [dailyOpen]);
   useEffect(() => {
     const onStorageError = () => setError('Browser storage is unavailable or full. This run may not survive a reload.');
     window.addEventListener('98-0-storage-error', onStorageError);
     void Promise.resolve(useDraftStore.persist.rehydrate()).then(() => {
       if (!useDraftStore.getState().run) useDraftStore.getState().newRun();
       if (useDraftStore.getState().run?.phase === 'SEASON_RUNNING') useDraftStore.getState().start();
+      useDraftStore.getState().refreshDaily();
       setReady(true);
     }).catch(() => {
       setError('The saved run could not be opened. Start a new run to continue.');
@@ -600,6 +617,12 @@ export function DraftRoom() {
   const hidden = !!run && statsHiddenForRun(run);
   const noChemistry = run?.iqMode === 'no';
   const modeLabel = run?.iqMode === 'no' ? 'NO IQ' : run?.iqMode === 'hi' ? 'HI IQ' : 'MID IQ';
+  const challenge = run?.daily ? challengeForAttempt(run.daily) : null;
+  const pool = run ? playersForRun(run, players) : players;
+  const reelFranchises = challenge?.franchises ? franchises.filter((franchise) => challenge.franchises!.includes(franchise.id)) : franchises;
+  const reelEras = challenge?.decades ?? eras;
+  const resumingDaily = !!run?.daily && !run.season;
+  const previewChallenge = resumingDaily ? challenge : today ? challengeForDate(today) : null;
 
   return (
     <div className="app-shell">
@@ -620,12 +643,14 @@ export function DraftRoom() {
         </nav>
         <div className="topbar-right">
           <span className="mode-label">{modeLabel}</span>
+          <button className="icon-button" title="Daily challenge" aria-label="Daily challenge" disabled={!ready || !!busy || dailyBusy}
+            onClick={() => { setToday(utcDate(Date.now())); refreshDaily(); setDailyOpen(true); }}><CalendarDays size={18} /></button>
           <SoundControls />
           <button
             className="icon-button"
             title="New run"
             aria-label="New run"
-            disabled={!ready || !!busy}
+            disabled={!ready || !!busy || dailyBusy}
             onClick={() => setConfirmReset(true)}
           >
             <RotateCcw size={18} />
@@ -667,14 +692,21 @@ export function DraftRoom() {
                 </button>
               </div>
             )}
+            {run?.daily && <div className="daily-banner" role="status">
+              <CalendarDays size={16} aria-hidden="true" />
+              <strong>DAILY / {run.daily.date} UTC / MID IQ</strong>
+              {challenge && <div className="daily-theme"><strong>{challenge.name}</strong><span>{challenge.restriction}</span></div>}
+              <span>{run.daily.kind === 'practice' ? 'PRACTICE / UNRANKED' : dailyEntries.find((entry) => entry.attempt.attemptId === run.id)?.result?.status === 'late'
+                ? 'LATE / UNRANKED' : 'LOCAL ONLY / NOT VERIFIED'}</span>
+            </div>}
             {draft.phase === 'COACH' ? (
               <>
-                {!run?.legacyDraft && run?.engineVersion === 'season-7' && <div className="iq-mode-selector" role="group" aria-label="IQ mode">
+                {!run?.daily && !run?.legacyDraft && run?.engineVersion === 'season-7' && <div className="iq-mode-selector" role="group" aria-label="IQ mode">
                   {(['no', 'mid', 'hi'] as const).map((mode) => <button key={mode} aria-pressed={(run?.iqMode ?? 'mid') === mode}
                     onClick={() => act(() => chooseMode(mode), 'switch')}>{mode.toUpperCase()} IQ</button>)}
                 </div>}
                 <p className="iq-mode-status">{hidden ? 'STATS LOCKED UNTIL START SEASON' : noChemistry ? 'CHEMISTRY OFF / INDIVIDUAL QUALITY ON' : 'FULL CHEMISTRY / STATS VISIBLE'}</p>
-                <CoachChoices draft={draft} hideEffects={hidden || noChemistry} onChoose={(id) => act(() => chooseCoach(id), 'coach')} />
+                <CoachChoices draft={draft} pool={pool} hideEffects={hidden || noChemistry} onChoose={(id) => act(() => chooseCoach(id), 'coach')} />
               </>
             ) : (
               <>
@@ -752,15 +784,15 @@ export function DraftRoom() {
                               <div className="reel-value" aria-hidden={!!busy}>
                                 <span className="franchise-abbr">
                                   {teamSpinning
-                                    ? franchises[tick % franchises.length]!.id
+                                    ? reelFranchises[tick % reelFranchises.length]!.id
                                     : (draft.roll?.franchise ?? '???')}
                                 </span>
                                 <strong>
                                   {teamSpinning
-                                    ? franchises[tick % franchises.length]!.name
+                                    ? reelFranchises[tick % reelFranchises.length]!.name
                                     : draft.roll
                                       ? franchiseName(draft.roll.franchise)
-                                      : 'ANY FRANCHISE'}
+                                      : challenge?.franchises ? 'CHALLENGE FRANCHISES' : 'ANY FRANCHISE'}
                                 </strong>
                               </div>
                             </div>
@@ -772,7 +804,7 @@ export function DraftRoom() {
                               <div className="reel-value" aria-hidden={!!busy}>
                                 <strong>
                                   {eraSpinning
-                                    ? eras[tick % eras.length]
+                                    ? reelEras[tick % reelEras.length]
                                     : (draft.roll?.decade ?? '----s')}
                                 </strong>
                                 <span>THE DECADE</span>
@@ -794,7 +826,7 @@ export function DraftRoom() {
                                   key={kind}
                                   className="reroll-button"
                                   disabled={
-                                    !!busy || rollOptions(draft, players, kind).length === 0
+                                    !!busy || rollOptions(draft, pool, kind).length === 0
                                   }
                                   onClick={() => roll(kind)}
                                   aria-label={`Reroll ${kind}`}
@@ -818,6 +850,7 @@ export function DraftRoom() {
                         <PlayerPool
                           key={`${draft.roll?.franchise}-${draft.roll?.decade}-${filled}`}
                           draft={draft}
+                          pool={pool}
                           busy={!!busy}
                           hidden={hidden}
                           onSelect={setSelected}
@@ -902,9 +935,57 @@ export function DraftRoom() {
           </div>
         </Modal>
       )}
+      {dailyOpen && <Modal title="DAILY CHALLENGE" onClose={() => { if (!dailyBusy) setDailyOpen(false); }}>
+        <p className="daily-date">{run?.daily && !run.season ? run.daily.date : today} UTC / MID IQ</p>
+        {previewChallenge ? <div className="daily-preview"><h3>{previewChallenge.name}</h3><p>{previewChallenge.restriction}</p></div>
+          : <p className="daily-availability" role="status">{resumingDaily ? 'Original Daily / unrestricted pool' : 'No challenge published for this date.'}</p>}
+        <p className="reset-message">Local only. No public ranking or verified attempts. The first attempt is committed before coach offers; abandoning it does not restore it. Retries are unranked practice.</p>
+        <p className="reset-message">Same challenge and offer priorities, with legal fallbacks. Local results close 24 hours after the UTC day ends; later finishes are unranked.</p>
+        {!(run?.daily && !run.season) && <p className="reset-message">Starting replaces the active run. Saved Daily records remain.</p>}
+        <div className="dialog-actions">
+          <button className="secondary-button" disabled={dailyBusy} onClick={() => setDailyOpen(false)}>Cancel</button>
+          <button className="primary-button" disabled={dailyBusy || (!resumingDaily && !previewChallenge)} onClick={async () => {
+            setDailyBusy(true);
+            try {
+              await startDaily(today);
+              gameAudio.stopAll();
+              setSelected(null);
+              setResultView('postseason');
+              setError('');
+              setDailyOpen(false);
+            } catch (caught) {
+              setError(caught instanceof Error ? caught.message : 'Daily could not start. Check browser storage.');
+              setDailyOpen(false);
+            } finally { setDailyBusy(false); }
+          }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : run?.daily && !run.season ? 'RESUME DAILY'
+            : dailyEntries.some((entry) => entry.attempt.date === today && entry.attempt.kind === 'local') ? 'START PRACTICE' : 'START DAILY'}</button>
+        </div>
+        <details className="daily-calendar">
+          <summary>28-DAY CALENDAR / UTC</summary>
+          <ol>{DAILY_CALENDAR.map((entry, index) => {
+            const date = dailyChallengeDate(index);
+            return <li key={entry.id} aria-current={date === today ? 'date' : undefined}>
+              <time dateTime={date}>{date}</time><strong>{entry.name}</strong><span>{entry.restriction}</span>
+            </li>;
+          })}</ol>
+        </details>
+        <section className="daily-records" aria-label="Local Daily records">
+          <h3>LOCAL DAILY RECORDS</h3>
+          {dailyEntries.length === 0 ? <p className="muted">No local attempts yet.</p> :
+            <ol>{[...dailyEntries].reverse().map((entry) => {
+              const result = entry.attempt.attemptId === run?.id && (playback?.revealed ?? 0) < 82 ? undefined : entry.result;
+              return <li key={entry.attempt.attemptId}>
+                <strong>{entry.attempt.date} / MID IQ</strong>
+                <span>{challengeForAttempt(entry.attempt)?.name ?? 'Original Daily'}</span>
+                <span>{result ? `${result.wins}-${82 - result.wins} / PD ${result.pointDifferential > 0 ? '+' : ''}${result.pointDifferential} / STREAK ${result.longestWinStreak}` : 'ATTEMPT COMMITTED'} </span>
+                <small>{result?.status === 'late' ? 'LATE / UNRANKED' : entry.attempt.kind === 'practice' ? 'PRACTICE / UNRANKED' : 'LOCAL ONLY / NOT VERIFIED'}</small>
+              </li>;
+            })}</ol>}
+        </section>
+      </Modal>}
       {confirmReset && (
         <Modal title="START A NEW RUN?" onClose={() => setConfirmReset(false)}>
-          <p className="reset-message">Your current draft, season and postseason results will be cleared. Run history is not available yet.</p>
+          <p className="reset-message">Your current draft, season and postseason results will be cleared. Daily commitments and local records remain; abandoning a Daily does not restore its first attempt.</p>
           <div className="dialog-actions">
             <button className="secondary-button" onClick={() => setConfirmReset(false)}>
               Keep this run
