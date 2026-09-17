@@ -109,6 +109,19 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
   }
   return <div className="share-result">
     <button className="secondary-button" onClick={onBack}><ArrowLeft size={16} /> HISTORY</button>
+    <div className="share-actions">
+      <button className="primary-button" disabled={busy} onClick={() => void share()}><Share2 size={20} /> SHARE</button>
+      <button className="secondary-button" disabled={!image || busy} onClick={() => {
+        try { downloadBlob(image!, `${filename}.png`); setFeedback('Image download started.'); }
+        catch { setFeedback('Image download failed. Result text remains available.'); }
+      }}><Download size={17} /> IMAGE</button>
+      <button className="secondary-button" disabled={busy} onClick={() => void copy()}><Copy size={17} /> COPY TEXT</button>
+      <button className="secondary-button" onClick={() => {
+        try { downloadBlob(new Blob([text], { type: 'text/plain;charset=utf-8' }), `${filename}.txt`); setFeedback('Text download started.'); }
+        catch { selectText('Download failed. Result text selected.'); }
+      }}><FileText size={17} /> TEXT FILE</button>
+    </div>
+    <p className="share-feedback" role="status">{feedback || (imageError ? 'Image export failed. Text sharing and download remain available.' : image ? 'Image ready.' : 'Rendering image...')}</p>
     <div className="share-card" ref={card}>
       <div className="share-brand"><strong>98<span>-</span>0.</strong><span>{result.mode.toUpperCase()} IQ</span><Trophy size={28} /></div>
       {result.daily && <p className="share-daily">DAILY / {result.daily.date} UTC / {result.daily.kind.toUpperCase()}</p>}
@@ -126,19 +139,6 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
       </li>)}</ul>
       <p className="share-disclaimer">LOCAL RESULT / NOT VERIFIED / NOT A RANKING</p>
     </div>
-    <div className="share-actions">
-      <button className="primary-button" disabled={!image || busy} onClick={() => {
-        try { downloadBlob(image!, `${filename}.png`); setFeedback('Image download started.'); }
-        catch { setFeedback('Image download failed. Result text remains available.'); }
-      }}><Download size={17} /> IMAGE</button>
-      <button className="secondary-button" disabled={busy} onClick={() => void copy()}><Copy size={17} /> COPY TEXT</button>
-      <button className="secondary-button" disabled={busy} onClick={() => void share()}><Share2 size={17} /> SHARE</button>
-      <button className="secondary-button" onClick={() => {
-        try { downloadBlob(new Blob([text], { type: 'text/plain;charset=utf-8' }), `${filename}.txt`); setFeedback('Text download started.'); }
-        catch { selectText('Download failed. Result text selected.'); }
-      }}><FileText size={17} /> TEXT FILE</button>
-    </div>
-    <p className="share-feedback" role="status">{feedback || (imageError ? 'Image export failed. Text sharing and download remain available.' : image ? 'Image ready.' : 'Rendering image...')}</p>
     <label className="collection-label" htmlFor="result-text">RESULT TEXT</label>
     <textarea id="result-text" ref={fallback} readOnly value={text} rows={8} />
   </div>;

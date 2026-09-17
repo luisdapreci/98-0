@@ -29,6 +29,12 @@
   min-width: 0;
 }
 .collection-toolbar button > span { color: var(--accent); }
+.collection-toolbar .result-share-button {
+  flex: 1 0 100%;
+  min-height: 56px;
+  font-size: 18px;
+  margin-top: 8px;
+}
 .collection-label { display: block; color: var(--muted); font-size: 10px; font-weight: 700; margin: 16px 0; }
 .almanac-entry { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 20px 0; border-bottom: 1px solid var(--line); }
 .almanac-number { color: var(--teal); font: 600 22px var(--display); }
@@ -76,6 +82,7 @@
 .share-disclaimer { padding-top: 20px; margin-top: 8px; border-top: 1px solid #343c34; color: #a1aa9e; font-size: 9px; line-height: 1.6; }
 .share-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .share-actions button { padding: 12px; font-size: 11px; }
+.share-actions .primary-button { flex: 1 0 100%; min-height: 52px; font-size: 16px; }
 .share-feedback { min-height: 36px; color: var(--teal); font-size: 12px; line-height: 1.5; }
 .share-result textarea { width: 100%; min-width: 0; resize: vertical; background: var(--bg); color: var(--text); border: 1px solid var(--line); padding: 12px; font: 12px/1.6 var(--body); }
 .share-result textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }

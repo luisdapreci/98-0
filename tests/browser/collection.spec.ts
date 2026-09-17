@@ -33,6 +33,7 @@ test('history updates pending postseason in place and exported records match the
   const { run, finished } = scenario('perfect');
   await loadRun(page, run);
   await expect(page.getByRole('button', { name: 'SHARE RESULT', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'SHARE RESULT', exact: true })).toHaveClass(/primary-button/);
   await page.getByRole('button', { name: 'SHARE RESULT', exact: true }).click();
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('POSTSEASON PENDING');
   await expect(page.getByRole('dialog').locator('.share-card')).not.toContainText('98-0. PERFECT.');
@@ -48,6 +49,9 @@ test('history updates pending postseason in place and exported records match the
   await page.getByRole('button', { name: 'SHARE RESULT', exact: true }).click();
   const expected = recordProgress(emptyProgress(), finished, true, true).runs[0]!;
   await expect(page.getByLabel('RESULT TEXT', { exact: true })).toHaveValue(resultText(expected));
+  await expect(page.getByLabel('RESULT TEXT', { exact: true })).toContainText('https://98-0.vercel.app');
+  await expect(page.getByRole('button', { name: 'SHARE', exact: true })).toBeInViewport();
+  await expect(page.getByRole('button', { name: 'SHARE', exact: true })).toHaveClass(/primary-button/);
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('98-0. PERFECT.');
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('16-0');
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
@@ -131,6 +135,7 @@ test('clipboard and native-share capability failures preserve selectable text an
   await page.getByRole('button', { name: 'TEXT FILE', exact: true }).click();
   const download = await downloading;
   const text = readFileSync((await download.path())!, 'utf8');
+  expect(text).toContain('https://98-0.vercel.app');
   expect(text).toBe(resultText(recordProgress(emptyProgress(), run, true, false).runs[0]!));
   await expect(page.locator('.share-feedback')).toContainText('Text download started');
 });
@@ -147,9 +152,11 @@ test('copy and native share report success, cancellation and failure without los
   await page.getByRole('button', { name: 'COPY TEXT', exact: true }).click();
   await expect(page.locator('.share-feedback')).toHaveText('Result text copied.');
   expect(await page.locator('body').getAttribute('data-copied')).toBe(await page.getByLabel('RESULT TEXT', { exact: true }).inputValue());
+  expect(await page.locator('body').getAttribute('data-copied')).toContain('https://98-0.vercel.app');
   await page.getByRole('button', { name: 'SHARE', exact: true }).click();
   await expect(page.locator('.share-feedback')).toHaveText('Result shared.');
   expect(await page.locator('body').getAttribute('data-shared')).toContain('image/png:98-0');
+  expect(await page.locator('body').getAttribute('data-shared')).toContain('https://98-0.vercel.app');
   for (const name of ['AbortError', 'NotAllowedError']) {
     await page.evaluate((name) => Object.defineProperty(navigator, 'share', { configurable: true, value: async () => { throw new DOMException('Rejected', name); } }), name);
     await page.getByRole('button', { name: 'SHARE', exact: true }).click();

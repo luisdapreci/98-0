@@ -726,7 +726,7 @@ export function DraftRoom() {
             onClick={() => setCollection('almanac')}><BookOpen size={17} /> COACH ALMANAC {progress.almanacUnlocked ? <span>12/12</span> : <LockKeyhole size={14} />}</button>
           <button className="secondary-button" disabled={!ready || hidden} title={hidden ? 'Scouting locked until Start Season' : 'Run history'}
             onClick={() => { void refreshProgress(); setShareId(null); setCollection('history'); }}><History size={17} /> RUN HISTORY <span>{progress.runs.length}</span></button>
-          {shareable && playback?.revealed === 82 && <button className="secondary-button" onClick={() => { setShareId(shareable.id); setCollection('history'); }}><Share2 size={17} /> SHARE RESULT</button>}
+          {shareable && playback?.revealed === 82 && <button className="primary-button result-share-button" aria-haspopup="dialog" onClick={() => { setShareId(shareable.id); setCollection('history'); }}><Share2 size={22} /> SHARE RESULT</button>}
         </div>
         {!ready || !draft || !synergy ? (
           <div className="loading-state" role="status">

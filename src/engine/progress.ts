@@ -85,5 +85,6 @@ export function resultText(result: RunSummary): string {
     `Coach: ${result.coach.name} / ${result.coach.systemName}`,
     ...result.lineup.map((player) => `${player.slot === 'SIXTH' ? '6TH' : player.slot}: ${player.name} / ${player.franchise} / ${player.decade}`),
     'LOCAL RESULT / NOT VERIFIED / NOT A RANKING',
+    'Play 98-0: https://98-0.vercel.app',
   ].join('\n');
 }

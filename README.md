@@ -6,6 +6,31 @@ Draft six players (five starters plus a 6th man) by spinning a Team × Era slot 
 
 Inspired by `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, and *Immaculate Grid*.
 
+## Public playtest
+
+Play at **<https://98-0.vercel.app>**. Anyone with the link can play without an account. This is a playtest build, not balance or full release acceptance.
+
+Saves, Daily attempts and history stay in the current browser on this domain; they do not sync between devices or transfer from localhost. Clearing site data removes them. Ask testers to use this stable URL and send their device/browser, a screenshot or shared result, and what happened versus what they expected. Physical-device sharing and Safari/Firefox remain unverified.
+
+Published to Vercel project `preciadox/98-0` on 2026-09-17. Vercel connected the GitHub repository for automatic deployments; pushes to its configured production branch can update the playtest. No gameplay secrets, database or environment variables are required. For a manual update from this folder after validation:
+
+```powershell
+npx --yes vercel@latest deploy --prod
+```
+
+Keep the production alias stable so browser saves remain available. Record the deployment URL when collecting observations; the earlier season-3 playtest protocol is not evidence for this build.
+
+Verification on 2026-09-17: 114 engine tests, typecheck, production build and 94 local desktop/320px Edge browser checks passed. The public URL returned HTTP 200 without authentication. Eight deployed desktop/mobile checks passed for six-pick drafting and playback, Daily completion/reload/practice, postseason history and PNG exports, and share fallbacks. The checked runtime dependencies had no known CVEs; this was not a comprehensive security audit or human playtest.
+
+To repeat those deployed checks (the optional URL disables the local test server):
+
+```powershell
+$env:PLAYWRIGHT_CHANNEL = 'msedge'
+$env:PLAYWRIGHT_BASE_URL = 'https://98-0.vercel.app'
+npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share'
+Remove-Item Env:PLAYWRIGHT_BASE_URL
+```
+
 ## Status
 
 As of 2026-09-17, the local game is playable through drafting, the seeded 82-game season, play-in, four playoff series and championship/perfect-run results. Playback includes rivalries, overtime, loss explanations, defense breakdowns and opt-in audio.

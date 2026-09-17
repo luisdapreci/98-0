@@ -1,0 +1,16 @@
+.git/
+.next/
+.vercel/
+.venv/
+node_modules/
+test-results/
+playwright-report/
+docs/
+scripts/
+tests/
+data/raw/
+data/reference/
+.env*
+*.tsbuildinfo
+*.code-workspace
+*.bat
