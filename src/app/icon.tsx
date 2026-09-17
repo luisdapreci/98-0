@@ -1,4 +1,9 @@
 import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { BrandMark } from '../components/brand-mark';
+
+const brandFont = readFile(join(process.cwd(), 'node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff'));
 
 export function generateImageMetadata() {
   return [180, 192, 512].map((width) => ({
@@ -13,13 +18,15 @@ export default async function Icon({ id }: { id: Promise<string> }) {
   return new ImageResponse(
     <div style={{
       display: 'flex', width: '100%', height: '100%',
-      background: '#131614', color: '#d5ef64',
+      background: '#131614',
       alignItems: 'center', justifyContent: 'center',
-      fontSize: width * 0.3, fontWeight: 700,
-      borderBottom: `${width * 0.06}px solid #d5ef64`,
+      fontSize: width * 0.42,
     }}>
-      98-0
+      <BrandMark />
     </div>,
-    { width, height: width },
+    {
+      width, height: width,
+      fonts: [{ name: 'Barlow Condensed', data: await brandFont, weight: 700, style: 'normal' }],
+    },
   );
 }

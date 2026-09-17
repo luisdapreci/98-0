@@ -197,13 +197,9 @@ button {
   gap: 20px;
 }
 .wordmark {
+  display: inline-flex;
+  flex-shrink: 0;
   font: 700 44px/1 var(--display);
-}
-.wordmark > span:first-child {
-  color: var(--accent);
-}
-.wordmark-period {
-  color: var(--accent);
 }
 .topbar nav {
   display: flex;

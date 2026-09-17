@@ -1,4 +1,5 @@
 'use client';
+import { BrandMark } from './brand-mark';
 
 import { useDeferredValue, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
@@ -684,7 +685,7 @@ export function DraftRoom() {
     <div className="app-shell">
       <header className="topbar">
         <a className="wordmark" href="/" aria-label="98-0 Draft Room">
-          98<span>-</span>0<span className="wordmark-period">.</span>
+          <BrandMark />
         </a>
         <nav aria-label="Run stages">
           <span className={run?.season ? '' : 'current-stage'}>
