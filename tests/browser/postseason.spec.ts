@@ -23,7 +23,7 @@ for (const kind of ['playInLoss', 'champion', 'perfect', 'seriesLoss'] as const)
     await expect(page.locator('.postseason-summary .ticker-score strong')).toHaveText(['--', '--']);
     await expect(page.locator('.series-preview')).toBeVisible();
     await expect(page.locator('.series-preview')).toContainText(finished.postseason!.gameLog[0]!.opponent.name);
-    await expect(page.getByRole('button', { name: 'Enable game sound', exact: true })).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('button', { name: 'Mute game sound', exact: true })).toHaveAttribute('aria-pressed', 'true');
     await expectFits(page);
     await page.screenshot({ path: testInfo.outputPath(`${kind}-preview.png`), fullPage: true, animations: 'disabled' });
     expect((await savedState(page)).run).toEqual(finished);
@@ -62,7 +62,6 @@ test('series entrances, clincher pauses and Finals ceremony preserve saved outco
   const { finished } = scenario('perfect');
   await loadRun(page, finished);
   await page.clock.install();
-  await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Mute game sound', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
   await page.getByRole('button', { name: 'Start Series', exact: true }).click();

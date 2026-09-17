@@ -7,7 +7,7 @@ import type { SoundCue } from './sound-effects';
 
 const preferenceKey = '98-0-audio-v1';
 export const useAudioSettings = create<{ enabled: boolean; volume: number; error: string }>(() =>
-  ({ enabled: false, volume: 0.45, error: '' }));
+  ({ enabled: true, volume: 0.45, error: '' }));
 let context: AudioContext | null = null;
 let master: GainNode | null = null;
 let generation = 0;
@@ -97,7 +97,7 @@ export const gameAudio = {
       const saved = JSON.parse(localStorage.getItem(preferenceKey) ?? 'null');
       if (saved && typeof saved.enabled === 'boolean' && Number.isFinite(saved.volume)
         && saved.volume >= 0 && saved.volume <= 1) useAudioSettings.setState({ enabled: saved.enabled, volume: saved.volume });
-    } catch { useAudioSettings.setState({ enabled: false, volume: 0.45 }); }
+    } catch { useAudioSettings.setState({ enabled: true, volume: 0.45 }); }
     const gesture = () => { void unlock(); };
     const hide = () => {
       if (document.hidden) {

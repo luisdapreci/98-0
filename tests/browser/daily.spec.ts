@@ -8,6 +8,40 @@ const ledgerKey = '98-0-daily-v1';
 const now = new Date('2026-09-17T23:59:00Z');
 const firstCycle = rotationSchedule(rotationDate(0));
 
+test('Daily is visible and off by default until explicitly started', async ({ page }, testInfo) => {
+  await page.clock.setFixedTime(now);
+  await page.goto('/');
+  const dailyButton = page.getByRole('button', { name: 'Daily challenge', exact: true });
+  await expect(dailyButton).toBeEnabled();
+  await expect(dailyButton).toBeInViewport();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
+  const original = (await savedState(page)).run;
+  expect(original.daily).toBeUndefined();
+  await expect(page.locator('.daily-banner')).toHaveCount(0);
+  await expectFits(page);
+  await page.screenshot({ path: testInfo.outputPath('daily-opt-in.png'), fullPage: true, animations: 'disabled' });
+  await dailyButton.click();
+  expect((await savedState(page)).run).toEqual(original);
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await page.reload();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
+  expect((await savedState(page)).run).toEqual(original);
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key) ?? '[]'), ledgerKey)).toEqual([]);
+  await dailyButton.click();
+  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE ON');
+  const optedIn = (await savedState(page)).run;
+  expect(optedIn.daily.date).toBe('2026-09-17');
+  await page.reload();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE ON');
+  expect((await savedState(page)).run).toEqual(optedIn);
+  await page.getByRole('button', { name: 'New run', exact: true }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
+  expect((await savedState(page)).run.daily).toBeUndefined();
+});
+
 test('Daily commits before offers, completes six picks, persists results and retries as practice', async ({ page }, testInfo) => {
   const date = firstCycle.find((entry) => entry.challenge.id === 'triangle-test')!.date;
   await page.clock.setFixedTime(new Date(`${date}T12:00:00Z`));

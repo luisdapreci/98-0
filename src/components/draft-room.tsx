@@ -686,8 +686,6 @@ export function DraftRoom() {
         </nav>
         <div className="topbar-right">
           <span className="mode-label">{modeLabel}</span>
-          <button className="icon-button" title="Daily challenge" aria-label="Daily challenge" disabled={!ready || !!busy || dailyBusy}
-            onClick={() => { setToday(utcDate(Date.now())); refreshDaily(); setDailyOpen(true); }}><CalendarDays size={18} /></button>
           <SoundControls />
           <button
             className="icon-button"
@@ -718,6 +716,11 @@ export function DraftRoom() {
           </div>
         </div>
         <div className="collection-toolbar">
+          <button className="secondary-button" title="Daily challenge" aria-label="Daily challenge"
+            aria-haspopup="dialog" aria-describedby="daily-challenge-status" disabled={!ready || !!busy || dailyBusy}
+            onClick={() => { setToday(utcDate(Date.now())); refreshDaily(); setDailyOpen(true); }}>
+            <CalendarDays size={17} /> DAILY CHALLENGE <span id="daily-challenge-status">{run?.daily ? 'ON' : 'OFF'}</span>
+          </button>
           <button className="secondary-button" disabled={!ready || hidden || !progress.almanacUnlocked}
             title={hidden ? 'Scouting locked until Start Season' : progress.almanacUnlocked ? 'Coach Almanac' : 'Unlocks after one completed 82-game season'}
             onClick={() => setCollection('almanac')}><BookOpen size={17} /> COACH ALMANAC {progress.almanacUnlocked ? <span>12/12</span> : <LockKeyhole size={14} />}</button>

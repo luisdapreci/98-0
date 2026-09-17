@@ -78,6 +78,8 @@ test('draft sounds share one context, persist settings, mute immediately and fit
   const original = (await savedState(page)).run;
   expect(await starts(page)).toBe(0);
   expect(await page.evaluate(() => window.audioProbe.contexts.length)).toBe(0);
+  await expect(page.getByRole('button', { name: 'Mute game sound', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect.poll(() => starts(page)).toBeGreaterThan(0);
   expect((await savedState(page)).run).toEqual(original);
@@ -142,6 +144,7 @@ test('draft sounds share one context, persist settings, mute immediately and fit
 test('season play, pause, reveal and skip sound without changing saved outcomes', async ({ page }) => {
   await instrumentAudio(page);
   await loadRun(page, readyFixture('browser-audio-season'), 0);
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect.poll(() => starts(page)).toBeGreaterThan(0);
   let before = await starts(page);
@@ -177,6 +180,7 @@ test('postseason sounds reveal overtime and the ending only on progression, with
   }, { saveKey, index });
   await page.reload();
   expect(await starts(page)).toBe(0);
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect.poll(() => starts(page)).toBeGreaterThan(0);
   let before = await starts(page);
@@ -212,6 +216,7 @@ test('unsupported audio fails visibly without blocking draft actions', async ({ 
   await page.addInitScript(() => Object.defineProperty(window, 'AudioContext', { value: undefined }));
   await loadRun(page, createRun('browser-audio-unsupported', data.coaches), 0);
   const original = (await savedState(page)).run;
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect(page.getByRole('status').filter({ hasText: 'Audio is unavailable' })).toBeVisible();
   expect((await savedState(page)).run).toEqual(original);
