@@ -61,11 +61,11 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
         if (cancelled || !card.current) return;
         const exportCard = card.current.cloneNode(true) as HTMLDivElement;
         exportCard.classList.add('share-card-export');
-        Object.assign(exportCard.style, { position: 'fixed', left: '-10000px', top: '0', width: '720px', maxWidth: 'none', padding: '32px', pointerEvents: 'none' });
+        Object.assign(exportCard.style, { position: 'fixed', left: '-10000px', top: '0', width: '900px', height: '900px', maxWidth: 'none', padding: '32px', pointerEvents: 'none' });
         exportCard.setAttribute('aria-hidden', 'true');
         document.body.append(exportCard);
         try {
-          const blob = await toBlob(exportCard, { pixelRatio: 2, width: 720, backgroundColor: '#131614',
+          const blob = await toBlob(exportCard, { pixelRatio: 2, width: 900, height: 900, backgroundColor: '#131614',
             style: { position: 'static', left: 'auto', top: 'auto' } });
           if (!blob) throw new Error('Empty image');
           if (!cancelled) setImage(blob);

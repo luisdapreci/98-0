@@ -4,6 +4,37 @@ import { controlledSeason, expect, expectFits, loadRun, readyFixture, savedState
 
 const progressKey = '98-0-progress-v1';
 
+test('collection toolbar fits one row with space below the playoffs title', async ({ page }, testInfo) => {
+  await loadRun(page, scenario('perfect').finished);
+  await expect(page.locator('h1')).toHaveText('THE PLAYOFFS.');
+  const widths = testInfo.project.name === 'mobile' ? [320, 350, 390] : [1440];
+  for (const width of widths) {
+    await page.setViewportSize({ width, height: 900 });
+    const toolbar = page.locator('.collection-toolbar');
+    const buttons = toolbar.locator('.secondary-button');
+    await expect(buttons).toHaveCount(3);
+    const bounds = await buttons.evaluateAll((elements) => elements.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return { top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right, overflow: element.scrollWidth > element.clientWidth };
+    }));
+    expect(new Set(bounds.map((rect) => rect.top)).size).toBe(1);
+    expect(bounds.every((rect) => rect.left >= 0 && rect.right <= width && !rect.overflow)).toBe(true);
+    const title = await page.locator('h1').boundingBox();
+    expect(bounds[0]!.top - (title!.y + title!.height)).toBeGreaterThanOrEqual(16);
+    const share = await toolbar.getByRole('button', { name: 'SHARE RESULT' }).boundingBox();
+    expect(share!.y).toBeGreaterThan(bounds[0]!.bottom);
+    await toolbar.screenshot({ path: testInfo.outputPath(`toolbar-${width}.png`) });
+  }
+  await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: /COACH ALMANAC/ }).click();
+  await expect(page.locator('.almanac-entry')).toHaveCount(12);
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: /RUN HISTORY/ }).click();
+  await expect(page.locator('.history-list li')).toHaveCount(1);
+});
+
 test('Almanac unlocks for a losing season before playback and survives new drafts', async ({ page }, testInfo) => {
   await loadRun(page, readyFixture('collection-unlock'), 0);
   await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeDisabled();
@@ -56,6 +87,7 @@ test('history updates pending postseason in place and exported records match the
         label: getComputedStyle(exported.querySelector('.share-records span')!).fontSize,
         disclaimer: getComputedStyle(exported.querySelector('.share-disclaimer')!).fontSize,
         overflow: [exported, ...exported.querySelectorAll('*')].filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className),
+        fits: exported.querySelector('.share-disclaimer')!.getBoundingClientRect().bottom <= exported.getBoundingClientRect().bottom - 32,
       });
       observer.disconnect();
     });
@@ -71,7 +103,7 @@ test('history updates pending postseason in place and exported records match the
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('16-0');
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
   expect(await page.evaluate(() => JSON.parse(document.body.dataset.exportTypography!))).toEqual({
-    name: '30px', metadata: '24px', label: '24px', disclaimer: '22px', overflow: [],
+    name: '30px', metadata: '24px', label: '24px', disclaimer: '22px', overflow: [], fits: true,
   });
   await expect(page.getByRole('dialog').locator('.share-lineup strong').first()).toHaveCSS('font-size', '18px');
   await expectFits(page);
@@ -102,8 +134,8 @@ test('history updates pending postseason in place and exported records match the
     }
     return { width: image.width, height: image.height, bright, rightHalfBright };
   }, png.toString('base64'));
-  expect(pixels.width).toBe(1440);
-  expect(pixels.height).toBeGreaterThan(800);
+  expect(pixels.width).toBe(1800);
+  expect(pixels.height).toBe(pixels.width);
   expect(pixels.bright).toBeGreaterThan(10000);
   expect(pixels.rightHalfBright).toBeGreaterThan(1000);
   await page.getByRole('dialog').screenshot({ path: testInfo.outputPath('share-dialog.png') });
@@ -126,14 +158,33 @@ test('history caps at 50 while per-mode personal bests remain accessible with lo
   await expect(page.locator('.collection-empty')).toBeVisible();
   await page.getByRole('button', { name: 'PERSONAL BESTS', exact: true }).click();
   await expect(page.locator('.history-list li')).toHaveCount(3);
+  await page.evaluate(() => {
+    const observer = new MutationObserver(() => {
+      const exported = document.querySelector('.share-card-export');
+      if (!exported) return;
+      const bounds = exported.getBoundingClientRect();
+      document.body.dataset.exportOverflow = JSON.stringify([...exported.querySelectorAll('*')].flatMap((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.bottom <= bounds.bottom - 31 && rect.right <= bounds.right - 31 && rect.left >= bounds.left + 31 ? []
+          : [{ element: element.tagName, className: element.getAttribute('class'), bottom: rect.bottom - bounds.top, right: rect.right - bounds.left, left: rect.left - bounds.left }];
+      }));
+      observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true });
+  });
   await page.getByRole('button', { name: /View result:/ }).first().click();
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('DAILY / 2026-09-17 UTC / PRACTICE');
   await expect(page.getByRole('dialog').locator('.share-lineup')).toContainText(best.lineup[0]!.name);
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
+  expect(await page.evaluate(() => JSON.parse(document.body.dataset.exportOverflow!))).toEqual([]);
   expect(await page.locator('.share-card, .share-card *').evaluateAll((elements) => elements.filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className))).toEqual([]);
   const downloading = page.waitForEvent('download');
   await page.getByRole('button', { name: 'IMAGE', exact: true }).click();
-  await (await downloading).saveAs(testInfo.outputPath('long-name-share.png'));
+  const download = await downloading;
+  await download.saveAs(testInfo.outputPath('long-name-share.png'));
+  const png = readFileSync((await download.path())!);
+  expect(png.readUInt32BE(16)).toBe(1800);
+  expect(png.readUInt32BE(20)).toBe(1800);
   await expectFits(page);
 });
 
