@@ -6,16 +6,16 @@ import { renderSound } from './sound-effects';
 import type { SoundCue } from './sound-effects';
 
 const preferenceKey = '98-0-audio-v1';
-export const useAudioSettings = create<{ enabled: boolean; volume: number; error: string }>(() =>
-  ({ enabled: true, volume: 0.45, error: '' }));
+export const useAudioSettings = create<{ enabled: boolean; error: string }>(() =>
+  ({ enabled: true, error: '' }));
 let context: AudioContext | null = null;
 let master: GainNode | null = null;
 let generation = 0;
 const active = new Map<string, { cancel: () => void }>();
 
 function savePreferences() {
-  const { enabled, volume } = useAudioSettings.getState();
-  try { localStorage.setItem(preferenceKey, JSON.stringify({ enabled, volume })); }
+  const { enabled } = useAudioSettings.getState();
+  try { localStorage.setItem(preferenceKey, JSON.stringify({ enabled })); }
   catch { useAudioSettings.setState({ error: 'Sound works, but this browser could not save your audio preferences.' }); }
 }
 
@@ -37,7 +37,7 @@ async function unlock(): Promise<boolean> {
       limiter.ratio.value = 6;
       master.connect(limiter).connect(context.destination);
     }
-    master!.gain.value = useAudioSettings.getState().volume;
+    master!.gain.value = 1;
     if (context.state !== 'running') await context.resume();
     return context.state === 'running';
   } catch {
@@ -53,12 +53,12 @@ function channelFor(cue: SoundCue): string {
 
 function play(cue: SoundCue) {
   const settings = useAudioSettings.getState();
-  if (!settings.enabled || settings.volume === 0 || document.hidden) return;
+  if (!settings.enabled || document.hidden) return;
   const requestGeneration = generation;
   const requested = performance.now();
   const emit = () => {
     if (!context || !master || context.state !== 'running' || document.hidden || requestGeneration !== generation
-      || !useAudioSettings.getState().enabled || useAudioSettings.getState().volume === 0 || performance.now() - requested > 500) return;
+      || !useAudioSettings.getState().enabled || performance.now() - requested > 500) return;
     const channel = channelFor(cue);
     const previous = active.get(channel);
     previous?.cancel();
@@ -84,20 +84,11 @@ export const gameAudio = {
     if (enabled) play('win');
     else if (context?.state === 'running') void context.suspend().catch(() => {});
   },
-  setVolume(value: number) {
-    if (!Number.isFinite(value)) return;
-    const volume = Math.min(1, Math.max(0, value));
-    useAudioSettings.setState({ volume });
-    if (master && context) master.gain.setTargetAtTime(volume, context.currentTime, 0.015);
-    if (volume === 0) stopAll();
-    savePreferences();
-  },
   initialize() {
     try {
       const saved = JSON.parse(localStorage.getItem(preferenceKey) ?? 'null');
-      if (saved && typeof saved.enabled === 'boolean' && Number.isFinite(saved.volume)
-        && saved.volume >= 0 && saved.volume <= 1) useAudioSettings.setState({ enabled: saved.enabled, volume: saved.volume });
-    } catch { useAudioSettings.setState({ enabled: true, volume: 0.45 }); }
+      if (saved && typeof saved.enabled === 'boolean') useAudioSettings.setState({ enabled: saved.enabled });
+    } catch { useAudioSettings.setState({ enabled: true }); }
     const gesture = () => { void unlock(); };
     const hide = () => {
       if (document.hidden) {

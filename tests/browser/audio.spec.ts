@@ -8,17 +8,22 @@ import { data, expect, expectFits, loadRun, readyFixture, savedState, saveKey, s
 
 declare global {
   interface Window {
-    audioProbe: { starts: number; stops: number; contexts: AudioContext[] };
+    audioProbe: { starts: number; stops: number; contexts: AudioContext[]; gains: GainNode[] };
     soundTest: typeof import('../../src/lib/sound-effects.ts');
   }
 }
 
 async function instrumentAudio(page: Page) {
   await page.addInitScript(() => {
-    window.audioProbe = { starts: 0, stops: 0, contexts: [] };
+    window.audioProbe = { starts: 0, stops: 0, contexts: [], gains: [] };
     const OriginalContext = window.AudioContext;
     window.AudioContext = class extends OriginalContext {
       constructor() { super(); window.audioProbe.contexts.push(this); }
+      createGain() {
+        const gain = super.createGain();
+        window.audioProbe.gains.push(gain);
+        return gain;
+      }
       createOscillator() {
         const source = super.createOscillator();
         const start = source.start.bind(source);
@@ -83,19 +88,12 @@ test('draft sounds share one context, persist settings, mute immediately and fit
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect.poll(() => starts(page)).toBeGreaterThan(0);
   expect((await savedState(page)).run).toEqual(original);
-  await page.locator('.sound-settings summary').click();
-  const slider = page.getByRole('slider', { name: 'Sound volume' });
-  await slider.focus();
-  await slider.press('Home');
-  for (let step = 0; step < 5; step++) await slider.press('ArrowRight');
-  await expect(slider).toHaveValue('25');
+  expect(await page.evaluate(() => window.audioProbe.gains[0].gain.value)).toBe(1);
+  await expect(page.getByRole('group', { name: 'Game audio' }).getByRole('button')).toHaveCount(1);
+  await expect(page.getByRole('slider', { name: 'Sound volume' })).toHaveCount(0);
+  await expect(page.getByLabel('Sound settings', { exact: true })).toHaveCount(0);
   await expectFits(page);
-  expect(await page.locator('.sound-popover').evaluate((element) => {
-    const bounds = element.getBoundingClientRect();
-    return bounds.left >= 0 && bounds.right <= window.innerWidth && element.scrollWidth <= element.clientWidth;
-  })).toBe(true);
-  await page.screenshot({ path: testInfo.outputPath('sound-settings.png'), fullPage: true, animations: 'disabled' });
-  await page.locator('.sound-settings summary').click();
+  await page.screenshot({ path: testInfo.outputPath('sound-controls.png'), fullPage: true, animations: 'disabled' });
   let before = await starts(page);
   await page.getByRole('button', { name: /^Select / }).first().click();
   await expect.poll(() => starts(page)).toBeGreaterThan(before);
@@ -120,25 +118,38 @@ test('draft sounds share one context, persist settings, mute immediately and fit
   expect(await page.evaluate(() => window.audioProbe.contexts.length)).toBe(1);
   await page.reload();
   await expect(page.getByRole('button', { name: 'Enable game sound', exact: true })).toHaveAttribute('aria-pressed', 'false');
-  await page.locator('.sound-settings summary').click();
-  await expect(slider).toHaveValue('25');
   await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   await expect.poll(() => starts(page)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.audioProbe.gains[0].gain.value)).toBe(1);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem('98-0-audio-v1')!))).toEqual({ enabled: true });
   await page.reload();
   await expect(page.getByRole('button', { name: 'Mute game sound', exact: true })).toHaveAttribute('aria-pressed', 'true');
   expect(await starts(page)).toBe(0);
   expect(await page.evaluate(() => window.audioProbe.contexts.length)).toBe(0);
-  await page.locator('.sound-settings summary').click();
-  await slider.focus();
-  await slider.press('Home');
-  await expect(page.getByRole('button', { name: 'Test sound', exact: true })).toBeDisabled();
-  await page.locator('.sound-settings summary').click();
   await page.getByRole('button', { name: 'Reroll team', exact: true }).click();
   await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'false');
-  expect(await starts(page)).toBe(0);
-  await page.reload();
-  await page.locator('.sound-settings summary').click();
-  await expect(slider).toHaveValue('0');
+  await expect.poll(() => starts(page)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.audioProbe.gains[0].gain.value)).toBe(1);
+});
+
+test('legacy volume is ignored at full gain while mute and malformed preference recovery work', async ({ page }) => {
+  await instrumentAudio(page);
+  await loadRun(page, createRun('browser-audio-legacy', data.coaches), 0);
+  const original = (await savedState(page)).run;
+  for (const saved of ['{"enabled":true,"volume":0}', '{"enabled":true,"volume":0.25}',
+    '{"enabled":false,"volume":0.25}', '{"enabled":true}', '{invalid']) {
+    await page.evaluate((value) => localStorage.setItem('98-0-audio-v1', value), saved);
+    await page.reload();
+    const muted = saved.includes('false');
+    await expect(page.getByRole('button', { name: muted ? 'Enable game sound' : 'Mute game sound', exact: true }))
+      .toHaveAttribute('aria-pressed', String(!muted));
+    expect(await starts(page)).toBe(0);
+    if (!muted) await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
+    await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
+    await expect.poll(() => starts(page)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => window.audioProbe.gains[0].gain.value)).toBe(1);
+    expect((await savedState(page)).run).toEqual(original);
+  }
 });
 
 test('season play, pause, reveal and skip sound without changing saved outcomes', async ({ page }) => {
@@ -195,9 +206,8 @@ test('postseason sounds reveal overtime and the ending only on progression, with
   await expect.poll(() => page.evaluate(() => window.audioProbe.contexts[0]?.state)).toBe('suspended');
   expect(await page.evaluate(() => window.audioProbe.stops)).toBeGreaterThan(stopped);
   before = await starts(page);
-  await page.locator('.sound-settings summary').click();
-  await page.getByRole('button', { name: 'Test sound', exact: true }).click();
-  await page.locator('.sound-settings summary').click();
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
+  await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
   expect(await starts(page)).toBe(before);
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: false });

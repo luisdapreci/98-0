@@ -22,6 +22,10 @@ Keep the production alias stable so browser saves remain available. Record the d
 
 Verification on 2026-09-17: 114 engine tests, typecheck, production build and 94 local desktop/320px Edge browser checks passed. The public URL returned HTTP 200 without authentication. Eight deployed desktop/mobile checks passed for six-pick drafting and playback, Daily completion/reload/practice, postseason history and PNG exports, and share fallbacks. The checked runtime dependencies had no known CVEs; this was not a comprehensive security audit or human playtest.
 
+Audio simplification deployed on 2026-09-17: removed volume settings and the test-sound popover; enabled audio now uses fixed 100% master gain with the existing compressor. Mute still persists, legacy volume values are ignored, and run saves are unchanged. Immutable deployment: <https://98-0-ayk9d5flv-preciadox.vercel.app>; public alias remains <https://98-0.vercel.app>.
+
+Validation: `npm test` passed 114 tests; `npm run typecheck`, `npm run build`, and `git diff --check` passed. `PLAYWRIGHT_CHANNEL=msedge npm run test:browser -- tests/browser/audio.spec.ts` passed 12 local desktop/320px checks, with screenshots reviewed. Verified project settings with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published using `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Public access returned HTTP 200 without credentials. With `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, the audio, postseason, Daily and collection browser files filtered by `sound|audio|legacy volume|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share` passed all 22 checks (exit code 0). An earlier live run was interrupted; this complete run supersedes it. The remote URL override was cleared afterward. Full browser-suite rerun, subjective listening, physical devices, Safari/Firefox and actual messaging-app delivery remain unverified for this narrow update.
+
 To repeat those deployed checks (the optional URL disables the local test server):
 
 ```powershell
@@ -33,7 +37,7 @@ Remove-Item Env:PLAYWRIGHT_BASE_URL
 
 ## Status
 
-As of 2026-09-17, the local game is playable through drafting, the seeded 82-game season, play-in, four playoff series and championship/perfect-run results. Playback includes rivalries, overtime, loss explanations, defense breakdowns and opt-in audio.
+As of 2026-09-17, the local game is playable through drafting, the seeded 82-game season, play-in, four playoff series and championship/perfect-run results. Playback includes rivalries, overtime, loss explanations, defense breakdowns and audio enabled by default at 100%, with a persistent mute toggle.
 
 - **IQ modes:** choose before signing a coach. No IQ disables chemistry and coach effects while retaining individual offense, defense and bench quality. Mid IQ is the default. HI IQ uses the same simulation as Mid IQ but hides scouting information until Start Season.
 - **Postseason:** new runs qualify at 45 wins after all 82 games are revealed. Start Postseason explicitly; a ring requires 16 main-bracket wins. A perfect 98-0 requires 82-0 plus 16-0, without a play-in.

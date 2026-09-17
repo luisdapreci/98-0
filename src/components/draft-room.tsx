@@ -554,7 +554,7 @@ function PlayerPool({
 
 export function DraftRoom() {
   const { run, notice, clearNotice, newRun, chooseMode, chooseCoach, spin, reroll, pick, start,
-    dailyEntries, refreshDaily, startDaily, playback, refreshProgress } = useDraftStore();
+    dailyEntries, refreshDaily, startDaily, playback, postseasonPlayback, refreshProgress } = useDraftStore();
   const { progress } = useProgressStore();
   const draft = run?.draft;
   const [ready, setReady] = useState(false);
@@ -666,6 +666,18 @@ export function DraftRoom() {
   const previewChallenge = resumingDaily ? challenge : today ? rotatingChallengeForDate(today) : null;
   const cycleSchedule = today ? rotationSchedule(today) : [];
   const shareable = progress.runs.find((entry) => entry.id === run?.id);
+  const postseasonComplete = !!run?.postseason && postseasonPlayback?.revealed === run.postseason.gameLog.length;
+  const scrolledResult = useRef<string | null>(null);
+  useEffect(() => {
+    if (!ready || !showPostseason || !postseasonComplete || !shareable?.id || scrolledResult.current === shareable.id) return;
+    const shareButton = document.querySelector('.result-share-button');
+    if (!shareButton) return;
+    scrolledResult.current = shareable.id;
+    shareButton.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      block: 'start',
+    });
+  }, [ready, showPostseason, postseasonComplete, shareable?.id]);
 
   return (
     <div className="app-shell">
@@ -703,7 +715,7 @@ export function DraftRoom() {
           <div>
             <p className="eyebrow">BASKETBALL. ACROSS GENERATIONS.</p>
             <h1>
-              THE DRAFT ROOM<span className="title-dot">.</span>
+              {showPostseason ? 'THE PLAYOFFS' : run?.season ? 'THE REGULAR SEASON' : 'THE DRAFT ROOM'}<span className="title-dot">.</span>
             </h1>
           </div>
           <div className="run-stamp">

@@ -30,18 +30,26 @@ test('screen transitions reset scrolling to the top', async ({ page }) => {
   };
 
   await loadRun(page, createRun('browser-scroll-coach', data.coaches, null, RIVALRY_VERSION, 'mid'), 0);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE DRAFT ROOM.');
   await expectTransitionAtTop(/^Select /);
   await expect(page.getByRole('heading', { name: 'ON THE CLOCK' })).toBeVisible();
 
   await loadRun(page, readyFixture('browser-scroll-ready'), 0);
   await expectTransitionAtTop('START SEASON');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE REGULAR SEASON.');
   await expect(page.getByRole('button', { name: 'Skip to final result', exact: true })).toBeVisible();
 
   await loadRun(page, controlledSeason(65, 'browser-scroll-postseason'));
   await expectTransitionAtTop('START POSTSEASON');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE PLAYOFFS.');
   await expect(page.getByRole('group', { name: 'Run results' })).toBeVisible();
   await expectTransitionAtTop('REGULAR SEASON');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE REGULAR SEASON.');
   await expectTransitionAtTop('PLAYOFFS');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE PLAYOFFS.');
+  await page.reload();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('THE PLAYOFFS.');
+  await expectFits(page);
 });
 
 test('three IQ modes default to Mid IQ, persist selection, and lock at coach signing', async ({ page }, testInfo) => {

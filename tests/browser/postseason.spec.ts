@@ -34,6 +34,8 @@ for (const kind of ['playInLoss', 'champion', 'perfect', 'seriesLoss'] as const)
     if ((await savedState(page)).postseasonPlayback.revealed < finished.postseason!.gameLog.length) await skip.click();
     else await expect(skip).toBeDisabled();
     await expect(page.getByRole('heading', { name: kind === 'perfect' ? '98-0. PERFECT.' : kind === 'champion' ? 'CHAMPIONS.' : 'RUN COMPLETE.' })).toBeVisible();
+    await expect(page.locator('#postseason-title')).toBeInViewport({ ratio: 1 });
+    await expect(page.getByRole('button', { name: 'SHARE RESULT', exact: true })).toBeInViewport({ ratio: 1 });
     if (kind === 'champion') await expect(page.getByText('CHAMPIONSHIP RING EARNED', { exact: true })).toBeVisible();
     if (kind === 'playInLoss') await expect(page.getByText('ELIMINATED / PLAY-IN', { exact: true })).toBeVisible();
     if (kind === 'seriesLoss') {
@@ -96,6 +98,9 @@ test('series entrances, clincher pauses and Finals ceremony preserve saved outco
   await page.screenshot({ path: testInfo.outputPath('finals-preview.png'), fullPage: true, animations: 'disabled' });
   await page.getByRole('button', { name: 'Finish Series', exact: true }).click();
   await expect(page.getByRole('heading', { name: '98-0. PERFECT.' })).toBeVisible();
+  await page.clock.runFor(1500);
+  await expect(page.locator('#postseason-title')).toBeInViewport({ ratio: 1 });
+  await expect(page.getByRole('button', { name: 'SHARE RESULT', exact: true })).toBeInViewport({ ratio: 1 });
   await expect(page.locator('.championship-ring')).toContainText('98-0');
   await expect(page.locator('.postseason-retrospective')).toContainText('A clean sweep.');
   expect((await savedState(page)).run).toEqual(finished);

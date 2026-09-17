@@ -74,17 +74,19 @@ export function recordProgress(progress: Progress, run: RunSave, seasonRevealed:
 
 export function resultText(result: RunSummary): string {
   const postseason = result.postseason;
-  const status = postseason?.isPerfectRun ? '98-0 PERFECT RUN' : postseason?.champion ? 'CHAMPION' : result.postseasonStatus === 'missed'
-    ? 'MISSED POSTSEASON' : result.postseasonStatus === 'pending' ? 'POSTSEASON PENDING' : `ELIMINATED / ${postseason?.eliminatedRound}`;
+  const roundNames = { playIn: 'Play-in', round1: 'Round 1', round2: 'Round 2', conferenceFinals: 'Conference finals', finals: 'Finals' };
+  const status = postseason?.isPerfectRun ? 'Perfect run: 98 wins, 0 losses' : postseason?.champion ? 'Champion' : result.postseasonStatus === 'missed'
+    ? 'Missed postseason' : result.postseasonStatus === 'pending' ? 'Postseason pending'
+      : `Eliminated: ${postseason?.eliminatedRound ? roundNames[postseason.eliminatedRound] : 'Postseason'}`;
   return [
-    `98-0 / ${result.mode.toUpperCase()} IQ`,
-    ...(result.daily ? [`DAILY ${result.daily.date} UTC / ${result.daily.kind.toUpperCase()}`] : []),
+    `98-0 Basketball | ${result.mode.toUpperCase()} IQ`,
+    ...(result.daily ? [`Daily: ${result.daily.date} UTC (${result.daily.kind === 'practice' ? 'practice' : 'local'})`] : []),
+    '',
     status,
-    `Regular season: ${result.season.wins}-${result.season.losses} / DIFF ${result.season.differential > 0 ? '+' : ''}${result.season.differential} / BEST STREAK ${result.season.streak}`,
+    `Regular season: ${result.season.wins}-${result.season.losses}`,
     ...(postseason ? [`Play-in: ${postseason.playIn.wins}-${postseason.playIn.losses}`, `Playoffs: ${postseason.playoffs.wins}-${postseason.playoffs.losses}`] : []),
-    `Coach: ${result.coach.name} / ${result.coach.systemName}`,
-    ...result.lineup.map((player) => `${player.slot === 'SIXTH' ? '6TH' : player.slot}: ${player.name} / ${player.franchise} / ${player.decade}`),
-    'LOCAL RESULT / NOT VERIFIED / NOT A RANKING',
-    'Play 98-0: https://98-0.vercel.app',
+    '',
+    'Local, unverified result.',
+    'Play: https://98-0.vercel.app',
   ].join('\n');
 }

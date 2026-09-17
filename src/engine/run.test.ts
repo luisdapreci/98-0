@@ -12,6 +12,7 @@ import type { TeamLineup } from './types.ts';
 import { lineupForUsagePolicy, usageBaseCap, usageCapForLineup } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
 import { emptyProgress, recordProgress, resultText } from './progress.ts';
+import type { RunSummary } from './progress.ts';
 
 const data: RunData = {
   players: JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8')),
@@ -55,8 +56,39 @@ test('progress unlocks on 82 games, archives revealed seasons once and keeps pos
     assert.deepEqual(revealed.runs[0]!.postseason?.playoffs, finished.postseason!.playoffs);
     assert.deepEqual(revealed.runs[0]!.postseason?.playIn, finished.postseason!.playIn);
     assert.equal(revealed.runs[0]!.completedAt, 2);
-    assert.match(resultText(revealed.runs[0]!), /LOCAL RESULT \/ NOT VERIFIED/);
+    assert.match(resultText(revealed.runs[0]!), /Local, unverified result\./);
     assert.equal(recordProgress(revealed, run, true, false), revealed);
+  }
+});
+
+test('share captions separate the game title from records without repeating the image roster', () => {
+  const result: RunSummary = {
+    id: 'share-caption', completedAt: 1, mode: 'hi', engineVersion: 'season-7',
+    coach: { name: 'Pat Riley', systemName: 'Showtime' },
+    lineup: [{ slot: 'PG', id: 'brunson', name: 'Jalen Brunson', franchise: 'NYK', decade: '2020s' }],
+    daily: null, season: { wins: 16, losses: 66, differential: -1122, streak: 2 },
+    postseason: null, postseasonStatus: 'missed',
+  };
+  assert.equal(resultText(result), [
+    '98-0 Basketball | HI IQ', '',
+    'Missed postseason', 'Regular season: 16-66', '',
+    'Local, unverified result.', 'Play: https://98-0.vercel.app',
+  ].join('\n'));
+  assert.match(resultText({ ...result, postseasonStatus: 'pending' }), /Postseason pending/);
+  for (const kind of ['local', 'practice'] as const) {
+    assert.ok(resultText({ ...result, daily: { date: '2026-09-17', kind } })
+      .includes(`Daily: 2026-09-17 UTC (${kind})\n\n`));
+  }
+  const postseason: NonNullable<RunSummary['postseason']> = {
+    playIn: { wins: 0, losses: 0 }, playoffs: { wins: 16, losses: 0 },
+    champion: true, isPerfectRun: false, eliminatedRound: null,
+  };
+  assert.match(resultText({ ...result, postseasonStatus: 'complete', postseason }), /Champion\nRegular season: 16-66\nPlay-in: 0-0\nPlayoffs: 16-0/);
+  assert.match(resultText({ ...result, season: { ...result.season, wins: 82, losses: 0 }, postseasonStatus: 'complete',
+    postseason: { ...postseason, isPerfectRun: true } }), /Perfect run: 98 wins, 0 losses\nRegular season: 82-0/);
+  for (const [round, label] of [['playIn', 'Play-in'], ['round1', 'Round 1'], ['round2', 'Round 2'], ['conferenceFinals', 'Conference finals'], ['finals', 'Finals']] as const) {
+    assert.ok(resultText({ ...result, postseasonStatus: 'complete',
+      postseason: { ...postseason, champion: false, eliminatedRound: round } }).includes(`Eliminated: ${label}\n`));
   }
 });
 
