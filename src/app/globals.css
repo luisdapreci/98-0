@@ -2064,6 +2064,9 @@ main {
 .daily-records span, .daily-records small { font-size: 12px; }
 .coach-grid.fixed-coach { grid-template-columns: minmax(0, 440px); }
 .daily-theme { display: grid; gap: 4px; flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+@media (min-width: 640px) {
+  .daily-theme { margin-inline-start: 38px; }
+}
 .daily-theme strong { font-size: 16px; }
 .daily-preview { padding: 12px 0; border-block: 1px solid var(--line); overflow-wrap: anywhere; }
 .daily-preview h3 { font-size: 24px; margin: 0 0 6px; }
