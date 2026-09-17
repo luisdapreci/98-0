@@ -4,3 +4,6 @@ next-env.d.ts
 *.tsbuildinfo
 test-results/
 playwright-report/
+.venv/
+__pycache__/
+*.py[cod]

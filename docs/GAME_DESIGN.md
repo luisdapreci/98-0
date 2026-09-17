@@ -1,4 +1,4 @@
-# `CORE_SPEC.md`: Project 98-0
+# Project 98-0: Game Design
 
 ## 1. Executive Summary & Pitch
 

@@ -1,12 +1,12 @@
-# Current-Game Baseline Playtest
+# Historical Season-3 Baseline Playtest
 
-Date: 2026-09-15. Status: authorized preparation; no participants tested. The user approved exploratory feedback on the current game with "lets do it". Balance-model research remains paused.
+Date: 2026-09-15. Status: authorized preparation for the then-current build; no participants tested. The user approved exploratory feedback with "lets do it". Balance-model research remains paused.
 
-**Build boundary:** the user subsequently requested a higher usage cap. New runs in the local `season-4` preview at <http://127.0.0.1:4174> use 135% plus coach bonuses. The build fingerprint and technical evidence below remain the original 115%-cap `season-3` baseline, not evidence for the updated build. Do not start sessions under this old build record against the new preview or pool the versions; register the tested build before collecting additional sessions. The user's shared screenshot and product preference are informal feedback, not fabricated B01 consent or a completed formal session.
+**Historical protocol, not current-build readiness:** new runs now use `season-7`, with a 135% base usage cap, stricter overload penalty and 45-win qualification. The fingerprint, local URL and technical evidence below belong to the original 115%-cap `season-3` baseline. The URL records a past local session, not a maintained preview. Before using this protocol on the current game, register the exact tested build, update version-dependent instructions and rerun readiness checks. Do not pool versions or overwrite the original evidence. The user's shared screenshot and product preference are informal feedback, not B01 consent or a completed formal session.
 
 ## Purpose
 
-The subsequent `season-5` preview also lowers play-in entry to 40 wins. Both `season-4` and `season-5` are separate from this original baseline; do not pool qualification rates across versions. See [the entry revision](GAME_DESIGN.md#playoff-sliding-scale) before registering a new tested build.
+The instructions below are retained for the original baseline only. See [current rules](GAME_DESIGN.md) and [latest functional validation](PHASE7_PROGRESS.md) before registering a new tested build.
 
 Find the most important problems in draft decisions, outcome credibility and willingness to play again in the existing game. Observe actual behavior before choosing more balance research. This is not the [release scorecard](RELEASE_SCORECARD.md)'s frozen-finalist pilot, does not consume its participants or acceptance attempt, and cannot pass B1, B2, P1 or E1. No hypotheses about historical turnover estimates are shown to participants.
 

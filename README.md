@@ -8,25 +8,16 @@ Inspired by `82-0.com`, *Wordle*, *Balatro*, *BasketballGM*, and *Immaculate Gri
 
 ## Status
 
-As of 2026-09-16, the core loop is playable in **No IQ**, **Mid IQ** (default), and **HI IQ**: drafting, the reproducible 82-game season, rivalry annotations, play-in, four playoff series and championship/perfect-run results. Playback includes overtime reveals, loss explanations, defense breakdowns and opt-in audio. Postseason adds matchup previews, elimination/clincher pauses, series-by-series skipping, championship progress, highlights and personalized endings.
+As of 2026-09-17, the local game is playable through drafting, the seeded 82-game season, play-in, four playoff series and championship/perfect-run results. Playback includes rivalries, overtime, loss explanations, defense breakdowns and opt-in audio.
 
-Select the IQ mode before signing a coach; it stays locked for the run. **No IQ** disables usage, spacing, coach effects and defensive-role fit while retaining individual offense, defense and bench quality. **Mid IQ** preserves the former Classic rules. **HI IQ** uses identical Mid IQ simulation but hides scouting stats, coaching effects, chemistry and stat-based sorting until **Start Season**, including after the sixth pick. Low IQ has been removed. **Local Daily is implemented in Mid IQ**. Coach Almanac, general run history and sharing with friends are implemented; online rankings are deferred.
+- **IQ modes:** choose before signing a coach. No IQ disables chemistry and coach effects while retaining individual offense, defense and bench quality. Mid IQ is the default. HI IQ uses the same simulation as Mid IQ but hides scouting information until Start Season.
+- **Postseason:** new runs qualify at 45 wins after all 82 games are revealed. Start Postseason explicitly; a ring requires 16 main-bracket wins. A perfect 98-0 requires 82-0 plus 16-0, without a play-in.
+- **Local Daily:** Mid IQ challenges rotate indefinitely through 56 themes, reshuffled each cycle from September 17, 2026 UTC. Attempts and results are local/unverified; retries are practice. Requires browser storage, Web Locks and HTTPS or localhost. See [Daily rules and limits](docs/PHASE6_PROGRESS.md).
+- **Collection and sharing:** completing an 82-game simulation unlocks all 12 Coach Almanac systems. History retains 50 recent seasons and per-mode personal bests. Revealed results support PNG/text export and browser sharing. See [storage, spoiler rules and fallbacks](docs/PHASE7_PROGRESS.md).
 
-**Phase 7 (2026-09-17):** Complete any 82-game season to unlock all 12 Coach Almanac systems. Run History keeps 50 recent seasons and per-mode personal bests across new drafts. Revealed results can be exported as PNG or text, copied, or shared through supported browser APIs. Play-in and playoff records remain separate, and all exports are labeled local/unverified. History updates as postseason results are revealed; replacing a run archives its already simulated outcomes. Almanac/history access stays blocked during HI IQ drafting until Start Season. See [docs/PHASE7_PROGRESS.md](docs/PHASE7_PROGRESS.md) for storage behavior, fallbacks and verification: 112 engine tests, 92 desktop/mobile Edge checks and production build pass. Real messaging-app delivery and physical-device testing remain open.
+Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; there is no offline installation or cold-launch cache.
 
-Open Daily from the header calendar button. Each UTC date pins a shared challenge, coach offers and round/action-specific reel priorities, with first-legal fallbacks. The first local attempt is committed before offers; abandoning it does not restore it, and retries are unranked practice. Active Daily drafts resume across midnight. Local results received before the end of the following UTC day retain first-attempt status; later finishes are marked late/unranked. Regular-season records persist separately from active runs, with mode, date, wins, differential and longest streak. These are local, unverified records, not a public leaderboard. Daily requires working browser storage and Web Locks on HTTPS or localhost; ordinary runs remain available without Web Locks. Clearing storage or changing the device clock bypasses local controls. See [docs/PHASE6_PROGRESS.md](docs/PHASE6_PROGRESS.md).
-
-Daily now cycles indefinitely through **56 unique themes**, starting fresh on **September 17, 2026 UTC**. Each 56-day cycle deterministically reshuffles the entire pool, including the first cycle, with every theme appearing once and no back-to-back repeat across cycle boundaries. Each date gets a fresh draft seed. Formats include fixed coaches, era/franchise restrictions, locked players, raw-stat filters, zero rerolls and C-eligible rosters. The centers-only challenge locks Raptors 2020s Scottie Barnes at PG to guarantee completion. New `daily-3` runs pin `rotation-1` and the theme; the dialog shows the current cycle. The old published schedule is retired for new starts, but `daily-1` and `daily-2` saves and records retain their original rules and seeds. An old same-day commitment does not consume the fresh rotation attempt.
-
-Players running the same app/data/rotation versions agree on the theme and offer priorities for the same UTC date without a server, shared counter or saved rotation state. Skipping days does not move the schedule. Correct device clocks are required. This supports offline synchronization once the game is loaded; it does not add offline installation or cold-launch caching.
-
-New runs require **45 wins** to qualify; after revealing all 82 games, choose **Start Postseason**. A ring requires 16 main-bracket wins; 98-0 requires exactly 82-0 plus 16-0, without a play-in.
-
-Changing IQ mode before coach signing starts a fresh seeded draft with reshuffled coach offers, excluding the immediately previous coaches when enough alternatives exist. Clicking the active mode or reloading preserves the offers.
-
-Sound is opt-in from the header speaker control, with volume and a preview in Sound settings. Original synthesized basketball-inspired effects cover reel spins/stops, coach signing, pick locks, playback starts/stops, wins/losses, overtime, series advancement and championship/perfect-run endings. Mute and volume persist separately from the run. Reload never replays old cues; a browser gesture unlocks audio. Hidden tabs cancel sounds, and fast playback replaces earlier cues instead of building a queue. Audio never changes simulation results.
-
-See [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) for current rules and planned work, [docs/PHASE6_PROGRESS.md](docs/PHASE6_PROGRESS.md) for current validation, and [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) for outstanding release gates. Rotation checks: 30 Daily/save engine tests, 38 desktop/320px Daily browser tests using Edge, typecheck and production build pass. Before the rotation change, the full suites passed 108 engine and 72 browser tests, including 10 audio checks. Audio checks exercise real waveform rendering/cancellation, settings persistence, zero volume, background muting, draft/playback events, unsupported browsers and unchanged saves. These are functional checks, not listening, mode-specific balance or human-playtest acceptance; no completed human playtest is recorded.
+The latest recorded full validation is in [Phase 7](docs/PHASE7_PROGRESS.md#validation): 112 engine tests, 92 desktop/mobile Edge checks, typecheck and production build passed. These are dated functional results, not human-playtest or balance sign-off. See [the release scorecard](docs/RELEASE_SCORECARD.md) for acceptance gates.
 
 ## Stack
 
@@ -72,11 +63,12 @@ npm run calibrate -- 500 docs/OUT.json chemistry,balanced,overloaded p3-baseline
 src/app/          Next.js routes and global styles
 src/components/   Draft room, season ticker, defense breakdown
 src/engine/       Draft rules, synergy math, season, postseason, rivalries, RNG, calibration
-src/lib/          Zustand draft store
+src/lib/          Run/progress/Daily persistence and audio
 data/raw/         Basketball-Reference CSVs (downloaded)
 data/processed/   players.json, coaches.json, opponents.json, franchises.json
 data/reference/   Real NBA score distributions used as calibration targets
 scripts/data_pipeline/  Python fetch/process/audit/validate scripts
+tests/browser/    Playwright desktop/mobile regression journeys
 docs/             Design spec, calibration studies, phase reviews
 ```
 
@@ -93,12 +85,19 @@ The pipeline fetches raw data (cached), builds peak-season player lines, generat
 
 ## Design and balance docs
 
-- [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) — the core spec: game loop, synergy formulas, IQ modes, draft rules
-- [docs/MID_IQ_CORE_RELEASE.md](docs/MID_IQ_CORE_RELEASE.md) — Mid IQ release notes
-- [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) — acceptance scorecard
-- [docs/BASELINE_PLAYTEST.md](docs/BASELINE_PLAYTEST.md) — baseline playtest protocol; participant results pending
+| Document | Role |
+|---|---|
+| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) | Current rules and roadmap; dated decisions remain historical |
+| [docs/PHASE7_PROGRESS.md](docs/PHASE7_PROGRESS.md) | Latest full functional validation; collection and sharing contract |
+| [docs/PHASE6_PROGRESS.md](docs/PHASE6_PROGRESS.md) | Current Daily rotation, compatibility and focused validation |
+| [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) | Binding acceptance gates and outstanding measurements |
+| [docs/MID_IQ_CORE_RELEASE.md](docs/MID_IQ_CORE_RELEASE.md) | Historical season-3 balance release, not current-build sign-off |
+| [docs/MID_IQ_ROSTER_CALIBRATION.md](docs/MID_IQ_ROSTER_CALIBRATION.md) | Research history and stopped experiments |
+| [docs/BASELINE_PLAYTEST.md](docs/BASELINE_PLAYTEST.md) | Historical season-3 protocol; no human sessions recorded; needs a new build registration before use |
 
-The many `MID_IQ_*.json` and `PHASE3_*.md` files are calibration experiment records produced by `npm run calibrate` and the Python audit scripts. They are evidence for balance decisions, not runtime inputs.
+`MID_IQ_*.json`, `PHASE3_*` reports and earlier phase reviews preserve calibration evidence, not current gameplay status. They are not browser runtime inputs, but regression tests and offline audit/calibration tools read many of them at fixed paths and verify source hashes. Keep their contents and paths intact, including superseded or failed results; use Git history for unrelated obsolete files. Raw/reference data and research scripts support those checks and reproducibility.
+
+Generated build/test output, Python bytecode and the local `.venv` are ignored. Do not commit them or delete active server output as part of documentation cleanup.
 
 ## Simulation notes
 
