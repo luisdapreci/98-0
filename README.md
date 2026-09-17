@@ -44,7 +44,15 @@ As of 2026-09-17, the local game is playable through drafting, the seeded 82-gam
 - **Local Daily:** Mid IQ challenges rotate indefinitely through 56 themes, reshuffled each cycle from September 17, 2026 UTC. Attempts and results are local/unverified; retries are practice. Requires browser storage, Web Locks and HTTPS or localhost. See [Daily rules and limits](docs/progress/PHASE6_PROGRESS.md).
 - **Collection and sharing:** completing an 82-game simulation unlocks all 12 Coach Almanac systems. History retains 50 recent seasons and per-mode personal bests. Revealed results support PNG/text export and browser sharing. See [storage, spoiler rules and fallbacks](docs/progress/PHASE7_PROGRESS.md).
 
-Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; there is no offline installation or cold-launch cache.
+Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; installation is supported locally, but there is no offline cold-launch cache.
+
+### Installable app (local, not yet published)
+
+The game remains playable in a browser. Supporting browsers can also install it as **98-0**, opening in a standalone window from the home screen or app launcher. The header shows an Install control when Chrome/Edge supplies a native install offer; browser eligibility, engagement, prior dismissal, private browsing and device policy determine availability. Safari on iPhone/iPad shows an Install control with Share > Add to Home Screen guidance. Controls are hidden in standalone mode.
+
+Installation adds no account, backend, service worker or offline cache. Opening the app requires internet access. The root URL and save formats are unchanged; existing storage is not migrated or cleared. Storage remains browser/origin-specific, and home-screen storage sharing varies by platform. Do not promise cross-device sync or that an iOS installation inherits Safari saves.
+
+Local verification on 2026-09-17: `npm run typecheck` and `npm run build` passed. `npm run test:browser -- tests/browser/install.spec.ts` with Edge passed 14 desktop/320px checks (exit code 0), covering manifest and PNG dimensions, prompt acceptance/dismissal/error, installed state, Safari guidance, continued drafting and saved-run reload. Chromium reported no installability errors in disposable regular profiles; default Playwright incognito contexts correctly rejected installation. Desktop/mobile screenshots were reviewed. Native prompt lifecycle and Safari detection use mocks; actual OS installation, launch from a home-screen icon, Android/iOS devices and Safari remain unverified. No production deployment was performed.
 
 The latest recorded full validation is in [Phase 7](docs/progress/PHASE7_PROGRESS.md#validation): 112 engine tests, 92 desktop/mobile Edge checks, typecheck and production build passed. These are dated functional results, not human-playtest or balance sign-off. See [the release scorecard](docs/release/RELEASE_SCORECARD.md) for acceptance gates.
 

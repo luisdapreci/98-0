@@ -39,6 +39,7 @@ import { SeasonTicker } from './season-ticker';
 import { PostseasonTicker } from './postseason-ticker';
 import { DefenseBreakdown } from './defense-breakdown';
 import { SoundControls } from './sound-controls';
+import { InstallApp } from './install-app';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
 import { challengeForAttempt, dailyCommitmentKey, DAILY_VERSION, utcDate } from '../engine/daily';
@@ -698,6 +699,7 @@ export function DraftRoom() {
         </nav>
         <div className="topbar-right">
           <span className="mode-label">{modeLabel}</span>
+          <InstallApp />
           <SoundControls />
           <button
             className="icon-button"
