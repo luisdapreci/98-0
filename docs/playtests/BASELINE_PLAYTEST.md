@@ -6,9 +6,9 @@ Date: 2026-09-15. Status: authorized preparation for the then-current build; no 
 
 ## Purpose
 
-The instructions below are retained for the original baseline only. See [current rules](GAME_DESIGN.md) and [latest functional validation](PHASE7_PROGRESS.md) before registering a new tested build.
+The instructions below are retained for the original baseline only. See [current rules](../design/GAME_DESIGN.md) and [latest functional validation](../progress/PHASE7_PROGRESS.md) before registering a new tested build.
 
-Find the most important problems in draft decisions, outcome credibility and willingness to play again in the existing game. Observe actual behavior before choosing more balance research. This is not the [release scorecard](RELEASE_SCORECARD.md)'s frozen-finalist pilot, does not consume its participants or acceptance attempt, and cannot pass B1, B2, P1 or E1. No hypotheses about historical turnover estimates are shown to participants.
+Find the most important problems in draft decisions, outcome credibility and willingness to play again in the existing game. Observe actual behavior before choosing more balance research. This is not the [release scorecard](../release/RELEASE_SCORECARD.md)'s frozen-finalist pilot, does not consume its participants or acceptance attempt, and cannot pass B1, B2, P1 or E1. No hypotheses about historical turnover estimates are shown to participants.
 
 Test the unchanged `season-3 / mid-iq-2 / conditional-score-3` game. Preserve all historical players, available coaching and reroll resources. No participant-specific tuning, rigged outcomes, selected winning seeds or mid-study UI changes. If a blocking bug requires a fix, stop recruitment, preserve observations and explicitly identify any later session as a different build.
 

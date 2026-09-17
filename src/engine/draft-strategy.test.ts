@@ -12,11 +12,45 @@ import { evaluateGame } from './math.ts';
 import { applyDraftAction, createRun, recoverRun } from './run.ts';
 import type { RunData } from './run.ts';
 import { generateSchedule, requireCompleteLineup } from './season.ts';
+import { parseResearchJson } from './research-files.ts';
+
+test('research document migration translates references without changing frozen JSON', () => {
+  const text = '{"source":"docs/MID_IQ_ROLE_ALLOCATION_1.json","sourceSha256":{"docs/MID_IQ_ROLE_ALLOCATION_1.json":"invalid"},"values":[null,3,false]}';
+  const original = JSON.parse(text);
+  const relocated = parseResearchJson(text);
+  assert.equal(relocated.source, 'docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json');
+  assert.deepEqual(relocated.sourceSha256, { 'docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json': 'invalid' });
+  assert.deepEqual(relocated.values, [null, 3, false]);
+  assert.equal(original.source, 'docs/MID_IQ_ROLE_ALLOCATION_1.json');
+  assert.equal(JSON.stringify(original), text);
+  assert.throws(() => parseResearchJson('{'), SyntaxError);
+});
+
+test('research migration preserves frozen bytes and verifies exact source revisions', () => {
+  const migration: {
+    paths: Record<string, string>; frozenArtifacts: Record<string, string>;
+    sourceFiles: Record<string, string>; sourceRevisions: Record<string, string>;
+  } = JSON.parse(readFileSync(new URL('../../docs/research/path-migration.json', import.meta.url), 'utf8'));
+  const fingerprint = (path: string) => createHash('sha256')
+    .update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
+  for (const [before, after] of Object.entries(migration.paths)) {
+    assert.equal(existsSync(new URL(`../../${before}`, import.meta.url)), false, before);
+    assert.ok(existsSync(new URL(`../../${after}`, import.meta.url)), after);
+  }
+  for (const [path, expected] of Object.entries(migration.frozenArtifacts)) assert.equal(fingerprint(path), expected, path);
+  assert.equal(Object.keys(migration.sourceFiles).length, Object.keys(migration.sourceRevisions).length);
+  for (const [path, original] of Object.entries(migration.sourceFiles)) {
+    const current = migration.sourceRevisions[original];
+    assert.equal(fingerprint(path), current, path);
+    assert.deepEqual(parseResearchJson(JSON.stringify({ source: original, tampered: 'invalid' })),
+      { source: current, tampered: 'invalid' });
+  }
+});
 
 const data: RunData = {
-  players: JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8')),
-  coaches: JSON.parse(readFileSync(new URL('../../data/processed/coaches.json', import.meta.url), 'utf8')),
-  opponents: JSON.parse(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).regularSeasonPool,
+  players: parseResearchJson(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8')),
+  coaches: parseResearchJson(readFileSync(new URL('../../data/processed/coaches.json', import.meta.url), 'utf8')),
+  opponents: parseResearchJson(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).regularSeasonPool,
 };
 
 test('lookahead completes legal drafts using only public observations and independent hypothetical draws', () => {
@@ -61,7 +95,7 @@ test('lookahead does not suggest unavailable rerolls or spend simulation randomn
 test('offline policy and access controls preserve pairing, legal menus, probability ordering and report immutability', () => {
   const directory = mkdtempSync(join(tmpdir(), '98-0-policy-test-'));
   const script = fileURLToPath(new URL('./calibrate-rosters.ts', import.meta.url));
-  const fixture = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_ROSTER_FIT_14.json', import.meta.url), 'utf8'));
+  const fixture = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json', import.meta.url), 'utf8'));
   for (const [key, path] of Object.entries({ candidateImplementationSha256: './roster-balance.ts',
     mathSha256: './math.ts', opponentSha256: '../../data/processed/opponents.json' })) {
     fixture[key] = createHash('sha256').update(readFileSync(new URL(path, import.meta.url))).digest('hex');
@@ -76,7 +110,7 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     assert.notEqual(blocked.status, 0);
     assert.match(blocked.stderr, /Development pool bands must all pass/);
     assert.equal(existsSync(blockedPath), false);
-    const alteredFit = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_ROSTER_FIT_18.json', import.meta.url), 'utf8'));
+    const alteredFit = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ROSTER_FIT_18.json', import.meta.url), 'utf8'));
     alteredFit.candidateImplementationSha256 = fixture.candidateImplementationSha256;
     alteredFit.provenanceProbe = true;
     writeFileSync(fitPath, JSON.stringify(alteredFit));
@@ -88,12 +122,12 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     assert.notEqual(blockedDiagnosis.status, 0);
     assert.match(blockedDiagnosis.stderr, /Diagnosis requires the original exposed fit/);
     assert.equal(existsSync(blockedPath), false);
-    writeFileSync(fitPath, readFileSync(new URL('../../docs/MID_IQ_ROSTER_FIT_18.json', import.meta.url)));
+    writeFileSync(fitPath, readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ROSTER_FIT_18.json', import.meta.url)));
     const diagnosisPath = join(directory, 'diagnosis.json');
     const diagnosis = run('diagnose', diagnosisPath);
     assert.equal(diagnosis.status, 0, diagnosis.stderr);
     const diagnosisText = readFileSync(diagnosisPath, 'utf8');
-    const diagnosticReport = JSON.parse(diagnosisText);
+    const diagnosticReport = parseResearchJson(diagnosisText);
     assert.equal(diagnosticReport.scope, 'exposed-family-diagnosis');
     assert.equal(diagnosticReport.rows.length, 24);
     for (const row of diagnosticReport.rows) {
@@ -108,10 +142,10 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     assert.match(run('diagnose', diagnosisPath).stderr, /Refusing to overwrite/);
     assert.equal(readFileSync(diagnosisPath, 'utf8'), diagnosisText);
     const possessionPath = join(directory, 'possession.json');
-    const auditPath = fileURLToPath(new URL('../../docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url));
+    const auditPath = fileURLToPath(new URL('../../docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url));
     const runPossession = (input: string) => spawnSync(process.execPath,
       ['--experimental-strip-types', script, possessionPath, 'possession', input], { encoding: 'utf8' });
-    const badAudit = JSON.parse(readFileSync(auditPath, 'utf8'));
+    const badAudit = parseResearchJson(readFileSync(auditPath, 'utf8'));
     badAudit.sourceSha256['data/processed/players.json'] = 'invalid';
     const badAuditPath = join(directory, 'bad-audit.json');
     writeFileSync(badAuditPath, JSON.stringify(badAudit));
@@ -122,7 +156,7 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     const possession = runPossession(auditPath);
     assert.equal(possession.status, 0, possession.stderr);
     const possessionText = readFileSync(possessionPath, 'utf8');
-    const possessionReport = JSON.parse(possessionText);
+    const possessionReport = parseResearchJson(possessionText);
     assert.equal(possessionReport.scope, 'exposed-offensive-accounting');
     assert.equal(possessionReport.supportedRosters, 22);
     assert.deepEqual(possessionReport.rows.filter((row: { status: string }) => row.status === 'unsupported-data')
@@ -142,7 +176,7 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     const lineupExecution = runLineup();
     assert.equal(lineupExecution.status, 0, lineupExecution.stderr);
     const lineupText = readFileSync(lineupPath, 'utf8');
-    assert.equal(lineupText, readFileSync(new URL('../../docs/MID_IQ_LINEUP_PROTOTYPE_1.json', import.meta.url), 'utf8'));
+    assert.deepEqual(parseResearchJson(lineupText), parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json', import.meta.url), 'utf8')));
     assert.match(runLineup().stderr, /Refusing to overwrite/);
     assert.equal(readFileSync(lineupPath, 'utf8'), lineupText);
     const rolePath = join(directory, 'role-allocation.json');
@@ -151,7 +185,7 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
     const roleExecution = runRoles();
     assert.equal(roleExecution.status, 0, roleExecution.stderr);
     const roleText = readFileSync(rolePath, 'utf8');
-    assert.equal(roleText, readFileSync(new URL('../../docs/MID_IQ_ROLE_ALLOCATION_1.json', import.meta.url), 'utf8'));
+    assert.deepEqual(parseResearchJson(roleText), parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json', import.meta.url), 'utf8')));
     assert.match(runRoles().stderr, /Refusing to overwrite/);
     assert.equal(readFileSync(rolePath, 'utf8'), roleText);
     writeFileSync(fitPath, JSON.stringify(fixture));
@@ -160,7 +194,7 @@ test('offline policy and access controls preserve pairing, legal menus, probabil
       const execution = run(mode, output);
       assert.equal(execution.status, 0, execution.stderr);
       const text = readFileSync(output, 'utf8');
-      const report = JSON.parse(text);
+      const report = parseResearchJson(text);
       assert.equal(report.seedCount, 2);
       assert.equal(report.results.length, 6);
       for (const result of report.results) for (const observation of result.observations) {

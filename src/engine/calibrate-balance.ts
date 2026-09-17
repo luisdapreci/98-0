@@ -1,3 +1,4 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { BALANCE_RULES_V1, BALANCE_RULES_V2, calculateDefensiveComposite, calculateOffensiveContribution, calculateWinProbability, evaluateGame, STARTER_POSITIONS } from './math.ts';
@@ -8,7 +9,7 @@ import { randomStream } from './random.ts';
 import { generateSchedule } from './season.ts';
 import type { Coach, OpponentPool, Player, TeamLineup } from './types.ts';
 
-const load = (path: string) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
+const load = (path: string) => parseResearchJson(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const players = new Map<string, Player>(load('../../data/processed/players.json').map((player: Player) => [player.id, player]));
 const coaches = new Map<string, Coach>(load('../../data/processed/coaches.json').map((coach: Coach) => [coach.id, coach]));
 const pool: OpponentPool = load('../../data/processed/opponents.json').regularSeasonPool;
@@ -131,7 +132,7 @@ if (process.argv[3] === 'redraft') {
   process.exit(0);
 }
 
-const retained: { strategyResults: Record<string, { observations: Observation[] }> } = load('../../docs/PHASE3_REVIEW.json');
+const retained: { strategyResults: Record<string, { observations: Observation[] }> } = load('../../docs/research/phase3/PHASE3_REVIEW.json');
 const prepared = Object.fromEntries(Object.entries(retained.strategyResults)
   .map(([policy, result]) => [policy, result.observations.map(prepare)]));
 const referencePrepared = prepare(reference);

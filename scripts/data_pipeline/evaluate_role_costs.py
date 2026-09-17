@@ -2,6 +2,7 @@
 import argparse
 import copy
 import json
+from research_files import parse_research_json
 import math
 import platform
 from pathlib import Path
@@ -11,20 +12,20 @@ from audit_possessions import ROOT
 from audit_team_roles import estimate, metrics
 from evaluate_turnover_shrinkage import common_indices, evaluate_cohort, verify_hashes
 
-PROTOCOL_PATH = "docs/MID_IQ_CANDIDATE_2_PROTOCOL.json"
+PROTOCOL_PATH = "docs/research/mid-iq/MID_IQ_CANDIDATE_2_PROTOCOL.json"
 PROTOCOL_SHA256 = "78f403ecea458a8f98a75d1667e77c970380f06a32cc2d0d2f125afaefad0f12"
 
 
 def load_inputs():
     assert fingerprint(ROOT / PROTOCOL_PATH) == PROTOCOL_SHA256, "Candidate2 registration changed."
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
-    prior_path = ROOT / "docs/MID_IQ_CANDIDATE_1_RESULT.json"
-    prior = json.loads(prior_path.read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    prior_path = ROOT / "docs/research/mid-iq/MID_IQ_CANDIDATE_1_RESULT.json"
+    prior = parse_research_json(prior_path.read_text(encoding="utf-8"))
     assert prior["version"] == "mid-iq-candidate-1-result-1"
-    hashes = {**prior["sourceSha256"], "docs/MID_IQ_CANDIDATE_1_RESULT.json": fingerprint(prior_path),
+    hashes = {**prior["sourceSha256"], "docs/research/mid-iq/MID_IQ_CANDIDATE_1_RESULT.json": fingerprint(prior_path),
               "scripts/data_pipeline/evaluate_turnover_shrinkage.py": prior["implementationSha256"], PROTOCOL_PATH: PROTOCOL_SHA256}
     verify_hashes(hashes)
-    source = json.loads((ROOT / protocol["source"]).read_text(encoding="utf-8"))
+    source = parse_research_json((ROOT / protocol["source"]).read_text(encoding="utf-8"))
     assert source["version"] == protocol["sourceVersion"]
     return protocol, source["rows"], hashes
 
@@ -120,7 +121,7 @@ def evaluate_selected(rows, protocol, selection):
 
 
 def self_test():
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
     reference = {"shots": 0.44, "assists": 0.1, "turnovers": 0.06}
     players = [{"priorRates": dict(reference), "after": {"minutes": 20, "shots": 8.8, "assists": 2, "turnovers": 1.2}} for _ in range(5)]
     neutral = {"players": players, "reference": reference}
@@ -215,7 +216,7 @@ def main():
     else:
         selection_path = Path(args.selection)
         selection_hash = fingerprint(selection_path)
-        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        selection = parse_research_json(selection_path.read_text(encoding="utf-8"))
         assert selection["version"] == "mid-iq-candidate-2-selection-1"
         for key, value in metadata.items():
             assert selection[key] == value, f"Selection metadata mismatch: {key}"

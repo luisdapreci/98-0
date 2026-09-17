@@ -41,9 +41,9 @@ The new same-seed run still misses qualification. The release targets a plausibl
 
 ## Development and Fresh Evaluation
 
-1. [Initial experiment](MID_IQ_OFFENSE_EXPERIMENT_1.json): weights 0, 0.25, 0.5, 0.75 and 1, using the reference roster and 900 previously exposed draft rosters/schedules. All retained baseline schedule expectations were reproduced within 1e-8 before evaluation.
-2. [Frozen candidate](MID_IQ_OFFENSE_CANDIDATE.json): weight 0.8. The 0.75 variant fell just below the reference qualification target; weight 1 removed supporting players' direct offensive contribution entirely. The frozen candidate meets the target while keeping all five contributions positive.
-3. [Fresh legal redrafts](MID_IQ_CORE_REDRAFT_1.json): prefix `mid-iq-core-validation-1-`, evaluated after freezing 0.8, with both rule versions drafting for their own objective. Six policies have 100 seeds each per version; lookahead has 20 per version. Total: 1,240 completed drafts. All action histories recover through the legal run engine. No tuning followed this evaluation.
+1. [Initial experiment](../research/mid-iq/MID_IQ_OFFENSE_EXPERIMENT_1.json): weights 0, 0.25, 0.5, 0.75 and 1, using the reference roster and 900 previously exposed draft rosters/schedules. All retained baseline schedule expectations were reproduced within 1e-8 before evaluation.
+2. [Frozen candidate](../research/mid-iq/MID_IQ_OFFENSE_CANDIDATE.json): weight 0.8. The 0.75 variant fell just below the reference qualification target; weight 1 removed supporting players' direct offensive contribution entirely. The frozen candidate meets the target while keeping all five contributions positive.
+3. [Fresh legal redrafts](../research/mid-iq/MID_IQ_CORE_REDRAFT_1.json): prefix `mid-iq-core-validation-1-`, evaluated after freezing 0.8, with both rule versions drafting for their own objective. Six policies have 100 seeds each per version; lookahead has 20 per version. Total: 1,240 completed drafts. All action histories recover through the legal run engine. No tuning followed this evaluation.
 
 | Policy | Seeds per Version | Old Median Wins | New Median Wins | Old 60+ Share | New 60+ Share |
 | --- | ---: | ---: | ---: | ---: | ---: |

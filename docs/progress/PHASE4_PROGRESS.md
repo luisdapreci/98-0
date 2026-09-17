@@ -1,13 +1,13 @@
 # Phase 4 Progress
 
-Implementation snapshot: 2026-09-14. Status updated: 2026-09-16. P4.1-P4.5 and Phase 5 are now implemented, including reviewed rivalry annotations and the playable championship loop. P3.7 historical scores were subsequently accepted and released as documented in [the second score-calibration report](PHASE3_SCORE_RETRY.md); score acceptance is no longer open.
+Implementation snapshot: 2026-09-14. Status updated: 2026-09-16. P4.1-P4.5 and Phase 5 are now implemented, including reviewed rivalry annotations and the playable championship loop. P3.7 historical scores were subsequently accepted and released as documented in [the second score-calibration report](../research/phase3/PHASE3_SCORE_RETRY.md); score acceptance is no longer open.
 
 Current new runs use `season-7` / `mid-iq-3` / `conditional-score-3`, with 135% base usage plus coach adjustments, a 1.5% overload slope and 0.45 floor, and 45-win qualification. Older saves retain their pinned rules. The Runtime, Explanations and Historical Verification sections preserve the original Phase 4 snapshot; current rivalry/postseason behavior and checks are recorded at the end.
 
 ## Runtime
 
 - The existing simulation still resolves and saves all 82 games once. Playback never calls simulation or draws randomness.
-- A separate `playback` field in the existing Zustand envelope stores the run ID, finished-game count, and tied-overtime stage. The original playback implementation did not change engine/data/score versions or the run schema; later versioned gameplay releases are tracked separately in [the release scorecard](RELEASE_SCORECARD.md).
+- A separate `playback` field in the existing Zustand envelope stores the run ID, finished-game count, and tied-overtime stage. The original playback implementation did not change engine/data/score versions or the run schema; later versioned gameplay releases are tracked separately in [the release scorecard](../release/RELEASE_SCORECARD.md).
 - New seasons and refreshed playback start paused. Play advances every 1,200 ms at 1x or 240 ms at 5x; hidden tabs do not advance. Next reveal pauses automatic playback; skip reveals the saved final result immediately.
 - Overtime reveals tied regulation, then any tied extra periods, then the stored final. Intermediate scores, accessible labels, standings and logs exclude unrevealed results. Completion and qualification appear only after all 82 games are revealed.
 - Old completed saves without playback metadata retain their already-visible final result. Malformed or wrong-run cursors reset to zero without discarding the season. Invalid overtime stages reset to the beginning of that game's reveal.
@@ -41,7 +41,7 @@ Current new runs use `season-7` / `mid-iq-3` / `conditional-score-3`, with 135% 
 ### Current Verification
 
 - Postseason presentation now includes series scouting previews, home schedules, upcoming stakes, automatic series/clincher/elimination pauses, Finish Series, optional audio, active-round prominence, a 16-win progress tracker and personalized endings. Highlights use revealed outcomes only. Results, simulation versions and save schema are unchanged; interactive coaching is not part of this upgrade.
-- P6.1-P6.2 now add No IQ, Mid IQ (default), and HI IQ; Low IQ was removed. Modes pin `iq-1` metadata and lock at coach signing. Legacy saves retain Mid IQ and pinned rules. No IQ disables mapped fit effects but retains individual/bench quality; HI IQ hides scouting information until Start Season. Mid IQ/HI IQ use identical results. See the approved mapping in [the design](GAME_DESIGN.md#chemistry-and-visibility-contract).
+- P6.1-P6.2 now add No IQ, Mid IQ (default), and HI IQ; Low IQ was removed. Modes pin `iq-1` metadata and lock at coach signing. Legacy saves retain Mid IQ and pinned rules. No IQ disables mapped fit effects but retains individual/bench quality; HI IQ hides scouting information until Start Season. Mid IQ/HI IQ use identical results. See the approved mapping in [the design](../design/GAME_DESIGN.md#chemistry-and-visibility-contract).
 - The frozen baseline math source is unchanged. A mode-aware wrapper handles No IQ; original calibration hashes and reports remain valid. A browser parity test compares Mid IQ/HI IQ inside Edge to avoid unrelated Node/Edge last-bit probability differences.
 - `npm test`: **98 passed**, including No IQ effect invariance, mode locking/version validation, exact Mid IQ/HI IQ season/postseason parity, legacy saves, and all existing engine/frozen-research regressions.
 - `npm run build`: **passed**, including TypeScript checking.

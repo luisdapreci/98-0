@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+from research_files import parse_research_json
 import math
 from collections import defaultdict
 from pathlib import Path
@@ -136,10 +137,10 @@ def summarize(rows):
 
 
 def build_report():
-    history_path = "docs/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json"
-    diagnostic_path = "docs/MID_IQ_POSSESSION_ERROR_DIAGNOSTIC_1.json"
-    history = json.loads((ROOT / history_path).read_text(encoding="utf-8"))
-    diagnostic = json.loads((ROOT / diagnostic_path).read_text(encoding="utf-8"))
+    history_path = "docs/research/mid-iq/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json"
+    diagnostic_path = "docs/research/mid-iq/MID_IQ_POSSESSION_ERROR_DIAGNOSTIC_1.json"
+    history = parse_research_json((ROOT / history_path).read_text(encoding="utf-8"))
+    diagnostic = parse_research_json((ROOT / diagnostic_path).read_text(encoding="utf-8"))
     assert history["version"] == "mid-iq-historical-team-offense-1"
     assert diagnostic["version"] == "mid-iq-possession-error-diagnostic-1"
     hashes = {**diagnostic["sourceSha256"], diagnostic_path: fingerprint(ROOT / diagnostic_path),

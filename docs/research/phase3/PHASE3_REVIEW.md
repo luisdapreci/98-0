@@ -17,8 +17,8 @@ This pass measures and recommends; it does **not** accept the balance targets or
 ```sh
 npm test
 npm run typecheck
-npm run calibrate -- 20 docs/PHASE3_REVIEW_PILOT.json chemistry,reroll-aware,lookahead p3-pilot-
-npm run calibrate -- 100 docs/PHASE3_REVIEW.json random,chemistry,reroll-aware,balanced,overloaded,non-shooting,defensive,bench-heavy,lookahead p3-holdout-
+npm run calibrate -- 20 docs/research/phase3/PHASE3_REVIEW_PILOT.json chemistry,reroll-aware,lookahead p3-pilot-
+npm run calibrate -- 100 docs/research/phase3/PHASE3_REVIEW.json random,chemistry,reroll-aware,balanced,overloaded,non-shooting,defensive,bench-heavy,lookahead p3-holdout-
 ```
 
 - [Pilot evidence](PHASE3_REVIEW_PILOT.json): 20 seeds, three policies. Median wins: chemistry 55.5, reroll-aware 60.5, lookahead 68. Lookahead qualified in 18/20 runs. Used only as a feasibility check.
@@ -29,7 +29,7 @@ npm run calibrate -- 100 docs/PHASE3_REVIEW.json random,chemistry,reroll-aware,b
 
 ## Legal Rollout Policy
 
-Implementation: [draft-strategy.ts](../src/engine/draft-strategy.ts). Policy `legal-rollout-1` uses 12 hypothetical completions per candidate, fixed before the pilot and held-out measurements.
+Implementation: [draft-strategy.ts](../../../src/engine/draft-strategy.ts). Policy `legal-rollout-1` uses 12 hypothetical completions per candidate, fixed before the pilot and held-out measurements.
 
 1. Evaluate all three offered coaches. For a visible player roll, shortlist the six best chemistry-greedy player/slot choices plus the best choice for each open slot, deduplicated. Consider each currently legal team/era reroll as another action. An unopened roll must be spun.
 2. Apply each candidate through the existing draft functions. Complete hypothetical drafts with chemistry-greedy picks, trying team then era rerolls when the best pick improves projected chemistry by less than 3. Tokens, eligibility, duplicate protection, and playable roll constraints remain enforced. This continuation does not use the old comparator's additional OVR-below-50 trigger.

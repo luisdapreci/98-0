@@ -1,3 +1,4 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -294,9 +295,9 @@ test('dual role allocation conserves independent budgets and retains passing tur
 });
 
 test('dual role study reproduces separate capacity ledgers without counting passing as scoring events', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
-  const report = load('docs/MID_IQ_ROLE_ALLOCATION_1.json');
-  const original = load('docs/MID_IQ_LINEUP_PROTOTYPE_1.json');
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const report = load('docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json');
+  const original = load('docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json');
   assert.equal(report.scope, 'exposed-dual-role-allocation-sensitivity');
   for (const [path, hash] of Object.entries(report.sourceSha256))
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -317,7 +318,7 @@ test('dual role study reproduces separate capacity ledgers without counting pass
   assert.equal(report.supportedRosters, 30);
   assert.equal(report.evaluatedScenarios, 1800);
   assert.deepEqual(report.rows.map((row: { id: string }) => row.id), original.rows.map((row: { id: string }) => row.id));
-  const baseline = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json').seasons.find((row: { season: number }) => row.season === 2020);
+  const baseline = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json').seasons.find((row: { season: number }) => row.season === 2020);
   let evaluated = 0;
   for (const [index, row] of report.rows.entries()) {
     const source = original.rows[index];
@@ -402,10 +403,10 @@ test('dual role study reproduces separate capacity ledgers without counting pass
 });
 
 test('lineup study preserves peak rates, complete policy grids and capped allocation ledgers', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
-  const report = load('docs/MID_IQ_LINEUP_PROTOTYPE_1.json');
-  const audit = load('docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json');
-  const era = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json');
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const report = load('docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json');
+  const audit = load('docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json');
+  const era = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json');
   const catalog = load('data/reference/mid-iq-roster-benchmarks.json');
   assert.equal(report.scope, 'exposed-lineup-allocation-sensitivity');
   for (const [path, hash] of Object.entries(report.sourceSha256))
@@ -524,8 +525,8 @@ test('lineup study preserves peak rates, complete policy grids and capped alloca
 });
 
 test('possession audit preserves selected peaks and pooled counts without filling missing turnovers', () => {
-  const audit = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url), 'utf8'));
-  const stored: Player[] = JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8'));
+  const audit = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url), 'utf8'));
+  const stored: Player[] = parseResearchJson(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8'));
   const byId = new Map(stored.map((player) => [player.id, player]));
   let ready = 0;
   assert.equal(audit.players.length, stored.length);
@@ -573,8 +574,8 @@ test('possession audit preserves selected peaks and pooled counts without fillin
 });
 
 test('era baselines reproduce season rates and exposure-weighted peak comparisons without imputing history', () => {
-  const report = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_ERA_BASELINE_AUDIT_1.json', import.meta.url), 'utf8'));
-  const audit = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url), 'utf8'));
+  const report = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json', import.meta.url), 'utf8'));
+  const audit = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json', import.meta.url), 'utf8'));
   assert.equal(report.scope, 'offline-season-context-audit');
   for (const [path, hash] of Object.entries(report.sourceSha256)) {
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -656,7 +657,7 @@ test('era baselines reproduce season rates and exposure-weighted peak comparison
 });
 
 test('workload study reproduces consecutive controls, clustered slopes and denominator sensitivity', () => {
-  const report = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_WORKLOAD_STUDY_1.json', import.meta.url), 'utf8'));
+  const report = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json', import.meta.url), 'utf8'));
   assert.equal(report.scope, 'observational-season-associations');
   for (const [path, hash] of Object.entries(report.sourceSha256))
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -739,7 +740,7 @@ test('workload study reproduces consecutive controls, clustered slopes and denom
     close(group.meanShootingChange, rows.reduce((sum, row) => sum + row.shooting, 0) / rows.length);
     close(group.meanTurnoverChange, rows.reduce((sum, row) => sum + row.turnovers, 0) / rows.length);
   }
-  const era = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_ERA_BASELINE_AUDIT_1.json', import.meta.url), 'utf8'));
+  const era = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json', import.meta.url), 'utf8'));
   const baselines = new Map<number, { turnoverShare: number; shotEndsPer36: number }>(
     era.seasons.map((row: { season: number; turnoverShare: number; shotEndsPer36: number }) => [row.season, row]));
   const fixedTurnovers = stable.map((pair) => {
@@ -756,7 +757,7 @@ test('workload study reproduces consecutive controls, clustered slopes and denom
 });
 
 test('offense predictions preserve held-out identities, training-only fits and paired error evidence', () => {
-  const report = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_OFFENSE_PREDICTION_1.json', import.meta.url), 'utf8'));
+  const report = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_OFFENSE_PREDICTION_1.json', import.meta.url), 'utf8'));
   assert.equal(report.scope, 'offline-next-season-prediction');
   for (const [path, hash] of Object.entries(report.sourceSha256))
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -773,7 +774,7 @@ test('offense predictions preserve held-out identities, training-only fits and p
   const profile = ['workload', 'shooting', 'turnovers'];
   const modelNames = ['mean', 'context', 'persistence', 'laggedOutcome', 'profile', 'profileAndAssists'];
   const heldOut = (identity: string) => BigInt(`0x${createHash('sha256').update(identity).digest('hex')}`) % 5n === 0n;
-  const workload = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_WORKLOAD_STUDY_1.json', import.meta.url), 'utf8'));
+  const workload = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json', import.meta.url), 'utf8'));
   const seasons = new Map<string, Record<string, number>>(workload.seasonObservations.map(
     (row: { playerId: string; season: number }) => [`${row.playerId}:${row.season}`, row]));
   assert.equal(rows.length, workload.consecutivePairs.length);
@@ -879,8 +880,8 @@ test('offense predictions preserve held-out identities, training-only fits and p
 });
 
 test('role-change study preserves rate changes, cohort isolation and conditional error evidence', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
-  const report = load('docs/MID_IQ_ROLE_CHANGE_STUDY_1.json');
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const report = load('docs/research/mid-iq/MID_IQ_ROLE_CHANGE_STUDY_1.json');
   assert.equal(report.scope, 'observed-role-change-associations');
   for (const [path, hash] of Object.entries(report.sourceSha256))
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -893,9 +894,9 @@ test('role-change study preserves rate changes, cohort isolation and conditional
     features: Record<string, number>; target: number; fixedTurnovers: number; shotLinkedTurnovers: number;
   }
   const rows: Observation[] = report.observations;
-  const workload = load('docs/MID_IQ_WORKLOAD_STUDY_1.json');
-  const era = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json');
-  const prediction = load('docs/MID_IQ_OFFENSE_PREDICTION_1.json');
+  const workload = load('docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json');
+  const era = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json');
+  const prediction = load('docs/research/mid-iq/MID_IQ_OFFENSE_PREDICTION_1.json');
   interface Season { playerId: string; season: number; age: number; minutesPerGame: number; teams: string[];
     workload: number; turnovers: number; csvLines: number[] }
   const seasons = new Map<string, Season>(workload.seasonObservations.map((row: Season) => [`${row.playerId}:${row.season}`, row]));
@@ -1042,8 +1043,8 @@ test('role-change study preserves rate changes, cohort isolation and conditional
 });
 
 test('team role study uses lagged rates and reconciles matched team budgets and season-cluster comparisons', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
-  const report = load('docs/MID_IQ_TEAM_ROLE_STUDY_1.json');
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const report = load('docs/research/mid-iq/MID_IQ_TEAM_ROLE_STUDY_1.json');
   assert.equal(report.scope, 'lagged-team-season-budget-diagnostics');
   for (const [path, hash] of Object.entries(report.sourceSha256))
     assert.equal(createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex'), hash);
@@ -1070,7 +1071,7 @@ test('team role study uses lagged rates and reconciles matched team budgets and 
   assert.equal(new Set(rows.map((row) => `${row.season}:${row.team}`)).size, rows.length);
   assert.equal(report.zeroMinuteStints.length, 5);
   for (const row of report.zeroMinuteStints) for (const field of ['minutes', 'shots', 'assists', 'turnovers']) assert.equal(row[field], 0);
-  const era = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json');
+  const era = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json');
   const unsupported: Record<string, number> = {};
   let scenarios = 0;
   for (const row of rows) {
@@ -1181,16 +1182,16 @@ test('team role study uses lagged rates and reconciles matched team budgets and 
 });
 
 test('candidate1 shrinkage preserves registration, earlier-only selection and the component rejection gate', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
   const hash = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
-  const protocol = load('docs/MID_IQ_CANDIDATE_1_PROTOCOL.json');
-  const selection = load('docs/MID_IQ_CANDIDATE_1_SELECTION.json');
-  const report = load('docs/MID_IQ_CANDIDATE_1_RESULT.json');
-  const source = load('docs/MID_IQ_TEAM_ROLE_STUDY_1.json');
-  assert.equal(hash('docs/MID_IQ_CANDIDATE_1_PROTOCOL.json'), 'f660073f9a4ef7519eab939676a822cb0e098d84d18b58fd70ea2132bcbe2e01');
+  const protocol = load('docs/research/mid-iq/MID_IQ_CANDIDATE_1_PROTOCOL.json');
+  const selection = load('docs/research/mid-iq/MID_IQ_CANDIDATE_1_SELECTION.json');
+  const report = load('docs/research/mid-iq/MID_IQ_CANDIDATE_1_RESULT.json');
+  const source = load('docs/research/mid-iq/MID_IQ_TEAM_ROLE_STUDY_1.json');
+  assert.equal(hash('docs/research/mid-iq/MID_IQ_CANDIDATE_1_PROTOCOL.json'), 'f660073f9a4ef7519eab939676a822cb0e098d84d18b58fd70ea2132bcbe2e01');
   assert.equal(selection.scope, 'earlier-only-candidate-selection');
   assert.equal(report.scope, 'selected-turnover-shrinkage-evaluation');
-  assert.equal(report.selectionSha256, hash('docs/MID_IQ_CANDIDATE_1_SELECTION.json'));
+  assert.equal(report.selectionSha256, hash('docs/research/mid-iq/MID_IQ_CANDIDATE_1_SELECTION.json'));
   assert.equal(selection.implementationSha256, hash('scripts/data_pipeline/evaluate_turnover_shrinkage.py'));
   assert.equal(report.implementationSha256, selection.implementationSha256);
   assert.equal(selection.protocolVersion, protocol.version);
@@ -1311,12 +1312,12 @@ test('candidate1 shrinkage preserves registration, earlier-only selection and th
 });
 
 test('candidate2 role costs preserve registration, independent ledgers and the component acceptance gate', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
   const hash = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
-  const protocol = load('docs/MID_IQ_CANDIDATE_2_PROTOCOL.json');
-  const selection = load('docs/MID_IQ_CANDIDATE_2_SELECTION.json');
-  const report = load('docs/MID_IQ_CANDIDATE_2_RESULT.json');
-  assert.equal(hash('docs/MID_IQ_CANDIDATE_2_PROTOCOL.json'), '78f403ecea458a8f98a75d1667e77c970380f06a32cc2d0d2f125afaefad0f12');
+  const protocol = load('docs/research/mid-iq/MID_IQ_CANDIDATE_2_PROTOCOL.json');
+  const selection = load('docs/research/mid-iq/MID_IQ_CANDIDATE_2_SELECTION.json');
+  const report = load('docs/research/mid-iq/MID_IQ_CANDIDATE_2_RESULT.json');
+  assert.equal(hash('docs/research/mid-iq/MID_IQ_CANDIDATE_2_PROTOCOL.json'), '78f403ecea458a8f98a75d1667e77c970380f06a32cc2d0d2f125afaefad0f12');
   assert.deepEqual(protocol.passingWeights, [0, 0.25, 0.5, 0.75, 1]);
   assert.equal(protocol.configurationCount, 5);
   assert.equal(protocol.candidateMechanism, 2);
@@ -1326,7 +1327,7 @@ test('candidate2 role costs preserve registration, independent ledgers and the c
   assert.deepEqual(protocol.evaluationYears, [2013, 2026]);
   assert.equal(selection.scope, 'earlier-only-role-cost-selection');
   assert.equal(report.scope, 'selected-role-cost-evaluation');
-  assert.equal(report.selectionSha256, hash('docs/MID_IQ_CANDIDATE_2_SELECTION.json'));
+  assert.equal(report.selectionSha256, hash('docs/research/mid-iq/MID_IQ_CANDIDATE_2_SELECTION.json'));
   assert.equal(selection.implementationSha256, hash('scripts/data_pipeline/evaluate_role_costs.py'));
   for (const field of ['implementationSha256', 'protocolVersion', 'runtime', 'sourceSha256']) assert.deepEqual(report[field], selection[field]);
   assert.equal(report.protocolVersion, protocol.version);
@@ -1433,13 +1434,13 @@ test('candidate2 role costs preserve registration, independent ledgers and the c
 });
 
 test('integration1 masked turnovers preserve player separation, frozen neighbors and the failed uncertainty gate', () => {
-  const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+  const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
   const hash = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
-  const protocol = load('docs/MID_IQ_INTEGRATION_1_PROTOCOL.json');
-  const fit = load('docs/MID_IQ_MISSING_TURNOVERS_FIT_1.json');
-  const report = load('docs/MID_IQ_MISSING_TURNOVERS_RESULT_1.json');
+  const protocol = load('docs/research/mid-iq/MID_IQ_INTEGRATION_1_PROTOCOL.json');
+  const fit = load('docs/research/mid-iq/MID_IQ_MISSING_TURNOVERS_FIT_1.json');
+  const report = load('docs/research/mid-iq/MID_IQ_MISSING_TURNOVERS_RESULT_1.json');
   const audit = load(protocol.missingDataPolicy.source);
-  assert.equal(hash('docs/MID_IQ_INTEGRATION_1_PROTOCOL.json'), 'a9a933d9b923dc21e44346aa805a8daa80af68566e1f4d8fe221af08d9432232');
+  assert.equal(hash('docs/research/mid-iq/MID_IQ_INTEGRATION_1_PROTOCOL.json'), 'a9a933d9b923dc21e44346aa805a8daa80af68566e1f4d8fe221af08d9432232');
   assert.equal(protocol.candidate2PassingWeight, 0.25);
   assert.deepEqual(protocol.budget, { missingDataPolicies: 1, strengthMappings: 1, retunes: 0, freshPanels: 1, finalistPolicyEvaluations: 1, humanPilots: 1 });
   assert.deepEqual(protocol.missingDataPolicy.minimumCohorts, { donors: 100, calibration: 40, evaluation: 40 });
@@ -1447,7 +1448,7 @@ test('integration1 masked turnovers preserve player separation, frozen neighbors
     maximumAbsoluteBiasPer36: 0.25, minimumEmpiricalIntervalCoverage: 0.85, maximumMeanIntervalWidthPer36: 3 });
   assert.equal(fit.version, 'mid-iq-missing-turnovers-fit-1');
   assert.equal(report.version, 'mid-iq-missing-turnovers-result-1');
-  assert.equal(report.fitSha256, hash('docs/MID_IQ_MISSING_TURNOVERS_FIT_1.json'));
+  assert.equal(report.fitSha256, hash('docs/research/mid-iq/MID_IQ_MISSING_TURNOVERS_FIT_1.json'));
   assert.equal(fit.implementationSha256, hash('scripts/data_pipeline/evaluate_missing_turnovers.py'));
   for (const field of ['implementationSha256', 'sourceSha256', 'protocolVersion', 'runtime']) assert.deepEqual(report[field], fit[field]);
   assert.equal(fit.protocolVersion, protocol.version);
@@ -1615,10 +1616,10 @@ test('offline roster spacing and congestion are continuous and PF/C labels do no
 });
 
 test('frozen offline candidates reproduce evaluations and unrounded development and reserved band failures', () => {
-  const catalog = JSON.parse(readFileSync(new URL('../../data/reference/mid-iq-roster-benchmarks.json', import.meta.url), 'utf8'));
-  const playerList: Player[] = JSON.parse(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8'));
-  const coachList: Coach[] = JSON.parse(readFileSync(new URL('../../data/processed/coaches.json', import.meta.url), 'utf8'));
-  const pool: OpponentPool = JSON.parse(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).regularSeasonPool;
+  const catalog = parseResearchJson(readFileSync(new URL('../../data/reference/mid-iq-roster-benchmarks.json', import.meta.url), 'utf8'));
+  const playerList: Player[] = parseResearchJson(readFileSync(new URL('../../data/processed/players.json', import.meta.url), 'utf8'));
+  const coachList: Coach[] = parseResearchJson(readFileSync(new URL('../../data/processed/coaches.json', import.meta.url), 'utf8'));
+  const pool: OpponentPool = parseResearchJson(readFileSync(new URL('../../data/processed/opponents.json', import.meta.url), 'utf8')).regularSeasonPool;
   for (const [reportName, passed, poolPassed, family] of [
     ['FIT_3', 10, undefined, 'development'], ['FIT_8', 15, undefined, 'development'],
     ['FIT_10', 15, undefined, 'development'], ['FIT_12', 15, 15, 'development'],
@@ -1626,7 +1627,7 @@ test('frozen offline candidates reproduce evaluations and unrounded development 
     ['FIT_16', 13, 14, 'development'], ['FIT_18', 13, 15, 'development'],
     ['VALIDATION_1', 4, 4, 'validation'],
   ] as const) {
-    const report = JSON.parse(readFileSync(new URL(`../../docs/MID_IQ_ROSTER_${reportName}.json`, import.meta.url), 'utf8'));
+    const report = parseResearchJson(readFileSync(new URL(`../../docs/research/mid-iq/MID_IQ_ROSTER_${reportName}.json`, import.meta.url), 'utf8'));
     for (const row of report.rosters) {
       const roster = catalog.rosters.find((entry: { id: string }) => entry.id === row.id);
       assert.equal(catalog.families[roster.family], family);
@@ -1634,7 +1635,7 @@ test('frozen offline candidates reproduce evaluations and unrounded development 
       const lineup = { ...Object.fromEntries(slots.map((slot, index) => [slot, playerList.find((player) => player.id === roster.players[index])])),
         coach: coachList.find((coach) => coach.id === roster.coach) } as TeamLineup;
       const neutral = evaluateRosterCandidate(lineup, { opponentNetRating: 0, isHome: false, isBackToBack: false }, report.fitted.parameters);
-      assert.deepEqual(JSON.parse(JSON.stringify(neutral)), row.neutral);
+      assert.deepEqual(parseResearchJson(JSON.stringify(neutral)), row.neutral);
       if (poolPassed !== undefined) {
         let expected = 0;
         for (const tier of Object.keys(SCHEDULE_COUNTS) as (keyof OpponentPool)[]) {
@@ -1664,7 +1665,7 @@ test('frozen offline candidates reproduce evaluations and unrounded development 
     if (family === 'development') assert.equal(report.variants.find((row: { id: string }) => row.id === 'V07').expectedWinDifference < 0, true);
     else {
       assert.equal(report.validationVerdict, 'FAIL');
-      const selected = JSON.parse(readFileSync(new URL('../../docs/MID_IQ_ROSTER_FIT_18.json', import.meta.url), 'utf8'));
+      const selected = parseResearchJson(readFileSync(new URL('../../docs/research/mid-iq/MID_IQ_ROSTER_FIT_18.json', import.meta.url), 'utf8'));
       assert.deepEqual(report.fitted.parameters, selected.fitted.parameters);
     }
   }
@@ -2046,13 +2047,13 @@ test('non-finite opponent ratings are rejected', () => {
 });
 
 test('processed players, coaches and opponents work together without mutating source data', () => {
-  const players = JSON.parse(readFileSync(
+  const players = parseResearchJson(readFileSync(
     new URL('../../data/processed/players.json', import.meta.url), 'utf8',
   )) as Player[];
-  const coaches = JSON.parse(readFileSync(
+  const coaches = parseResearchJson(readFileSync(
     new URL('../../data/processed/coaches.json', import.meta.url), 'utf8',
   )) as Coach[];
-  const opponents = JSON.parse(readFileSync(
+  const opponents = parseResearchJson(readFileSync(
     new URL('../../data/processed/opponents.json', import.meta.url), 'utf8',
   )) as { regularSeasonPool: Record<string, { netRating: number }[]> };
   assert.ok(players.length > 0);

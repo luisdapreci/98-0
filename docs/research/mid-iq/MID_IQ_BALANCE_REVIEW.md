@@ -2,7 +2,7 @@
 
 Date: 2026-09-14. Status: analysis and recommendations, not an approved retune.
 
-Subsequent decision: the user adopted qualification contention for the reference roster. The [season-3 scoring-core release](MID_IQ_CORE_RELEASE.md) documents the resulting single-variable change and fresh evaluation. This review remains the pre-change diagnosis; its other proposed retunes are not implemented.
+Subsequent decision: the user adopted qualification contention for the reference roster. The [season-3 scoring-core release](../../release/MID_IQ_CORE_RELEASE.md) documents the resulting single-variable change and fresh evaluation. This review remains the pre-change diagnosis; its other proposed retunes are not implemented.
 
 ## Recommendation
 
@@ -14,12 +14,12 @@ No runtime, data, version, target, or roadmap status changed in this review. P3.
 
 ## Evidence and Method
 
-- Primary evidence: [retained P3.7 report](PHASE3_REVIEW.json), 100 seeds for each of nine legal drafting policies, plus its [methodology and uncertainty](PHASE3_REVIEW.md).
-- Current formulas: [math.ts](../src/engine/math.ts). Policy definitions: [calibrate.ts](../src/engine/calibrate.ts) and [draft-strategy.ts](../src/engine/draft-strategy.ts). Current targets and postseason rules: [GAME_DESIGN.md](GAME_DESIGN.md).
+- Primary evidence: [retained P3.7 report](../phase3/PHASE3_REVIEW.json), 100 seeds for each of nine legal drafting policies, plus its [methodology and uncertainty](../phase3/PHASE3_REVIEW.md).
+- Current formulas: [math.ts](../../../src/engine/math.ts). Policy definitions: [calibrate.ts](../../../src/engine/calibrate.ts) and [draft-strategy.ts](../../../src/engine/draft-strategy.ts). Current targets and postseason rules: [GAME_DESIGN.md](../../design/GAME_DESIGN.md).
 - Reconstructed all 900 rosters from saved ordered player IDs and coach IDs using current processed data. Computed spacing tiers, base offense, usage and spacing effects, and bench diagnostics without changing inputs.
 - Reconstructed the saved schedules for the random, chemistry, and lookahead groups. All 300 schedule-conditioned expected-win totals match retained values within 1e-8. Used their individual game probabilities for outcome variance and conditional undefeated probabilities.
 - Coach diagnostics apply all 12 coaches to the same 100 retained lookahead rosters. These swaps ignore original offers and do not redraft around each coach. They are mechanism checks, not legal counterfactual runs or unbiased rankings.
-- This is exploratory reuse of exposed evidence, not a new held-out validation. The original review used season-1 scores; the released season-2 score changes preserve win probabilities and winners, so these win-balance measurements remain relevant. Old score-distribution findings are historical, superseded by the [accepted score release](PHASE3_SCORE_RETRY.md).
+- This is exploratory reuse of exposed evidence, not a new held-out validation. The original review used season-1 scores; the released season-2 score changes preserve win probabilities and winners, so these win-balance measurements remain relevant. Old score-distribution findings are historical, superseded by the [accepted score release](../phase3/PHASE3_SCORE_RETRY.md).
 
 ## 1. Difficulty and Progression
 

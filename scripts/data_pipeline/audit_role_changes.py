@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+from research_files import parse_research_json
 import math
 import platform
 from collections import defaultdict
@@ -45,15 +46,15 @@ def direction(value, threshold):
 
 
 def load_rows():
-    prediction_path = ROOT / "docs/MID_IQ_OFFENSE_PREDICTION_1.json"
-    prediction = json.loads(prediction_path.read_text(encoding="utf-8"))
+    prediction_path = ROOT / "docs/research/mid-iq/MID_IQ_OFFENSE_PREDICTION_1.json"
+    prediction = parse_research_json(prediction_path.read_text(encoding="utf-8"))
     assert prediction["version"] == "mid-iq-offense-prediction-1"
-    hashes = {**prediction["sourceSha256"], "docs/MID_IQ_OFFENSE_PREDICTION_1.json": fingerprint(prediction_path),
+    hashes = {**prediction["sourceSha256"], "docs/research/mid-iq/MID_IQ_OFFENSE_PREDICTION_1.json": fingerprint(prediction_path),
               "scripts/data_pipeline/predict_offense.py": prediction["implementationSha256"]}
     for path, expected in hashes.items():
         assert fingerprint(ROOT / path) == expected, f"Stale role-change source: {path}"
-    workload = json.loads((ROOT / "docs/MID_IQ_WORKLOAD_STUDY_1.json").read_text(encoding="utf-8"))
-    era = json.loads((ROOT / "docs/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
+    workload = parse_research_json((ROOT / "docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json").read_text(encoding="utf-8"))
+    era = parse_research_json((ROOT / "docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
     baselines = {row["season"]: row for row in era["seasons"]}
     with (ROOT / "data/raw/Player Per Game.csv").open(encoding="utf-8", newline="") as source:
         raw = dict(enumerate(csv.DictReader(source), 2))

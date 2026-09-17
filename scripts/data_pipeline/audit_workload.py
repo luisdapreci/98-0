@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+from research_files import parse_research_json
 import math
 import statistics
 from collections import Counter, defaultdict
@@ -95,10 +96,10 @@ def self_test():
 
 
 def build_report():
-    era_path = ROOT / "docs/MID_IQ_ERA_BASELINE_AUDIT_1.json"
-    era = json.loads(era_path.read_text(encoding="utf-8"))
+    era_path = ROOT / "docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json"
+    era = parse_research_json(era_path.read_text(encoding="utf-8"))
     assert era["version"] == "mid-iq-era-baseline-audit-1"
-    hashes = {**era["sourceSha256"], "docs/MID_IQ_ERA_BASELINE_AUDIT_1.json": fingerprint(era_path),
+    hashes = {**era["sourceSha256"], "docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json": fingerprint(era_path),
               "scripts/data_pipeline/audit_era_baselines.py": era["implementationSha256"]}
     for path, sha in hashes.items():
         assert fingerprint(ROOT / path) == sha, f"Stale workload source: {path}"

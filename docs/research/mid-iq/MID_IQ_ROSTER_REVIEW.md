@@ -8,11 +8,11 @@ This is the September 14 expectation-freeze snapshot. On September 15 the user a
 
 A recognizable, well-constructed team should perform like a contender. Different basketball identities should have viable paths to success, and weaknesses should matter without erasing the value of great players.
 
-This is the reviewed set: **24 base rosters, eight variants, all 12 coaches**. The [machine-readable catalog](../data/reference/mid-iq-roster-benchmarks.json), revision `mid-iq-roster-review-2`, contains exact player IDs, approved targets, strengths, weaknesses and the 13 chat decisions. Player and coach source fingerprints are unchanged. Nothing in the live season-3 balance has changed.
+This is the reviewed set: **24 base rosters, eight variants, all 12 coaches**. The [machine-readable catalog](../../../data/reference/mid-iq-roster-benchmarks.json), revision `mid-iq-roster-review-2`, contains exact player IDs, approved targets, strengths, weaknesses and the 13 chat decisions. Player and coach source fingerprints are unchanged. Nothing in the live season-3 balance has changed.
 
 All 32 lineups pass player identity, coach existence and position-eligibility checks. That does **not** establish a legal acquisition history or how frequently the necessary rolls and coach offers occur. These are team-value benchmarks; ordinary-draft accessibility remains a separate measurement.
 
-The reference C01 already has exposed results from the [previous balance release](MID_IQ_CORE_RELEASE.md). It is development evidence only. The other entries have not been evaluated as this benchmark suite. Reserved families are prospective validation cases for the next tuning experiment, not proof of independence from every earlier design decision or from shared player data.
+The reference C01 already has exposed results from the [previous balance release](../../release/MID_IQ_CORE_RELEASE.md). It is development evidence only. The other entries have not been evaluated as this benchmark suite. Reserved families are prospective validation cases for the next tuning experiment, not proof of independence from every earlier design decision or from shared player data.
 
 ## Approved Targets
 

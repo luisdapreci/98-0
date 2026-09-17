@@ -3,6 +3,7 @@ import argparse
 import csv
 import hashlib
 import json
+from research_files import parse_research_json
 import math
 import platform
 from collections import defaultdict
@@ -85,15 +86,15 @@ def paired_difference(rows, actual, candidate, reference):
 
 
 def load_rows():
-    workload_path = ROOT / "docs/MID_IQ_WORKLOAD_STUDY_1.json"
-    workload = json.loads(workload_path.read_text(encoding="utf-8"))
+    workload_path = ROOT / "docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json"
+    workload = parse_research_json(workload_path.read_text(encoding="utf-8"))
     assert workload["version"] == "mid-iq-workload-study-1"
-    hashes = {**workload["sourceSha256"], "docs/MID_IQ_WORKLOAD_STUDY_1.json": fingerprint(workload_path),
+    hashes = {**workload["sourceSha256"], "docs/research/mid-iq/MID_IQ_WORKLOAD_STUDY_1.json": fingerprint(workload_path),
               "scripts/data_pipeline/audit_workload.py": workload["implementationSha256"],
               "scripts/data_pipeline/requirements-analysis.txt": fingerprint(Path(__file__).with_name("requirements-analysis.txt"))}
     for path, expected in hashes.items():
         assert fingerprint(ROOT / path) == expected, f"Stale prediction source: {path}"
-    era = json.loads((ROOT / "docs/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
+    era = parse_research_json((ROOT / "docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
     baselines = {row["season"]: row for row in era["seasons"]}
     with (ROOT / "data/raw/Player Per Game.csv").open(encoding="utf-8", newline="") as source:
         raw_rows = dict(enumerate(csv.DictReader(source), 2))

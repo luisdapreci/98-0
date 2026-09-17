@@ -1,0 +1,17 @@
+/docs/**/*.json -text
+/scripts/data_pipeline/audit_era_baselines.py text eol=lf
+/scripts/data_pipeline/audit_role_changes.py text eol=lf
+/scripts/data_pipeline/audit_team_roles.py text eol=lf
+/scripts/data_pipeline/audit_workload.py text eol=lf
+/scripts/data_pipeline/diagnose_possession_offense.py text eol=lf
+/scripts/data_pipeline/evaluate_missing_turnovers.py text eol=lf
+/scripts/data_pipeline/evaluate_role_costs.py text eol=lf
+/scripts/data_pipeline/evaluate_shooting_history.py text eol=lf
+/scripts/data_pipeline/evaluate_turnover_shrinkage.py text eol=lf
+/scripts/data_pipeline/predict_offense.py text eol=lf
+/src/engine/calibrate-balance.ts text eol=lf
+/src/engine/calibrate-lineups.ts text eol=lf
+/src/engine/calibrate-possession-offense.ts text eol=lf
+/src/engine/calibrate-roles.ts text eol=lf
+/src/engine/calibrate-rosters.ts text eol=lf
+/src/engine/calibrate-scores.ts text eol=lf

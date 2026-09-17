@@ -3,6 +3,7 @@ import argparse
 import csv
 import itertools
 import json
+from research_files import parse_research_json
 import math
 from collections import defaultdict
 from pathlib import Path
@@ -179,10 +180,10 @@ def self_test():
 
 
 def build_report():
-    history_path = "docs/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json"
-    prototype_path = "docs/MID_IQ_POSSESSION_OFFENSE_2.json"
-    history = json.loads((ROOT / history_path).read_text(encoding="utf-8"))
-    prototype = json.loads((ROOT / prototype_path).read_text(encoding="utf-8"))
+    history_path = "docs/research/mid-iq/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json"
+    prototype_path = "docs/research/mid-iq/MID_IQ_POSSESSION_OFFENSE_2.json"
+    history = parse_research_json((ROOT / history_path).read_text(encoding="utf-8"))
+    prototype = parse_research_json((ROOT / prototype_path).read_text(encoding="utf-8"))
     assert history["version"] == "mid-iq-historical-team-offense-1"
     assert prototype["version"] == "mid-iq-possession-offense-2"
     hashes = {**prototype["sourceSha256"], history_path: fingerprint(ROOT / history_path), prototype_path: fingerprint(ROOT / prototype_path)}

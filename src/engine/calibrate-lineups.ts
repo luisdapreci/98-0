@@ -1,3 +1,4 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -5,16 +6,16 @@ import { evaluateLineupOffense } from './lineup-prototype.ts';
 import type { LineupOffenseInput } from './lineup-prototype.ts';
 
 const fingerprint = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
-const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
 const output = process.argv[2];
 assert.ok(output, 'A new output path is required.');
 assert.ok(!existsSync(output), 'Refusing to overwrite an existing lineup study.');
-const audit = load('docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json');
-const era = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json');
+const audit = load('docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json');
+const era = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json');
 assert.equal(audit.version, 'mid-iq-possession-input-audit-1');
 assert.equal(era.version, 'mid-iq-era-baseline-audit-1');
 const sourceSha256: Record<string, string> = { ...era.sourceSha256,
-  'docs/MID_IQ_ERA_BASELINE_AUDIT_1.json': fingerprint('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json'),
+  'docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json': fingerprint('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json'),
   'scripts/data_pipeline/audit_era_baselines.py': era.implementationSha256,
   'scripts/data_pipeline/audit_possessions.py': audit.auditImplementationSha256,
 };

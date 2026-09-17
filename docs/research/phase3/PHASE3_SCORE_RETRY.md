@@ -24,8 +24,8 @@ The old hoopR-data archive has no 2024 CSV and its schedule archive stops at 202
 
 | Role | Snapshot | Games | OT Games | Release Asset ID | Source CSV SHA-256 |
 | --- | --- | ---: | ---: | --- | --- |
-| Development | [2023-24](../data/reference/nba-scores-2024.json) | 1,230 | 59 | 493697559 | `ae89a6e51dec1817b41e457d02ffc4cfc26d25b411d318906c1ec5f39a6c5527` |
-| Held Out | [2024-25](../data/reference/nba-scores-2025.json) | 1,230 | 60 | 493698993 | `a7a5b6607a256c84a324f819e4461248bdff90a78b1ddb675a5a117a9a94e74f` |
+| Development | [2023-24](../../../data/reference/nba-scores-2024.json) | 1,230 | 59 | 493697559 | `ae89a6e51dec1817b41e457d02ffc4cfc26d25b411d318906c1ec5f39a6c5527` |
+| Held Out | [2024-25](../../../data/reference/nba-scores-2025.json) | 1,230 | 60 | 493698993 | `a7a5b6607a256c84a324f819e4461248bdff90a78b1ddb675a5a117a9a94e74f` |
 
 The importer checks the published digest against raw downloaded bytes before UTF-8 CSV parsing. It accepts whole-valued decimal period fields such as `4.0`, but rejects fractional, negative, missing or overflowing values. Both snapshots pass unique IDs, completed regular-season filters, non-tied integer scores, 30 teams, and exactly 82 appearances per team. NBA Cup finals and postseason games do not enter the 1,230-game workload. Release tags are mutable, so asset IDs, update times and source hashes are saved; a download whose digest differs from its asset metadata is rejected. Offline reproduction uses the retained snapshots, not a newly fetched release.
 

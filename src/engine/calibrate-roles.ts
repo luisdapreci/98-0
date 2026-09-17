@@ -1,30 +1,31 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { evaluateRoleAllocation } from './role-allocation.ts';
 import type { LineupOffenseInput } from './lineup-prototype.ts';
 
-const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
 const fingerprint = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
 const output = process.argv[2];
 assert.ok(output, 'A new output path is required.');
 assert.ok(!existsSync(output), 'Refusing to overwrite an existing role allocation study.');
-const lineup = load('docs/MID_IQ_LINEUP_PROTOTYPE_1.json');
-const roleStudy = load('docs/MID_IQ_ROLE_CHANGE_STUDY_1.json');
+const lineup = load('docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json');
+const roleStudy = load('docs/research/mid-iq/MID_IQ_ROLE_CHANGE_STUDY_1.json');
 assert.equal(lineup.version, 'mid-iq-lineup-prototype-1');
 assert.equal(roleStudy.version, 'mid-iq-role-change-study-1');
 const sourceSha256: Record<string, string> = { ...lineup.sourceSha256,
-  'docs/MID_IQ_LINEUP_PROTOTYPE_1.json': fingerprint('docs/MID_IQ_LINEUP_PROTOTYPE_1.json'),
+  'docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json': fingerprint('docs/research/mid-iq/MID_IQ_LINEUP_PROTOTYPE_1.json'),
   'src/engine/lineup-prototype.ts': lineup.implementationSha256,
   'src/engine/calibrate-lineups.ts': lineup.evaluatorSha256,
-  'docs/MID_IQ_ROLE_CHANGE_STUDY_1.json': fingerprint('docs/MID_IQ_ROLE_CHANGE_STUDY_1.json'),
+  'docs/research/mid-iq/MID_IQ_ROLE_CHANGE_STUDY_1.json': fingerprint('docs/research/mid-iq/MID_IQ_ROLE_CHANGE_STUDY_1.json'),
   'scripts/data_pipeline/audit_role_changes.py': roleStudy.implementationSha256 };
 for (const [path, hash] of Object.entries(roleStudy.sourceSha256)) {
   if (sourceSha256[path]) assert.equal(sourceSha256[path], hash);
   sourceSha256[path] = hash as string;
 }
 for (const [path, hash] of Object.entries(sourceSha256)) assert.equal(fingerprint(path), hash, `Stale role allocation source: ${path}`);
-const era = load('docs/MID_IQ_ERA_BASELINE_AUDIT_1.json');
+const era = load('docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json');
 const baseline: { shotPointsPerEnd: number; turnoverShare: number } = era.seasons.find((row: { season: number }) => row.season === 2020);
 assert.ok(baseline);
 const byId = new Map<string, LineupOffenseInput & { ready: boolean }>(lineup.players.map((player: LineupOffenseInput & { ready: boolean }) => [player.id, player]));

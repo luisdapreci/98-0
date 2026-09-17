@@ -1,0 +1,38 @@
+{
+  "version": "mid-iq-integration-protocol-1",
+  "approval": { "date": "2026-09-15", "request": "go with your recomendation", "scope": "Bounded candidate2 integration, preserving historical roster scope; no turnover-weight search or automatic release." },
+  "parentScorecard": "mid-iq-scorecard-1",
+  "budget": { "missingDataPolicies": 1, "strengthMappings": 1, "retunes": 0, "freshPanels": 1, "finalistPolicyEvaluations": 1, "humanPilots": 1 },
+  "candidate2PassingWeight": 0.25,
+  "unchanged": ["all player identities and peak years", "all approved roster bands and variants", "all four release gates", "draft resources and qualification thresholds", "live rules and saves until explicit release acceptance"],
+  "stages": [
+    "Freeze and validate the single missing-turnover policy using observed modern peaks with masked labels. Save training/calibration evidence before opening evaluation labels. Failure stops integration.",
+    "If the masking gate passes, emit a separate historical modeled-input layer with provenance and uncertainty, preserving raw nulls. Treat cross-era transport as an assumption, not validated historical truth.",
+    "Before any new roster outcomes, freeze one complete-strength mapping using candidate2 costs, existing offense inputs and existing defensive/coach/reserve rules. No parameter search. Require all exposed roster bands and mandatory variants to pass, with missing-data sensitivity retained. Failure stops this cycle.",
+    "Only a complete passing finalist may proceed to separately user-approved fresh families and the existing policy/player/engineering gates. No silent scope narrowing or fresh-panel reuse."
+  ],
+  "missingDataPolicy": {
+    "name": "masked-peak-neighbors-1",
+    "source": "docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json",
+    "features": ["shotEndsPer36", "assistsPer36"],
+    "target": "turnoversPer36",
+    "identityPartition": "SHA256 of underlying player id, interpreted as a big-endian integer modulo10: 0-5 donor, 6-7 calibration, 8-9 evaluation. Every version of an identity stays in its partition.",
+    "donors": "Complete observed peaks with every selected season from1978 through2002, donor identities only. One version per identity: greatest total observed minutes, tie lexicographic version id. Population mean and standard deviation of donor features only.",
+    "calibration": "Complete observed peaks with every selected season from2003 through2012, calibration identities only. One version per identity by greatest total minutes then version id. No calibration labels enter point predictions.",
+    "evaluation": "Complete observed peaks with every selected season from2013 through2026, evaluation identities only. One version per identity by greatest total minutes then version id. Save donor/calibration artifact before predicting evaluation rows.",
+    "estimator": "Mean turnoversPer36 of the50 nearest donors by squared Euclidean distance on donor-standardized shotEndsPer36 and assistsPer36. Tie by donor id. Exactly50 donors required; no bandwidth, feature or neighbor-count search. Constant donor target mean is the baseline.",
+    "uncertainty": "Split-conformal absolute-residual radius at sorted rank ceil((calibrationCount+1)*0.9), one-based; fail if unavailable. Lower=max(0, prediction-radius), upper=prediction+radius. This is a nominal90% modern masked-label interval; exchangeability across eras is not asserted.",
+    "minimumCohorts": { "donors": 100, "calibration": 40, "evaluation": 40 },
+    "maskingGate": {
+      "allPredictionsFiniteNonnegative": true,
+      "rmseNoWorseThanDonorMean": true,
+      "maximumAbsoluteBiasPer36": 0.25,
+      "minimumEmpiricalIntervalCoverage": 0.85,
+      "maximumMeanIntervalWidthPer36": 3
+    },
+    "thresholdRationale": "An integration screen, not a population confidence claim: require a role-informed estimate to outperform the trivial constant, bias below0.25 turnover/36, coverage within5 percentage points of nominal90%, and average interval width at most3 turnover/36 so uncertainty is not hidden in an uninformative range. These engineering tolerances are fixed before measurement.",
+    "historicalTreatment": "Only if this gate passes: observed peak turnover counts remain observed; predict only missing selected-season rates using that season's observed shots/assists/minutes, pool by minutes with retained observed turnover counts. Separate modeled provenance and lower/central/upper totals, never mutate audit or processed data. Historical league turnover reference and cross-era normalization still require explicit registration in the one strength mapping; no historical coverage claim from modern masking alone."
+  },
+  "failureAction": "Stop on a failed or unmeasurable stage, retain all evidence and current live balance. Do not try another missing-data policy, change thresholds or add strength mappings without explicit approval. Unused downstream stages do not authorize replacement experiments.",
+  "reporting": "Record cohort ids, source/writer/protocol hashes, retained donor neighbors, all predictions and intervals, exact gates and unsupported inputs. Exclusive outputs and byte replay required. Existing historical data are exposed; this is not the fresh-family release gate."
+}

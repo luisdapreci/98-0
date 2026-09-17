@@ -12,12 +12,12 @@ As of 2026-09-17, the local game is playable through drafting, the seeded 82-gam
 
 - **IQ modes:** choose before signing a coach. No IQ disables chemistry and coach effects while retaining individual offense, defense and bench quality. Mid IQ is the default. HI IQ uses the same simulation as Mid IQ but hides scouting information until Start Season.
 - **Postseason:** new runs qualify at 45 wins after all 82 games are revealed. Start Postseason explicitly; a ring requires 16 main-bracket wins. A perfect 98-0 requires 82-0 plus 16-0, without a play-in.
-- **Local Daily:** Mid IQ challenges rotate indefinitely through 56 themes, reshuffled each cycle from September 17, 2026 UTC. Attempts and results are local/unverified; retries are practice. Requires browser storage, Web Locks and HTTPS or localhost. See [Daily rules and limits](docs/PHASE6_PROGRESS.md).
-- **Collection and sharing:** completing an 82-game simulation unlocks all 12 Coach Almanac systems. History retains 50 recent seasons and per-mode personal bests. Revealed results support PNG/text export and browser sharing. See [storage, spoiler rules and fallbacks](docs/PHASE7_PROGRESS.md).
+- **Local Daily:** Mid IQ challenges rotate indefinitely through 56 themes, reshuffled each cycle from September 17, 2026 UTC. Attempts and results are local/unverified; retries are practice. Requires browser storage, Web Locks and HTTPS or localhost. See [Daily rules and limits](docs/progress/PHASE6_PROGRESS.md).
+- **Collection and sharing:** completing an 82-game simulation unlocks all 12 Coach Almanac systems. History retains 50 recent seasons and per-mode personal bests. Revealed results support PNG/text export and browser sharing. See [storage, spoiler rules and fallbacks](docs/progress/PHASE7_PROGRESS.md).
 
 Online rankings (Phase 8) are deferred. Phase 9 release gates, human playtesting, mode-specific balance acceptance and physical-device verification remain open. Local clocks and storage are not trusted; there is no offline installation or cold-launch cache.
 
-The latest recorded full validation is in [Phase 7](docs/PHASE7_PROGRESS.md#validation): 112 engine tests, 92 desktop/mobile Edge checks, typecheck and production build passed. These are dated functional results, not human-playtest or balance sign-off. See [the release scorecard](docs/RELEASE_SCORECARD.md) for acceptance gates.
+The latest recorded full validation is in [Phase 7](docs/progress/PHASE7_PROGRESS.md#validation): 112 engine tests, 92 desktop/mobile Edge checks, typecheck and production build passed. These are dated functional results, not human-playtest or balance sign-off. See [the release scorecard](docs/release/RELEASE_SCORECARD.md) for acceptance gates.
 
 ## Stack
 
@@ -54,7 +54,7 @@ Browser tests require `npm run build` first and a Playwright browser (`npx playw
 `npm run calibrate` takes optional positional args: sample size, output path, comma-separated strategies, seed prefix, and engine version. Example:
 
 ```powershell
-npm run calibrate -- 500 docs/OUT.json chemistry,balanced,overloaded p3-baseline- season-3
+npm run calibrate -- 500 docs/research/mid-iq/OUT.json chemistry,balanced,overloaded p3-baseline- season-3
 ```
 
 ## Project layout
@@ -85,17 +85,19 @@ The pipeline fetches raw data (cached), builds peak-season player lines, generat
 
 ## Design and balance docs
 
+See the [documentation index](docs/README.md) for the folder guide and complete reading list.
+
 | Document | Role |
 |---|---|
-| [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md) | Current rules and roadmap; dated decisions remain historical |
-| [docs/PHASE7_PROGRESS.md](docs/PHASE7_PROGRESS.md) | Latest full functional validation; collection and sharing contract |
-| [docs/PHASE6_PROGRESS.md](docs/PHASE6_PROGRESS.md) | Current Daily rotation, compatibility and focused validation |
-| [docs/RELEASE_SCORECARD.md](docs/RELEASE_SCORECARD.md) | Binding acceptance gates and outstanding measurements |
-| [docs/MID_IQ_CORE_RELEASE.md](docs/MID_IQ_CORE_RELEASE.md) | Historical season-3 balance release, not current-build sign-off |
-| [docs/MID_IQ_ROSTER_CALIBRATION.md](docs/MID_IQ_ROSTER_CALIBRATION.md) | Research history and stopped experiments |
-| [docs/BASELINE_PLAYTEST.md](docs/BASELINE_PLAYTEST.md) | Historical season-3 protocol; no human sessions recorded; needs a new build registration before use |
+| [docs/design/GAME_DESIGN.md](docs/design/GAME_DESIGN.md) | Current rules and roadmap; dated decisions remain historical |
+| [docs/progress/PHASE7_PROGRESS.md](docs/progress/PHASE7_PROGRESS.md) | Latest full functional validation; collection and sharing contract |
+| [docs/progress/PHASE6_PROGRESS.md](docs/progress/PHASE6_PROGRESS.md) | Current Daily rotation, compatibility and focused validation |
+| [docs/release/RELEASE_SCORECARD.md](docs/release/RELEASE_SCORECARD.md) | Binding acceptance gates and outstanding measurements |
+| [docs/release/MID_IQ_CORE_RELEASE.md](docs/release/MID_IQ_CORE_RELEASE.md) | Historical season-3 balance release, not current-build sign-off |
+| [docs/research/mid-iq/MID_IQ_ROSTER_CALIBRATION.md](docs/research/mid-iq/MID_IQ_ROSTER_CALIBRATION.md) | Research history and stopped experiments |
+| [docs/playtests/BASELINE_PLAYTEST.md](docs/playtests/BASELINE_PLAYTEST.md) | Historical season-3 protocol; no human sessions recorded; needs a new build registration before use |
 
-`MID_IQ_*.json`, `PHASE3_*` reports and earlier phase reviews preserve calibration evidence, not current gameplay status. They are not browser runtime inputs, but regression tests and offline audit/calibration tools read many of them at fixed paths and verify source hashes. Keep their contents and paths intact, including superseded or failed results; use Git history for unrelated obsolete files. Raw/reference data and research scripts support those checks and reproducibility.
+`MID_IQ_*.json`, `PHASE3_*` reports and earlier phase reviews preserve calibration evidence, not current gameplay status. They now live under `docs/research`, with frozen JSON contents unchanged. Tests and offline tools resolve their historical metadata through the [documented migration](docs/README.md#research-compatibility). Preserve this evidence, including superseded or failed results; raw/reference data and research scripts support its reproducibility.
 
 Generated build/test output, Python bytecode and the local `.venv` are ignored. Do not commit them or delete active server output as part of documentation cleanup.
 

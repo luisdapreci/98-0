@@ -3,6 +3,7 @@ import argparse
 import csv
 import hashlib
 import json
+from research_files import parse_research_json
 import math
 from collections import defaultdict
 from pathlib import Path
@@ -108,14 +109,14 @@ def self_test():
 
 
 def build_report():
-    audit_path = ROOT / "docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json"
-    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    audit_path = ROOT / "docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json"
+    audit = parse_research_json(audit_path.read_text(encoding="utf-8"))
     assert audit["version"] == "mid-iq-possession-input-audit-1"
     for path, sha in audit["sourceSha256"].items():
         assert fingerprint(ROOT / path) == sha, f"Stale input audit source: {path}"
     assert fingerprint(ROOT / "scripts/data_pipeline/audit_possessions.py") == audit["auditImplementationSha256"]
     hashes = {**audit["sourceSha256"], "data/raw/Team Summaries.csv": fingerprint(ROOT / "data/raw/Team Summaries.csv"),
-              "docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json": fingerprint(audit_path),
+              "docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json": fingerprint(audit_path),
               "scripts/data_pipeline/audit_possessions.py": audit["auditImplementationSha256"]}
     selected_years = {row["season"] for player in audit["players"] for row in player["selected"]}
     grouped = defaultdict(list)

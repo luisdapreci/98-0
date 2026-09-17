@@ -2,9 +2,9 @@
 
 **Current decision:** the user-approved [bounded integration cycle](MID_IQ_INTEGRATION_1_PROTOCOL.json) stopped at its [missing-turnover masking gate](MID_IQ_MISSING_TURNOVERS_RESULT_1.json): bias and interval coverage failed. Candidate 2 retains its component pass, but no historical data were filled and no complete-strength mapping was attempted. Keep live balance and every historical player; no complete-game finalist, fresh-family measurement or human evaluation has been consumed. The original two-mechanism cycle is exhausted and the follow-up's failure rule prohibits another estimator or retune without approval. Historical statements below retain their original scope and decisions.
 
-**Current product work:** the user approved [exploratory feedback on the current game](BASELINE_PLAYTEST.md) on 2026-09-15. The six-person session kit and empty observations are ready; production build and limited desktop/320px journeys passed. Human sessions remain 0 of 6. This is not the scorecard's finalist pilot or evidence of improved balance. Model research remains paused while real participant observations are collected.
+**Current product work:** the user approved [exploratory feedback on the current game](../../playtests/BASELINE_PLAYTEST.md) on 2026-09-15. The six-person session kit and empty observations are ready; production build and limited desktop/320px journeys passed. Human sessions remain 0 of 6. This is not the scorecard's finalist pilot or evidence of improved balance. Model research remains paused while real participant observations are collected.
 
-**Subsequent product direction:** the user requested more usage tolerance for star-studded rosters. A local `season-4` preview now uses a 135% base cap for new runs, with coach bonuses and existing penalties above the cap retained. Older saves and all frozen research remain unchanged. See [the scorecard's usage-preview record](RELEASE_SCORECARD.md#user-requested-usage-preview) for the one-roster comparison and verification limits. This does not reopen the failed turnover research or turn the old playtest build into evidence for the new cap.
+**Subsequent product direction:** the user requested more usage tolerance for star-studded rosters. A local `season-4` preview now uses a 135% base cap for new runs, with coach bonuses and existing penalties above the cap retained. Older saves and all frozen research remain unchanged. See [the scorecard's usage-preview record](../../release/RELEASE_SCORECARD.md#user-requested-usage-preview) for the one-roster comparison and verification limits. This does not reopen the failed turnover research or turn the old playtest build into evidence for the new cap.
 
 ## Premeasurement Decisions (2026-09-15)
 
@@ -32,7 +32,7 @@ One mechanism at a time, with ablations. Freeze a candidate and its hashes befor
 
 **Balancing is not release-ready.** Frozen fit 18 passed all 15 development bands and upgrade gates, but [the first reserved validation](MID_IQ_ROSTER_VALIDATION_1.json) passed only 4/9 bands. All nine reserved families are now exposed. Live season-3 / mid-iq-2 / conditional-score-3 remains unchanged. No saved seasons were rewritten, no player or coach data was changed, and no benchmark targets were relaxed. Earlier sections retain the development history; the reserved outcome below is the current verdict.
 
-The frozen [catalog](../data/reference/mid-iq-roster-benchmarks.json) retains its September 14 review-time status and hash for reproducibility. Its `performanceEvaluated: false` describes that expectation freeze, not the subsequent development work here. September 15 authorization supersedes the review-only restriction for this calibration task. The conditional record checks above are resolved for this experiment, without editing the frozen expectations.
+The frozen [catalog](../../../data/reference/mid-iq-roster-benchmarks.json) retains its September 14 review-time status and hash for reproducibility. Its `performanceEvaluated: false` describes that expectation freeze, not the subsequent development work here. September 15 authorization supersedes the review-only restriction for this calibration task. The conditional record checks above are resolved for this experiment, without editing the frozen expectations.
 
 ### First-Cycle Evidence
 
@@ -102,7 +102,7 @@ All 12 coaches were evaluated on each of the 15 development rosters. Their best-
 
 ### Candidate Formula and Reproducibility
 
-The experimental [candidate module](../src/engine/roster-balance.ts) is not imported by live run, season or UI code. Its only consumers are the offline evaluator and regression tests.
+The experimental [candidate module](../../../src/engine/roster-balance.ts) is not imported by live run, season or UI code. Its only consumers are the offline evaluator and regression tests.
 
 - Start from the released blend of all-five and top-three offensive contributions, then blend toward the top-two mean with `leadScorerWeight`. The parameter name originated in fit 1, which used the top-one maximum; fits 2-4 use the top-two mean.
 - Scale coach stat changes by `coachScale` before blending offensive, defensive, spacing and reserve features. Retain a scaled flat pace term for this experiment; its dominance is a rejected aspect, not an endorsed final design.
@@ -118,12 +118,12 @@ node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_BASELINE.jso
 node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_USAGE.json usage
 node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_SPACING.json spacing
 node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_FIT.json fit
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_STRESS.json stress docs/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_AUDIT.json audit docs/MID_IQ_ROSTER_FIT_14.json
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_POSITION_CONTROL.json position-stress docs/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_POLICY_STUDY.json policy-stress docs/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX 100
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_ACCESS_STUDY.json access-stress docs/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX 100
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_COACH_AUDIT.json coach-audit docs/MID_IQ_ROSTER_FIT_14.json
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_STRESS.json stress docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_AUDIT.json audit docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_POSITION_CONTROL.json position-stress docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_POLICY_STUDY.json policy-stress docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX 100
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_ACCESS_STUDY.json access-stress docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json NEW_SEED_PREFIX 100
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_COACH_AUDIT.json coach-audit docs/research/mid-iq/MID_IQ_ROSTER_FIT_14.json
 ```
 
 Output paths must be new: the evaluator refuses to overwrite retained evidence. Stress and audit verify the frozen candidate implementation, catalog, math and opponent hashes. Earlier reports whose implementation hashes differ are deliberately rejected by these commands; regression tests replay their numerical evaluations without falsely claiming unchanged source. There is deliberately no validation-family evaluation mode yet; those outcomes must not be exposed by a default run.
@@ -283,7 +283,7 @@ Stop tuning this candidate for release. The exposed families may inform diagnosi
 
 ## Post-Validation Diagnosis (No Retuning)
 
-[Diagnosis 1](MID_IQ_ROSTER_DIAGNOSIS_1.json) uses the exact exposed fit 18 and all 24 previously measured bases. The new `diagnose` mode in [the evaluator](../src/engine/calibrate-rosters.ts) requires the original fit-file hash and verifies the validation's model, math, catalog and opponent hashes. Every neutral evaluation and full-pool expectation must replay before output. It neither searches parameters nor creates a release candidate. Original reports, model implementation and approved bands remain unchanged.
+[Diagnosis 1](MID_IQ_ROSTER_DIAGNOSIS_1.json) uses the exact exposed fit 18 and all 24 previously measured bases. The new `diagnose` mode in [the evaluator](../../../src/engine/calibrate-rosters.ts) requires the original fit-file hash and verifies the validation's model, math, catalog and opponent hashes. Every neutral evaluation and full-pool expectation must replay before output. It neither searches parameters nor creates a release candidate. Original reports, model implementation and approved bands remain unchanged.
 
 The diagnostic ledger sums baseline, scoring, creation, congestion loss, coach shooting, spacing, roster defense, coach defense, reserve and pace exactly to neutral rating. Inverting the full-pool expectation gives the following uniform rating shifts needed to reach the nearest approved boundary, holding reserve fatigue fixed:
 
@@ -299,13 +299,13 @@ These are model counterfactuals, not player substitutions, historical causal eff
 
 ### Findings and Limits
 
-1. **Scoring concentration is compounded.** [The core aggregation](../src/engine/math.ts#L12) already blends all-five and top-three means. [The candidate](../src/engine/roster-balance.ts) then blends that result with the top-two mean at weight 0.8. Within each ordered scoring pool, effective rank weights are 46.133%, 46.133%, 6.133%, 0.8% and 0.8%, before the common offense/congestion scaling. Coach-induced rank changes can mix different orderings. This is weighting of the `points * FG%` input, not possession shares or each player's percentage of total offense. It makes distributed scoring difficult to represent. However, removing only the extra top-two blend worsens Detroit to 53.85 wins and passes just 14/24 bands, versus the frozen model's 19/24. Concentration alone is not the complete explanation.
+1. **Scoring concentration is compounded.** [The core aggregation](../../../src/engine/math.ts#L12) already blends all-five and top-three means. [The candidate](../../../src/engine/roster-balance.ts) then blends that result with the top-two mean at weight 0.8. Within each ordered scoring pool, effective rank weights are 46.133%, 46.133%, 6.133%, 0.8% and 0.8%, before the common offense/congestion scaling. Coach-induced rank changes can mix different orderings. This is weighting of the `points * FG%` input, not possession shares or each player's percentage of total offense. It makes distributed scoring difficult to represent. However, removing only the extra top-two blend worsens Detroit to 53.85 wins and passes just 14/24 bands, versus the frozen model's 19/24. Concentration alone is not the complete explanation.
 
-2. **A defensive-scale increase is not a solution.** Fit 18 retains 42.21% of uncoached defensive deviation from 110. Restoring 100% puts C04 at 65.75 wins, but passes only 1/24 approved bands. C04 and F05 receive almost identical uncoached roster-defense credit (5.414881 versus 5.443979 rating). Both use Ben Wallace at center; the [defense formula](../src/engine/math.ts#L92) gives the best big the rim term and lets the second big contribute only through the team mean, while Prince's stored DBPM is 0.1. This identifies limited differentiation in the estimator, not proof that a stored stat is erroneous or that every reputed defender should get a manual bonus. These are player-version composites, not literal historical team seasons.
+2. **A defensive-scale increase is not a solution.** Fit 18 retains 42.21% of uncoached defensive deviation from 110. Restoring 100% puts C04 at 65.75 wins, but passes only 1/24 approved bands. C04 and F05 receive almost identical uncoached roster-defense credit (5.414881 versus 5.443979 rating). Both use Ben Wallace at center; the [defense formula](../../../src/engine/math.ts#L92) gives the best big the rim term and lets the second big contribute only through the team mean, while Prince's stored DBPM is 0.1. This identifies limited differentiation in the estimator, not proof that a stored stat is erroneous or that every reputed defender should get a manual bonus. These are player-version composites, not literal historical team seasons.
 
-3. **Spacing has disproportionate explanatory power in several misses, but cannot simply be removed.** [Spacing input](../src/engine/math.ts#L125) is raw three-point attempts times percentage, summed across starters. It does not distinguish five credible threats from concentrated production, or shooting gravity from made-shot value. Fit 18 turns that into a fixed additive term and separately adds coach-driven made threes. C08 and C12 both saturate at +5.744361 spacing despite different lineups; C08 also gets +1.923658 more coach-shooting rating than C12. Neutralizing spacing passes only 11/24 bands. A replacement must distinguish shot value, shooter distribution and coaching effects rather than stack unconditional rewards.
+3. **Spacing has disproportionate explanatory power in several misses, but cannot simply be removed.** [Spacing input](../../../src/engine/math.ts#L125) is raw three-point attempts times percentage, summed across starters. It does not distinguish five credible threats from concentrated production, or shooting gravity from made-shot value. Fit 18 turns that into a fixed additive term and separately adds coach-driven made threes. C08 and C12 both saturate at +5.744361 spacing despite different lineups; C08 also gets +1.923658 more coach-shooting rating than C12. Neutralizing spacing passes only 11/24 bands. A replacement must distinguish shot value, shooter distribution and coaching effects rather than stack unconditional rewards.
 
-4. **The current inputs cannot identify possession efficiency.** `points * FG%` applies an additional accuracy reward to points already scored; assists add creation without turnover cost, and per-game volume is not minutes-adjusted. [PlayerStats](../src/engine/types.ts#L4) lacks minutes, field-goal/free-throw attempts and turnovers. The raw per-game CSV already has those columns, and the advanced CSV has true shooting and turnover percentage. Header availability is verified; complete historical coverage, aggregation weights and multi-team joins are not. The model should not infer unavailable values as zero or silently replace the selected peak years.
+4. **The current inputs cannot identify possession efficiency.** `points * FG%` applies an additional accuracy reward to points already scored; assists add creation without turnover cost, and per-game volume is not minutes-adjusted. [PlayerStats](../../../src/engine/types.ts#L4) lacks minutes, field-goal/free-throw attempts and turnovers. The raw per-game CSV already has those columns, and the advanced CSV has true shooting and turnover percentage. Header availability is verified; complete historical coverage, aggregation weights and multi-team joins are not. The model should not infer unavailable values as zero or silently replace the selected peak years.
 
 ### Next Model Boundary
 
@@ -318,7 +318,7 @@ The 24 exposed bases remain regression/diagnostic cases. Once the next model's s
 Reproduce the diagnosis to a new path:
 
 ```powershell
-node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_DIAGNOSIS.json diagnose docs/MID_IQ_ROSTER_FIT_18.json
+node --experimental-strip-types src/engine/calibrate-rosters.ts NEW_DIAGNOSIS.json diagnose docs/research/mid-iq/MID_IQ_ROSTER_FIT_18.json
 ```
 
 The CLI regression covers exact reconciliation, inverse-band ordering, term-removal arithmetic, rejection of an altered fit and refusal to overwrite. There is no optimizer, fresh schedule sample or new benchmark measurement in this diagnostic mode.
@@ -329,7 +329,7 @@ The next stage completed [a source audit](MID_IQ_POSSESSION_INPUT_AUDIT_1.json) 
 
 ### Peak-Preserving Data Audit
 
-[The audit script](../scripts/data_pipeline/audit_possessions.py) invokes the existing importer functions without their file-writing entry point. All **4,411 stored player objects reproduce exactly**, including peak years, rounded stats, positions and ordering. The audit then joins those same selected records to the raw CSVs by player, franchise, season and raw team for advanced stats. No ambiguous peak rows, repeated peak seasons or missing/duplicate selected advanced joins were found. Multi-team aggregate rows are excluded, matching the importer. Source files and importer dependencies are hashed and unchanged after the run.
+[The audit script](../../../scripts/data_pipeline/audit_possessions.py) invokes the existing importer functions without their file-writing entry point. All **4,411 stored player objects reproduce exactly**, including peak years, rounded stats, positions and ordering. The audit then joins those same selected records to the raw CSVs by player, franchise, season and raw team for advanced stats. No ambiguous peak rows, repeated peak seasons or missing/duplicate selected advanced joins were found. Multi-team aggregate rows are excluded, matching the importer. Source files and importer dependencies are hashed and unchanged after the run.
 
 | Decade | Stored Versions | Complete Core Offensive Inputs |
 | --- | ---: | ---: |
@@ -350,7 +350,7 @@ For new inputs, pool each selected season's `games * per-game statistic`, then d
 
 ### Prototype Contract
 
-[The pure prototype](../src/engine/possession-prototype.ts) defines an approximate used offensive event as `FGA + 0.44 * FTA + TOV`. For five starters it allocates exactly 100 events, using each player's share of observed per-36 demand by default. Each allocation produces shot events, turnover events and points at that player's pooled rates. An explicit five-share input is also supported; the retained report compares an equal-share allocation without optimizing either policy.
+[The pure prototype](../../../src/engine/possession-prototype.ts) defines an approximate used offensive event as `FGA + 0.44 * FTA + TOV`. For five starters it allocates exactly 100 events, using each player's share of observed per-36 demand by default. Each allocation produces shot events, turnover events and points at that player's pooled rates. An explicit five-share input is also supported; the retained report compares an equal-share allocation without optimizing either policy.
 
 This fixes accounting, not basketball balance: allocations sum to 100, shot plus turnover events reconcile, improved scoring at fixed opportunities increases output, and additional turnovers reduce output in the tested fixed-input cases. No raw point total is multiplied by FG% again, and no assist bonus creates extra events. Missing, negative and non-finite required inputs are rejected. Each roster requires complete core data for all six selected versions even though this first calculation evaluates only its five starters.
 
@@ -382,7 +382,7 @@ The next model gate is **historical coverage and identifiable offensive capacity
 
 ## Season-Relative Baseline Audit
 
-[Era baseline audit 1](MID_IQ_ERA_BASELINE_AUDIT_1.json), produced by [the season-context audit](../scripts/data_pipeline/audit_era_baselines.py), covers every year used by the frozen peaks: **67 seasons, 1960-2026**. All 4,411 player versions have shooting, shot-workload and assist-rate comparisons. Turnover comparisons remain available for 3,697 versions; complete NBA player-turnover coverage in these sources begins in 1978. No fit, win prediction, changed player version or new validation family is involved.
+[Era baseline audit 1](MID_IQ_ERA_BASELINE_AUDIT_1.json), produced by [the season-context audit](../../../scripts/data_pipeline/audit_era_baselines.py), covers every year used by the frozen peaks: **67 seasons, 1960-2026**. All 4,411 player versions have shooting, shot-workload and assist-rate comparisons. Turnover comparisons remain available for 3,697 versions; complete NBA player-turnover coverage in these sources begins in 1978. No fit, win prediction, changed player version or new validation family is involved.
 
 ### Reference Population
 
@@ -440,7 +440,7 @@ This run used the workspace `.venv` Python 3.14.3 selected by the environment to
 
 ## Observed Workload and Efficiency
 
-[Workload study 1](MID_IQ_WORKLOAD_STUDY_1.json) tests the next assumption using observed NBA player seasons, not the exposed roster bands. [The study script](../scripts/data_pipeline/audit_workload.py) verifies the frozen era-baseline report and all upstream source hashes. Its protocol was fixed before running the data. It produces descriptive associations only: **no fitted game coefficient, capacity ceiling, new win estimate or validation claim**.
+[Workload study 1](MID_IQ_WORKLOAD_STUDY_1.json) tests the next assumption using observed NBA player seasons, not the exposed roster bands. [The study script](../../../scripts/data_pipeline/audit_workload.py) verifies the frozen era-baseline report and all upstream source hashes. Its protocol was fixed before running the data. It produces descriptive associations only: **no fitted game coefficient, capacity ceiling, new win estimate or validation claim**.
 
 ### Fixed Protocol
 
@@ -498,7 +498,7 @@ Python self-checks cover slope arithmetic, clustered residuals, consecutive pair
 
 ## Next-Season Offensive Prediction
 
-[Prediction study 1](MID_IQ_OFFENSE_PREDICTION_1.json), generated by [predict_offense.py](../scripts/data_pipeline/predict_offense.py), tests whether the observed offensive inputs add predictive value beyond a player's own previous outcome. This is an offline diagnostic, **not a capacity model or a release candidate**. The fixed protocol was written and synthetic leakage checks passed before real-data evaluation. These seasons had already been inspected in descriptive studies, so the evaluation partitions are new but the underlying data are not wholly untouched.
+[Prediction study 1](MID_IQ_OFFENSE_PREDICTION_1.json), generated by [predict_offense.py](../../../scripts/data_pipeline/predict_offense.py), tests whether the observed offensive inputs add predictive value beyond a player's own previous outcome. This is an offline diagnostic, **not a capacity model or a release candidate**. The fixed protocol was written and synthetic leakage checks passed before real-data evaluation. These seasons had already been inspected in descriptive studies, so the evaluation partitions are new but the underlying data are not wholly untouched.
 
 ### Protocol and Isolation
 
@@ -555,7 +555,7 @@ The next implementation can use these findings as constraints for a conservative
 
 ### Reproduction
 
-The analysis adds NumPy only to the workspace Python environment, not the application dependencies. [requirements-analysis.txt](../scripts/data_pipeline/requirements-analysis.txt) specifies the compatible range; the frozen report records Python 3.14.3 and NumPy 2.5.3. Use that exact environment for byte-identical replay. Older audits and their hash-pinned writers remain unchanged.
+The analysis adds NumPy only to the workspace Python environment, not the application dependencies. [requirements-analysis.txt](../../../scripts/data_pipeline/requirements-analysis.txt) specifies the compatible range; the frozen report records Python 3.14.3 and NumPy 2.5.3. Use that exact environment for byte-identical replay. Older audits and their hash-pinned writers remain unchanged.
 
 ```powershell
 & './.venv/Scripts/python.exe' -m pip install numpy==2.5.3
@@ -567,7 +567,7 @@ Synthetic checks cover the solver, ridge shrinkage, constant-feature handling, p
 
 ## Offline Lineup Allocation Model
 
-[Lineup prototype 1](MID_IQ_LINEUP_PROTOTYPE_1.json) implements explicit era-relative shot allocation and turnover accounting in [lineup-prototype.ts](../src/engine/lineup-prototype.ts). [calibrate-lineups.ts](../src/engine/calibrate-lineups.ts) consumes the frozen possession and era audits without changing their writers, player peaks or production data. This replaces no existing model: the earlier accounting prototype, fit18 and live rules remain intact.
+[Lineup prototype 1](MID_IQ_LINEUP_PROTOTYPE_1.json) implements explicit era-relative shot allocation and turnover accounting in [lineup-prototype.ts](../../../src/engine/lineup-prototype.ts). [calibrate-lineups.ts](../../../src/engine/calibrate-lineups.ts) consumes the frozen possession and era audits without changing their writers, player peaks or production data. This replaces no existing model: the earlier accounting prototype, fit18 and live rules remain intact.
 
 ### Accounting Rules
 
@@ -634,7 +634,7 @@ Verification covers hand-calculated neutral cases, a 1,440-case synthetic policy
 
 ## Observed Offensive Role Changes
 
-[Role-change study 1](MID_IQ_ROLE_CHANGE_STUDY_1.json), generated by [audit_role_changes.py](../scripts/data_pipeline/audit_role_changes.py), examines how shooting, passing and turnovers move together between player seasons. It does not change the lineup prototype or select a turnover-response parameter. The cohort, models, thresholds and comparisons were fixed before measuring results.
+[Role-change study 1](MID_IQ_ROLE_CHANGE_STUDY_1.json), generated by [audit_role_changes.py](../../../scripts/data_pipeline/audit_role_changes.py), examines how shooting, passing and turnovers move together between player seasons. It does not change the lineup prototype or select a turnover-response parameter. The cohort, models, thresholds and comparisons were fixed before measuring results.
 
 ### Fixed Comparisons
 
@@ -716,7 +716,7 @@ Synthetic checks cover known multivariate coefficients, clustered covariance, di
 
 ## Separate Shooting and Passing Allocation
 
-[Dual-role allocation study 1](MID_IQ_ROLE_ALLOCATION_1.json) adds a separate passing-responsibility budget in [role-allocation.ts](../src/engine/role-allocation.ts), with an immutable report generated by [calibrate-roles.ts](../src/engine/calibrate-roles.ts). It consumes the frozen lineup inputs and pins the role-change evidence chain. It does not edit either prior model, import empirical slopes as game coefficients, or replace live balance.
+[Dual-role allocation study 1](MID_IQ_ROLE_ALLOCATION_1.json) adds a separate passing-responsibility budget in [role-allocation.ts](../../../src/engine/role-allocation.ts), with an immutable report generated by [calibrate-roles.ts](../../../src/engine/calibrate-roles.ts). It consumes the frozen lineup inputs and pins the role-change evidence chain. It does not edit either prior model, import empirical slopes as game coefficients, or replace live balance.
 
 ### Dual Budget Rules
 
@@ -807,7 +807,7 @@ Verification includes neutral and retained-lead-role examples, zero shares/expos
 
 ## Team-Season Turnover Gate
 
-[Team-role study 1](MID_IQ_TEAM_ROLE_STUDY_1.json), generated by [audit_team_roles.py](../scripts/data_pipeline/audit_team_roles.py), checks the turnover accounting against historical team-season aggregates. This is the first team-level diagnostic of the separate budgets, not a production calibration or a validation of five-player lineups. No coefficients are fitted and no capacity, allocation or turnover split is selected from these results.
+[Team-role study 1](MID_IQ_TEAM_ROLE_STUDY_1.json), generated by [audit_team_roles.py](../../../scripts/data_pipeline/audit_team_roles.py), checks the turnover accounting against historical team-season aggregates. This is the first team-level diagnostic of the separate budgets, not a production calibration or a validation of five-player lineups. No coefficients are fitted and no capacity, allocation or turnover split is selected from these results.
 
 ### Lagged Team Inputs
 
@@ -893,7 +893,7 @@ The [registration](MID_IQ_CANDIDATE_1_PROTOCOL.json) was written and fingerprint
 
 For a player with qualifying prior exposure, the retained player weight is `priorMinutes / (priorMinutes + kMinutes)`. Only prior turnover rate is blended toward the prior league rate; prior shots, assists, target-minute exposure, fixed half-shot/half-passing policy, uncapped prior-role allocation and the 100 passing-unit target stay unchanged. Zero shrinkage returns the original input exactly. Existing league-average fallback players remain unchanged. Minutes are a reliability proxy, not an identified sampling-variance model.
 
-[The evaluator](../scripts/data_pipeline/evaluate_turnover_shrinkage.py) runs in two stages. [The selection artifact](MID_IQ_CANDIDATE_1_SELECTION.json) records all earlier-period predictions and is written before evaluating the selected configuration in later years. [The result artifact](MID_IQ_CANDIDATE_1_RESULT.json) pins that selection's hash. All sources and the writer are hash-pinned; neither artifact can overwrite an existing path.
+[The evaluator](../../../scripts/data_pipeline/evaluate_turnover_shrinkage.py) runs in two stages. [The selection artifact](MID_IQ_CANDIDATE_1_SELECTION.json) records all earlier-period predictions and is written before evaluating the selected configuration in later years. [The result artifact](MID_IQ_CANDIDATE_1_RESULT.json) pins that selection's hash. All sources and the writer are hash-pinned; neither artifact can overwrite an existing path.
 
 Selection minimizes equal-team RMSE on the same 915 common-support teams from 1979-2012, with smaller shrinkage breaking exact ties. No high-coverage subset or later result selects a parameter. All eight configurations support every training team:
 
@@ -945,7 +945,7 @@ Verification independently reconstructs all 7,320 training predictions, the mini
 
 ### Mechanism and Selection
 
-The [offline evaluator](../scripts/data_pipeline/evaluate_role_costs.py) divides each player's prior turnover rate ratio by a weighted combination of prior shot and assist rate ratios. Its shot and passing costs therefore reflect the player's own prior role mix, instead of splitting every player's turnovers identically. At nominal prior exposure, the two components reconstruct observed turnovers. There is no reliability shrinkage, new efficiency bonus or claim that assists identify causal passing skill.
+The [offline evaluator](../../../scripts/data_pipeline/evaluate_role_costs.py) divides each player's prior turnover rate ratio by a weighted combination of prior shot and assist rate ratios. Its shot and passing costs therefore reflect the player's own prior role mix, instead of splitting every player's turnovers identically. At nominal prior exposure, the two components reconstruct observed turnovers. There is no reliability shrinkage, new efficiency bonus or claim that assists identify causal passing skill.
 
 Target-minute weights, previous league reference, source fallback rules, uncapped allocations and the synthetic 100-unit passing budget are unchanged. No target shot, assist or turnover counts enter predictions. Zero passing weight exactly reproduces the original shot-only control. Selection minimizes equal-team RMSE on the original 915 common-support teams from 1979-2012; exact ties favor smaller weights. New unsupported rows would invalidate a configuration rather than change membership. All five configurations support all training rows.
 
@@ -979,7 +979,7 @@ Earlier statistics are selection evidence. Later years were already exposed in p
 
 ### Integration Assessment and Stop
 
-The nearest lineup abstractions, [role allocation](../src/engine/role-allocation.ts) and [lineup offense](../src/engine/lineup-prototype.ts), consume complete shot, turnover, assist and efficiency inputs. A new version could express candidate 2's player-specific costs, but code compatibility alone would not resolve these existing release blockers:
+The nearest lineup abstractions, [role allocation](../../../src/engine/role-allocation.ts) and [lineup offense](../../../src/engine/lineup-prototype.ts), consume complete shot, turnover, assist and efficiency inputs. A new version could express candidate 2's player-specific costs, but code compatibility alone would not resolve these existing release blockers:
 
 | Required Criterion | Evidence | Consequence |
 | --- | --- | --- |
@@ -1010,7 +1010,7 @@ node --experimental-strip-types --test --test-name-pattern='candidate2 role cost
 
 ### Registered Method
 
-The [new evaluator](../scripts/data_pipeline/evaluate_missing_turnovers.py) tests whether known turnovers can be recovered from observed shooting and assist workloads. It uses the mean turnover rate of exactly 50 nearest donors, with distance based on donor-standardized shot endings and assists per 36 minutes. The donor target mean is the constant baseline. There is no neighbor-count, feature, bandwidth or threshold search.
+The [new evaluator](../../../scripts/data_pipeline/evaluate_missing_turnovers.py) tests whether known turnovers can be recovered from observed shooting and assist workloads. It uses the mean turnover rate of exactly 50 nearest donors, with distance based on donor-standardized shot endings and assists per 36 minutes. The donor target mean is the constant baseline. There is no neighbor-count, feature, bandwidth or threshold search.
 
 Underlying player identities are partitioned by SHA-256 modulo 10: buckets 0-5 donate, 6-7 calibrate, and 8-9 evaluate. Every version of a player stays in one partition. Each cohort retains one eligible version per identity, selected by greatest observed peak minutes with lexicographic version-id ties. Every selected season must fall inside its cohort window. These restrictions prevent same-player versions from acting as their own donors or appearing in both calibration and evaluation.
 

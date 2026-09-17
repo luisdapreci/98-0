@@ -1,3 +1,4 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -20,8 +21,8 @@ const releaseReplay = mode === 'replay-release';
 const retry = mode!.endsWith('-next') || releaseReplay;
 const fitting = mode === 'fit' || mode === 'fit-next';
 const experimentVersion = retry ? 'historical-score-fit-2' : 'historical-score-fit-1';
-const fitPath = new URL(`../../docs/PHASE3_SCORE_FIT${retry ? '_2' : ''}.json`, import.meta.url);
-const validationPath = new URL(`../../docs/PHASE3_SCORE_VALIDATION${retry ? '_2' : ''}.json`, import.meta.url);
+const fitPath = new URL(`../../docs/research/phase3/PHASE3_SCORE_FIT${retry ? '_2' : ''}.json`, import.meta.url);
+const validationPath = new URL(`../../docs/research/phase3/PHASE3_SCORE_VALIDATION${retry ? '_2' : ''}.json`, import.meta.url);
 if (retry && mode !== 'replay-next' && !releaseReplay) {
   assert.ok(!existsSync(fitting ? fitPath : validationPath), 'Retain existing evidence; use replay-next to verify a held-out report.');
   if (fitting) assert.ok(!existsSync(validationPath), 'This holdout is already exposed; do not refit this experiment.');
@@ -31,7 +32,7 @@ const implementationSha256 = retry ? Object.fromEntries(['calibrate-scores.ts', 
   .map((path) => [path, digest(readFileSync(new URL(path, import.meta.url)))])) : undefined;
 const expectedSeason = retry ? (fitting ? 2024 : 2025) : 2022;
 const referenceBytes = readFileSync(new URL(`../../data/reference/nba-scores${retry ? `-${expectedSeason}` : ''}.json`, import.meta.url));
-const reference = JSON.parse(referenceBytes.toString()) as {
+const reference = parseResearchJson(referenceBytes.toString()) as {
   schemaVersion: number; season: number; splitDate: string; games: HistoricalGame[]; sources: unknown[];
 };
 assert.equal(reference.schemaVersion, 1);
@@ -192,7 +193,7 @@ if (fitting) {
   console.log(JSON.stringify({ trainingCount: training.length, rules, observed, candidate: report.candidate }, null, 2));
 } else {
   const fitBytes = readFileSync(fitPath);
-  const fit = JSON.parse(fitBytes.toString()) as {
+  const fit = parseResearchJson(fitBytes.toString()) as {
     version: string; referenceSha256: string; rules: ScoreRules; tolerances: typeof tolerances;
     trainingSeason?: number; validationSeason?: number; implementationSha256?: typeof implementationSha256;
   };
@@ -206,7 +207,7 @@ if (fitting) {
       assert.equal(SCORE_RULES.version, 'conditional-score-3');
       assert.deepEqual({ ...SCORE_RULES, version: fit.rules.version }, fit.rules, 'Released parameters differ from the accepted candidate.');
     } else assert.deepEqual(fit.implementationSha256, implementationSha256, 'Calibration implementation changed after fitting.');
-    const trainingIds = new Set((JSON.parse(trainingBytes.toString()).games as HistoricalGame[]).map((game) => game.id));
+    const trainingIds = new Set((parseResearchJson(trainingBytes.toString()).games as HistoricalGame[]).map((game) => game.id));
     assert.ok(validation.every((game) => !trainingIds.has(game.id)), 'Training and validation games overlap.');
   } else assert.equal(fit.referenceSha256, referenceSha256, 'Reference changed after fitting.');
   assert.deepEqual(fit.tolerances, tolerances, 'Validation tolerances changed after fitting.');
@@ -225,12 +226,12 @@ if (fitting) {
     ...(retry ? { sources: reference.sources, trainingReferenceSha256: fit.referenceSha256, implementationSha256 } : {}),
   };
   if (releaseReplay) {
-    const retained = JSON.parse(readFileSync(validationPath, 'utf8')) as typeof report;
+    const retained = parseResearchJson(readFileSync(validationPath, 'utf8')) as typeof report;
     assert.deepEqual({ ...report, implementationSha256: undefined }, { ...retained, implementationSha256: undefined },
       'Released implementation did not reproduce retained historical evidence.');
     console.log(JSON.stringify({ version: 'historical-score-release-verification-1', scoreVersion: SCORE_RULES.version,
       validationSha256: digest(readFileSync(validationPath)), implementationSha256, passed: report.passed }, null, 2));
-  } else if (mode === 'replay-next') assert.deepEqual(report, JSON.parse(readFileSync(validationPath, 'utf8')), 'Retained evidence did not reproduce.');
+  } else if (mode === 'replay-next') assert.deepEqual(report, parseResearchJson(readFileSync(validationPath, 'utf8')), 'Retained evidence did not reproduce.');
   else writeFileSync(validationPath, JSON.stringify(report, null, 2) + '\n', { flag: retry ? 'wx' : 'w' });
   if (!releaseReplay) console.log(JSON.stringify(report, null, 2));
   assert.ok(report.passed, 'Historical score acceptance failed; do not retune on this holdout.');

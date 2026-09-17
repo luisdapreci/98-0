@@ -2,6 +2,7 @@
 import argparse
 import copy
 import json
+from research_files import parse_research_json
 import math
 import platform
 from pathlib import Path
@@ -10,15 +11,15 @@ from audit_era_baselines import fingerprint
 from audit_possessions import ROOT
 from audit_team_roles import estimate, metrics, paired
 
-PROTOCOL_PATH = "docs/MID_IQ_CANDIDATE_1_PROTOCOL.json"
+PROTOCOL_PATH = "docs/research/mid-iq/MID_IQ_CANDIDATE_1_PROTOCOL.json"
 PROTOCOL_SHA256 = "f660073f9a4ef7519eab939676a822cb0e098d84d18b58fd70ea2132bcbe2e01"
 
 
 def load_inputs():
     assert fingerprint(ROOT / PROTOCOL_PATH) == PROTOCOL_SHA256, "Registration changed after freeze."
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
     source_path = ROOT / protocol["source"]
-    source = json.loads(source_path.read_text(encoding="utf-8"))
+    source = parse_research_json(source_path.read_text(encoding="utf-8"))
     assert source["version"] == protocol["sourceVersion"]
     hashes = {**source["sourceSha256"], protocol["source"]: fingerprint(source_path),
               PROTOCOL_PATH: PROTOCOL_SHA256, "scripts/data_pipeline/audit_team_roles.py": source["implementationSha256"]}
@@ -129,7 +130,7 @@ def evaluate_selected(rows, protocol, selection):
 
 
 def self_test():
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
     reference = {"shots": 0.44, "assists": 0.1, "turnovers": 0.06}
     players = [{"priorRates": {**reference, "turnovers": 0.12}, "priorMinutes": 500, "fallback": None,
                 "after": {"minutes": 20, "shots": 8.8, "assists": 2, "turnovers": 1.2}} for _ in range(5)]
@@ -205,7 +206,7 @@ def main():
     else:
         selection_path = Path(args.selection)
         selection_hash = fingerprint(selection_path)
-        selection = json.loads(selection_path.read_text(encoding="utf-8"))
+        selection = parse_research_json(selection_path.read_text(encoding="utf-8"))
         assert selection["version"] == "mid-iq-candidate-1-selection-1"
         for key, value in metadata.items():
             assert selection[key] == value, f"Selection metadata mismatch: {key}"

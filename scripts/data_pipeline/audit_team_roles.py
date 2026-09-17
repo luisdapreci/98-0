@@ -2,6 +2,7 @@
 import argparse
 import csv
 import json
+from research_files import parse_research_json
 import math
 import platform
 from collections import defaultdict
@@ -114,15 +115,15 @@ def self_test():
 
 
 def load_teams():
-    source_path = ROOT / "docs/MID_IQ_ROLE_ALLOCATION_1.json"
-    source = json.loads(source_path.read_text(encoding="utf-8"))
+    source_path = ROOT / "docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json"
+    source = parse_research_json(source_path.read_text(encoding="utf-8"))
     assert source["version"] == "mid-iq-role-allocation-1"
-    hashes = {**source["sourceSha256"], "docs/MID_IQ_ROLE_ALLOCATION_1.json": fingerprint(source_path),
+    hashes = {**source["sourceSha256"], "docs/research/mid-iq/MID_IQ_ROLE_ALLOCATION_1.json": fingerprint(source_path),
               "src/engine/role-allocation.ts": source["implementationSha256"],
               "src/engine/calibrate-roles.ts": source["evaluatorSha256"]}
     for path, expected in hashes.items():
         assert fingerprint(ROOT / path) == expected, f"Stale team-role source: {path}"
-    era = json.loads((ROOT / "docs/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
+    era = parse_research_json((ROOT / "docs/research/mid-iq/MID_IQ_ERA_BASELINE_AUDIT_1.json").read_text(encoding="utf-8"))
     references = {}
     for season in era["seasons"]:
         if season["season"] < 1978:

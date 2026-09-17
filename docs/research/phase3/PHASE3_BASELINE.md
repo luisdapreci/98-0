@@ -10,10 +10,10 @@ This is the original exploratory measurement. The [P3.7 review](PHASE3_REVIEW.md
 npm test
 npm run typecheck
 npm run build
-npm run calibrate -- 300 docs/PHASE3_BASELINE_RECHECK.json random,chemistry,reroll-aware,balanced,overloaded,non-shooting,defensive,bench-heavy p3-baseline-
+npm run calibrate -- 300 docs/research/phase3/PHASE3_BASELINE_RECHECK.json random,chemistry,reroll-aware,balanced,overloaded,non-shooting,defensive,bench-heavy p3-baseline-
 ```
 
-[Machine-readable results](PHASE3_BASELINE.json) retain distributions, confidence intervals, construction metrics, coach groups, and era-exposure groups. The harness is [src/engine/calibrate.ts](../src/engine/calibrate.ts).
+[Machine-readable results](PHASE3_BASELINE.json) retain distributions, confidence intervals, construction metrics, coach groups, and era-exposure groups. The harness is [src/engine/calibrate.ts](../../../src/engine/calibrate.ts).
 
 The current harness adds fields and two score batches. This command reproduces all original policy and score statistics in a separate report, not a byte-identical historical JSON file.
 
@@ -64,7 +64,7 @@ All 12 coaches and all seven eras occur under every policy. The JSON includes gr
 
 ## Pinned Score Rules
 
-The v1 implementation is [src/engine/season.ts](../src/engine/season.ts). Rules are pinned for replay, but basketball realism still needs review.
+The v1 implementation is [src/engine/season.ts](../../../src/engine/season.ts). Rules are pinned for replay, but basketball realism still needs review.
 
 1. Sample the final winner once, `U < evaluateGame(...).winProbability`. No score/OT path changes it or reapplies game modifiers.
 2. Regulation uses the specified logistic margin conditioned on the chosen winner's side. With selected-side delta `d`, scale `s=10.5`, and quantile `q`, magnitude is `s * (softplus(d/s + log(q)) - log(1-q))`. This stable form does not flip an unconditional draw. Apply `Math.round`, then clamp to 1-70. The cap creates an explicit tail mass.

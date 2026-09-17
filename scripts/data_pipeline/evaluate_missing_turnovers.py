@@ -3,6 +3,7 @@ import argparse
 import copy
 import hashlib
 import json
+from research_files import parse_research_json
 import math
 import platform
 from pathlib import Path
@@ -11,7 +12,7 @@ from audit_era_baselines import fingerprint
 from audit_possessions import ROOT
 from evaluate_turnover_shrinkage import verify_hashes
 
-PROTOCOL_PATH = "docs/MID_IQ_INTEGRATION_1_PROTOCOL.json"
+PROTOCOL_PATH = "docs/research/mid-iq/MID_IQ_INTEGRATION_1_PROTOCOL.json"
 PROTOCOL_SHA256 = "a9a933d9b923dc21e44346aa805a8daa80af68566e1f4d8fe221af08d9432232"
 COHORTS = {"donors": (1978, 2002, range(6)), "calibration": (2003, 2012, range(6, 8)),
            "evaluation": (2013, 2026, range(8, 10))}
@@ -19,16 +20,16 @@ COHORTS = {"donors": (1978, 2002, range(6)), "calibration": (2003, 2012, range(6
 
 def load_inputs():
     assert fingerprint(ROOT / PROTOCOL_PATH) == PROTOCOL_SHA256, "Integration registration changed."
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
-    previous_path = "docs/MID_IQ_CANDIDATE_2_RESULT.json"
-    previous = json.loads((ROOT / previous_path).read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    previous_path = "docs/research/mid-iq/MID_IQ_CANDIDATE_2_RESULT.json"
+    previous = parse_research_json((ROOT / previous_path).read_text(encoding="utf-8"))
     assert previous["version"] == "mid-iq-candidate-2-result-1"
     assert previous["decision"]["verdict"] == "advance-to-integration-assessment"
     assert previous["selectedPassingWeight"] == protocol["candidate2PassingWeight"] == 0.25
     hashes = {**previous["sourceSha256"], previous_path: fingerprint(ROOT / previous_path),
               "scripts/data_pipeline/evaluate_role_costs.py": previous["implementationSha256"], PROTOCOL_PATH: PROTOCOL_SHA256}
     verify_hashes(hashes)
-    audit = json.loads((ROOT / protocol["missingDataPolicy"]["source"]).read_text(encoding="utf-8"))
+    audit = parse_research_json((ROOT / protocol["missingDataPolicy"]["source"]).read_text(encoding="utf-8"))
     assert audit["version"] == "mid-iq-possession-input-audit-1"
     return protocol, audit["players"], hashes
 
@@ -163,7 +164,7 @@ def self_test():
             pass
         else:
             raise AssertionError("Invalid features accepted")
-    protocol = json.loads((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
+    protocol = parse_research_json((ROOT / PROTOCOL_PATH).read_text(encoding="utf-8"))
     policy = protocol["missingDataPolicy"]
     rows = [{"prediction": 2, "lower": 1, "upper": 3, "observedTurnoversPer36": 2} for _ in range(40)]
     metrics = summarize(rows, 3)
@@ -200,7 +201,7 @@ def main():
     else:
         fit_path = Path(args.fit)
         fit_hash = fingerprint(fit_path)
-        trained = json.loads(fit_path.read_text(encoding="utf-8"))
+        trained = parse_research_json(fit_path.read_text(encoding="utf-8"))
         assert trained["version"] == "mid-iq-missing-turnovers-fit-1"
         for key, value in metadata.items():
             assert trained[key] == value, f"Training metadata mismatch: {key}"

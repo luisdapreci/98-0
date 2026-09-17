@@ -1,15 +1,16 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { evaluatePossessionOffense } from './possession-prototype.ts';
 import type { PossessionOffenseInput } from './possession-prototype.ts';
 
-const load = (path: string) => JSON.parse(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
+const load = (path: string) => parseResearchJson(readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8'));
 const hash = (path: string) => createHash('sha256').update(readFileSync(new URL(`../../${path}`, import.meta.url))).digest('hex');
 const output = process.argv[2];
 assert.ok(output && !existsSync(output), 'A new unused output path is required.');
-const historyPath = 'docs/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json';
-const auditPath = 'docs/MID_IQ_POSSESSION_INPUT_AUDIT_1.json';
+const historyPath = 'docs/research/mid-iq/MID_IQ_HISTORICAL_TEAM_OFFENSE_1.json';
+const auditPath = 'docs/research/mid-iq/MID_IQ_POSSESSION_INPUT_AUDIT_1.json';
 const history = load(historyPath);
 const audit = load(auditPath);
 assert.equal(history.version, 'mid-iq-historical-team-offense-1');

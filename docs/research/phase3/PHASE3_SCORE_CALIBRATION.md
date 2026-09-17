@@ -8,8 +8,8 @@ On 2026-09-14, Mid IQ v1 balance was approved with the original random-play and 
 
 ## Reference and Reproduction
 
-- [Reference snapshot](../data/reference/nba-scores.json): 1,230 completed 2021-22 NBA regular-season games, sourced from ESPN through [sportsdataverse/hoopR-data](https://github.com/sportsdataverse/hoopR-data). Includes factual results, dates, team IDs and overtime counts, plus the source commit, URL, retrieval time and CSV SHA-256.
-- The [importer](../scripts/data_pipeline/fetch_score_reference.ps1) verifies unique IDs, season/type/completion filters, integer non-tied scores, 30 teams, and exactly 82 games per team. Preseason, playoffs, All-Star and unfinished/postponed entries are excluded.
+- [Reference snapshot](../../../data/reference/nba-scores.json): 1,230 completed 2021-22 NBA regular-season games, sourced from ESPN through [sportsdataverse/hoopR-data](https://github.com/sportsdataverse/hoopR-data). Includes factual results, dates, team IDs and overtime counts, plus the source commit, URL, retrieval time and CSV SHA-256.
+- The [importer](../../../scripts/data_pipeline/fetch_score_reference.ps1) verifies unique IDs, season/type/completion filters, integer non-tied scores, 30 teams, and exactly 82 games per team. Preseason, playoffs, All-Star and unfinished/postponed entries are excluded.
 - The 2022-23 repository archive was incomplete: 1,175 completed regular-season entries plus 56 unfinished entries. An attempted ESPN supplement was denied. It was not included. A release-asset check found no schedule assets to substitute.
 - The split was fixed before fitting: 750 games before `2022-02-01T00:00Z` for fitting; 480 games from that cutoff onward for validation. This is one season, not evidence of stability across eras or multiple seasons.
 - [Fit evidence](PHASE3_SCORE_FIT.json) and [held-out evidence](PHASE3_SCORE_VALIDATION.json) pin the reference digest. Validation also pins the fit artifact digest and checks that tolerances have not changed.
@@ -27,7 +27,7 @@ The validation command intentionally exits nonzero while retaining the JSON repo
 
 ## Method
 
-The [calibration harness](../src/engine/calibrate-scores.ts) calls the actual `sampleOutcome` implementation with explicit candidate rules; the default runtime remains v1. No parallel implementation of score generation is used.
+The [calibration harness](../../../src/engine/calibrate-scores.ts) calls the actual `sampleOutcome` implementation with explicit candidate rules; the default runtime remains v1. No parallel implementation of score generation is used.
 
 Historical team net-rating inputs are unavailable in this archive. A fixed proxy uses each team's **prior-games-only mean point differential**, shrunk toward zero with a ten-game prior, plus 2.5 for home court; sigma stays 10.5. It is not an opponent-adjusted rating or a calibrated historical win predictor. Scores are sampled conditional on the **observed historical winner**. This tests conditional score distributions, not winner forecasts or a league-wide win model.
 

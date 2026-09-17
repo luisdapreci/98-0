@@ -1,3 +1,4 @@
+import { parseResearchJson } from './research-files.ts';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -16,7 +17,7 @@ import { evaluatePossessionBudget } from './possession-prototype.ts';
 import type { PossessionInput } from './possession-prototype.ts';
 import type { Coach, GameContext, GameEvaluation, OpponentPool, Player, TeamLineup } from './types.ts';
 
-const load = (path: string) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
+const load = (path: string) => parseResearchJson(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const fingerprint = (path: string) => createHash('sha256').update(readFileSync(new URL(path, import.meta.url))).digest('hex');
 // math.ts gained the season-6 (mid-iq-3) usage rules; mid-iq-1/mid-iq-2 evaluation is unchanged, so fits
 // recorded against the previous file remain replayable.
@@ -220,7 +221,7 @@ function variantLineup(variant: Variant) {
   return lineup;
 }
 if (supportAuditRun) {
-  const sourcePath = '../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json';
+  const sourcePath = '../../docs/research/mid-iq/MID_IQ_RESERVE_REPLACEMENT_1.json';
   const source = load(sourcePath);
   assert.equal(source.experiment, 'reserve-replacement');
   assert.equal(source.released, false);
@@ -331,10 +332,10 @@ if (supportAuditRun) {
     wins: probe.poolExpectedWins.toFixed(2), difference: probe.poolExpectedWinDifference.toFixed(2) }))));
   process.exit(0);
 }
-const controlPath = scoringTranslationRun || separateCreationRun ? '../../docs/MID_IQ_NO_USAGE_BONUS_1.json'
-  : noUsageBonusRun ? '../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json'
-  : reserveReplacementRun ? '../../docs/MID_IQ_BASELINE_PROTECTED_1.json'
-  : '../../docs/MID_IQ_ROSTER_RELEASED_2.json';
+const controlPath = scoringTranslationRun || separateCreationRun ? '../../docs/research/mid-iq/MID_IQ_NO_USAGE_BONUS_1.json'
+  : noUsageBonusRun ? '../../docs/research/mid-iq/MID_IQ_RESERVE_REPLACEMENT_1.json'
+  : reserveReplacementRun ? '../../docs/research/mid-iq/MID_IQ_BASELINE_PROTECTED_1.json'
+  : '../../docs/research/mid-iq/MID_IQ_ROSTER_RELEASED_2.json';
 const controlReport = offlineUsageRun ? load(controlPath) : undefined;
 if (controlReport) {
   assert.equal(controlReport.engineVersion, STRICT_USAGE_ENGINE_VERSION);
@@ -349,20 +350,20 @@ if (controlReport) {
     assert.equal(controlReport.released, false);
     assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
     assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
-    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_RESERVE_REPLACEMENT_1.json'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/research/mid-iq/MID_IQ_RESERVE_REPLACEMENT_1.json'));
   }
   if (noUsageBonusRun) {
     assert.equal(controlReport.experiment, 'reserve-replacement');
     assert.equal(controlReport.released, false);
     assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
     assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
-    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_BASELINE_PROTECTED_1.json'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/research/mid-iq/MID_IQ_BASELINE_PROTECTED_1.json'));
   }
   if (reserveReplacementRun) {
     assert.equal(controlReport.experiment, 'baseline-protected');
     assert.equal(controlReport.usagePolicySha256, fingerprint('./usage-policy.ts'));
     assert.equal(controlReport.postseasonPolicySha256, fingerprint('./postseason-policy.ts'));
-    assert.equal(controlReport.controlSha256, fingerprint('../../docs/MID_IQ_ROSTER_RELEASED_2.json'));
+    assert.equal(controlReport.controlSha256, fingerprint('../../docs/research/mid-iq/MID_IQ_ROSTER_RELEASED_2.json'));
     assert.equal(replacementWeightedUsage([20, 20, 20, 20, 20], 20), 100);
     assert.equal(replacementWeightedUsage([30, 30, 30, 30, 30], null), 150);
     assert.equal(replacementWeightedUsage([10, 20, 30, 25, 15], 0), 92);
@@ -476,7 +477,7 @@ function compareControl(id: string, lineup: TeamLineup, candidate: ReturnType<ty
 function stress() {
   const fitPath = process.argv[4];
   assert.ok(fitPath, 'Provide the frozen fit report path.');
-  const frozen = JSON.parse(readFileSync(fitPath, 'utf8'));
+  const frozen = parseResearchJson(readFileSync(fitPath, 'utf8'));
   assert.equal(frozen.scope, 'development-only');
   assert.equal(frozen.candidateImplementationSha256, fingerprint('./roster-balance.ts'), 'Candidate implementation changed after fitting.');
   assert.equal(frozen.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
@@ -709,7 +710,7 @@ function fit() {
     { ...initialRules, usageSlope: 0.003, defenseScale: 0.7, spacingLow: -3 }];
   const warmStart = process.argv[4];
   if (warmStart) {
-    const previous = JSON.parse(readFileSync(warmStart, 'utf8'));
+    const previous = parseResearchJson(readFileSync(warmStart, 'utf8'));
     assert.equal(previous.scope, 'development-only');
     assert.equal(previous.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
     assert.equal(previous.candidateImplementationSha256, fingerprint('./roster-balance.ts'));
@@ -800,7 +801,7 @@ function fit() {
 function frozenFit() {
   const path = process.argv[4];
   assert.ok(path, 'Provide a frozen fit report.');
-  const report = JSON.parse(readFileSync(path, 'utf8'));
+  const report = parseResearchJson(readFileSync(path, 'utf8'));
   assert.equal(report.scope, 'development-only');
   assert.equal(report.catalogSha256, fingerprint('../../data/reference/mid-iq-roster-benchmarks.json'));
   assert.equal(report.candidateImplementationSha256, fingerprint('./roster-balance.ts'));
@@ -819,9 +820,9 @@ function frozenFit() {
       if (variant.id === 'V04') assert.ok(delta >= 2 && delta <= 4);
       if (variant.id === 'V06') assert.ok(Math.abs(delta) <= 1e-10);
     }
-    const previousValidationPath = new URL('../../docs/MID_IQ_ROSTER_VALIDATION_1.json', import.meta.url);
+    const previousValidationPath = new URL('../../docs/research/mid-iq/MID_IQ_ROSTER_VALIDATION_1.json', import.meta.url);
     if (existsSync(previousValidationPath)) {
-      const previous = JSON.parse(readFileSync(previousValidationPath, 'utf8'));
+      const previous = parseResearchJson(readFileSync(previousValidationPath, 'utf8'));
       assert.equal(previous.sourceFitSha256, createHash('sha256').update(readFileSync(path)).digest('hex'),
         'Reserved families already exposed. Only replay the original frozen fit; a new validation requires independent families.');
       assert.equal(previous.catalogSha256, report.catalogSha256);
@@ -839,7 +840,7 @@ if (mode === 'possession') {
   const auditPath = process.argv[4];
   assert.ok(auditPath, 'Provide a frozen possession input audit.');
   const auditBytes = readFileSync(auditPath);
-  const audit = JSON.parse(auditBytes.toString('utf8'));
+  const audit = parseResearchJson(auditBytes.toString('utf8'));
   assert.equal(audit.version, 'mid-iq-possession-input-audit-1');
   assert.equal(audit.scope, 'offline-data-audit');
   for (const path of ['data/raw/Player Per Game.csv', 'data/raw/Advanced.csv', 'data/processed/players.json',
@@ -885,12 +886,12 @@ if (mode === 'possession') {
   process.exit(0);
 }
 if (mode === 'diagnose') {
-  const validationPath = '../../docs/MID_IQ_ROSTER_VALIDATION_1.json';
+  const validationPath = '../../docs/research/mid-iq/MID_IQ_ROSTER_VALIDATION_1.json';
   const validation = load(validationPath);
   const sourceFitSha256 = createHash('sha256').update(readFileSync(process.argv[4]!)).digest('hex');
   assert.equal(validation.scope, 'reserved-family-validation');
   assert.equal(validation.sourceFitSha256, sourceFitSha256, 'Diagnosis requires the original exposed fit.');
-  const sourceFit = JSON.parse(readFileSync(process.argv[4]!, 'utf8'));
+  const sourceFit = parseResearchJson(readFileSync(process.argv[4]!, 'utf8'));
   for (const key of ['catalogSha256', 'candidateImplementationSha256', 'mathSha256', 'opponentSha256']) {
     assert.equal(validation[key], sourceFit[key]);
   }
@@ -906,7 +907,7 @@ if (mode === 'diagnose') {
     const features = rosterBalanceFeatures(lineup);
     const neutral = evaluator(lineup, { opponentNetRating: 0, isHome: false, isBackToBack: false });
     const previous = recorded.find((row) => row.id === roster.id)!;
-    assert.deepEqual(JSON.parse(JSON.stringify(neutral)), previous.neutral);
+    assert.deepEqual(parseResearchJson(JSON.stringify(neutral)), previous.neutral);
     const expectedAtShift = (shift: number) => {
       let wins = 0;
       for (const [tier, count] of Object.entries(SCHEDULE_COUNTS)) {
