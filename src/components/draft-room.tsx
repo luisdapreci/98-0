@@ -37,8 +37,8 @@ import { DefenseBreakdown } from './defense-breakdown';
 import { SoundControls } from './sound-controls';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
-import { challengeForAttempt, utcDate } from '../engine/daily';
-import { DAILY_CALENDAR, challengeForDate, dailyChallengeDate } from '../engine/daily-calendar';
+import { challengeForAttempt, dailyCommitmentKey, DAILY_VERSION, utcDate } from '../engine/daily';
+import { rotatingChallengeForDate, rotationSchedule } from '../engine/daily-calendar';
 
 const eras = ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
 const slotLabel = (slot: DraftSlot) => (slot === 'SIXTH' ? '6TH' : slot);
@@ -622,7 +622,8 @@ export function DraftRoom() {
   const reelFranchises = challenge?.franchises ? franchises.filter((franchise) => challenge.franchises!.includes(franchise.id)) : franchises;
   const reelEras = challenge?.decades ?? eras;
   const resumingDaily = !!run?.daily && !run.season;
-  const previewChallenge = resumingDaily ? challenge : today ? challengeForDate(today) : null;
+  const previewChallenge = resumingDaily ? challenge : today ? rotatingChallengeForDate(today) : null;
+  const cycleSchedule = today ? rotationSchedule(today) : [];
 
   return (
     <div className="app-shell">
@@ -938,7 +939,7 @@ export function DraftRoom() {
       {dailyOpen && <Modal title="DAILY CHALLENGE" onClose={() => { if (!dailyBusy) setDailyOpen(false); }}>
         <p className="daily-date">{run?.daily && !run.season ? run.daily.date : today} UTC / MID IQ</p>
         {previewChallenge ? <div className="daily-preview"><h3>{previewChallenge.name}</h3><p>{previewChallenge.restriction}</p></div>
-          : <p className="daily-availability" role="status">{resumingDaily ? 'Original Daily / unrestricted pool' : 'No challenge published for this date.'}</p>}
+          : <p className="daily-availability" role="status">{resumingDaily ? 'Original Daily / unrestricted pool' : 'Rotation begins September 17, 2026 UTC.'}</p>}
         <p className="reset-message">Local only. No public ranking or verified attempts. The first attempt is committed before coach offers; abandoning it does not restore it. Retries are unranked practice.</p>
         <p className="reset-message">Same challenge and offer priorities, with legal fallbacks. Local results close 24 hours after the UTC day ends; later finishes are unranked.</p>
         {!(run?.daily && !run.season) && <p className="reset-message">Starting replaces the active run. Saved Daily records remain.</p>}
@@ -958,12 +959,11 @@ export function DraftRoom() {
               setDailyOpen(false);
             } finally { setDailyBusy(false); }
           }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : run?.daily && !run.season ? 'RESUME DAILY'
-            : dailyEntries.some((entry) => entry.attempt.date === today && entry.attempt.kind === 'local') ? 'START PRACTICE' : 'START DAILY'}</button>
+            : dailyEntries.some((entry) => dailyCommitmentKey(entry.attempt) === dailyCommitmentKey({ date: today, version: DAILY_VERSION }) && entry.attempt.kind === 'local') ? 'START PRACTICE' : 'START DAILY'}</button>
         </div>
         <details className="daily-calendar">
-          <summary>28-DAY CALENDAR / UTC</summary>
-          <ol>{DAILY_CALENDAR.map((entry, index) => {
-            const date = dailyChallengeDate(index);
+          <summary>THIS 56-DAY CYCLE / UTC</summary>
+          <ol>{cycleSchedule.map(({ challenge: entry, date }) => {
             return <li key={entry.id} aria-current={date === today ? 'date' : undefined}>
               <time dateTime={date}>{date}</time><strong>{entry.name}</strong><span>{entry.restriction}</span>
             </li>;

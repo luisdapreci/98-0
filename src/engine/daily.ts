@@ -3,10 +3,10 @@ import type { DraftState, RerollKind } from './draft.ts';
 import { DATA_VERSION, RANDOM_VERSION, randomStream, shuffle } from './random.ts';
 import { QUALIFICATION_45_ENGINE_VERSION } from './engine-versions.ts';
 import type { Player } from './types.ts';
-import { challengeForDate, DAILY_CALENDAR_VERSION } from './daily-calendar.ts';
+import { challengeForDate, calendarVersionForDate, DAILY_ROTATION_VERSION, rotatingChallengeForDate } from './daily-calendar.ts';
 import type { DailyChallenge } from './daily-calendar.ts';
 
-export const DAILY_VERSION = 'daily-2';
+export const DAILY_VERSION = 'daily-3';
 export const DAILY_MODE = 'mid';
 const DAY_MS = 86_400_000;
 
@@ -18,8 +18,12 @@ interface DailyAttemptBase {
 }
 
 export type DailyAttempt = DailyAttemptBase & ({ version: 'daily-1' } | {
+  version: 'daily-2';
+  calendarVersion: ReturnType<typeof calendarVersionForDate>;
+  challengeId: string;
+} | {
   version: typeof DAILY_VERSION;
-  calendarVersion: typeof DAILY_CALENDAR_VERSION;
+  calendarVersion: typeof DAILY_ROTATION_VERSION;
   challengeId: string;
 });
 
@@ -47,20 +51,30 @@ export function dailySeed(date: string, version: DailyAttempt['version'] = DAILY
   const start = Date.parse(`${date}T00:00:00.000Z`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(start) || utcDate(start) !== date)
     throw new Error('Invalid Daily date.');
-  if (version !== 'daily-1' && version !== DAILY_VERSION) throw new Error('Unsupported Daily version.');
-  const challenge = version === DAILY_VERSION ? challengeForDate(date) : null;
-  if (version === DAILY_VERSION && !challenge) throw new Error('No Daily challenge is published for this date.');
+  if (!['daily-1', 'daily-2', DAILY_VERSION].includes(version)) throw new Error('Unsupported Daily version.');
+  const challenge = version === DAILY_VERSION ? rotatingChallengeForDate(date) : version === 'daily-2' ? challengeForDate(date) : null;
+  if (version !== 'daily-1' && !challenge) throw new Error('No Daily challenge is available for this date.');
   return [version, date, DAILY_MODE, 'iq-1', QUALIFICATION_45_ENGINE_VERSION,
     DATA_VERSION, RANDOM_VERSION, 'conditional-score-3', 'rivalry-1',
-    ...(challenge ? [DAILY_CALENDAR_VERSION, challenge.id] : [])].join(':');
+    ...(challenge ? [version === DAILY_VERSION ? DAILY_ROTATION_VERSION : calendarVersionForDate(date), challenge.id] : [])].join(':');
 }
 
 export function challengeForAttempt(attempt: DailyAttempt): DailyChallenge | null {
   if (attempt.version === 'daily-1') return null;
+  if (attempt.version === DAILY_VERSION) {
+    const challenge = rotatingChallengeForDate(attempt.date);
+    if (!challenge || attempt.calendarVersion !== DAILY_ROTATION_VERSION || attempt.challengeId !== challenge.id)
+      throw new Error('Invalid Daily rotation.');
+    return challenge;
+  }
   const challenge = challengeForDate(attempt.date);
-  if (attempt.version !== DAILY_VERSION || attempt.calendarVersion !== DAILY_CALENDAR_VERSION
-    || !challenge || attempt.challengeId !== challenge.id) throw new Error('Invalid Daily challenge.');
+  if (attempt.version !== 'daily-2' || !challenge || attempt.calendarVersion !== calendarVersionForDate(attempt.date)
+    || attempt.challengeId !== challenge.id) throw new Error('Invalid Daily challenge.');
   return challenge;
+}
+
+export function dailyCommitmentKey(attempt: Pick<DailyAttempt, 'date' | 'version'>): string {
+  return `${attempt.version === DAILY_VERSION ? DAILY_VERSION : 'legacy'}:${attempt.date}`;
 }
 
 export function validateDailyAttempt(attempt: DailyAttempt): void {

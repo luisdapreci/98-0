@@ -16,7 +16,7 @@ import { lineupForUsagePolicy } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
 import { challengeForAttempt, DAILY_MODE, dailyRoll, dailySeed, validateDailyAttempt } from './daily.ts';
 import type { DailyAttempt } from './daily.ts';
-import { challengePlayers, validateChallenge } from './daily-calendar.ts';
+import { challengeFixedPlayers, challengePlayers, validateChallenge } from './daily-calendar.ts';
 import {
   HISTORICAL_ENTRY_ENGINE_VERSION, QUALIFICATION_45_ENGINE_VERSION, STAR_USAGE_ENGINE_VERSION, STRICT_USAGE_ENGINE_VERSION,
 } from './engine-versions.ts';
@@ -117,10 +117,10 @@ export function createDailyRun(attempt: DailyAttempt, coaches: readonly Coach[],
   if (challenge) validateChallenge(challenge, players, coaches);
   const run = createRun(dailySeed(attempt.date, attempt.version), coaches, null, RIVALRY_VERSION, DAILY_MODE);
   if (challenge?.coachId) run.draft.offers = [coaches.find((coach) => coach.id === challenge.coachId)!];
-  if (challenge?.fixedPlayer) {
-    const fixed = challenge.fixedPlayer;
+  for (const fixed of challengeFixedPlayers(challenge)) {
     run.draft.lineup[fixed.slot] = players.find((player) => player.id === fixed.id)!;
   }
+  if (challenge?.rerolls) run.draft.rerolls = { ...challenge.rerolls };
   return { ...run, id: attempt.attemptId, daily: { ...attempt } };
 }
 

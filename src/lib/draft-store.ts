@@ -9,8 +9,8 @@ import franchiseData from '../../data/processed/franchises.json';
 import opponentData from '../../data/processed/opponents.json';
 import type { DraftSlot, RerollKind } from '../engine/draft';
 import { applyDraftAction, createDailyRun, createRun, finishSeason, recoverRun, selectIQMode, startPostseason, startSeason } from '../engine/run';
-import { DAILY_VERSION, utcDate } from '../engine/daily';
-import { challengeForDate, DAILY_CALENDAR_VERSION } from '../engine/daily-calendar';
+import { DAILY_VERSION, dailyCommitmentKey, utcDate } from '../engine/daily';
+import { rotatingChallengeForDate, DAILY_ROTATION_VERSION } from '../engine/daily-calendar';
 import type { DailyAttempt, DailyEntry } from '../engine/daily';
 import { readDailyEntries, recordDailyResult, writeDailyEntries } from './daily-storage';
 import { RIVALRY_VERSION } from '../engine/rivalry';
@@ -114,10 +114,10 @@ export const useDraftStore = create<DraftStore>()(
           const now = Date.now();
           const date = utcDate(now);
           if (expectedDate && expectedDate !== date) throw new Error('The Daily date changed. Reopen Daily to view the new challenge.');
-          const challenge = challengeForDate(date);
-          if (!challenge) throw new Error('No Daily challenge is published for this date. Ordinary runs remain available.');
-          const attempt: DailyAttempt = { version: DAILY_VERSION, calendarVersion: DAILY_CALENDAR_VERSION, challengeId: challenge.id, date, startedAt: now,
-            kind: entries.some((entry) => entry.attempt.date === date && entry.attempt.kind === 'local') ? 'practice' : 'local',
+          const challenge = rotatingChallengeForDate(date);
+          if (!challenge) throw new Error('Daily rotation begins September 17, 2026 UTC. Check your device date.');
+          const attempt: DailyAttempt = { version: DAILY_VERSION, calendarVersion: DAILY_ROTATION_VERSION, challengeId: challenge.id, date, startedAt: now,
+            kind: entries.some((entry) => dailyCommitmentKey(entry.attempt) === dailyCommitmentKey({ date, version: DAILY_VERSION }) && entry.attempt.kind === 'local') ? 'practice' : 'local',
             attemptId: crypto.randomUUID() };
           const run = createDailyRun(attempt, coaches, players);
           writeDailyEntries([...entries, { attempt }]);

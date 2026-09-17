@@ -1,4 +1,4 @@
-import { DAILY_MODE, dailySeed, dailyStatus, validateDailyAttempt } from '../engine/daily';
+import { DAILY_MODE, dailyCommitmentKey, dailySeed, dailyStatus, validateDailyAttempt } from '../engine/daily';
 import type { DailyEntry } from '../engine/daily';
 import type { RunSave } from '../engine/run';
 
@@ -16,8 +16,9 @@ export function readDailyEntries(): DailyEntry[] {
     if (identities.has(entry.attempt.attemptId)) throw new Error('Duplicate Daily attempt.');
     identities.add(entry.attempt.attemptId);
     if (entry.attempt.kind === 'local') {
-      if (dates.has(entry.attempt.date)) throw new Error('Duplicate Daily date.');
-      dates.add(entry.attempt.date);
+      const key = dailyCommitmentKey(entry.attempt);
+      if (dates.has(key)) throw new Error('Duplicate Daily date.');
+      dates.add(key);
     }
     const result = entry.result;
     if (!result) continue;
