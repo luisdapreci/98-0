@@ -7,7 +7,7 @@ import '@fontsource/dm-sans/700.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '98-0 | The Draft Room',
+  title: '98-0. Basketball Across Generations',
   description: 'Six picks. Seven decades. Build your all-time NBA lineup.',
   applicationName: '98-0',
   appleWebApp: { capable: true, title: '98-0', statusBarStyle: 'default' },
