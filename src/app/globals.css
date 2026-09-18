@@ -1225,7 +1225,7 @@ main {
 }
 .playback-controls {
   justify-content: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding-block: 12px;
   border-block: 1px solid var(--line);
 }
@@ -2136,7 +2136,8 @@ main {
 .venue-sequence .home { color: var(--postseason-accent); border-color: var(--postseason-accent); }
 .venue-sequence strong { font-size: 16px; }
 .series-start { min-height: 44px; padding: 12px 18px; background: var(--postseason-accent); color: var(--bg); font-weight: 700; }
-.series-finish { min-height: 44px; padding: 10px; background: var(--raised); font-size: 12px; }
+.series-finish { min-height: 44px; padding: 10px; background: var(--raised); font-size: 12px; flex: 0 1 auto; min-width: 0; text-align: left; }
+.series-finish svg { flex-shrink: 0; }
 .playoff-round.active-round { border-top: 2px solid var(--postseason-accent); }
 .playoff-round:not(.active-round) h3 { font-size: 20px; margin-bottom: 8px; }
 .playoff-round.won-round .round-heading > strong { color: var(--orange); }

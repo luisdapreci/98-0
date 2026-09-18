@@ -122,8 +122,9 @@ export function PostseasonTicker({ run }: { run: RunSave }) {
     <div className="playback-controls" role="group" aria-label="Postseason playback">
       <PlaybackControls complete={complete} playing={playing} speed={speed} onPlay={() => { setSelected(null); setAuthorizedGame(playing ? null : next!.gameNumber); }} onSpeed={setSpeed}
         nextLabel={overtimePeriod !== null ? 'Next overtime period' : 'Next Game'}
-        onNext={reveal} onSkip={() => { setAuthorizedGame(null); setSelected(null); skipPostseason(); }} />
-      <button className="series-finish" disabled={complete} onClick={() => { setAuthorizedGame(null); setSelected(null); finishPostseasonSeries(); }}><FastForward size={18} aria-hidden="true" />Finish Series</button>
+        onNext={reveal} onSkip={() => { setAuthorizedGame(null); setSelected(null); skipPostseason(); }}>
+        <button className="series-finish" disabled={complete} onClick={() => { setAuthorizedGame(null); setSelected(null); finishPostseasonSeries(); }}><FastForward size={18} aria-hidden="true" />Finish Series</button>
+      </PlaybackControls>
     </div>
     <div className="ticker-match" role="status" aria-live="polite" aria-atomic="true">
       <span className="eyebrow">{current ? `${ROUND_LABELS[current.round]} / GAME ${current.seriesGame} / ${overtimePeriod !== null ? overtimePeriod === 0 ? 'END OF REGULATION / OVERTIME' : `END OF OT${overtimePeriod} / STILL TIED` : 'FINAL'}` : `${ROUND_LABELS[result.path[0]!.round]} / READY`}</span>

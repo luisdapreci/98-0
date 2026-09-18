@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Pause, Play, SkipForward, StepForward } from 'lucide-react';
 import { isPerfectSeasonChase, lossExplanations, visibleStandings } from '../engine/playback';
 import type { RunSave } from '../engine/run';
@@ -31,16 +31,17 @@ export function RivalryAlert({ game, lineup }: { game: SeasonGame | PostseasonGa
   </div>;
 }
 
-export function PlaybackControls({ complete, playing, speed, onPlay, onSpeed, onNext, onSkip, nextLabel = 'Next reveal' }: {
+export function PlaybackControls({ complete, playing, speed, onPlay, onSpeed, onNext, onSkip, nextLabel = 'Next reveal', children }: {
   complete: boolean; playing: boolean; speed: 1 | 5; onPlay: () => void;
-  onSpeed: (speed: 1 | 5) => void; onNext: () => void; onSkip: () => void; nextLabel?: string;
+  onSpeed: (speed: 1 | 5) => void; onNext: () => void; onSkip: () => void; nextLabel?: string; children?: ReactNode;
 }) {
   return <>
+    <button className="icon-button" disabled={complete} onClick={onNext} aria-label={nextLabel} title={nextLabel}><StepForward size={20} /></button>
     <button className="icon-button" disabled={complete} onClick={onPlay} aria-label={playing ? 'Pause playback' : 'Play playback'} title={playing ? 'Pause playback' : 'Play playback'}>{playing && !complete ? <Pause size={20} /> : <Play size={20} />}</button>
     <div className="playback-speed" role="group" aria-label="Playback speed">
       {([1, 5] as const).map((value) => <button key={value} aria-pressed={speed === value} onClick={() => onSpeed(value)} aria-label={`${value}x speed`}>{value}x</button>)}
     </div>
-    <button className="icon-button" disabled={complete} onClick={onNext} aria-label={nextLabel} title={nextLabel}><StepForward size={20} /></button>
+    {children}
     <button className="icon-button" disabled={complete} onClick={onSkip} aria-label="Skip to final result" title="Skip to final result"><SkipForward size={20} /></button>
   </>;
 }
