@@ -4,9 +4,11 @@ For the game overview and local setup, see the [README](../README.md). This docu
 
 ## Current status
 
-As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics, install support and the first-visit player guide are implemented.
+As of **2026-09-18**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics, install support and the first-visit player guide are implemented.
 
-The latest deployment is the Daily single-attempt, description-sharing and compact mobile-stat update from commit `8299c50`: <https://98-0-pjlqryoy9-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 44 local and 44 deployed desktop/mobile Edge browser checks, plus anonymous HTTP 200 with game content. These are dated functional results, not human-playtest, balance or full release acceptance.
+The latest deployment is the single-row playback-controls update from commit `b763fa9`: <https://98-0-p8i0pohbj-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 118 local Edge desktop/mobile browser checks across the five playback-related spec files, 10 deployed Edge desktop/mobile checks, plus anonymous HTTP 200 on the alias. These are dated functional results, not human-playtest, balance or full release acceptance.
+
+Deployed: season and postseason playback controls sit on one non-wrapping row ordered from least to most fast-forward — Next Game/reveal step, Play/Pause with the 1x/5x speed toggle, Finish Series (postseason only), then Skip to final result. Saved results, simulation versions and save schema are unchanged.
 
 The player table has a narrower, frozen desktop name column, and the result popup previews the exact square share PNG. Deployed: mobile player stats use one compact ten-column row beneath the name; desktop and HI IQ layouts are unchanged by this follow-up.
 
@@ -46,7 +48,15 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 
 ## Update history
 
-Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+Entries are newest first. Validation counts apply only to their stated source and scope.
+
+### Single-row playback controls deployment, 2026-09-18
+
+- Published source commit `b763fa9` (working tree clean, matching `origin/master`) to <https://98-0.vercel.app>; immutable deployment: <https://98-0-p8i0pohbj-preciadox.vercel.app>. Scope: `PlaybackControls` reordered to step → play/speed → skip with an optional child slot, the postseason Finish Series button moved into that row between the speed toggle and full skip, and the row set to `flex-wrap: nowrap` with a shrinkable Finish Series button. No engine, save or result changes.
+- Pre-publication checks on the exact source, with `PLAYWRIGHT_BASE_URL` cleared: `npm test` (115 pass), `npm run typecheck`, `npm run build`, `git diff --check` (clean), and 118 local Edge (`PLAYWRIGHT_CHANNEL=msedge`) desktop/mobile browser checks via `npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/audio.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts tests/browser/modes.spec.ts` against the fresh production build — all passed. This targeted every spec that exercises the playback row (play/pause/step/skip/Finish Series ordering, layout fit and audio hooks); the remaining specs (guide, install, recovery, rivalry) were not re-run.
+- Verified the existing link (`.vercel/project.json` and `npx --yes vercel@latest project inspect 98-0 --scope preciadox`: project `prj_syeOx1sQASaIcYcADSoizyvqJuOd`, root `.`, Next.js preset, Node 24.x, default build/output), then published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Vercel reported Ready and retained the stable alias; an anonymous request to the alias returned HTTP 200.
+- Deployed verification: the AGENTS.md live check set (10 Edge desktop/mobile checks across postseason, daily and collection specs, grep-limited) passed against `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, including the postseason spec's playback-row width assertion; the override was cleared in `finally`. No commit or push was performed during publication; this status entry was written locally afterward.
+- Limitations: browser tests use isolated storage, not existing player saves. Physical devices, Safari/Firefox, actual messaging-app delivery, comprehensive security/accessibility and human balance/release acceptance remain unverified for this deployment.
 
 ### Daily and compact mobile-stat deployment, 2026-09-17
 
