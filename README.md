@@ -8,22 +8,6 @@ A basketball drafting roguelike. Build a team from NBA history, play through an 
 
 Free to access in your browser, with no account required. The game is in public playtesting; balance and device compatibility are still being evaluated. See [project status](docs/STATUS.md) for updates and known limitations.
 
-### Share title dot deployment, 2026-09-17
-
-- Published commit `4605994` from a clean worktree to <https://98-0.vercel.app>; immutable deployment: <https://98-0-5ftvvngn2-preciadox.vercel.app>. The share-card title's final dot now uses the orange brand color in the preview and exported PNG. Gameplay and saved results are unchanged.
-- Passed `npm test` (115 tests), `npm run typecheck`, `npm run build`, `git diff --check`, and six local desktop/mobile Edge checks using `npm run test:browser -- tests/browser/collection.spec.ts --grep 'history updates pending postseason|clipboard and native-share|copy and native share'`.
-- Verified the existing project with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Anonymous `Invoke-WebRequest` confirmed HTTP 200 and game content on the stable alias.
-- With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, ran `npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share'`: all 10 deployed checks passed. Cleared the remote override afterward; reviewed the live exported PNG and mobile preview.
-- Physical devices, Safari/Firefox and actual messaging-app delivery remain unverified. This deployment note was added locally after publication; no commit or push was performed during deployment.
-
-### Player guide deployment, 2026-09-17
-
-- Published the first-visit guide and header help button to <https://98-0.vercel.app>; immutable deployment: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Gameplay rules, supported saves and saved results are unchanged; dismissal uses the separate `98-0-guide-v1` preference.
-- Passed `npm test` (115 tests), `npm run typecheck`, `npm run build` and `git diff --check`. All 128 Edge browser checks passed across desktop and 320px mobile: `npm run test:browser -- tests/browser/daily.spec.ts --project=desktop` and `--project=mobile` (20 each), then the other eight browser spec files with each project (44 each). An earlier combined run was interrupted by terminal reuse and is not counted as passing evidence.
-- Confirmed the existing project using `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Anonymous `Invoke-WebRequest` returned HTTP 200 with game and guide content.
-- With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, ran `npm run test:browser -- tests/browser/guide.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'first visit guide|Escape dismisses|guide remains|returning player header|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share'`: 18 passed, exit code 0. The remote override was cleared afterward.
-- Reviewed desktop/mobile screenshots; verified dismissal, reopening, keyboard focus, blocked guide storage, header fit and saved-draft preservation. Physical devices, Safari/Firefox, real messaging-app delivery and comprehensive accessibility acceptance remain unverified. Source changes are not committed or pushed.
-
 ## How to play
 
 The first visit opens a player guide. Reopen it anytime with the **How to play** question-mark button beside the sound and vibration controls. Closing it remembers dismissal in this browser/site, separately from run saves. If browser storage is blocked, the guide remains dismissible but may appear again after reloading.

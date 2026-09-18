@@ -4,9 +4,9 @@ For the game overview and local setup, see the [README](../README.md). This docu
 
 ## Current status
 
-As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics and install support are implemented.
+As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics, install support and the first-visit player guide are implemented.
 
-The latest recorded deployment is from clean commit `0ce9800`: <https://98-0-6js7hbj8p-preciadox.vercel.app>. Its recorded validation passed 115 engine tests, 120 local desktop/mobile Edge browser checks and 36 deployed checks, plus typecheck, production build and whitespace checks. These are dated functional results, not human-playtest, balance or full release acceptance. This documentation reorganization does not constitute a new deployment or test run.
+The latest recorded deployment is the player-guide update: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Its recorded validation passed 115 engine tests, 128 local desktop/mobile Edge browser checks and 18 deployed checks, plus typecheck, production build and whitespace checks. The deployment record reports uncommitted, unpushed source changes. These are dated functional results, not human-playtest, balance or full release acceptance. This documentation reorganization does not constitute a new deployment or test run.
 
 ### Remaining work and limitations
 
@@ -37,6 +37,14 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Player guide deployment, 2026-09-17
+
+- Published the first-visit guide and header help button to <https://98-0.vercel.app>; immutable deployment: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Gameplay rules, supported saves and saved results are unchanged; dismissal uses the separate `98-0-guide-v1` preference.
+- Passed `npm test` (115 tests), `npm run typecheck`, `npm run build` and `git diff --check`. All 128 Edge browser checks passed across desktop and 320px mobile: `npm run test:browser -- tests/browser/daily.spec.ts --project=desktop` and `--project=mobile` (20 each), then the other eight browser spec files with each project (44 each). An earlier combined run was interrupted by terminal reuse and is not counted as passing evidence.
+- Confirmed the existing project using `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Anonymous `Invoke-WebRequest` returned HTTP 200 with game and guide content.
+- With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, ran `npm run test:browser -- tests/browser/guide.spec.ts tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'first visit guide|Escape dismisses|guide remains|returning player header|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share'`: 18 passed, exit code 0. The remote override was cleared afterward.
+- Reviewed desktop/mobile screenshots; verified dismissal, reopening, keyboard focus, blocked guide storage, header fit and saved-draft preservation. Physical devices, Safari/Firefox, real messaging-app delivery and comprehensive accessibility acceptance remain unverified. Source changes were not committed or pushed at the time of this deployment record.
 
 ### Reel feedback and collection polish
 

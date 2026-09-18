@@ -8,6 +8,13 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
+## Documentation Updates
+
+- Keep [README.md](README.md) focused on the game: its premise, rules, modes, features, player-facing limitations and local setup. Do not add dated status updates, deployment logs, test counts or validation transcripts to it.
+- Use [docs/STATUS.md](docs/STATUS.md) for all project status updates, deployment records, validation results and outstanding work. Read it before reporting current status; add dated entries newest first and update its current-status summary when the latest recorded state changes.
+- Record the scope, source commit or working-tree state, immutable deployment URL when applicable, checks actually run, results and remaining limitations. Distinguish local from deployed checks and historical evidence from new verification; preserve prior records.
+- Keep detailed phase reports and release evidence in their existing documents and link to them from [docs/STATUS.md](docs/STATUS.md). The README should link to status rather than duplicate it. Documentation edits alone do not authorize deployment.
+
 ## Vercel Playtest Deployment
 
 This section is maintained by the project, outside the generated Next.js block. Deployment settings below were verified on 2026-09-17.
@@ -74,4 +81,4 @@ try {
 
 If a deployment fails, inspect its build logs with `npx --yes vercel@latest inspect <deployment-url> --logs`. If live checks fail, report the failed flow and deployment URL; do not claim success. Identify the last known-good deployment and obtain authorization before rolling back or replacing production. Never repair a deployment by deleting player data or relaxing save validation.
 
-Record deployment scope, commands, results and remaining limitations in the README or a release note. Use dated evidence, not permanent test-count requirements. Initial playtest verification passed 114 engine tests, 94 local desktop/mobile Edge checks and eight deployed checks; the subsequent sharing update passed 12 focused local and four deployed checks. Physical devices, Safari/Firefox, real messaging-app delivery, comprehensive security/accessibility and human balance acceptance remain separate validation work. See [README.md](README.md#public-playtest) and [the release scorecard](docs/release/RELEASE_SCORECARD.md).
+Record deployment scope, commands, results and remaining limitations in [docs/STATUS.md](docs/STATUS.md), not the README. Link any detailed release note from that status entry. Use dated evidence, not permanent test-count requirements. Physical devices, Safari/Firefox, real messaging-app delivery, comprehensive security/accessibility and human balance acceptance remain separate validation work. See [project status](docs/STATUS.md) and [the release scorecard](docs/release/RELEASE_SCORECARD.md).
