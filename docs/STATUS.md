@@ -12,6 +12,8 @@ The player table now has a narrower, frozen name column, and the result popup pr
 
 Local, not yet deployed: the Daily popup uses START DAILY for all starts, removes the redundant bottom dismiss button, and replaces RESUME DAILY with CANCEL DAILY to abandon the active Daily draft and create a normal run. The top X only dismisses the popup; Daily commitments and records remain.
 
+Local, not yet deployed: background music now loops with a three-second crossfade, starts after interaction, and shares the existing mute control. Music pauses when muted or hidden and resumes without restarting. The original FLAC is preserved. Public use of this commercial recording requires appropriate music rights.
+
 ### Remaining work and limitations
 
 - Online rankings (Phase 8) are deferred. Daily attempts use local clocks and storage and are not trusted or server-verified.
@@ -41,6 +43,22 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Background music loop, 2026-09-17 (local only)
+
+- Scope: uncommitted working-tree changes in `src/lib/background-music.ts`, `src/lib/game-audio.ts`, the existing audio browser tests and documentation, using the previously prepared MP3. Started with the compression status edit and untracked audio assets; preserved both. No gameplay/save-format changes or dependency additions.
+- Fetches and decodes `/audio/background-music.mp3` once after an enabled user gesture. Blends the last three seconds with the first three seconds per channel using complementary linear gains, then loops natively from the end of the blended head. The initial intro plays in full; native loop points avoid timer scheduling gaps. Music fades in over 750 ms at 25% gain beneath the existing effects/master chain.
+- Shared mute and tab hiding suspend the audio context, retaining music position; returning or unmuting resumes it. Page exit suspends audio, cleanup aborts loading and disconnects music, and late loads cannot start while muted/hidden. Music errors are visible without blocking effects or gameplay.
+- Passed `npm run typecheck`, `npm run build`, and `npm run test:browser -- tests/browser/audio.spec.ts --reporter=dot`: 28 local desktop/320px mobile Edge checks, exit code 0. Fresh production test server; remote URL and server reuse overrides cleared. VS Code test discovery found no tests, so validation used the existing CLI. Editor diagnostics were clear.
+- New checks cover synthetic stereo crossfade waveforms across three repeated boundaries, actual MP3 fetch/decode and loop settings, gesture-only startup, one music source/context, mute persistence, position-preserving suspension, visible-tab resume, delayed-load mute races, missing music, effects and draft continuity. Existing sound/haptic regressions also passed. Synthetic waveform checks establish transition mechanics, not subjective musical quality.
+- No deployment, commit or push. Full engine/browser suites, subjective listening, physical devices and Safari/Firefox were not newly tested. Public-use rights and moving/excluding the preserved FLAC from public deployment remain publication prerequisites.
+
+### Background music compression, 2026-09-17 (local only)
+
+- Scope: working tree contained only untracked `public/audio/` before this status edit. Converted the user-provided `public/audio/background-music.flac` to `public/audio/background-music.mp3`; original retained unchanged. No application code or dependency manifests changed.
+- FFmpeg conversion used `-map 0:a:0 -vn -c:a libmp3lame -q:a 4 -ar 44100`: stereo, variable bitrate, approximately 152.5 kb/s, full 1:47 track, no embedded artwork or volume adjustment. Existing attribution metadata retained. FFmpeg tooling was installed under the system temporary directory, outside the project.
+- Size decreased from 41,404,570 bytes (39.49 MiB) to 2,039,022 bytes (1.94 MiB), approximately 95% smaller. Local full MP3 decoding with `ffmpeg -v error -xerror -i public/audio/background-music.mp3 -f null NUL` passed with no errors.
+- Not connected to gameplay; no deployment, commit or push. Browser playback, subjective listening and seamless looping were not checked. Metadata identifies a commercial recording; public use requires appropriate music rights. Both files remain in `public/audio/` and would be publicly served if deployed; review rights and source-file placement before publication.
 
 ### Daily popup actions, 2026-09-17 (local only)
 

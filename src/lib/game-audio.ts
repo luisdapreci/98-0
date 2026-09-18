@@ -5,12 +5,14 @@ import { create } from 'zustand';
 import { renderSound } from './sound-effects';
 import type { SoundCue } from './sound-effects';
 import { gameHaptics } from './game-haptics';
+import { createBackgroundMusic } from './background-music';
 
 const preferenceKey = '98-0-audio-v1';
 export const useAudioSettings = create<{ enabled: boolean; error: string }>(() =>
   ({ enabled: true, error: '' }));
 let context: AudioContext | null = null;
 let master: GainNode | null = null;
+let music: ReturnType<typeof createBackgroundMusic> | null = null;
 let generation = 0;
 const active = new Map<string, { cancel: () => void }>();
 
@@ -30,6 +32,8 @@ async function unlock(): Promise<boolean> {
   if (!useAudioSettings.getState().enabled || document.hidden) return false;
   try {
     if (!context || context.state === 'closed') {
+      music?.dispose();
+      music = null;
       context = new AudioContext();
       master = context.createGain();
       const limiter = context.createDynamicsCompressor();
@@ -40,6 +44,16 @@ async function unlock(): Promise<boolean> {
     }
     master!.gain.value = 1;
     if (context.state !== 'running') await context.resume();
+    if (!useAudioSettings.getState().enabled || document.hidden) {
+      if (context.state === 'running') await context.suspend();
+      return false;
+    }
+    if (context.state === 'running') {
+      music ??= createBackgroundMusic(context, master!,
+        () => useAudioSettings.getState().enabled && !document.hidden,
+        () => useAudioSettings.setState({ error: 'Background music could not play. Game sounds are still available.' }));
+      void music.start();
+    }
     return context.state === 'running';
   } catch {
     useAudioSettings.setState({ error: 'Audio is unavailable. The game can continue without sound.' });
@@ -83,7 +97,10 @@ export const gameAudio = {
     useAudioSettings.setState({ enabled, error: '' });
     stopAll();
     savePreferences();
-    if (enabled) play('win', false);
+    if (enabled) {
+      void unlock();
+      play('win', false);
+    }
     else if (context?.state === 'running') void context.suspend().catch(() => {});
   },
   initialize() {
@@ -96,18 +113,27 @@ export const gameAudio = {
       if (document.hidden) {
         stopAll();
         if (context?.state === 'running') void context.suspend().catch(() => {});
-      }
+      } else if (context) void unlock();
+    };
+    const pageHide = () => {
+      stopAll();
+      if (context?.state === 'running') void context.suspend().catch(() => {});
     };
     document.addEventListener('pointerdown', gesture);
     document.addEventListener('keydown', gesture);
     document.addEventListener('visibilitychange', hide);
-    window.addEventListener('pagehide', stopAll);
+    window.addEventListener('pagehide', pageHide);
+    window.addEventListener('pageshow', hide);
     return () => {
       stopAll();
+      music?.dispose();
+      music = null;
+      if (context?.state === 'running') void context.suspend().catch(() => {});
       document.removeEventListener('pointerdown', gesture);
       document.removeEventListener('keydown', gesture);
       document.removeEventListener('visibilitychange', hide);
-      window.removeEventListener('pagehide', stopAll);
+      window.removeEventListener('pagehide', pageHide);
+      window.removeEventListener('pageshow', hide);
     };
   },
 };

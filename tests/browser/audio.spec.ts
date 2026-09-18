@@ -8,9 +8,11 @@ import { data, expect, expectFits, loadRun, readyFixture, savedState, saveKey, s
 
 declare global {
   interface Window {
-    audioProbe: { starts: number; stops: number; contexts: AudioContext[]; gains: GainNode[] };
+    audioProbe: { starts: number; stops: number; contexts: AudioContext[]; gains: GainNode[];
+      music: AudioBufferSourceNode[]; decodes: number };
     hapticProbe: (number | number[])[];
     soundTest: typeof import('../../src/lib/sound-effects.ts');
+    musicTest: typeof import('../../src/lib/background-music.ts');
   }
 }
 
@@ -29,10 +31,15 @@ const pulses = (page: Page) => page.evaluate(() => window.hapticProbe.filter((pa
 
 async function instrumentAudio(page: Page) {
   await page.addInitScript(() => {
-    window.audioProbe = { starts: 0, stops: 0, contexts: [], gains: [] };
+    window.audioProbe = { starts: 0, stops: 0, contexts: [], gains: [], music: [], decodes: 0 };
     const OriginalContext = window.AudioContext;
     window.AudioContext = class extends OriginalContext {
       constructor() { super(); window.audioProbe.contexts.push(this); }
+      async decodeAudioData(bytes: ArrayBuffer) {
+        const buffer = await super.decodeAudioData(bytes);
+        window.audioProbe.decodes++;
+        return buffer;
+      }
       createGain() {
         const gain = super.createGain();
         window.audioProbe.gains.push(gain);
@@ -49,13 +56,144 @@ async function instrumentAudio(page: Page) {
       createBufferSource() {
         const source = super.createBufferSource();
         const start = source.start.bind(source);
-        source.start = (when, offset, duration) => { window.audioProbe.starts++; start(when, offset, duration); };
+        source.start = (when, offset, duration) => {
+          if (source.loop) window.audioProbe.music.push(source);
+          else window.audioProbe.starts++;
+          start(when, offset, duration);
+        };
         return source;
       }
     };
   });
 }
 const starts = (page: Page) => page.evaluate(() => window.audioProbe.starts);
+
+test('music crossfade blends both channels and renders repeated loop boundaries without gaps', async ({ page }) => {
+  await page.goto('/');
+  const source = readFileSync(new URL('../../src/lib/background-music.ts', import.meta.url), 'utf8');
+  const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText;
+  await page.addScriptTag({ content: `{ const exports = {}; ${compiled}\nwindow.musicTest = exports; }` });
+  const result = await page.evaluate(async () => {
+    const sampleRate = 8000;
+    const context = new OfflineAudioContext(2, 20 * sampleRate, sampleRate);
+    const buffer = context.createBuffer(2, 8 * sampleRate, sampleRate);
+    for (let channel = 0; channel < 2; channel++) {
+      const samples = buffer.getChannelData(channel);
+      samples.fill(0.2 * (channel + 1));
+      samples.fill(0.4 * (channel + 1), 5 * sampleRate);
+    }
+    const loop = window.musicTest.prepareMusicLoop(buffer);
+    const source = context.createBufferSource();
+    source.buffer = loop.buffer;
+    source.loop = true;
+    source.loopStart = loop.loopStart;
+    source.loopEnd = buffer.duration;
+    source.connect(context.destination);
+    source.start();
+    const rendered = await context.startRendering();
+    return { loopStart: loop.loopStart, channels: [0, 1].map((channel) => {
+      const samples = rendered.getChannelData(channel);
+      return { intro: samples[sampleRate], tail: samples[5 * sampleRate], middle: samples[6.5 * sampleRate],
+        boundaries: [8, 13, 18].map((seconds) => ({ before: samples[seconds * sampleRate - 1], after: samples[seconds * sampleRate] })),
+        silent: samples.some((sample) => Math.abs(sample) < 0.01),
+        clipped: samples.some((sample) => Math.abs(sample) >= 1) };
+    }) };
+  });
+  expect(result.loopStart).toBe(3);
+  for (const [channel, samples] of result.channels.entries()) {
+    expect(samples.intro).toBeCloseTo(0.2 * (channel + 1), 4);
+    expect(samples.tail).toBeCloseTo(0.4 * (channel + 1), 4);
+    expect(samples.middle).toBeCloseTo(0.3 * (channel + 1), 4);
+    expect(samples.silent).toBe(false);
+    expect(samples.clipped).toBe(false);
+    for (const boundary of samples.boundaries) {
+      expect(boundary.before).toBeCloseTo(0.2 * (channel + 1), 4);
+      expect(boundary.after).toBeCloseTo(boundary.before!, 4);
+    }
+  }
+});
+
+test('background music loads after a gesture, shares mute and resumes without duplicate loops', async ({ page }) => {
+  await instrumentAudio(page);
+  let requests = 0;
+  page.on('request', (request) => { if (request.url().endsWith('/audio/background-music.mp3')) requests++; });
+  await loadRun(page, createRun('browser-background-music', data.coaches), 0);
+  const original = (await savedState(page)).run;
+  expect(requests).toBe(0);
+  await page.keyboard.press('Shift');
+  await expect.poll(() => page.evaluate(() => window.audioProbe.music.length)).toBe(1);
+  const track = await page.evaluate(() => {
+    const source = window.audioProbe.music[0]!;
+    return { loop: source.loop, start: source.loopStart, end: source.loopEnd, duration: source.buffer!.duration,
+      channels: source.buffer!.numberOfChannels };
+  });
+  expect(track).toMatchObject({ loop: true, start: 3, channels: 2 });
+  expect(track.duration).toBeGreaterThan(106);
+  expect(track.duration).toBeLessThan(108);
+  expect(track.end).toBe(track.duration);
+  await page.keyboard.press('Shift');
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.audioProbe.contexts[0]?.state)).toBe('suspended');
+  const pausedAt = await page.evaluate(() => window.audioProbe.contexts[0]!.currentTime);
+  await page.keyboard.press('Shift');
+  expect(await page.evaluate(() => window.audioProbe.contexts[0]!.currentTime)).toBe(pausedAt);
+  await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.audioProbe.contexts[0]?.state)).toBe('running');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: true });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(() => page.evaluate(() => window.audioProbe.contexts[0]?.state)).toBe('suspended');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, value: false });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(() => page.evaluate(() => window.audioProbe.contexts[0]?.state)).toBe('running');
+  expect(await page.evaluate(() => window.audioProbe.music.length)).toBe(1);
+  expect(await page.evaluate(() => window.audioProbe.contexts.length)).toBe(1);
+  expect(requests).toBe(1);
+  expect((await savedState(page)).run).toEqual(original);
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Enable game sound', exact: true })).toBeVisible();
+  await page.keyboard.press('Shift');
+  expect(await page.evaluate(() => window.audioProbe.music.length)).toBe(0);
+  expect(requests).toBe(1);
+});
+
+test('background music finishing a delayed load stays silent when muted', async ({ page }) => {
+  await instrumentAudio(page);
+  let release!: () => void;
+  const pending = new Promise<void>((resolve) => { release = resolve; });
+  let requested = false;
+  await page.route('**/audio/background-music.mp3', async (route) => {
+    requested = true;
+    await pending;
+    await route.fulfill({ contentType: 'audio/mpeg', body: readFileSync(new URL('../../public/audio/background-music.mp3', import.meta.url)) });
+  });
+  await loadRun(page, createRun('browser-music-delayed', data.coaches), 0);
+  await page.keyboard.press('Shift');
+  await expect.poll(() => requested).toBe(true);
+  await page.getByRole('button', { name: 'Mute game sound', exact: true }).click();
+  release();
+  await expect.poll(() => page.evaluate(() => window.audioProbe.decodes)).toBe(1);
+  expect(await page.evaluate(() => window.audioProbe.music.length)).toBe(0);
+  await page.getByRole('button', { name: 'Enable game sound', exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.audioProbe.music.length)).toBe(1);
+  expect(await page.evaluate(() => window.audioProbe.decodes)).toBe(1);
+});
+
+test('background music load failure leaves effects and drafting available', async ({ page }) => {
+  await instrumentAudio(page);
+  await page.route('**/audio/background-music.mp3', (route) => route.fulfill({ status: 404, body: '' }));
+  await loadRun(page, createRun('browser-music-missing', data.coaches), 0);
+  await page.keyboard.press('Shift');
+  await expect(page.getByRole('status').filter({ hasText: 'Background music could not play' })).toBeVisible();
+  await page.getByRole('button', { name: /^Select / }).first().click();
+  await expect(page.getByRole('button', { name: 'SPIN THE REELS', exact: true })).toBeEnabled();
+  await expect.poll(() => starts(page)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => window.audioProbe.music.length)).toBe(0);
+});
 
 test('sound palette renders non-silent unclipped waveforms and cancels scheduled voices', async ({ page }) => {
   await page.goto('/');

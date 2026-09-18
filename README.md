@@ -48,7 +48,7 @@ Choose a mode before signing your coach:
 
 ## Browser experience
 
-Play on desktop or mobile, with sound effects and a persistent mute toggle. Supported devices also offer independently controlled vibration for drafting, playback and results. Vibration availability depends on the browser, hardware and OS; it is not supported in Safari on iPhone/iPad.
+Play on desktop or mobile, with sound effects, looping background music and a persistent mute toggle. Music starts after your first interaction, blends the end into the beginning over three seconds, and plays below the effects. Muting or hiding the game pauses the music; unmuting or returning resumes it. Supported devices also offer independently controlled vibration for drafting, playback and results. Vibration availability depends on the browser, hardware and OS; it is not supported in Safari on iPhone/iPad.
 
 Supporting browsers can install **98-0** to the home screen or app launcher. Chrome/Edge can offer native installation; iPhone/iPad Safari uses Share > Add to Home Screen. **Internet access is required to open the game:** installation does not add offline support.
 
