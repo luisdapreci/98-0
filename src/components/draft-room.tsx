@@ -45,7 +45,7 @@ import { PlayerGuide } from './player-guide';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
 import { REEL_SPIN_DURATION_MS } from '../lib/sound-effects';
-import { challengeForAttempt, dailyCommitmentKey, DAILY_VERSION, utcDate } from '../engine/daily';
+import { challengeForAttempt, utcDate } from '../engine/daily';
 import { rotatingChallengeForDate, rotationSchedule } from '../engine/daily-calendar';
 
 const eras = ['1960s', '1970s', '1980s', '1990s', '2000s', '2010s', '2020s'];
@@ -1029,11 +1029,11 @@ export function DraftRoom() {
         <p className="reset-message">Same challenge and offer priorities, with legal fallbacks. Local results close 24 hours after the UTC day ends; later finishes are unranked.</p>
         {!(run?.daily && !run.season) && <p className="reset-message">Starting replaces the active run. Saved Daily records remain.</p>}
         <div className="dialog-actions">
-          <button className="secondary-button" disabled={dailyBusy} onClick={() => setDailyOpen(false)}>Cancel</button>
           <button className="primary-button" disabled={dailyBusy || (!resumingDaily && !previewChallenge)} onClick={async () => {
             setDailyBusy(true);
             try {
-              await startDaily(today);
+              if (resumingDaily) newRun();
+              else await startDaily(today);
               gameAudio.stopAll();
               setSelected(null);
               setResultView('postseason');
@@ -1043,8 +1043,7 @@ export function DraftRoom() {
               setError(caught instanceof Error ? caught.message : 'Daily could not start. Check browser storage.');
               setDailyOpen(false);
             } finally { setDailyBusy(false); }
-          }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : run?.daily && !run.season ? 'RESUME DAILY'
-            : dailyEntries.some((entry) => dailyCommitmentKey(entry.attempt) === dailyCommitmentKey({ date: today, version: DAILY_VERSION }) && entry.attempt.kind === 'local') ? 'START PRACTICE' : 'START DAILY'}</button>
+          }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : resumingDaily ? 'CANCEL DAILY' : 'START DAILY'}</button>
         </div>
         <details className="daily-calendar">
           <summary>THIS 56-DAY CYCLE / UTC</summary>

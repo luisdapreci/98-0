@@ -10,6 +10,8 @@ The latest recorded deployment is the frozen player-name column and square share
 
 The player table now has a narrower, frozen name column, and the result popup previews the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
 
+Local, not yet deployed: the Daily popup uses START DAILY for all starts, removes the redundant bottom dismiss button, and replaces RESUME DAILY with CANCEL DAILY to abandon the active Daily draft and create a normal run. The top X only dismisses the popup; Daily commitments and records remain.
+
 ### Remaining work and limitations
 
 - Online rankings (Phase 8) are deferred. Daily attempts use local clocks and storage and are not trusted or server-verified.
@@ -39,6 +41,13 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Daily popup actions, 2026-09-17 (local only)
+
+- Scope: uncommitted working-tree changes from a clean tree in `src/components/draft-room.tsx` and the existing Daily browser tests. START DAILY replaces START PRACTICE, the bottom Cancel dismiss button is removed, and CANCEL DAILY uses the existing new-run action. Retry eligibility, Daily records, save formats and gameplay rules are unchanged.
+- Passed `npm run typecheck`, `npm run build`, and 10 local Edge desktop/320px mobile checks against the fresh production build. Browser commands: `npm run test:browser -- tests/browser/daily.spec.ts --grep 'Daily is visible|Daily commits before offers|Daily survives UTC rollover' --reporter=dot` (6 passed) and `npm run test:browser -- tests/browser/daily.spec.ts --grep 'Legacy drafts resume|Daily Shaq Meets Steph' --reporter=dot` (4 passed), both exit code 0.
+- Verified X dismissal preserves the current run, cancellation returns to normal mode across reload, commitments survive cancellation, same-day retries remain practice, completed records persist, and legacy drafts remain unchanged on dismissal. Desktop/mobile popup screenshots reviewed; source/test editor diagnostics were clear. VS Code test discovery found no Playwright tests; the project CLI ran them successfully.
+- No deployment, commit or push. Full engine/browser suites, physical devices and Safari/Firefox were not newly tested.
 
 ### Frozen names and square preview deployment, 2026-09-17
 

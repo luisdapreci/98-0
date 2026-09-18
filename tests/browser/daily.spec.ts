@@ -22,7 +22,8 @@ test('Daily is visible and off by default until explicitly started', async ({ pa
   await page.screenshot({ path: testInfo.outputPath('daily-opt-in.png'), fullPage: true, animations: 'disabled' });
   await dailyButton.click();
   expect((await savedState(page)).run).toEqual(original);
-  await page.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(page.getByRole('dialog').getByRole('button')).toHaveCount(2);
+  await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await page.reload();
   await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
   expect((await savedState(page)).run).toEqual(original);
@@ -36,10 +37,31 @@ test('Daily is visible and off by default until explicitly started', async ({ pa
   await page.reload();
   await expect(dailyButton).toHaveText('DAILY CHALLENGE ON');
   expect((await savedState(page)).run).toEqual(optedIn);
-  await page.getByRole('button', { name: 'New run', exact: true }).click();
-  await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
+  await dailyButton.click();
+  await expect(page.getByRole('dialog').getByRole('button')).toHaveCount(2);
+  await expect(page.getByRole('button', { name: 'CANCEL DAILY', exact: true })).toBeVisible();
+  await expectFits(page);
+  await page.screenshot({ path: testInfo.outputPath('daily-cancel.png'), fullPage: true, animations: 'disabled' });
+  await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
+  expect((await savedState(page)).run).toEqual(optedIn);
+  await dailyButton.click();
+  await page.getByRole('button', { name: 'CANCEL DAILY', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
   expect((await savedState(page)).run.daily).toBeUndefined();
+  await expect(page.getByRole('group', { name: 'IQ mode', exact: true })).toBeVisible();
+  await expect(page.locator('.daily-banner')).toHaveCount(0);
+  await page.reload();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
+  expect((await savedState(page)).run.daily).toBeUndefined();
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey)).toEqual([{ attempt: optedIn.daily }]);
+  await dailyButton.click();
+  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  expect((await savedState(page)).run.daily.kind).toBe('practice');
+  await dailyButton.click();
+  await page.getByRole('button', { name: 'CANCEL DAILY', exact: true }).click();
+  await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
 });
 
 test('Daily commits before offers, completes six picks, persists results and retries as practice', async ({ page }, testInfo) => {
@@ -87,7 +109,7 @@ test('Daily commits before offers, completes six picks, persists results and ret
   await expect(page.getByRole('region', { name: 'Local Daily records' })).toContainText(`${complete.season.wins}-${complete.season.losses}`);
   await expectFits(page);
   await page.screenshot({ path: testInfo.outputPath('daily-records.png'), fullPage: true, animations: 'disabled' });
-  await page.getByRole('button', { name: 'START PRACTICE', exact: true }).click();
+  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   const practice = (await savedState(page)).run;
   expect(practice.daily.kind).toBe('practice');
@@ -108,11 +130,12 @@ test('Daily survives UTC rollover; abandonment retains commitment and the next d
   await page.reload();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await expect(page.locator('.daily-date')).toContainText('2026-09-17');
-  await page.getByRole('button', { name: 'RESUME DAILY', exact: true }).click();
+  await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect((await savedState(page)).run).toEqual(original);
-  await page.getByRole('button', { name: 'New run', exact: true }).click();
-  await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
+  await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
+  await page.getByRole('button', { name: 'CANCEL DAILY', exact: true }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
@@ -120,7 +143,7 @@ test('Daily survives UTC rollover; abandonment retains commitment and the next d
   await page.getByRole('button', { name: 'New run', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
-  await page.getByRole('button', { name: 'START PRACTICE', exact: true }).click();
+  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   const entries = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey);
   expect(entries.map((entry: { attempt: { kind: string } }) => entry.attempt.kind)).toEqual(['local', 'local', 'practice']);
@@ -247,7 +270,7 @@ for (const index of [15, 26, 6, 27, 38, 42, 48, 49, 50, 51, 52, 55]) {
       await page.reload();
       await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
       await expect(page.getByRole('region', { name: 'Local Daily records' })).toContainText('Shaq Meets Steph');
-      await page.getByRole('button', { name: 'START PRACTICE', exact: true }).click();
+      await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
       await expect(page.getByRole('dialog')).toHaveCount(0);
       const practice = (await savedState(page)).run;
       expect(practice.daily.kind).toBe('practice');
@@ -293,7 +316,7 @@ test('Legacy drafts resume unchanged and do not consume the fresh rotation commi
   await loadRun(page, run, 0);
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await expect(page.locator('.daily-preview')).toContainText(DAILY_CALENDAR[1]!.name);
-  await page.getByRole('button', { name: 'RESUME DAILY', exact: true }).click();
+  await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect((await savedState(page)).run).toEqual(run);
   await page.getByRole('button', { name: 'New run', exact: true }).click();
@@ -313,7 +336,7 @@ test('Legacy drafts resume unchanged and do not consume the fresh rotation commi
   await page.getByRole('button', { name: 'New run', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
-  await page.getByRole('button', { name: 'START PRACTICE', exact: true }).click();
+  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect((await savedState(page)).run.daily.kind).toBe('practice');
 });
