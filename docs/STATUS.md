@@ -6,13 +6,13 @@ For the game overview and local setup, see the [README](../README.md). This docu
 
 As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics, install support and the first-visit player guide are implemented.
 
-The latest recorded deployment is the frozen player-name column and square share-preview update from clean commit `84d0551`: <https://98-0-fgz5c5yps-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 14 local and 14 deployed desktop/mobile Edge browser checks, plus a deployed frozen-column interaction probe and anonymous HTTP 200. These are dated functional results, not human-playtest, balance or full release acceptance.
+The latest recorded deployment is the Daily popup and background music update from commit `7b51bc4` plus the working-tree FLAC upload exclusion: <https://98-0-484zmm9m5-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 46 local and 46 deployed desktop/mobile Edge browser checks, plus anonymous HTTP 200 and audio asset checks. These are dated functional results, not human-playtest, balance or full release acceptance.
 
 The player table now has a narrower, frozen name column, and the result popup previews the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
 
-Local, not yet deployed: the Daily popup uses START DAILY for all starts, removes the redundant bottom dismiss button, and replaces RESUME DAILY with CANCEL DAILY to abandon the active Daily draft and create a normal run. The top X only dismisses the popup; Daily commitments and records remain.
+Deployed: the Daily popup uses START DAILY for all starts, removes the redundant bottom dismiss button, and replaces RESUME DAILY with CANCEL DAILY to abandon the active Daily draft and create a normal run. The top X only dismisses the popup; Daily commitments and records remain.
 
-Local, not yet deployed: background music now loops with a three-second crossfade, starts after interaction, and shares the existing mute control. Music pauses when muted or hidden and resumes without restarting. The original FLAC is preserved. Public use of this commercial recording requires appropriate music rights.
+Deployed: background music loops with a three-second crossfade, starts after interaction, and shares the existing mute control. Music pauses when muted or hidden and resumes without restarting. The user confirmed public-use rights/permission for the recording. The original FLAC is preserved locally and excluded from CLI uploads; its public URL returns 404.
 
 ### Remaining work and limitations
 
@@ -43,6 +43,17 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Daily popup and background music deployment, 2026-09-17
+
+- Published commit `7b51bc486ca38f512b1e0a00df86bcf57fec59d2` plus the uncommitted `.vercelignore` exclusion `public/audio/*.flac` to <https://98-0.vercel.app>; immutable deployment: <https://98-0-484zmm9m5-preciadox.vercel.app>. The initial working tree was clean. Scope: Daily popup actions and looping background music; no gameplay or save-format changes.
+- The user confirmed rights/permission to publish the recording and authorized publishing the MP3 while excluding the original FLAC. No audio source files were removed. A local upload-rule assertion verified the exclusion and retained runtime MP3.
+- Pre-publish checks passed: `npm test` (115 tests), `npm run typecheck`, `npm run build`, and `git diff --check`. VS Code test discovery returned no tests; the canonical npm suite ran successfully.
+- Local and deployed Edge desktop/320px mobile runs each passed 46 checks, exit code 0: `npm run test:browser -- tests/browser/audio.spec.ts --reporter=dot` (28), then `npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'Daily is visible|Daily survives UTC rollover|Legacy drafts resume|Daily Shaq Meets Steph|six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share' --reporter=dot` (18). Local runs used the fresh production build with remote/reuse overrides cleared; deployed runs used the stable public alias. The remote override was cleared afterward.
+- Verified the existing project link and `npx --yes vercel@latest project inspect 98-0 --scope preciadox`: repository root, Next.js preset, Node 24.x and default build/output settings. Published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`; the stable alias was retained. No Git push or production-branch change was needed.
+- Anonymous requests passed: game HTTP 200 with current title and game content, MP3 HTTP 200 with the expected 2,039,022 bytes, original FLAC HTTP 404. An initial HTTP probe failed on an obsolete title expectation; the assertion was corrected against current source and passed. This was a probe error, not a deployment failure.
+- Live coverage includes music fetch/decode, loop mechanics, gesture startup, mute/hidden-tab behavior, sound/haptic regressions, Daily cancellation and retry persistence, draft completion, postseason history, actual exported result content and sharing fallbacks. Deployed desktop/mobile Daily screenshots and the mobile perfect-result share preview were reviewed. Browser tests used isolated storage; no player data was cleared.
+- No commit or push was performed. This status entry is a post-deployment documentation change. The full browser suite, subjective listening, physical devices, Safari/Firefox, real messaging-app delivery and comprehensive accessibility/balance acceptance were not newly verified. Rights confirmation is user-provided, not an independent license audit.
 
 ### Background music loop, 2026-09-17 (local only)
 
