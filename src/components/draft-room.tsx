@@ -664,6 +664,7 @@ export function DraftRoom() {
   const reelFranchises = challenge?.franchises ? franchises.filter((franchise) => challenge.franchises!.includes(franchise.id)) : franchises;
   const reelEras = challenge?.decades ?? eras;
   const resumingDaily = !!run?.daily && !run.season;
+  const dailyUsed = dailyEntries.some((entry) => entry.attempt.date === today);
   const previewChallenge = resumingDaily ? challenge : today ? rotatingChallengeForDate(today) : null;
   const cycleSchedule = today ? rotationSchedule(today) : [];
   const shareable = progress.runs.find((entry) => entry.id === run?.id);
@@ -765,7 +766,7 @@ export function DraftRoom() {
               <CalendarDays size={16} aria-hidden="true" />
               <strong>DAILY / {run.daily.date} UTC / MID IQ</strong>
               {challenge && <div className="daily-theme"><strong>{challenge.name}</strong><span>{challenge.restriction}</span></div>}
-              <span>{run.daily.kind === 'practice' ? 'PRACTICE / UNRANKED' : dailyEntries.find((entry) => entry.attempt.attemptId === run.id)?.result?.status === 'late'
+              <span>{dailyEntries.find((entry) => entry.attempt.attemptId === run.id)?.result?.status === 'late'
                 ? 'LATE / UNRANKED' : 'LOCAL ONLY / NOT VERIFIED'}</span>
             </div>}
             {draft.phase === 'COACH' ? (
@@ -1025,11 +1026,11 @@ export function DraftRoom() {
         <p className="daily-date">{run?.daily && !run.season ? run.daily.date : today} UTC / MID IQ</p>
         {previewChallenge ? <div className="daily-preview"><h3>{previewChallenge.name}</h3><p>{previewChallenge.restriction}</p></div>
           : <p className="daily-availability" role="status">{resumingDaily ? 'Original Daily / unrestricted pool' : 'Rotation begins September 17, 2026 UTC.'}</p>}
-        <p className="reset-message">Local only. No public ranking or verified attempts. The first attempt is committed before coach offers; abandoning it does not restore it. Retries are unranked practice.</p>
+        <p className="reset-message">Local only. No public ranking or verified attempts. One attempt per UTC day, committed before coach offers. Cancelling or abandoning it uses that day's attempt.</p>
         <p className="reset-message">Same challenge and offer priorities, with legal fallbacks. Local results close 24 hours after the UTC day ends; later finishes are unranked.</p>
-        {!(run?.daily && !run.season) && <p className="reset-message">Starting replaces the active run. Saved Daily records remain.</p>}
+        {!resumingDaily && <p className="reset-message">{dailyUsed ? "Today's Daily attempt has been used. The next Daily unlocks at 00:00 UTC." : 'Starting replaces the active run. Saved Daily records remain.'}</p>}
         <div className="dialog-actions">
-          <button className="primary-button" disabled={dailyBusy || (!resumingDaily && !previewChallenge)} onClick={async () => {
+          <button className="primary-button" disabled={dailyBusy || (!resumingDaily && (dailyUsed || !previewChallenge))} onClick={async () => {
             setDailyBusy(true);
             try {
               if (resumingDaily) newRun();
@@ -1043,7 +1044,7 @@ export function DraftRoom() {
               setError(caught instanceof Error ? caught.message : 'Daily could not start. Check browser storage.');
               setDailyOpen(false);
             } finally { setDailyBusy(false); }
-          }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : resumingDaily ? 'CANCEL DAILY' : 'START DAILY'}</button>
+          }}><CalendarDays size={16} />{dailyBusy ? 'OPENING' : resumingDaily ? 'CANCEL DAILY' : dailyUsed ? 'DAILY USED' : 'START DAILY'}</button>
         </div>
         <details className="daily-calendar">
           <summary>THIS 56-DAY CYCLE / UTC</summary>
@@ -1062,14 +1063,14 @@ export function DraftRoom() {
                 <strong>{entry.attempt.date} / MID IQ</strong>
                 <span>{challengeForAttempt(entry.attempt)?.name ?? 'Original Daily'}</span>
                 <span>{result ? `${result.wins}-${82 - result.wins} / PD ${result.pointDifferential > 0 ? '+' : ''}${result.pointDifferential} / STREAK ${result.longestWinStreak}` : 'ATTEMPT COMMITTED'} </span>
-                <small>{result?.status === 'late' ? 'LATE / UNRANKED' : entry.attempt.kind === 'practice' ? 'PRACTICE / UNRANKED' : 'LOCAL ONLY / NOT VERIFIED'}</small>
+                <small>{result?.status === 'late' ? 'LATE / UNRANKED' : 'LOCAL ONLY / NOT VERIFIED'}</small>
               </li>;
             })}</ol>}
         </section>
       </Modal>}
       {confirmReset && (
         <Modal title="START A NEW RUN?" onClose={() => setConfirmReset(false)}>
-          <p className="reset-message">Your current draft, season and postseason results will be cleared. Daily commitments and local records remain; abandoning a Daily does not restore its first attempt.</p>
+          <p className="reset-message">Your current draft, season and postseason results will be cleared. Daily commitments and local records remain; abandoning a Daily uses that day's attempt.</p>
           <div className="dialog-actions">
             <button className="secondary-button" onClick={() => setConfirmReset(false)}>
               Keep this run

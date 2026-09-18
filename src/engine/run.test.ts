@@ -11,7 +11,8 @@ import type { RunData } from './run.ts';
 import type { TeamLineup } from './types.ts';
 import { lineupForUsagePolicy, usageBaseCap, usageCapForLineup } from './usage-policy.ts';
 import { seasonForQualification } from './postseason-policy.ts';
-import { emptyProgress, recordProgress, resultText } from './progress.ts';
+import { emptyProgress, recordProgress, resultText, summarizeDaily } from './progress.ts';
+import { DAILY_ROTATION_VERSION, rotatingChallengeForDate, challengeForDate, calendarVersionForDate } from './daily-calendar.ts';
 import type { RunSummary } from './progress.ts';
 
 const data: RunData = {
@@ -76,9 +77,23 @@ test('share captions separate the game title from records without repeating the 
   ].join('\n'));
   assert.match(resultText({ ...result, postseasonStatus: 'pending' }), /Postseason pending/);
   for (const kind of ['local', 'practice'] as const) {
-    assert.ok(resultText({ ...result, daily: { date: '2026-09-17', kind } })
-      .includes(`Daily: 2026-09-17 UTC (${kind})\n\n`));
+    const text = resultText({ ...result, daily: { date: '2026-09-17', kind } });
+    assert.ok(text.includes('Daily: 2026-09-17 UTC\n\n'));
+    assert.doesNotMatch(text, /practice/i);
   }
+  const date = '2026-09-17';
+  const challenge = rotatingChallengeForDate(date)!;
+  const daily = summarizeDaily({ version: 'daily-3', calendarVersion: DAILY_ROTATION_VERSION,
+    challengeId: challenge.id, date, kind: 'local', startedAt: Date.parse(`${date}T12:00:00Z`), attemptId: 'daily-share' });
+  assert.deepEqual(daily.challenge, { name: challenge.name, restriction: challenge.restriction });
+  assert.ok(resultText({ ...result, daily }).includes(`Daily: ${date} UTC\n${challenge.name}\n${challenge.restriction}\n\n`));
+  const legacyChallenge = challengeForDate(date)!;
+  assert.deepEqual(summarizeDaily({ version: 'daily-2', calendarVersion: calendarVersionForDate(date),
+    challengeId: legacyChallenge.id, date, kind: 'local', startedAt: Date.parse(`${date}T12:00:00Z`), attemptId: 'legacy-share' }).challenge,
+  { name: legacyChallenge.name, restriction: legacyChallenge.restriction });
+  assert.deepEqual(summarizeDaily({ version: 'daily-1', date, kind: 'local',
+    startedAt: Date.parse(`${date}T12:00:00Z`), attemptId: 'original-share' }).challenge,
+  { name: 'Original Daily', restriction: 'Unrestricted player pool' });
   const postseason: NonNullable<RunSummary['postseason']> = {
     playIn: { wins: 0, losses: 0 }, playoffs: { wins: 16, losses: 0 },
     champion: true, isPerfectRun: false, eliminatedRound: null,

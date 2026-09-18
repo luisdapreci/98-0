@@ -3,6 +3,40 @@ import { createRun } from '../../src/engine/run.ts';
 import { RIVALRY_VERSION } from '../../src/engine/rivalry.ts';
 import { controlledSeason, data, expect, expectFits, loadRun, readyFixture, savedState, test } from './fixtures';
 
+test('player stats stay on one compact row on mobile', async ({ page }, testInfo) => {
+  await loadRun(page, createRun('browser-compact-stats', data.coaches, null, RIVALRY_VERSION, 'mid'), 0);
+  await page.getByRole('button', { name: /^Select / }).first().click();
+  await page.getByRole('button', { name: 'SPIN THE REELS', exact: true }).click();
+  await expect(page.locator('.player-list')).toHaveAttribute('aria-busy', 'false');
+  await expect(page.locator('.player-row').first()).toBeVisible();
+
+  for (const width of testInfo.project.name === 'mobile' ? [320, 390, 760] : [1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const sort of ['Overall rating', 'Assists per game']) {
+      await page.getByRole('button', { name: new RegExp(`^${sort}: sort`) }).click();
+      const rows = await page.locator('.player-row').evaluateAll((elements) => elements.map((element) => {
+        const stats = [...element.querySelectorAll<HTMLElement>('.stat-cell')];
+        const bounds = element.getBoundingClientRect();
+        return {
+          count: stats.length,
+          tops: stats.map((stat) => stat.getBoundingClientRect().top),
+          fits: stats.every((stat) => {
+            const rect = stat.getBoundingClientRect();
+            return stat.scrollWidth <= stat.clientWidth + 1 && rect.left >= bounds.left && rect.right <= bounds.right;
+          }),
+        };
+      }));
+      for (const row of rows) {
+        expect(row.count).toBe(10);
+        expect(new Set(row.tops).size).toBe(1);
+        expect(row.fits).toBe(true);
+      }
+      await expectFits(page);
+    }
+    await page.locator('.player-pool').screenshot({ path: testInfo.outputPath(`compact-stats-${width}.png`), animations: 'disabled' });
+  }
+});
+
 test('earned collections cannot expose scouting during a HI IQ draft', async ({ page }) => {
   await loadRun(page, controlledSeason(0, 'hi-collection-unlock'));
   await expect(page.getByRole('button', { name: /COACH ALMANAC/ })).toBeEnabled();

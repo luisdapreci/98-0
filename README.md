@@ -41,10 +41,10 @@ Choose a mode before signing your coach:
 
 ## Daily, collection and sharing
 
-- **Daily challenges:** a Mid IQ challenge each UTC day, rotating through 56 themes reshuffled each cycle. Your first attempt counts locally; retries are practice. Results are not server-verified, and there are no online rankings.
+- **Daily challenges:** a Mid IQ challenge each UTC day, rotating through 56 themes reshuffled each cycle. One attempt per UTC day in this browser, committed before coach offers; cancelling or abandoning it does not allow a retry. Unfinished saves can resume. The next Daily unlocks at 00:00 UTC. Results are not server-verified, and there are no online rankings.
 - **Coach Almanac:** complete an 82-game simulation to unlock all 12 coach systems for reference.
 - **Season history:** keep your 50 most recent seasons and personal bests for each IQ mode.
-- **Shareable results:** export revealed results as text or a square PNG, or share through a supported browser.
+- **Shareable results:** export revealed results as text or a square PNG, or share through a supported browser. Daily exports include the challenge name and description. Older history needs its original Daily record to recover missing descriptions; otherwise it retains the date only.
 
 ## Browser experience
 

@@ -10,10 +10,12 @@ Completed for local scope on 2026-09-17. No accounts, friend service or public r
 - Personal bests retain the most wins, highest differential and longest winning streak separately for each IQ mode, even after the original entry leaves the recent 50. Equal values preserve the existing best. Legacy saves without mode metadata remain Mid IQ.
 - New drafts and Daily starts preserve progress under `98-0-progress-v1`. Web Locks serialize read/merge/write operations where available. Malformed data and quota failures are reported without deleting existing progress. Progress UI updates do not rewrite the active run save.
 - Almanac and history are temporarily inaccessible during HI IQ drafting to avoid revealing protected scouting information; both become accessible at Start Season. The Almanac labels coach effects inactive in No IQ.
-- Result previews and plain text derive from the archived summary, not a new simulation. Daily date and local/practice status are included. Every export is explicitly local, unverified and not a ranking; authoritative Daily status remains in the separate Daily ledger.
+- Result previews and plain text derive from the archived summary, not a new simulation. Daily exports include the UTC date, challenge name and restriction description without the saved attempt kind. New summaries snapshot these details from the run's pinned Daily version. Older summaries recover missing details from a matching original Daily ledger entry; without a valid matching record, they remain date-only rather than guessing a theme. Every export is explicitly local, unverified and not a ranking; authoritative Daily status remains in the separate Daily ledger. This presentation update is deployed; see [current status](../STATUS.md).
 - `html-to-image` is dynamically imported for PNG export. An offscreen 720px layout renders at 2x resolution, independent of mobile preview width. Fonts finish loading before export, and long names wrap. Image and text downloads, clipboard text and native file/text sharing have explicit success, cancellation and failure feedback. Selectable text remains available without clipboard, native sharing or image export.
 
 ## Validation
+
+The evidence below records the original Phase 7 implementation. Later presentation updates and focused export checks are recorded in [project status](../STATUS.md).
 
 | Check | Result |
 | --- | --- |

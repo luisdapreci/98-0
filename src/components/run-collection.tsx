@@ -136,9 +136,12 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
       {imageUrl && <img src={imageUrl} width={1800} height={1800} alt={`98-0 result: ${statusLabel(result)}. Full result in RESULT TEXT below.`} />}
     </div>}
     <div hidden={!imageError}>
-    <div className="share-card" ref={card}>
+    <div className={`share-card${result.daily?.challenge ? ' share-card-daily' : ''}`} ref={card}>
       <div className="share-brand"><strong>98<span>-</span>0<span className="share-brand-dot">.</span></strong><span>{result.mode.toUpperCase()} IQ</span><Trophy size={28} /></div>
-      {result.daily && <p className="share-daily">DAILY / {result.daily.date} UTC / {result.daily.kind.toUpperCase()}</p>}
+      {result.daily && <div className="share-daily">
+        <span>DAILY / {result.daily.date} UTC</span>
+        {result.daily.challenge && <><strong>{result.daily.challenge.name}</strong><p>{result.daily.challenge.restriction}</p></>}
+      </div>}
       <h3>{statusLabel(result)}</h3>
       <div className="share-records">
         <div><span>REGULAR SEASON</span><strong>{result.season.wins}-{result.season.losses}</strong></div>
@@ -184,7 +187,7 @@ export function RunHistory({ progress, initialId }: { progress: Progress; initia
       <button onClick={() => setSelected(run)} aria-label={`View result: ${run.coach.name}, ${run.season.wins}-${run.season.losses}, ${run.mode.toUpperCase()} IQ, ${label}`}>
         <span className="history-record">{run.season.wins}<small>-{run.season.losses}</small></span>
         <span className="history-identity"><small>{label} / {run.mode.toUpperCase()} IQ</small><strong>{run.coach.name}</strong><span>{statusLabel(run)}</span>
-          {run.daily && <small>DAILY {run.daily.date} / {run.daily.kind.toUpperCase()}</small>}
+          {run.daily && <small>DAILY {run.daily.date} UTC</small>}
           <small>DIFF {run.season.differential} / STREAK {run.season.streak}</small>
         </span>
         {run.postseason?.champion ? <Trophy size={20} /> : <Check size={18} />}

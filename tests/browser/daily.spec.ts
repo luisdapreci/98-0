@@ -56,15 +56,16 @@ test('Daily is visible and off by default until explicitly started', async ({ pa
   expect((await savedState(page)).run.daily).toBeUndefined();
   expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey)).toEqual([{ attempt: optedIn.daily }]);
   await dailyButton.click();
-  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  expect((await savedState(page)).run.daily.kind).toBe('practice');
-  await dailyButton.click();
-  await page.getByRole('button', { name: 'CANCEL DAILY', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
+  await expect(page.getByRole('dialog')).toContainText('The next Daily unlocks at 00:00 UTC.');
+  await expect(page.getByRole('dialog')).not.toContainText(/practice/i);
+  expect((await savedState(page)).run.daily).toBeUndefined();
   await expect(dailyButton).toHaveText('DAILY CHALLENGE OFF');
+  await expectFits(page);
+  await page.screenshot({ path: testInfo.outputPath('daily-used.png'), fullPage: true, animations: 'disabled' });
 });
 
-test('Daily commits before offers, completes six picks, persists results and retries as practice', async ({ page }, testInfo) => {
+test('Daily commits before offers, completes six picks, persists results and blocks retries', async ({ page }, testInfo) => {
   const date = firstCycle.find((entry) => entry.challenge.id === 'triangle-test')!.date;
   await page.clock.setFixedTime(new Date(`${date}T12:00:00Z`));
   await page.goto('/');
@@ -104,19 +105,19 @@ test('Daily commits before offers, completes six picks, persists results and ret
   await page.getByRole('button', { name: 'Skip to final result', exact: true }).click();
   const complete = (await savedState(page)).run;
   await expect.poll(() => page.evaluate((key) => JSON.parse(localStorage.getItem(key)!)[0].result?.wins, ledgerKey)).toBe(complete.season.wins);
+  await expect.poll(() => page.evaluate((id) => {
+    const progress = JSON.parse(localStorage.getItem('98-0-progress-v1') ?? '{}');
+    return progress.runs?.find((entry: { id: string }) => entry.id === id)?.daily?.challenge;
+  }, complete.id)).toEqual({ name: 'Triangle Test', restriction: 'Phil Jackson' });
   await page.reload();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await expect(page.getByRole('region', { name: 'Local Daily records' })).toContainText(`${complete.season.wins}-${complete.season.losses}`);
   await expectFits(page);
   await page.screenshot({ path: testInfo.outputPath('daily-records.png'), fullPage: true, animations: 'disabled' });
-  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  const practice = (await savedState(page)).run;
-  expect(practice.daily.kind).toBe('practice');
-  expect(practice.seed).toBe(initial.seed);
-  expect(practice.draft.offers).toEqual(initial.draft.offers);
-  expect(practice.id).not.toBe(initial.id);
-  await expect(page.locator('.daily-banner')).toContainText('PRACTICE / UNRANKED');
+  await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
+  await expect(page.getByRole('dialog')).not.toContainText(/practice/i);
+  expect((await savedState(page)).run).toEqual(complete);
+  expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!).length, ledgerKey)).toBe(1);
 });
 
 test('Daily survives UTC rollover; abandonment retains commitment and the next day is separate', async ({ page }) => {
@@ -143,10 +144,9 @@ test('Daily survives UTC rollover; abandonment retains commitment and the next d
   await page.getByRole('button', { name: 'New run', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
-  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
   const entries = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey);
-  expect(entries.map((entry: { attempt: { kind: string } }) => entry.attempt.kind)).toEqual(['local', 'local', 'practice']);
+  expect(entries.map((entry: { attempt: { kind: string } }) => entry.attempt.kind)).toEqual(['local', 'local']);
 });
 
 test('Daily late completion stays playable and cannot enter local first-attempt results', async ({ page }) => {
@@ -270,12 +270,8 @@ for (const index of [15, 26, 6, 27, 38, 42, 48, 49, 50, 51, 52, 55]) {
       await page.reload();
       await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
       await expect(page.getByRole('region', { name: 'Local Daily records' })).toContainText('Shaq Meets Steph');
-      await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-      await expect(page.getByRole('dialog')).toHaveCount(0);
-      const practice = (await savedState(page)).run;
-      expect(practice.daily.kind).toBe('practice');
-      expect(practice.seed).toBe(initial.seed);
-      expect(practice.draft).toEqual(initial.draft);
+      await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
+      expect((await savedState(page)).run).toEqual(complete);
     }
   });
 }
@@ -306,16 +302,19 @@ test('Daily calendar rolls into another complete shuffled cycle at UTC midnight'
   expect((await savedState(page)).run.seed).toBe(dailySeed(date));
 });
 
-test('Legacy drafts resume unchanged and do not consume the fresh rotation commitment', async ({ page }) => {
+for (const kind of ['local', 'practice'] as const) {
+test(`Legacy ${kind} drafts resume unchanged and consume the same UTC day commitment`, async ({ page }) => {
   const date = rotationDate(0);
   await page.clock.setFixedTime(now);
   await page.goto('/');
   const run = createDailyRun({ version: 'daily-2', calendarVersion: calendarVersionForDate(date), challengeId: DAILY_CALENDAR[1]!.id,
-    date, startedAt: now.getTime(), kind: 'local', attemptId: 'legacy-resume' }, data.coaches, data.players);
+    date, startedAt: now.getTime(), kind, attemptId: 'legacy-resume' }, data.coaches, data.players);
   await page.evaluate(({ key, attempt }) => localStorage.setItem(key, JSON.stringify([{ attempt }])), { key: ledgerKey, attempt: run.daily });
   await loadRun(page, run, 0);
+  await expect(page.locator('.daily-banner')).not.toContainText(/practice/i);
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await expect(page.locator('.daily-preview')).toContainText(DAILY_CALENDAR[1]!.name);
+  await expect(page.getByRole('dialog')).not.toContainText(/practice/i);
   await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
   expect((await savedState(page)).run).toEqual(run);
@@ -323,22 +322,43 @@ test('Legacy drafts resume unchanged and do not consume the fresh rotation commi
   await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
   await expect(page.locator('.daily-preview')).toContainText(rotatingChallengeForDate(date)!.name);
-  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  const fresh = (await savedState(page)).run;
-  expect(fresh.daily.kind).toBe('local');
-  expect(fresh.seed).not.toBe(run.seed);
+  await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
+  const ordinary = (await savedState(page)).run;
+  expect(ordinary.daily).toBeUndefined();
   await page.reload();
-  expect((await savedState(page)).run).toEqual(fresh);
+  expect((await savedState(page)).run).toEqual(ordinary);
   const entries = await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey);
-  expect(entries.map((entry: { attempt: { kind: string } }) => entry.attempt.kind)).toEqual(['local', 'local']);
+  expect(entries).toHaveLength(1);
   expect(entries[0].attempt).toEqual(run.daily);
-  await page.getByRole('button', { name: 'New run', exact: true }).click();
-  await page.getByRole('dialog').getByRole('button', { name: 'NEW RUN', exact: true }).click();
   await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
-  await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  expect((await savedState(page)).run.daily.kind).toBe('practice');
+  await expect(page.getByRole('button', { name: 'DAILY USED', exact: true })).toBeDisabled();
+});
+}
+
+test('Daily rejects a stale second-tab start without replacing the committed run', async ({ page, context }) => {
+  await page.clock.setFixedTime(now);
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();
+  const second = await context.newPage();
+  try {
+    await second.clock.setFixedTime(now);
+    await second.goto('/');
+    await second.getByRole('button', { name: 'Daily challenge', exact: true }).click();
+    await expect(second.getByRole('button', { name: 'START DAILY', exact: true })).toBeEnabled();
+    await page.getByRole('button', { name: 'START DAILY', exact: true }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    const committed = (await savedState(page)).run;
+    await second.getByRole('button', { name: 'START DAILY', exact: true }).click();
+    await expect(second.locator('.error-banner')).toContainText("Today's Daily attempt has already been used.");
+    await expect(second.locator('.daily-banner')).toHaveCount(0);
+    expect((await savedState(page)).run).toEqual(committed);
+    expect(await page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), ledgerKey)).toEqual([{ attempt: committed.daily }]);
+    await second.reload();
+    await expect(second.locator('.daily-banner')).toBeVisible();
+    expect((await savedState(second)).run).toEqual(committed);
+  } finally {
+    await second.close();
+  }
 });
 
 test('Independent offline players agree on future UTC themes, seeds, coaches and reels', async ({ browser, baseURL }) => {
