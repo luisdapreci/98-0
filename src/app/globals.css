@@ -1448,6 +1448,21 @@ main {
 .dialog-heading h2 {
   font-size: 24px;
 }
+.player-guide { width: 580px; }
+.player-guide .dialog-heading { margin-bottom: 18px; }
+.player-guide .dialog-heading .icon-button { flex-shrink: 0; }
+.guide-goal { font-size: 15px; line-height: 1.6; }
+.guide-goal strong { color: var(--accent); }
+.guide-steps { margin: 22px 0; padding-left: 24px; }
+.guide-steps li { padding-left: 8px; margin-bottom: 18px; }
+.guide-steps li::marker { color: var(--accent); font-weight: 700; }
+.guide-steps h3 { font-size: 19px; margin-bottom: 4px; }
+.guide-steps p, .guide-modes dd, .guide-note { color: var(--muted); font-size: 13px; line-height: 1.6; }
+.guide-modes { border-block: 1px solid var(--line); padding: 14px 0; }
+.guide-modes > div { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px; margin: 8px 0; }
+.guide-modes dt { font-size: 11px; font-weight: 700; line-height: 1.9; color: var(--accent); }
+.guide-modes dd { margin: 0; }
+.guide-note { margin: 18px 0; }
 .pick-identity h3 {
   font-size: 38px;
   line-height: 1.1;

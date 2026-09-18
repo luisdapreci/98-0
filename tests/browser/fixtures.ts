@@ -17,8 +17,10 @@ const read = (name: string) => JSON.parse(readFileSync(new URL(`../../data/proce
 const pool = read('opponents');
 export const data: RunData = { players: read('players'), coaches: read('coaches'), opponents: pool.regularSeasonPool, playoffs: pool.playoffPool };
 
-export const test = base.extend<{ pageErrors: string[] }>({
-  pageErrors: [async ({ page }, use) => {
+export const test = base.extend<{ pageErrors: string[]; guideDismissed: boolean }>({
+  guideDismissed: [true, { option: true }],
+  pageErrors: [async ({ page, context, guideDismissed }, use) => {
+    if (guideDismissed) await context.addInitScript(() => localStorage.setItem('98-0-guide-v1', 'dismissed'));
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
     await use(errors);

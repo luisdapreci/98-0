@@ -328,6 +328,7 @@ test('Independent offline players agree on future UTC themes, seeds, coaches and
       const page = await context.newPage();
       await page.clock.setFixedTime(new Date('2032-02-29T01:00:00Z'));
       await page.goto('/');
+      await page.getByRole('button', { name: 'Close guide', exact: true }).click();
       await expect(page.getByRole('button', { name: 'New run', exact: true })).toBeEnabled();
       await context.setOffline(true);
       await page.getByRole('button', { name: 'Daily challenge', exact: true }).click();

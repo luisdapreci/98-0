@@ -41,6 +41,7 @@ import { PostseasonTicker } from './postseason-ticker';
 import { DefenseBreakdown } from './defense-breakdown';
 import { SoundControls } from './sound-controls';
 import { InstallApp } from './install-app';
+import { PlayerGuide } from './player-guide';
 import { gameAudio } from '../lib/game-audio';
 import type { SoundCue } from '../lib/sound-effects';
 import { REEL_SPIN_DURATION_MS } from '../lib/sound-effects';
@@ -700,6 +701,7 @@ export function DraftRoom() {
           <span className="mode-label">{modeLabel}</span>
           <InstallApp />
           <SoundControls />
+          <PlayerGuide />
           <button
             className="icon-button"
             title="New run"
