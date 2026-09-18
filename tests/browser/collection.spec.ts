@@ -82,6 +82,7 @@ test('history updates pending postseason in place and exported records match the
       const exported = document.querySelector('.share-card-export');
       if (!exported) return;
       document.body.dataset.exportTypography = JSON.stringify({
+        dotColor: getComputedStyle(exported.querySelector('.share-brand-dot')!).color,
         name: getComputedStyle(exported.querySelector('.share-lineup strong')!).fontSize,
         metadata: getComputedStyle(exported.querySelector('.share-lineup small')!).fontSize,
         label: getComputedStyle(exported.querySelector('.share-records span')!).fontSize,
@@ -103,8 +104,10 @@ test('history updates pending postseason in place and exported records match the
   await expect(page.getByRole('dialog').locator('.share-card')).toContainText('16-0');
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
   expect(await page.evaluate(() => JSON.parse(document.body.dataset.exportTypography!))).toEqual({
+    dotColor: 'rgb(242, 163, 92)',
     name: '30px', metadata: '24px', label: '24px', disclaimer: '22px', overflow: [], fits: true,
   });
+  await expect(page.getByRole('dialog').locator('.share-brand-dot')).toHaveCSS('color', 'rgb(242, 163, 92)');
   await expect(page.getByRole('dialog').locator('.share-lineup strong').first()).toHaveCSS('font-size', '18px');
   await expectFits(page);
   expect(await page.locator('.share-card, .share-card *, .share-actions').evaluateAll((elements) => elements.filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className))).toEqual([]);

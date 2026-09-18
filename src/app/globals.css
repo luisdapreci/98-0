@@ -63,6 +63,7 @@
 .share-brand { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
 .share-brand > strong { font: 700 54px/1 var(--display); }
 .share-brand > strong span { color: #d5ef64; }
+.share-brand > strong .share-brand-dot { color: var(--orange); }
 .share-brand > span { margin-left: auto; color: #f2a35c; font-size: 12px; font-weight: 700; }
 .share-brand svg { color: #d5ef64; }
 .share-daily { font-size: 14px; color: #f2a35c; line-height: 1.4; margin-bottom: 12px; }

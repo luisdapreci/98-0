@@ -124,7 +124,7 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
     </div>
     <p className="share-feedback" role="status">{feedback || (imageError ? 'Image export failed. Text sharing and download remain available.' : image ? 'Image ready.' : 'Rendering image...')}</p>
     <div className="share-card" ref={card}>
-      <div className="share-brand"><strong>98<span>-</span>0.</strong><span>{result.mode.toUpperCase()} IQ</span><Trophy size={28} /></div>
+      <div className="share-brand"><strong>98<span>-</span>0<span className="share-brand-dot">.</span></strong><span>{result.mode.toUpperCase()} IQ</span><Trophy size={28} /></div>
       {result.daily && <p className="share-daily">DAILY / {result.daily.date} UTC / {result.daily.kind.toUpperCase()}</p>}
       <h3>{statusLabel(result)}</h3>
       <div className="share-records">
