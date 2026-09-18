@@ -6,9 +6,9 @@ For the game overview and local setup, see the [README](../README.md). This docu
 
 As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel.app>**, without authentication. Drafting, all three IQ modes, the 82-game season, play-in, four playoff series, championship results, Daily challenges, collection, sharing, audio, haptics, install support and the first-visit player guide are implemented.
 
-The latest recorded deployment is the player-guide update: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Its recorded validation passed 115 engine tests, 128 local desktop/mobile Edge browser checks and 18 deployed checks, plus typecheck, production build and whitespace checks. The deployment record reports uncommitted, unpushed source changes. These are dated functional results, not human-playtest, balance or full release acceptance. This documentation reorganization does not constitute a new deployment or test run.
+The latest recorded deployment is the frozen player-name column and square share-preview update from clean commit `84d0551`: <https://98-0-fgz5c5yps-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 14 local and 14 deployed desktop/mobile Edge browser checks, plus a deployed frozen-column interaction probe and anonymous HTTP 200. These are dated functional results, not human-playtest, balance or full release acceptance.
 
-The working tree also contains locally verified, undeployed updates: a narrower, frozen name column on table layouts and a result popup preview using the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
+The player table now has a narrower, frozen name column, and the result popup previews the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
 
 ### Remaining work and limitations
 
@@ -39,6 +39,15 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Frozen names and square preview deployment, 2026-09-17
+
+- Published clean commit `84d0551643a1db6eb7edeabae84d9c533f3508f6` to <https://98-0.vercel.app>; immutable deployment: <https://98-0-fgz5c5yps-preciadox.vercel.app>. Scope includes the 160px frozen player-name/header column and the result popup's square PNG preview. No save or gameplay-rule changes.
+- Pre-publish checks passed: `npm test` (115 tests), `npm run typecheck`, `npm run build`, `git diff --check`, and 14 local Edge desktop/320px mobile checks against the fresh production build. Browser command: `npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'six-pick draft|Daily commits before offers|history updates pending postseason|history caps|clipboard and native-share|copy and native share|image generation failure' --reporter=dot`.
+- Confirmed the existing local project link and `npx --yes vercel@latest project inspect 98-0 --scope preciadox` settings: repository root, Next.js, Node 24.x and default build/output. Published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`; the stable alias was retained. Anonymous `Invoke-WebRequest` returned HTTP 200 with game content.
+- Repeated the same 14 browser checks against the public alias with `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`: all passed. Cleared the remote override afterward. Checks cover drafting, Daily/reload persistence, postseason history, byte-identical preview/download PNGs and sharing fallbacks.
+- An additional isolated Edge probe on production confirmed the 160px name width, fixed name/header positions while stats scroll, clicking a frozen name opens player selection, and unchanged mobile cards without horizontal overflow. Reviewed deployed desktop/mobile table and share-preview screenshots. All browser checks used isolated storage; no existing player data was cleared.
+- No commit or push was performed during deployment; this status record is a post-deployment documentation change. The full browser suite, physical devices, Safari/Firefox, actual messaging-app delivery and comprehensive accessibility/balance acceptance were not newly verified.
 
 ### Square share preview, 2026-09-17 (local only)
 
