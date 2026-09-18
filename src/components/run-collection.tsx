@@ -47,6 +47,7 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
   const card = useRef<HTMLDivElement>(null);
   const fallback = useRef<HTMLTextAreaElement>(null);
   const [image, setImage] = useState<Blob | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [imageError, setImageError] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [busy, setBusy] = useState(false);
@@ -54,6 +55,7 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
   const filename = `98-0-${result.mode}-${result.daily?.date ?? new Date(result.completedAt).toISOString().slice(0, 10)}`;
   useEffect(() => {
     let cancelled = false;
+    let previewUrl: string | null = null;
     void (async () => {
       try {
         await document.fonts.ready;
@@ -68,13 +70,20 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
           const blob = await toBlob(exportCard, { pixelRatio: 2, width: 900, height: 900, backgroundColor: '#131614',
             style: { position: 'static', left: 'auto', top: 'auto' } });
           if (!blob) throw new Error('Empty image');
-          if (!cancelled) setImage(blob);
+          if (!cancelled) {
+            previewUrl = URL.createObjectURL(blob);
+            setImageUrl(previewUrl);
+            setImage(blob);
+          }
         } finally { exportCard.remove(); }
       } catch {
         if (!cancelled) setImageError(true);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
   }, []);
 
   function selectText(message: string) {
@@ -123,6 +132,10 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
       }}><FileText size={17} /> TEXT FILE</button>
     </div>
     <p className="share-feedback" role="status">{feedback || (imageError ? 'Image export failed. Text sharing and download remain available.' : image ? 'Image ready.' : 'Rendering image...')}</p>
+    {!imageError && <div className="share-preview" aria-busy={!imageUrl}>
+      {imageUrl && <img src={imageUrl} width={1800} height={1800} alt={`98-0 result: ${statusLabel(result)}. Full result in RESULT TEXT below.`} />}
+    </div>}
+    <div hidden={!imageError}>
     <div className="share-card" ref={card}>
       <div className="share-brand"><strong>98<span>-</span>0<span className="share-brand-dot">.</span></strong><span>{result.mode.toUpperCase()} IQ</span><Trophy size={28} /></div>
       {result.daily && <p className="share-daily">DAILY / {result.daily.date} UTC / {result.daily.kind.toUpperCase()}</p>}
@@ -139,6 +152,7 @@ function ShareResult({ result, onBack }: { result: RunSummary; onBack: () => voi
         <strong>{player.name}</strong><small>{player.franchise} / {player.decade}</small>
       </li>)}</ul>
       <p className="share-disclaimer">LOCAL RESULT / NOT VERIFIED / NOT A RANKING</p>
+    </div>
     </div>
     <label className="collection-label" htmlFor="result-text">RESULT TEXT</label>
     <textarea id="result-text" ref={fallback} readOnly value={text} rows={8} />

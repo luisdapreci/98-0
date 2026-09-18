@@ -59,6 +59,8 @@
 .history-identity > span { color: var(--orange); font-size: 10px; }
 .share-result { display: grid; gap: 16px; }
 .share-result > .secondary-button { justify-self: start; }
+.share-preview { width: 100%; min-width: 0; aspect-ratio: 1; background: #131614; }
+.share-preview img { display: block; width: 100%; height: auto; aspect-ratio: 1; }
 .share-card { width: 100%; min-width: 0; padding: 20px; background: #131614; color: #f0f2e9; border-top: 4px solid #d5ef64; overflow-wrap: anywhere; }
 .share-brand { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
 .share-brand > strong { font: 700 54px/1 var(--display); }
@@ -784,6 +786,32 @@ main {
   color: var(--muted);
   font-size: 8px;
   margin-top: 6px;
+}
+@media (min-width: 761px) {
+  .player-list:not(.hidden-stats) .player-grid {
+    grid-template-columns: 160px 32px repeat(11, minmax(48px, 1fr)) 17px;
+    min-width: 857px;
+  }
+  .player-list:not(.hidden-stats) .table-header {
+    z-index: 2;
+  }
+  .player-list:not(.hidden-stats) .player-name,
+  .player-list:not(.hidden-stats) .column-sort:first-child {
+    position: sticky;
+    left: 8px;
+    z-index: 1;
+    align-self: stretch;
+    background: var(--bg);
+    box-shadow: -8px 0 var(--bg), 8px 0 var(--bg);
+  }
+  .player-list:not(.hidden-stats) .player-name {
+    margin-block: -12px;
+    padding-block: 12px;
+  }
+  .player-list:not(.hidden-stats) .column-sort:first-child {
+    margin-block: -10px;
+    padding-block: 10px;
+  }
 }
 .position-tag {
   font-size: 9px;

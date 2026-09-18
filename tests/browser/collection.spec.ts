@@ -117,6 +117,21 @@ test('history updates pending postseason in place and exported records match the
   await download.saveAs(testInfo.outputPath('perfect-share.png'));
   const png = readFileSync((await download.path())!);
   expect(png.subarray(1, 4).toString()).toBe('PNG');
+  const preview = page.locator('.share-preview img');
+  await expect(preview).toBeVisible();
+  const previewData = await preview.evaluate(async (element: HTMLImageElement) => {
+    await element.decode();
+    const bytes = new Uint8Array(await (await fetch(element.src)).arrayBuffer());
+    const bounds = element.getBoundingClientRect();
+    return { bytes: Array.from(bytes), width: bounds.width, height: bounds.height,
+      naturalWidth: element.naturalWidth, naturalHeight: element.naturalHeight };
+  });
+  expect(Buffer.from(previewData.bytes)).toEqual(png);
+  expect(previewData.width).toBeGreaterThan(0);
+  expect(previewData.height).toBeCloseTo(previewData.width, 1);
+  expect(previewData.naturalWidth).toBe(1800);
+  expect(previewData.naturalHeight).toBe(1800);
+  await preview.screenshot({ path: testInfo.outputPath('share-preview.png') });
   const pixels = await page.evaluate(async (base64) => {
     const image = new Image();
     image.src = `data:image/png;base64,${base64}`;

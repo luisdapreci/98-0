@@ -8,6 +8,8 @@ As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel
 
 The latest recorded deployment is the player-guide update: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Its recorded validation passed 115 engine tests, 128 local desktop/mobile Edge browser checks and 18 deployed checks, plus typecheck, production build and whitespace checks. The deployment record reports uncommitted, unpushed source changes. These are dated functional results, not human-playtest, balance or full release acceptance. This documentation reorganization does not constitute a new deployment or test run.
 
+The working tree also contains locally verified, undeployed updates: a narrower, frozen name column on table layouts and a result popup preview using the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
+
 ### Remaining work and limitations
 
 - Online rankings (Phase 8) are deferred. Daily attempts use local clocks and storage and are not trusted or server-verified.
@@ -37,6 +39,18 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Square share preview, 2026-09-17 (local only)
+
+- Scope: uncommitted working-tree change. The result popup displays the same generated 1800-by-1800 PNG used for download and native file sharing, scaled to a square at the available width. Object URLs are released on close; export failures retain the existing card and text fallback. Existing player-table edits were preserved.
+- Passed `npm run typecheck`, `npm run build` and 10 local Edge desktop/320px mobile checks with `npm run test:browser -- tests/browser/collection.spec.ts --grep 'history updates pending postseason|history caps|clipboard and native-share|copy and native share|image generation failure' --reporter=dot`. Checks confirm byte-identical preview/download PNGs, square dimensions, long-name exports and sharing fallbacks. Desktop/mobile screenshots were reviewed; editor diagnostics reported no errors in the changed source/test files.
+- No deployment, commit or push. Physical devices, Safari/Firefox and actual messaging-app delivery were not tested.
+
+### Frozen player names, 2026-09-17 (local only)
+
+- Scope: uncommitted working-tree changes to `src/app/globals.css`, starting from a clean tree. Above 760px, the visible-stats table uses a 160px name column with sticky names and name-sort header, opaque backgrounds and matching header layering. Mobile cards and hidden-stat layouts retain their existing rules.
+- Local validation: an isolated Edge CSS probe passed width, pinned-name/header, scrolling-stat and mobile-position checks. A separate Playwright probe against the actual local Next.js dev server passed at 1440px and 320px, including selecting a player by the frozen name and no mobile horizontal overflow. Desktop/mobile screenshots reviewed; CSS diagnostics and `git diff --check` passed.
+- Integrated-browser click automation was inconclusive; the isolated Edge app check passed. No production build, full suite, deployed checks, Safari/Firefox or physical-device checks were run. No deployment, commit or push was performed.
 
 ### Player guide deployment, 2026-09-17
 
