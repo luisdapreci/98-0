@@ -4,7 +4,7 @@ Date: 2026-09-17. P6.1-P6.4 are complete for local gameplay, with an indefinite 
 
 ## Implemented Contract
 
-The single-attempt update described here is local only, not yet deployed. See [current status and dated validation](../STATUS.md).
+The single-attempt update described here is deployed. See [current status and dated validation](../STATUS.md).
 
 - New `daily-3` seeds pin UTC date, Mid IQ, IQ/engine/data/random/score/rivalry versions plus `rotation-1` and challenge ID. Existing `daily-1` saves and ledger results retain their original unrestricted pools, three offers and seeds; `daily-2` retains its finite `calendar-1`/`calendar-2` mapping and exact seeds. Ordinary runs, baseline math and calibration artifacts are unchanged.
 - The [rotation](../../src/engine/daily-calendar.ts) starts fresh on **2026-09-17 UTC** and has no expiry. Every 56-day cycle contains each of the 56 themes once, including a shuffled first cycle (September 17-November 11). Cycle number is the floor of elapsed UTC days divided by 56; the remainder selects the day. IDs are sorted by code point, then Fisher-Yates shuffled using the existing versioned FNV1a/Mulberry32 stream with rotation version, anchor and cycle number. If the first theme equals the previous raw cycle's last theme, swap the first two. Since this never changes the last theme of a 56-item cycle, the boundary guarantee needs only two shuffles, without recursion or stored history. Each date retains a distinct draft seed. The retired published schedule exists only for legacy saves. Pool definitions and shuffle rules are part of the versioned contract: future changes must preserve replay for existing versions.
