@@ -8,6 +8,14 @@ A basketball drafting roguelike. Build a team from NBA history, play through an 
 
 Free to access in your browser, with no account required. The game is in public playtesting; balance and device compatibility are still being evaluated. See [project status](docs/STATUS.md) for updates and known limitations.
 
+### Share title dot deployment, 2026-09-17
+
+- Published commit `4605994` from a clean worktree to <https://98-0.vercel.app>; immutable deployment: <https://98-0-5ftvvngn2-preciadox.vercel.app>. The share-card title's final dot now uses the orange brand color in the preview and exported PNG. Gameplay and saved results are unchanged.
+- Passed `npm test` (115 tests), `npm run typecheck`, `npm run build`, `git diff --check`, and six local desktop/mobile Edge checks using `npm run test:browser -- tests/browser/collection.spec.ts --grep 'history updates pending postseason|clipboard and native-share|copy and native share'`.
+- Verified the existing project with `npx --yes vercel@latest project inspect 98-0 --scope preciadox`, then published with `npx --yes vercel@latest deploy --prod --yes --scope preciadox`. Anonymous `Invoke-WebRequest` confirmed HTTP 200 and game content on the stable alias.
+- With `PLAYWRIGHT_CHANNEL=msedge` and `PLAYWRIGHT_BASE_URL=https://98-0.vercel.app`, ran `npm run test:browser -- tests/browser/postseason.spec.ts tests/browser/daily.spec.ts tests/browser/collection.spec.ts --grep 'six-pick draft|Daily commits before offers|history updates pending postseason|clipboard and native-share|copy and native share'`: all 10 deployed checks passed. Cleared the remote override afterward; reviewed the live exported PNG and mobile preview.
+- Physical devices, Safari/Firefox and actual messaging-app delivery remain unverified. This deployment note was added locally after publication; no commit or push was performed during deployment.
+
 ### Player guide deployment, 2026-09-17
 
 - Published the first-visit guide and header help button to <https://98-0.vercel.app>; immutable deployment: <https://98-0-f0rhqqkrf-preciadox.vercel.app>. Gameplay rules, supported saves and saved results are unchanged; dismissal uses the separate `98-0-guide-v1` preference.
