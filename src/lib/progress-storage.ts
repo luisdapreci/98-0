@@ -1,6 +1,7 @@
-import { emptyProgress, recordProgress } from '../engine/progress';
+import { emptyProgress, recordProgress, summarizeDaily } from '../engine/progress';
 import type { Progress, RunSummary } from '../engine/progress';
 import type { RunSave } from '../engine/run';
+import { readDailyEntries } from './daily-storage';
 
 export const PROGRESS_STORAGE_KEY = '98-0-progress-v1';
 
@@ -16,7 +17,9 @@ function isSummary(value: unknown): value is RunSummary {
     && summary.lineup.every((player) => player && ['slot', 'id', 'name', 'franchise', 'decade'].every((key) => typeof player[key as keyof typeof player] === 'string'))
     && record(summary.season) && summary.season.wins + summary.season.losses === 82
     && Number.isFinite(summary.season.differential) && Number.isInteger(summary.season.streak)
-    && (summary.daily === null || (!!summary.daily && /^\d{4}-\d{2}-\d{2}$/.test(summary.daily.date) && ['local', 'practice'].includes(summary.daily.kind)))
+    && (summary.daily === null || (!!summary.daily && /^\d{4}-\d{2}-\d{2}$/.test(summary.daily.date) && ['local', 'practice'].includes(summary.daily.kind)
+      && (summary.daily.challenge === undefined || (!!summary.daily.challenge
+        && typeof summary.daily.challenge.name === 'string' && typeof summary.daily.challenge.restriction === 'string'))))
     && ['pending', 'missed', 'complete'].includes(summary.postseasonStatus)
     && (summary.postseasonStatus === 'complete'
       ? !!summary.postseason && record(summary.postseason.playIn) && record(summary.postseason.playoffs)
@@ -35,6 +38,18 @@ export function readProgress(): Progress {
     || Object.entries(saved.bests).some(([mode, best]) => !['no', 'mid', 'hi'].includes(mode) || !best
       || ![best.record, best.differential, best.streak].every((summary) => isSummary(summary) && summary.mode === mode))) {
     throw new Error('Saved progress is unreadable. Existing data has not been cleared.');
+  }
+  const summaries = [...saved.runs, ...Object.values(saved.bests).flatMap((best) => [best.record, best.differential, best.streak])];
+  if (summaries.some((summary) => summary.daily && !summary.daily.challenge)) {
+    let entries;
+    try { entries = readDailyEntries(); }
+    catch { return saved; }
+    const attempts = new Map(entries.map((entry) => [entry.attempt.attemptId, entry.attempt]));
+    for (const summary of summaries) {
+      const attempt = attempts.get(summary.id);
+      if (summary.daily && !summary.daily.challenge && attempt
+        && attempt.date === summary.daily.date && attempt.kind === summary.daily.kind) summary.daily = summarizeDaily(attempt);
+    }
   }
   return saved;
 }

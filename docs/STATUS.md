@@ -8,7 +8,11 @@ As of **2026-09-17**, the public playtest is available at **<https://98-0.vercel
 
 The latest recorded deployment is the Daily popup and background music update from commit `7b51bc4` plus the working-tree FLAC upload exclusion: <https://98-0-484zmm9m5-preciadox.vercel.app>. New validation passed 115 engine tests, typecheck, production build, whitespace checks, 46 local and 46 deployed desktop/mobile Edge browser checks, plus anonymous HTTP 200 and audio asset checks. These are dated functional results, not human-playtest, balance or full release acceptance.
 
-The player table now has a narrower, frozen name column, and the result popup previews the exact square share PNG. Mobile player cards and HI IQ layouts are unchanged.
+The player table has a narrower, frozen desktop name column, and the result popup previews the exact square share PNG. A local-only follow-up puts mobile player stats in one compact ten-column row beneath the name; desktop and HI IQ layouts are unchanged by this follow-up.
+
+Local only: Daily now allows one attempt per UTC day in the current browser, including cancelled or abandoned attempts. Same-day restarts are blocked across versions and tabs; unfinished saves remain resumable. All visible practice labels are removed from Daily, history and sharing, while legacy saved data remains readable. The next Daily unlocks at 00:00 UTC.
+
+Local only: Daily share images and text now include the challenge name and restriction description. New summaries preserve the run's version-correct details; older summaries recover them from a matching Daily record when available. Ordinary exports are unchanged.
 
 Deployed: the Daily popup uses START DAILY for all starts, removes the redundant bottom dismiss button, and replaces RESUME DAILY with CANCEL DAILY to abandon the active Daily draft and create a normal run. The top X only dismisses the popup; Daily commitments and records remain.
 
@@ -43,6 +47,37 @@ Browser results below used Edge (`PLAYWRIGHT_CHANNEL=msedge`) on desktop and mob
 ## Update history
 
 Entries are newest first. All updates below were recorded on **2026-09-17**. Validation counts apply only to their stated source and scope.
+
+### Daily descriptions in shared results, 2026-09-17 (local only)
+
+- Scope: uncommitted follow-up from `7ff1999` in summary generation, progress storage, share-card presentation/styles, existing engine/browser tests and documentation. Preserved prior single-attempt, wording and mobile-stat changes. No deployment, commit or push.
+- New Daily summaries snapshot challenge name and restriction from the original version-pinned attempt, with an unrestricted-pool description for original unthemed Dailies. Text, clipboard, text-file downloads, native-share payloads and square PNGs use those same details. Ordinary runs retain their previous output, and no removed attempt-kind labels return.
+- Older summaries without descriptions can recover them using matching attempt ID/date/kind in a validated Daily ledger, including old calendar versions. Missing or corrupt ledger data does not block readable history; descriptions are not inferred from date alone. Stored optional description fields are validated. No season or postseason results are resampled.
+- Passed `node --experimental-strip-types --test --test-name-pattern='share captions|progress unlocks' src/engine/run.test.ts` (two focused engine tests), `npm run typecheck`, `npm run build`, and `npm run test:browser -- tests/browser/collection.spec.ts tests/browser/daily.spec.ts --grep 'history caps at 50|Daily share description recovery|Daily commits before offers|history updates pending postseason|image generation failure' --reporter=dot` (14 local Edge checks across desktop and 320px mobile). Used a fresh production build with remote/reuse overrides cleared. Touched-file editor diagnostics were clear.
+- The first browser run exposed footer overflow with the longest challenge description plus a long player name, and overly broad selectors matching the temporary export clone. Tightened roster spacing/type only on Daily exports with descriptions, scoped the selectors to the dialog, rebuilt and reran the same checks successfully. Reviewed both resulting 1800px square PNGs with the full description and footer visible; all overflow assertions passed.
+- No live verification, full-suite run, real messaging-app delivery, physical-device, Safari/Firefox or human acceptance checks were performed. Older history without both saved details and an intact matching Daily ledger remains date-only. Public production is unchanged.
+
+### Daily wording and share audit, 2026-09-17 (local only)
+
+- Scope: follow-up on the uncommitted single-attempt changes from `7ff1999`. Updated current Daily rules in the game design and Phase 6/7 behavior documentation; clearly marked older validation as historical. Preserved existing source, mobile-stat changes, legacy-save compatibility and historical deployment records.
+- Source audit found no practice wording in UI components or the player README. The existing legacy-Daily sharing test now checks history, the offscreen image-export content, result text, clipboard output, native-share text and the downloaded text file for the cleaned Daily caption. Both generated 1800px square PNGs were visually reviewed without the removed label.
+- Passed `npm run test:browser -- tests/browser/collection.spec.ts --grep 'history caps at 50' --reporter=dot`: two local Edge checks, desktop and 320px mobile. Used the production build verified in the preceding entry, with no subsequent application-source changes and remote/reuse overrides cleared. Editor diagnostics for the expanded test and `git diff --check` passed. No new build or full-suite run was needed for this test/documentation-only follow-up.
+- No deployment, commit or push. Internal historical attempt values remain supported but are not displayed. Native sharing used a controlled browser mock, not actual messaging-app delivery; physical devices and other browsers remain unverified.
+
+### One Daily attempt per UTC day, 2026-09-17 (local only)
+
+- Scope: uncommitted changes from `7ff1999` to the Daily start guard, popup, player guide, history/share presentation and focused tests. Preserved the existing mobile-stat edits in `src/app/globals.css`, `tests/browser/modes.spec.ts` and this document. No deployment, commit or push.
+- The start guard checks every recorded attempt for today's UTC date inside the existing Web Lock before creating offers. Cancellation, completion, legacy versions and old retry records all consume that date. Rejected starts leave the saved run intact. The popup disables starts with DAILY USED; existing drafts and completed results remain readable without resampling or migrating saves.
+- Removed visible practice wording from the Daily banner, records, guide, history, exported image and shared text. Historical kind/status values remain supported internally so old saves and records still validate. Updated the README's player-facing rule.
+- Passed `node --experimental-strip-types --test src/engine/run.test.ts src/engine/daily.test.ts` (33 tests), `npm run typecheck`, `npm run build`, and 26 local Edge desktop/320px mobile checks using `npm run test:browser -- tests/browser/daily.spec.ts tests/browser/guide.spec.ts tests/browser/collection.spec.ts --grep 'Daily is visible|Daily commits before offers|Daily survives UTC rollover|Daily late completion|Daily fails closed|Daily Shaq Meets Steph|Daily calendar rolls|Legacy .* drafts resume|Daily rejects a stale|first visit guide|history caps at 50' --reporter=dot`. Browser checks used the fresh production build with remote/reuse overrides cleared. An initial environment-cleanup command exited before tests started; the corrected setup and browser run passed.
+- Coverage includes cancellation/reload lockout, completed results, UTC rollover, corrupt/unavailable storage, legacy local/retry saves, stale second-tab rejection without replacing the committed save, guide dismissal and share-image metadata. Reviewed desktop/mobile DAILY USED screenshots; touched source/test editor diagnostics were clear.
+- Remaining limitations: enforcement still uses browser-local storage and device time; clearing storage or switching browser/origin/device bypasses the local history. No live checks, full-suite run, physical-device, Safari/Firefox or human acceptance testing was performed for this change. Public production remains on the deployment recorded above.
+
+### Compact mobile player stats, 2026-09-17 (local only)
+
+- Scope: uncommitted changes from `7ff1999`, starting with a clean working tree. Mobile player rows use ten equal stat columns, 9px values and 7px labels above the values; sorting highlights the selected stat without moving its column. Desktop and hidden-stat HI IQ layouts are unchanged. No gameplay or save changes.
+- Passed `npm run build` and `npm run test:browser -- tests/browser/modes.spec.ts --grep 'player stats stay' --reporter=dot`: two local Edge checks covering 320px, 390px, 760px and desktop 1440px, with overall/assists sorting, aligned stats and no stat clipping. Reviewed 320px, 390px and desktop screenshots; editor diagnostics were clear.
+- No deployment, commit or push. Physical-device readability, Safari/Firefox and the full browser suite were not newly verified.
 
 ### Daily popup and background music deployment, 2026-09-17
 

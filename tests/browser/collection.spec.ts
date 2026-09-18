@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { emptyProgress, recordProgress, resultText } from '../../src/engine/progress';
+import { calendarVersionForDate, challengeForDate, rotationDate, rotationSchedule } from '../../src/engine/daily-calendar';
 import { controlledSeason, expect, expectFits, loadRun, readyFixture, savedState, scenario, test } from './fixtures';
 
 const progressKey = '98-0-progress-v1';
@@ -164,7 +165,9 @@ test('history caps at 50 while per-mode personal bests remain accessible with lo
   let progress = recordProgress(emptyProgress(), run, true, false, 1);
   const best = progress.bests.hi!.record;
   best.lineup[0]!.name = 'Dikembe Mutombo Mpolondo Mukamba Jean-Jacques Wamutombo';
-  best.daily = { date: '2026-09-17', kind: 'practice' };
+  const { date, challenge } = rotationSchedule(rotationDate(0)).reduce((longest, entry) =>
+    entry.challenge.restriction.length > longest.challenge.restriction.length ? entry : longest);
+  best.daily = { date, kind: 'practice', challenge: { name: challenge.name, restriction: challenge.restriction } };
   for (let index = 2; index <= 55; index++) progress = recordProgress(progress,
     { ...run, id: `history-${index}`, iqMode: index % 2 ? 'no' : 'mid', season: { ...run.season!, wins: 45, losses: 37 } }, true, false, index);
   await page.goto('/');
@@ -176,10 +179,15 @@ test('history caps at 50 while per-mode personal bests remain accessible with lo
   await expect(page.locator('.collection-empty')).toBeVisible();
   await page.getByRole('button', { name: 'PERSONAL BESTS', exact: true }).click();
   await expect(page.locator('.history-list li')).toHaveCount(3);
+  await expect(page.locator('.history-list')).not.toContainText(/practi[cv]e/i);
   await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (text: string) => { document.body.dataset.copied = text; } } });
+    Object.defineProperty(navigator, 'canShare', { configurable: true, value: () => true });
+    Object.defineProperty(navigator, 'share', { configurable: true, value: async (data: ShareData) => { document.body.dataset.shared = data.text; } });
     const observer = new MutationObserver(() => {
       const exported = document.querySelector('.share-card-export');
       if (!exported) return;
+      document.body.dataset.exportText = exported.textContent ?? '';
       const bounds = exported.getBoundingClientRect();
       document.body.dataset.exportOverflow = JSON.stringify([...exported.querySelectorAll('*')].flatMap((element) => {
         const rect = element.getBoundingClientRect();
@@ -191,9 +199,29 @@ test('history caps at 50 while per-mode personal bests remain accessible with lo
     observer.observe(document.body, { childList: true });
   });
   await page.getByRole('button', { name: /View result:/ }).first().click();
-  await expect(page.getByRole('dialog').locator('.share-card')).toContainText('DAILY / 2026-09-17 UTC / PRACTICE');
+  await expect(page.getByRole('dialog').locator('.share-card')).toContainText(`DAILY / ${date} UTC`);
+  await expect(page.getByRole('dialog').locator('.share-daily')).toContainText(challenge.name);
+  await expect(page.getByRole('dialog').locator('.share-daily')).toContainText(challenge.restriction);
+  await expect(page.getByRole('dialog')).not.toContainText(/practice/i);
   await expect(page.getByRole('dialog').locator('.share-lineup')).toContainText(best.lineup[0]!.name);
   await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
+  const imageText = await page.locator('body').getAttribute('data-export-text');
+  expect(imageText).toContain(`DAILY / ${date} UTC`);
+  expect(imageText).toContain(challenge.name);
+  expect(imageText).toContain(challenge.restriction);
+  expect(imageText).not.toMatch(/practi[cv]e/i);
+  const caption = resultText(best);
+  expect(caption).toContain(`${challenge.name}\n${challenge.restriction}`);
+  expect(caption).not.toMatch(/practi[cv]e/i);
+  await expect(page.getByLabel('RESULT TEXT', { exact: true })).toHaveValue(caption);
+  await page.getByRole('button', { name: 'COPY TEXT', exact: true }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-copied', caption);
+  await page.getByRole('button', { name: 'SHARE', exact: true }).click();
+  await expect(page.locator('body')).toHaveAttribute('data-shared', caption);
+  const textDownloading = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'TEXT FILE', exact: true }).click();
+  const textDownload = await textDownloading;
+  expect(readFileSync((await textDownload.path())!, 'utf8')).toBe(caption);
   expect(await page.evaluate(() => JSON.parse(document.body.dataset.exportOverflow!))).toEqual([]);
   expect(await page.locator('.share-card, .share-card *').evaluateAll((elements) => elements.filter((element) => element.clientWidth && element.scrollWidth > element.clientWidth + 1).map((element) => element.className))).toEqual([]);
   const downloading = page.waitForEvent('download');
@@ -205,6 +233,38 @@ test('history caps at 50 while per-mode personal bests remain accessible with lo
   expect(png.readUInt32BE(20)).toBe(1800);
   await expectFits(page);
 });
+
+for (const ledger of ['original', 'missing', 'corrupt'] as const) {
+  test(`Daily share description recovery keeps old history readable with ${ledger} ledger`, async ({ page }) => {
+    const run = controlledSeason(44, 'daily-description-recovery', 'mid');
+    const progress = recordProgress(emptyProgress(), run, true, false, 1);
+    const summary = progress.runs[0]!;
+    const date = '2026-09-17';
+    const challenge = challengeForDate(date)!;
+    summary.daily = { date, kind: 'local' };
+    const attempt = { date, kind: 'local', version: 'daily-2', calendarVersion: calendarVersionForDate(date),
+      challengeId: challenge.id, attemptId: summary.id, startedAt: Date.parse(`${date}T12:00:00Z`) };
+    await page.goto('/');
+    await expect(page.getByRole('button', { name: 'New run', exact: true })).toBeEnabled();
+    await page.evaluate(({ progress, attempt, ledger, key }) => {
+      localStorage.setItem(key, JSON.stringify(progress));
+      if (ledger !== 'missing') localStorage.setItem('98-0-daily-v1', ledger === 'corrupt' ? 'invalid' : JSON.stringify([{ attempt }]));
+    }, { progress, attempt, ledger, key: progressKey });
+    await page.reload();
+    await page.getByRole('button', { name: /RUN HISTORY/ }).click();
+    await page.getByRole('button', { name: /View result:/ }).first().click();
+    if (ledger === 'original') {
+      summary.daily.challenge = { name: challenge.name, restriction: challenge.restriction };
+      await expect(page.getByRole('dialog').locator('.share-daily')).toContainText(challenge.name);
+      await expect(page.getByRole('dialog').locator('.share-daily')).toContainText(challenge.restriction);
+    } else {
+      await expect(page.getByRole('dialog').locator('.share-daily')).toHaveText(`DAILY / ${date} UTC`);
+    }
+    await expect(page.getByLabel('RESULT TEXT', { exact: true })).toHaveValue(resultText(summary));
+    await expect(page.getByRole('button', { name: 'IMAGE', exact: true })).toBeEnabled();
+    await expect(page.getByRole('dialog')).not.toContainText(/practice/i);
+  });
+}
 
 test('clipboard and native-share capability failures preserve selectable text and downloads', async ({ page }) => {
   const run = controlledSeason(44, 'collection-fallback');

@@ -1,4 +1,6 @@
 import { DRAFT_SLOTS } from './draft.ts';
+import { challengeForAttempt } from './daily.ts';
+import type { DailyAttempt } from './daily.ts';
 import type { RunSave } from './run.ts';
 import type { IQMode, PostseasonResult } from './types.ts';
 
@@ -9,7 +11,7 @@ export interface RunSummary {
   engineVersion: string;
   coach: { name: string; systemName: string };
   lineup: { slot: string; id: string; name: string; franchise: string; decade: string }[];
-  daily: { date: string; kind: 'local' | 'practice' } | null;
+  daily: { date: string; kind: 'local' | 'practice'; challenge?: { name: string; restriction: string } } | null;
   season: { wins: number; losses: number; differential: number; streak: number };
   postseason: Pick<PostseasonResult, 'playIn' | 'playoffs' | 'champion' | 'isPerfectRun' | 'eliminatedRound'> | null;
   postseasonStatus: 'pending' | 'missed' | 'complete';
@@ -26,6 +28,14 @@ export function emptyProgress(): Progress {
   return { version: 1, almanacUnlocked: false, runs: [], bests: {} };
 }
 
+export function summarizeDaily(attempt: DailyAttempt): NonNullable<RunSummary['daily']> {
+  const challenge = challengeForAttempt(attempt);
+  return { date: attempt.date, kind: attempt.kind, challenge: {
+    name: challenge?.name ?? 'Original Daily',
+    restriction: challenge?.restriction ?? 'Unrestricted player pool',
+  } };
+}
+
 export function summarizeRun(run: RunSave, completedAt: number, postseasonRevealed: boolean): RunSummary | null {
   if (!run.season || run.season.gameLog.length !== 82 || !run.frozenLineup?.coach) return null;
   const postseason = postseasonRevealed ? run.postseason : undefined;
@@ -36,7 +46,7 @@ export function summarizeRun(run: RunSave, completedAt: number, postseasonReveal
       const player = run.frozenLineup![slot]!;
       return { slot, id: player.id, name: player.name, franchise: player.franchise, decade: player.decade };
     }),
-    daily: run.daily ? { date: run.daily.date, kind: run.daily.kind } : null,
+    daily: run.daily ? summarizeDaily(run.daily) : null,
     season: { wins: run.season.wins, losses: run.season.losses, differential: run.season.pointDifferential, streak: run.season.longestStreak },
     postseason: postseason ? { playIn: postseason.playIn, playoffs: postseason.playoffs, champion: postseason.champion,
       isPerfectRun: postseason.isPerfectRun, eliminatedRound: postseason.eliminatedRound } : null,
@@ -80,7 +90,8 @@ export function resultText(result: RunSummary): string {
       : `Eliminated: ${postseason?.eliminatedRound ? roundNames[postseason.eliminatedRound] : 'Postseason'}`;
   return [
     `98-0 Basketball | ${result.mode.toUpperCase()} IQ`,
-    ...(result.daily ? [`Daily: ${result.daily.date} UTC (${result.daily.kind === 'practice' ? 'practice' : 'local'})`] : []),
+    ...(result.daily ? [`Daily: ${result.daily.date} UTC`] : []),
+    ...(result.daily?.challenge ? [result.daily.challenge.name, result.daily.challenge.restriction] : []),
     '',
     status,
     `Regular season: ${result.season.wins}-${result.season.losses}`,

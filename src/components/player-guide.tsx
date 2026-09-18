@@ -48,7 +48,7 @@ export function PlayerGuide() {
       <dl className="guide-modes">
         <div><dt>NO IQ</dt><dd>Individual talent and bench quality. No chemistry or coach effects.</dd></div>
         <div><dt>HI IQ</dt><dd>Mid IQ rules, but scouting stays hidden until Start Season.</dd></div>
-        <div><dt>DAILY</dt><dd>A themed Mid IQ challenge each UTC day. Your first attempt counts locally; retries are practice.</dd></div>
+        <div><dt>DAILY</dt><dd>A themed Mid IQ challenge each UTC day. One attempt per day, even if cancelled. The next Daily unlocks at 00:00 UTC.</dd></div>
       </dl>
       <p className="guide-note">Progress stays in this browser. Reloading does not reroll results. Complete a season to unlock the Coach Almanac.</p>
       <div className="dialog-actions">

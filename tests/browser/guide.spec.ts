@@ -8,7 +8,8 @@ test('first visit guide closes, remembers dismissal, and reopens without changin
   await expect(guide).toBeVisible();
   await expect(guide.getByRole('button', { name: 'Close guide' })).toBeFocused();
   await expect(guide).toContainText('45 wins');
-  await expect(guide).toContainText('retries are practice');
+  await expect(guide).toContainText('One attempt per day, even if cancelled.');
+  await expect(guide).not.toContainText(/practice/i);
   await expectFits(page);
   expect(await guide.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath('guide-first-visit.png'), animations: 'disabled' });
